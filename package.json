@@ -1,0 +1,46 @@
+{
+  "name": "canvas-plus",
+  "version": "1.0.0",
+  "description": "A universal library for manipulating images, built on canvas.",
+  "author": "Joseph Huckaby <jhuckaby@gmail.com>",
+  "homepage": "https://github.com/jhuckaby/canvas-plus",
+  "license": "MIT",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jhuckaby/canvas-plus"
+  },
+  "bugs": {
+    "url": "https://github.com/jhuckaby/canvas-plus/issues"
+  },
+  "keywords": [
+    "image",
+    "canvas",
+    "rgba"
+  ],
+  "dependencies": {
+    "blob-to-buffer": "1.2.6",
+    "canvas": "1.6.10",
+    "crc-32": "1.0.2",
+    "exif-js": "2.2.1",
+    "image-q": "1.1.1",
+    "image-size": "0.6.0",
+    "omggif": "1.0.8",
+    "pixl-class": "^1.0.0",
+    "pixl-perf": "^1.0.0",
+    "pixl-tools": "^1.0.0",
+    "pixl-request": "^1.0.0"
+  },
+  "devDependencies": {
+    "browser-process-hrtime": "0.1.2"
+  },
+  "browser": {
+    "./lib/node/create.js": "./lib/browser/create.js",
+    "./lib/node/font.js": "./lib/browser/font.js",
+    "./lib/node/load.js": "./lib/browser/load.js",
+    "./lib/node/write.js": "./lib/browser/write.js"
+  },
+  "scripts": {
+    "browserify": "browserify browser.js > canvas-plus.js"
+  }
+}
