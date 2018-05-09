@@ -1888,6 +1888,7 @@ Also, special thanks go to:
 - Matt Lockyer's [Gaussian Blur Convolution Kernel Generator](https://github.com/mattlockyer/iat455/blob/master/assignment1/assignment/effects/blur-effect-dyn.js), (c) [Matt Lockyer](https://github.com/mattlockyer/iat455), MIT License
 - The [Monotone Cubic Interpolation](https://en.wikipedia.org/wiki/Monotone_cubic_interpolation) article on Wikipedia, and sample code therein.
 - The [TinyColor](https://github.com/bgrins/TinyColor) library, (c) [Brian Grinstead](http://briangrinstead.com), MIT License.
+- The [Blockhash](http://blockhash.io/) algorithm and JS code, (c) 2014 [Commons Machinery](http://commonsmachinery.se/), MIT License.
 - [Stack Overflow](https://stackoverflow.com/)
 - [Mozilla Developer Network (MDN)](https://developer.mozilla.org/en-US/)
 
