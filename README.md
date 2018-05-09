@@ -138,7 +138,7 @@ There are already some extremely cool image processing libraries out there.  I p
 Use [npm](https://www.npmjs.com/) to install the module:
 
 ```
-npm install canvas-plus
+npm install pixl-canvas-plus
 ```
 
 Please note that the [canvas](https://www.npmjs.com/package/canvas) module dependency is a binary compiled library, which depends on [Cairo](https://www.cairographics.org/) being preinstalled on your machine.  See their [installation wiki](https://github.com/Automattic/node-canvas/wiki) for assistance.
