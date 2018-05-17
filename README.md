@@ -146,7 +146,7 @@ Please note that the [canvas](https://www.npmjs.com/package/canvas) module depen
 Here is a simple usage example:
 
 ```js
-var CanvasPlus = require('canvas-plus');
+var CanvasPlus = require('pixl-canvas-plus');
 var canvas = new CanvasPlus();
 
 canvas.load( 'waterfall.jpg', function(err) {
