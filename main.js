@@ -80,6 +80,7 @@ var CanvasPlus = module.exports = Class.create({
 		alpha: true, // for png, gif
 		quality: 75, // for jpeg only
 		progressive: false, // for jpeg only
+		chromaSubsampling: true, // for jpeg only
 		
 		// Resize settings:
 		resizeMode: 'fit',
@@ -96,7 +97,6 @@ var CanvasPlus = module.exports = Class.create({
 		lineSpacing: 0,
 		outlineThickness: 2,
 		outlineStyle: 'round',
-		textAutoComposite: true,
 		
 		// Quantization settings:
 		colors: 256,
@@ -405,7 +405,7 @@ var CanvasPlus = module.exports = Class.create({
 		var ctx = this.context;
 		antialias = antialias.toLowerCase();
 		
-		ctx.filter = antialias;
+		ctx.quality = antialias;
 		ctx.patternQuality = antialias;
 		
 		switch (antialias) {

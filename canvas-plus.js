@@ -38,7 +38,6 @@ var CanvasPlus = window.CanvasPlus = require('./main.js');
 // make some browser-specific overrides
 CanvasPlus.prototype.browser = true;
 CanvasPlus.prototype.userAgent = navigator.userAgent;
-CanvasPlus.prototype.defaultSettings.textAutoComposite = false;
 
 // Context2D.measureText() doesn't include height in the browser, so we must hack one in.
 var font_height_cache = {};
@@ -55,7 +54,7 @@ CanvasPlus.prototype.measureTextHeight = function(font_style) {
 	sty.top = '0px';
 	sty.opacity = 0;
 	sty.font = font_style;
-	sty.lineHeight = '1.0';
+	sty.lineHeight = 'normal'; // default is roughly 1.2 in most browsers
 	div.innerHTML = 'M';
 	
 	body.appendChild( div );
@@ -113,9 +112,6 @@ module.exports = Class.create({
 		this.canvas.height = height;
 		this.context = this.canvas.getContext('2d');
 		
-		// remove 'filter' from canvasSettingsKeys (it means something different in the browser)
-		delete this.canvasSettingsKeys.filter;
-		
 		// apply settings
 		for (var key in this.canvasSettingsKeys) {
 			this.context[key] = this.settings[key];
@@ -154,18 +150,61 @@ module.exports = Class.create({
 // Released under the MIT License
 
 var Class = require("pixl-class");
+var fonts_loaded = {};
 
 module.exports = Class.create({
 	
-	loadFont: function(family) {
-		// no-op for browser, just return object with family name
-		var font = {
-			_pixl_id: family
-		};
-		return font;
+	getFontID: function(family) {
+		// family is font ID for browser
+		return family;
+	},
+	
+	loadFont: function(family, url, callback) {
+		// load CSS font family in browser, callback is optional
+		var self = this;
+		
+		if (family in fonts_loaded) {
+			if (callback) callback();
+			return;
+		}
+		fonts_loaded[family] = 1;
+		
+		// sniff format from URL
+		if (url.match(/\.(\w+)(\?|$)/)) {
+			var fmt = RegExp.$1;
+			if (fmt.match(/ttf/i)) fmt = 'truetype';
+			else if (fmt.match(/otf/i)) fmt = 'opentype';
+			
+			var pf = this.perf.begin('font');
+			
+			var sty = document.createElement('style');
+			sty.type = 'text/css';
+			sty.innerHTML = "@font-face { font-family:'" + family + "'; src:url('" + url + "') format('" + fmt + "'); }\n";
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(sty);
+			
+			onFontReady(family, function() {
+				pf.end();
+				self.logDebug(5, "Font loaded successfully: " + family + ": " + url);
+				if (callback) callback();
+			}, 
+			{
+				timeoutAfter: 5000,
+				onTimeout: function() {
+					pf.end();
+					return self.doError( 'font', "Failed to load font after 5 seconds: " + family, callback );
+				}
+			});
+		}
+		else {
+			self.doError( 'font', "Cannot determine font format from URL: " + url, callback );
+		}
 	}
 	
 });
+
+// onFontReady (MIT License)
+// https://github.com/dwighthouse/onfontready/blob/master/LICENSE
+function onFontReady(e,t,i,n,o){i=i||0,i.timeoutAfter&&setTimeout(function(){n&&(document.body.removeChild(n),n=0,i.onTimeout&&i.onTimeout())},i.timeoutAfter),o=function(){n&&n.firstChild.clientWidth==n.lastChild.clientWidth&&(document.body.removeChild(n),n=0,t())},o(document.body.appendChild(n=document.createElement("div")).innerHTML='<div style="position:fixed;white-space:pre;bottom:999%;right:999%;font:999px '+(i.generic?"":"'")+e+(i.generic?"":"'")+',serif">'+(i.sampleText||" ")+'</div><div style="position:fixed;white-space:pre;bottom:999%;right:999%;font:999px '+(i.generic?"":"'")+e+(i.generic?"":"'")+',monospace">'+(i.sampleText||" ")+"</div>"),n&&(n.firstChild.appendChild(e=document.createElement("iframe")).style.width="999%",e.contentWindow.onresize=o,n.lastChild.appendChild(e=document.createElement("iframe")).style.width="999%",e.contentWindow.onresize=o,e=setTimeout(o))};
 
 },{"pixl-class":32}],4:[function(require,module,exports){
 (function (Buffer){
@@ -690,8 +729,8 @@ module.exports = Class.create({
 			if (expand_by) {
 				// yes expand
 				result = this.expand({
-					width: this.get('width') + expand_by,
-					height: this.get('height') + expand_by,
+					width: expand_by,
+					height: expand_by,
 					gravity: 'center'
 				});
 				if (result.isError) return result;
@@ -2146,7 +2185,7 @@ module.exports = Class.create({
 		
 		this.set('mode', 'indexed');
 		this.perf.end('quantize');
-		this.logDebug(6, "Image quantization complete");
+		this.logDebug(6, "Image quantization complete", { num_colors: iq_colors.length });
 		return this;
 	},
 	
@@ -2531,11 +2570,8 @@ module.exports = Class.create({
 		var ctx = this.context;
 		var width = this.get('width');
 		var height = this.get('height');
-		var font = this.loadFont( opts.font );
-		var font_spec = opts.fontStyle + ' ' + opts.fontWeight + ' ' + opts.size + 'px "' + font._pixl_id + '"';
-		
-		// add font to context (node only, safe to dupe)
-		if (ctx.addFont) ctx.addFont( font );
+		var font_family = this.getFontID( opts.font );
+		var font_spec = opts.fontStyle + ' ' + opts.fontWeight + ' ' + opts.size + 'px "' + font_family + '"';
 		
 		ctx.save();
 		ctx.font = font_spec;
@@ -2714,89 +2750,23 @@ module.exports = Class.create({
 			});
 			
 			if (scale_factor < 1.0) {
-				if (opts.textAutoComposite) {
-					// node-canvas v1.x Context2D.scale() is very inaccurate without pango (which I can't get working).
-					// See: https://github.com/Automattic/node-canvas/issues/949
-					// So we can auto-shrink ourselves using a secondary canvas and then composite onto the source canvas.
-					// (This will probably be resolved in node-canvas v2.0, and I can remove this hack.)
-					var cwidth = Math.ceil( text_width );
-					var cheight = Math.ceil( text_height );
-					
-					this.logDebug(9, "Performing text rendering on secondary canvas", { width: cwidth, height: cheight });
-					
-					var CanvasPlus = Object.getPrototypeOf(this).constructor;
-					var pxc = new CanvasPlus( cwidth, cheight );
-					var canvas2 = pxc.canvas;
-					var ctx2 = canvas2.getContext('2d');
-					
-					// copy over all canvas props
-					for (var key in this.canvasSettingsKeys) {
-						ctx2[key] = ctx[key];
-					}
-					
-					// setup ctx2 like ctx
-					if (ctx2.addFont) ctx2.addFont( font );
-					ctx2.font = font_spec;
-					ctx2.textAlign = 'left';
-					ctx2.textBaseline = 'hanging';
-					
-					if (opts.shadowColor) {
-						ctx2.shadowColor = opts.shadowColor;
-						ctx2.shadowOffsetX = opts.shadowOffsetX || 0;
-						ctx2.shadowOffsetY = opts.shadowOffsetY || 0;
-						ctx2.shadowBlur = opts.shadowBlur || 0;
-					}
-					if (opts.outlineColor) {
-						ctx2.strokeStyle = opts.outlineColor;
-						ctx2.lineWidth = opts.outlineThickness * 2;
-						ctx2.lineJoin = opts.outlineStyle;
-					}
-					
-					// render onto secondary canvas (no margins, no offset)
-					renderText( ctx2, cwidth, cheight, 0, 0, 0, 0 );
-					
-					// composite onto source canvas using proper scale / gravity / margin / offset
-					result = this.composite({
-						image: canvas2,
-						width: Math.floor( cwidth * scale_factor ),
-						height: Math.floor( cheight * scale_factor ),
-						gravity: gravity,
-						marginX: mx,
-						marginY: my,
-						offsetX: dx,
-						offsetY: dy,
-						opacity: opts.opacity,
-						mode: opts.compositeMode
-					});
-					if (result.isError) {
-						ctx.restore();
-						this.perf.end('text');
-						return result;
-					}
-					
-					text_width = Math.floor( cwidth * scale_factor );
-					text_height = Math.floor( cheight * scale_factor );
-					rendered = true;
-				}
-				else {
-					// Scale using canvas math (only works accurately in browser, or with pango).
-					// Hopefully we can make this the standard method with node-canvas 2.0+
-					ctx.scale( scale_factor, scale_factor );
-					
-					renderText(
-						ctx, 
-						width / scale_factor, 
-						height / scale_factor, 
-						mx / scale_factor, 
-						my / scale_factor, 
-						dx / scale_factor, 
-						dy / scale_factor 
-					);
-					
-					text_width = text_width * scale_factor;
-					text_height = text_height * scale_factor;
-					rendered = true;
-				} // use scale
+				// Scale using canvas math (only works accurately in browser, or with pango).
+				// Now the standard method with node-canvas 2.0+
+				ctx.scale( scale_factor, scale_factor );
+				
+				renderText(
+					ctx, 
+					width / scale_factor, 
+					height / scale_factor, 
+					mx / scale_factor, 
+					my / scale_factor, 
+					dx / scale_factor, 
+					dy / scale_factor 
+				);
+				
+				text_width = text_width * scale_factor;
+				text_height = text_height * scale_factor;
+				rendered = true;
 			} // need shrink
 		} // autoshrink
 		
@@ -3226,8 +3196,6 @@ module.exports = Class.create({
 		var iq_colors = this.palette;
 		var iq_pixels = this.pixels;
 		
-		this.logDebug(6, "Compressing into GIF" );
-		
 		// locate first fully transparent color, if needed
 		// also, normalize all transparent pixels to same palette index
 		var transparent_index = null;
@@ -3254,13 +3222,18 @@ module.exports = Class.create({
 		}
 		
 		// GIF requires palette size be a power of 2, so pad with black
-		while (num_colors & (num_colors - 1)) {
+		while ((num_colors & (num_colors - 1)) || (num_colors < 2)) {
 			palette_data.push( 0x000000 );
 			num_colors++;
 		}
 		
+		this.logDebug(6, "Compressing into GIF", {
+			palette_size: num_colors,
+			transparent_index: transparent_index
+		} );
+		
 		// construct GIF buffer
-		var buf = new Buffer( (width * height) + 1024 );
+		var buf = Buffer.alloc( (width * height) + 1024 );
 		var gf = null;
 		try {
 			gf = new OMGGIF.GifWriter( buf, width, height, { palette: palette_data } );
@@ -3279,7 +3252,6 @@ module.exports = Class.create({
 
 }).call(this,require("buffer").Buffer)
 },{"blob-to-buffer":26,"buffer":39,"omggif":31,"pixl-class":32}],23:[function(require,module,exports){
-(function (Buffer){
 // canvas-plus - Image Transformation Engine
 // JPEG Output Format Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3314,33 +3286,24 @@ module.exports = Class.create({
 		}
 		else {
 			// use node-canvas proprietary API
-			this.logDebug(6, "Compressing into JPEG format", { quality: this.get('quality'), progressive: this.get('progressive') } );
+			var opts = {
+				quality: this.get('quality') / 100,
+				progressive: this.get('progressive'),
+				chromaSubsampling: this.get('chromaSubsampling')
+			};
 			
-			var stream = this.canvas.createJPEGStream({
-				bufsize: this.get('bufsize') || 4096,
-				quality: this.get('quality'),
-				progressive: this.get('progressive')
-			});
-			var buffers = [];
+			this.logDebug(6, "Compressing into JPEG format", opts );
 			
-			stream.on('data', function (chunk) {
-				buffers.push(chunk);
-			});
-			stream.on('error', function (err) {
-				self.doError('jpeg', "JPEG Encode Error: " + err, callback);
-			});
-			stream.on('end', function() {
-				var buf = Buffer.concat(buffers);
-				self.logDebug(6, "JPEG compression complete");
-				callback(null, buf);
-			});
+			var buf = this.canvas.toBuffer('image/jpeg', opts );
+			
+			this.logDebug(6, "JPEG compression complete");
+			return callback(false, buf);
 		} // node-canvas
 	}
 	
 });
 
-}).call(this,require("buffer").Buffer)
-},{"blob-to-buffer":26,"buffer":39,"pixl-class":32}],24:[function(require,module,exports){
+},{"blob-to-buffer":26,"pixl-class":32}],24:[function(require,module,exports){
 (function (Buffer){
 // canvas-plus - Image Transformation Engine
 // PNG Output Format Mixin
@@ -3420,9 +3383,11 @@ module.exports = Class.create({
 			}
 			else {
 				// use node-canvas API
-				this.logDebug(6, "Compressing into 32-bit PNG", { compression: this.get('compressionLevel'), filter: this.get('pngFilter') } );
+				var opts = { compressionLevel: this.get('compressionLevel'), filters: this.get('pngFilter') };
+				this.logDebug(6, "Compressing into 32-bit PNG", opts );
 				
-				buf = this.canvas.toBuffer(undefined, this.get('compressionLevel'), this.canvas[this.get('pngFilter')]);
+				opts.filters = this.canvas[this.get('pngFilter')];
+				buf = this.canvas.toBuffer('image/png', opts );
 				
 				this.logDebug(6, "PNG compression complete");
 				return callback(false, buf);
@@ -3603,6 +3568,7 @@ var CanvasPlus = module.exports = Class.create({
 		alpha: true, // for png, gif
 		quality: 75, // for jpeg only
 		progressive: false, // for jpeg only
+		chromaSubsampling: true, // for jpeg only
 		
 		// Resize settings:
 		resizeMode: 'fit',
@@ -3619,7 +3585,6 @@ var CanvasPlus = module.exports = Class.create({
 		lineSpacing: 0,
 		outlineThickness: 2,
 		outlineStyle: 'round',
-		textAutoComposite: true,
 		
 		// Quantization settings:
 		colors: 256,
@@ -3928,7 +3893,7 @@ var CanvasPlus = module.exports = Class.create({
 		var ctx = this.context;
 		antialias = antialias.toLowerCase();
 		
-		ctx.filter = antialias;
+		ctx.quality = antialias;
 		ctx.patternQuality = antialias;
 		
 		switch (antialias) {
@@ -9708,12 +9673,13 @@ module.exports = Class.create({
 		return JSON.stringify( this.metrics() );
 	},
 	
-	summarize: function() {
+	summarize: function(prefix) {
 		// Summarize performance metrics in query string format
 		var pairs = [];
 		var metrics = this.metrics();
+		if (!prefix) prefix = '';
 		
-		// prefix with scale
+		// start with scale
 		pairs.push( 'scale=' + this.scale );
 		
 		// make sure total is always right after scale
@@ -9722,7 +9688,7 @@ module.exports = Class.create({
 		
 		// build summary string of other metrics
 		for (var id in metrics.perf) {
-			pairs.push( id + '=' + metrics.perf[id] );
+			pairs.push( prefix + id + '=' + metrics.perf[id] );
 		}
 		
 		// add counters if applicable, prefix each with c_

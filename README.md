@@ -141,7 +141,7 @@ Use [npm](https://www.npmjs.com/) to install the module:
 npm install pixl-canvas-plus
 ```
 
-Please note that the [canvas](https://www.npmjs.com/package/canvas) module dependency is a binary compiled library, which depends on [Cairo](https://www.cairographics.org/) being preinstalled on your machine.  See their [installation wiki](https://github.com/Automattic/node-canvas/wiki) for assistance.
+Please note that the [canvas](https://www.npmjs.com/package/canvas) module dependency is a binary compiled library, which depends on [Cairo](https://www.cairographics.org/) being preinstalled on your machine.  See their [installation wiki](https://github.com/Automattic/node-canvas/wiki) for assistance.  That being said, [canvas](https://www.npmjs.com/package/canvas) v2.x comes with precompiled binaries for macOS, Windows and Linux, so it might just slip right in.
 
 Here is a simple usage example:
 
@@ -273,7 +273,7 @@ catch (err) {
 
 In Node.js this example would look for a `waterfall.jpg` file on disk in the current directory.  In the browser this would be treated as a URL to `waterfall.jpg` relative to the current page.
 
-Note that loading images in the browser requires that the file is hosted on the same domain as the page, or is hosted on a server that sends back proper [CORS headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).  However, if you need to load an image from a 3rd party URL that does not support CORS, you can use the special [loadRemote()](#loadremote) method.  This works well enough, but due to browser security restrictions we have no access to the raw binary bytes, so features like [EXIF data](#getexif) and [Auto-Orient](#auto-orient) are not available.
+Note that loading images in the browser requires that the file is hosted on the same domain as the page, or is hosted on a server that sends back proper [CORS headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).  However, if you need to load an image from a 3rd party URL that does not support CORS, you can use the special [loadRemote()](#loadremote) method.  This works well enough, but due to browser security restrictions we will not have access to the raw binary bytes, so features like [EXIF data](#getexif) and [Auto-Orient](#auto-orient) are not available.
 
 ## Saving
 
@@ -303,7 +303,7 @@ Note that in the browser the buffer is provided using the [buffer](https://www.n
 
 ## Errors
 
-All filter functions are synchronous, so they do not follow the callback pattern.  Further, it is well known that [using try/catch results in V8 not optimizing the code](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers) (Update: this is fixed in V8 5.3 / node 7.x).  So by default all filter methods do not throw (however you can enable this behavior if you want, see below).  Instead, they set an internal error state which you can query after the fact.  Example:
+All filter functions are synchronous, so they do not follow the callback pattern.  So by default all filter methods do not throw (however you can enable this behavior if you want, see below).  Instead, they set an internal error state which you can query after the fact.  Example:
 
 ```js
 canvas.adjust({
@@ -327,7 +327,7 @@ if (canvas.getLastError()) {
 }
 ```
 
-If you would prefer to use try/catch (only recommended in Node 7.x and up), you can enable `throw` mode by calling [set()](#set) before running any filters:
+If you would prefer to use try/catch, you can enable `throw` mode by calling [set()](#set) before running any filters:
 
 ```js
 canvas.set('throw', true);
@@ -910,7 +910,7 @@ The `amount` is really just the size of one dimension of the [Gaussian convoluti
 Example use:
 
 ```js
-canvas.blur({
+canvas.gaussianBlur({
 	"amount": 9
 });
 ```
@@ -1278,11 +1278,20 @@ The `text()` method renders text onto your canvas.  Beyond the built-in features
 | `opacity` | Float | Text opacity (0.0 to 1.0), defaults to `1.0`. |
 | `mode` | String | Text rendering mode, see [globalCompositeOperation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation), defaults to `source-over`. |
 
-Example use:
+#### Fonts
+
+When specifying fonts via the `font` property, please note that things are handled differently if you are running in a browser, vs. using Node.js on the server-side.  For Node.js, you need to specify a filesystem path to the font file, in either OpenType (OTF) or TrueType (TTF) format, and preload the font using `loadFont()` before creating the canvas (see below).  The font weight and style are expected to be embedded into the file itself, e.g. `Arial-Narrow-bold.otf` or `Helvetica-bold-italic.ttf`.  Example:
 
 ```js
-// Note: Fonts are handled differently in the browser vs. Node.js.
-// Please see 'Fonts' section below for details.
+// Node.js text example
+var canvas = new CanvasPlus();
+canvas.loadFont( "/path/to/fonts/Arial-Narrow-bold.otf" ); // do this first!
+canvas.create({
+	width: 640,
+	height: 480,
+	background: "#FFFFFF"
+});
+
 canvas.text({
 	"text": "Hello there, Node.js!",
 	"font": "/path/to/fonts/Arial-Narrow-bold.otf",
@@ -1296,14 +1305,12 @@ canvas.text({
 });
 ```
 
-#### Fonts
+Note that you **must** load all fonts before creating the canvas in which they will be used.  This is a limitation of node-canvas v2.  See [registerFont](https://github.com/Automattic/node-canvas#registerfont) for details.
 
-When specifying fonts via the `font` property, please note that things are handled differently if you are running in a browser, vs. using Node.js on the server-side.  For Node.js, you need to specify a filesystem path to the font file, in either OpenType (OTF) or TrueType (TTF) format (see example above).  The font weight and style are expected to be embedded into the file itself, e.g. `Arial-Narrow-bold.otf` or `Helvetica-bold-italic.ttf`.
-
-When running CanvasPlus in the browser, things are a bit different.  You must specify a CSS font family instead, e.g. `Arial Narrow`.  This can be any built-in system font, or a custom web font that you loaded previously (make sure it is [completely loaded](https://www.npmjs.com/package/onfontready) before using in CanvasPlus).  In addition, if you want to specify a font weight or style, please use the special browser-only `fontWeight` and/or `fontStyle` properties, respectively.  Example:
+When running CanvasPlus in the browser, things are a bit different.  You must specify a CSS font family instead, e.g. `Arial Narrow`.  This can be any built-in system font, or a custom web font that you loaded previously (make sure it is completely loaded before using in CanvasPlus).  In addition, if you want to specify a font weight or style, please use the special browser-only `fontWeight` and/or `fontStyle` properties, respectively.  Example:
 
 ```js
-// Browser-specific example
+// Browser-specific text example
 canvas.text({
 	"text": "Hello there, browser!",
 	"font": "Arial Narrow", // CSS font-family
@@ -1317,6 +1324,16 @@ canvas.text({
 	"outlineColor": "#000000",
 	"outlineThickness": 4
 });
+```
+
+As a convenience, a special version of `loadFont()` is made available for use in the browser.  It accepts a font family name, a URL, and an optional callback.  The callback will be fired when the font is completely loaded and ready to use.  Example:
+
+```js
+// browser font loading example
+canvas.loadFont( "Open Sans", "fonts/open-sans-regular.woff2", function(err) {
+	if (err) throw err;
+	// font is ready to use!
+} );
 ```
 
 #### Text Overflow
@@ -1856,6 +1873,7 @@ The following parameters are only applicable in Node.js, when using the [canvas]
 | Parameter Name | Type | Description |
 |----------------|------|-------------|
 | `progressive` | Boolean | Optionally save JPEGs in progressive scan mode.  Defaults to `false`. |
+| `chromaSubsampling` | Boolean | Optionally save JPEGs with [chroma subsampling](https://en.wikipedia.org/wiki/Chroma_subsampling).  Defaults to `true`. |
 | `compressionLevel` | Integer | Compression level for PNG images.  Defaults to `6`. |
 | `pngFilter` | String | PNG filter algorithm, for 32-bit PNG images.  Defaults to `PNG_ALL_FILTERS`.  See below. |
 
@@ -1888,6 +1906,7 @@ Also, special thanks go to:
 - Matt Lockyer's [Gaussian Blur Convolution Kernel Generator](https://github.com/mattlockyer/iat455/blob/master/assignment1/assignment/effects/blur-effect-dyn.js), (c) [Matt Lockyer](https://github.com/mattlockyer/iat455), MIT License
 - The [Monotone Cubic Interpolation](https://en.wikipedia.org/wiki/Monotone_cubic_interpolation) article on Wikipedia, and sample code therein.
 - The [TinyColor](https://github.com/bgrins/TinyColor) library, (c) [Brian Grinstead](http://briangrinstead.com), MIT License.
+- The [onFontReady](https://github.com/dwighthouse/onfontready) library, (c) [Dwight House](https://github.com/dwighthouse), MIT License.
 - The [Blockhash](http://blockhash.io/) algorithm and JS code, (c) 2014 [Commons Machinery](http://commonsmachinery.se/), MIT License.
 - [Stack Overflow](https://stackoverflow.com/)
 - [Mozilla Developer Network (MDN)](https://developer.mozilla.org/en-US/)
@@ -1896,7 +1915,7 @@ Also, special thanks go to:
 
 The MIT License (MIT)
 
-Copyright (c) 2017 - 2018 Joseph Huckaby.
+Copyright (c) 2017 - 2019 Joseph Huckaby.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -36,7 +36,6 @@ var CanvasPlus = window.CanvasPlus = require('./main.js');
 // make some browser-specific overrides
 CanvasPlus.prototype.browser = true;
 CanvasPlus.prototype.userAgent = navigator.userAgent;
-CanvasPlus.prototype.defaultSettings.textAutoComposite = false;
 
 // Context2D.measureText() doesn't include height in the browser, so we must hack one in.
 var font_height_cache = {};
@@ -53,7 +52,7 @@ CanvasPlus.prototype.measureTextHeight = function(font_style) {
 	sty.top = '0px';
 	sty.opacity = 0;
 	sty.font = font_style;
-	sty.lineHeight = '1.0';
+	sty.lineHeight = 'normal'; // default is roughly 1.2 in most browsers
 	div.innerHTML = 'M';
 	
 	body.appendChild( div );
