@@ -1068,29 +1068,29 @@ Note that quantization includes and preserves alpha transparency in the palette,
 
 ### quantizeFast
 
-**Live Demo:** [Quantize Fast](https://jhuckaby.github.io/canvas-plus-playground/?t=load/eyJpbWFnZSI6IndhdGVyZmFsbC5qcGcifQ%3D%3D&t=resize/eyJ3aWR0aCI6NjQwLCJoZWlnaHQiOjQ4MCwibW9kZSI6ImZpdCJ9&t=quantizeFast/eyJjcnVzaFJHQiI6NiwiY3J1c2hBbHBoYSI6NiwiZGl0aGVyIjp0cnVlfQ%3D%3D&f=png)
+**Live Demo:** [Quantize Fast](https://jhuckaby.github.io/canvas-plus-playground/?t=load/eyJpbWFnZSI6IndhdGVyZmFsbC5qcGcifQ%3D%3D&t=resize/eyJ3aWR0aCI6NjQwLCJoZWlnaHQiOjQ4MCwibW9kZSI6ImZpdCJ9&t=quantizeFast/eyJjb2xvcnMiOjI1NiwiY3J1c2hSR0IiOjE2LCJjcnVzaEFscGhhIjoxNn0%3D&f=png)
 
-The `quantizeFast()` method works similarly to [quantize()](#quantize), in that it reduces your image to a fixed number of unique colors, then generates a palette and converts the canvas into [indexed mode](#modes).  However, this version is approximately 10X faster.  It does this by "crushing" (a.k.a [posterizing](#posterize)) the image, optionally dithering it, then simply building a palette of all unique colors.  This generally produces lower quality results than [quantize()](#quantize) (depending on the image), but at a fraction of the CPU cost.  The method accepts an object containing the following properties:
+The `quantizeFast()` method works similarly to [quantize()](#quantize), in that it reduces your image to a fixed number of unique colors, then generates a palette and converts the canvas into [indexed mode](#modes).  However, this algorithm is approximately 10X faster.  It does this by "crushing" (a.k.a [posterizing](#posterize)) the image, optionally dithering it at the same time, then simply building a palette of all unique colors.  This generally produces lower quality results than [quantize()](#quantize) (depending on the image), but at a fraction of the CPU cost.  The method accepts an object containing the following properties:
 
 | Property Name | Type | Description |
 |---------------|------|-------------|
-| `crushRGB` | Integer | Number of posterization levels for the RGB channels, defaults to `0`. |
-| `crushAlpha` | Integer | Number of posterization levels for the Alpha channel, defaults to `0`. |
+| `colors` | Integer | Target number of colors in the palette, defaults to `256`. |
+| `crushRGB` | Integer | Optional starting number of posterization levels for the RGB channels, defaults to `16`. |
+| `crushAlpha` | Integer | Optional starting number of posterization levels for the Alpha channel, defaults to `16`. |
 | `dither` | Boolean | Optional pattern dither, defaults to `false` (disabled). |
-| `fallback` | Boolean | Optional fallback to [quantize()](#quantize) if image has too many colors, defaults to `false` (disabled). |
 
 Example use:
 
 ```js
 canvas.quantizeFast({
-	"crushRGB": 6,
+	"colors": 256,
 	"dither": true
 });
 ```
 
-It is important to note that you cannot specify the exact number of colors you want in your palette with `quantizeFast()`.  The algorithm builds its own palette based on the total unique colors after "crushing" (posterizing) the image.  You can control the level of posterization of course, and adjust it differently for the RGB and Alpha channels.  The higher the `crushRGB` and `crushAlpha` values are, the more unique colors are produced.  Also, while dithering is provided here as an option, only a [pattern dither](https://en.wikipedia.org/wiki/Ordered_dithering) is supported.
+The Quantize Fast algorithm will begin by crushing the image at the specified (or default) posterize levels, and see if the target number of colors was achieved.  If not, it will crush further by reducing the posterization levels, and keep trying until the palette size is equal to or less than the `colors` parameter.  To optimize for speed, depending on the image and with possible quality loss, you can change the starting `crushRGB` and/or `crushAlpha` to values below 16.
 
-When the `fallback` feature is enabled, the library will automatically switch over to [quantize()](#quantize) if the fast algorithm fails.  Meaning, if there are too many unique colors after crushing is complete.  The image must have 256 or fewer colors for quantization to work, and the fast algorithm cannot guarantee this outcome.  It all depends on how complex and varied the image colors are, and how many crush levels are used.  When `fallback` is disabled and the image ends up with more than 256 colors, an error is raised (see [Errors](#errors)).
+It is important to note that Quantize Fast may not achieve the exact number of colors you want in your palette, but it tries to get as close as possible without going over.  The algorithm builds its own palette based on the total unique colors after "crushing" (posterizing) the image.  You can control the level of posterization of course, and adjust it differently for the RGB and Alpha channels.  The higher the `crushRGB` and `crushAlpha` values are, the more unique colors are produced.  Also, while dithering is provided here as an option, only a [pattern dither](https://en.wikipedia.org/wiki/Ordered_dithering) is supported.
 
 Note that quantization includes and preserves alpha transparency in the palette, unless you first [flatten](#flatten) your canvas.
 
