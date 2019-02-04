@@ -268,11 +268,8 @@ module.exports = Class.create({
 		}
 		var arr_buf = thingy;
 		
-		// convert ArrayBuffer to Node-like Buffer
-		var buf = Buffer.from(arr_buf);
-		
 		this.perf.begin('read');
-		this.logDebug(4, "Loading image from buffer", { size: buf.length } );
+		this.logDebug(4, "Loading image from buffer", { size: arr_buf.byteLength } );
 		
 		// detect EXIF data if present in image
 		this.exif = EXIF.readFromBinaryFile( arr_buf );
@@ -283,20 +280,21 @@ module.exports = Class.create({
 		
 		// load image from buffer
 		var mime_type = "image/" + this.get('format').replace(/jpg/, 'jpeg');
-		var buf_view = new Uint8Array( arr_buf );
-		var blob = new Blob( [ buf_view ], { type: mime_type } );
 		var url_creator = window.URL || window.webkitURL || window.mozURL || window.msURL;
-		var object_url = url_creator.createObjectURL( blob );
+		var object_url = null;
 		
 		this.image.onerror = function() {
 			// load failed
 			self.doError('load', "Image load failed", callback);
+			
+			// free memory
+			if (object_url) url_creator.revokeObjectURL(object_url);
 		};
 		
 		this.image.onload = function() {
 			// load complete (should be same thread)
 			self.perf.end('read');
-			self.perf.count('bytes_read', buf.length);
+			self.perf.count('bytes_read', arr_buf.byteLength);
 			self.set('mode', 'image');
 			
 			// sanity checks
@@ -329,11 +327,22 @@ module.exports = Class.create({
 			if (callback) callback(false);
 			
 			// free memory
-			url_creator.revokeObjectURL(object_url);
+			if (object_url) url_creator.revokeObjectURL(object_url);
 		};
 		
 		// trigger load
-		this.image.src = object_url;
+		if (this.get('useDataURLs')) {
+			// load using data url
+			var buf = Buffer.from(arr_buf);
+			this.image.src = "data:" + mime_type + ";base64," + buf.toString('base64');
+		}
+		else {
+			// load using blob
+			var buf_view = new Uint8Array( arr_buf );
+			var blob = new Blob( [ buf_view ], { type: mime_type } );
+			object_url = url_creator.createObjectURL( blob );
+			this.image.src = object_url;
+		}
 	},
 	
 	loadRemote: function(url, callback) {
@@ -377,6 +386,10 @@ module.exports = Class.create({
 			self.set('width', this.width);
 			self.set('height', this.height);
 			self.set('format', fmt);
+			
+			self.set('origWidth', self.get('width'));
+			self.set('origHeight', self.get('height'));
+			self.set('origFormat', self.get('format'));
 			
 			self.canvas = null;
 			self.context = null;
@@ -2392,6 +2405,20 @@ module.exports = Class.create({
 		var orig_width = this.get('width');
 		var orig_height = this.get('height');
 		
+		// if width or height are missing, set to 0 so they aren't overwritten in applySettings
+		if (!opts.width) opts.width = 0;
+		if (!opts.height) opts.height = 0;
+		
+		// allow width and/or height to be percentage strings
+		if ((typeof(opts.width) == 'string') && opts.width.match(/([\d\.]+)\%/)) {
+			var pct = parseFloat( RegExp.$1 );
+			opts.width = Math.floor( orig_width * (pct / 100) );
+		}
+		if ((typeof(opts.height) == 'string') && opts.height.match(/([\d\.]+)\%/)) {
+			var pct = parseFloat( RegExp.$1 );
+			opts.height = Math.floor( orig_height * (pct / 100) );
+		}
+		
 		// import settings into opts
 		opts = this.applySettings(opts);
 		
@@ -3270,6 +3297,7 @@ module.exports = Class.create({
 
 }).call(this,require("buffer").Buffer)
 },{"blob-to-buffer":26,"buffer":39,"omggif":31,"pixl-class":32}],23:[function(require,module,exports){
+(function (Buffer){
 // canvas-plus - Image Transformation Engine
 // JPEG Output Format Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3286,7 +3314,14 @@ module.exports = Class.create({
 		if (this.requireRGBA().isError) return callback( this.getLastError() );
 		
 		// look for standard API first
-		if (this.canvas.toBlob) {
+		if (this.get('useDataURLs')) {
+			this.logDebug(6, "Compressing into JPEG format (using browser)", { quality: this.get('quality') } );
+			
+			var buf = Buffer.from( this.canvas.toDataURL('image/jpeg', this.get('quality') / 100).split(',')[1], 'base64' );
+			this.logDebug(6, "JPEG compression complete");
+			return callback(false, buf);
+		}
+		else if (this.canvas.toBlob) {
 			this.logDebug(6, "Compressing into JPEG format (using browser)", { quality: this.get('quality') } );
 			
 			this.canvas.toBlob( 
@@ -3321,7 +3356,8 @@ module.exports = Class.create({
 	
 });
 
-},{"blob-to-buffer":26,"pixl-class":32}],24:[function(require,module,exports){
+}).call(this,require("buffer").Buffer)
+},{"blob-to-buffer":26,"buffer":39,"pixl-class":32}],24:[function(require,module,exports){
 (function (Buffer){
 // canvas-plus - Image Transformation Engine
 // PNG Output Format Mixin
@@ -3383,7 +3419,14 @@ module.exports = Class.create({
 		
 		if (mode == 'rgba') {
 			// simple rgba to png, use node-canvas
-			if (this.canvas.toBlob) {
+			if (this.get('useDataURLs')) {
+				this.logDebug(6, "Compressing into 32-bit PNG format (using browser)" );
+				
+				var buf = Buffer.from( this.canvas.toDataURL('image/jpeg').split(',')[1], 'base64' );
+				this.logDebug(6, "PNG compression complete");
+				return callback(false, buf);
+			}
+			else if (this.canvas.toBlob) {
 				// use standard HTML5 API
 				this.logDebug(6, "Compressing into 32-bit PNG (using browser)" );
 				

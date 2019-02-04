@@ -127,6 +127,7 @@ There are already some extremely cool image processing libraries out there.  I p
 	* [Clipping](#clipping)
 	* [Parameters](#parameters)
 		+ [Node Parameters](#node-parameters)
+		+ [Browser Parameters](#browser-parameters)
 - [Development](#development)
 - [Acknowledgments](#acknowledgments)
 - [License](#license)
@@ -1131,6 +1132,14 @@ canvas.resize({
 });
 ```
 
+Actually, you can just specify percentage as a string with a `%` suffix, which has the same effect:
+
+```js
+canvas.resize({
+	"width": "50%"
+});
+```
+
 Here is a description of all the available resize modes:
 
 | Resize Mode | Alias | Description |
@@ -1878,6 +1887,16 @@ The following parameters are only applicable in Node.js, when using the [canvas]
 | `pngFilter` | String | PNG filter algorithm, for 32-bit PNG images.  Defaults to `PNG_ALL_FILTERS`.  See below. |
 
 The `pngFilter` parameter specifies the algorithm for preparing the PNG data for compression.  The available values are: `PNG_ALL_FILTERS`, `PNG_FILTER_SUB`, `PNG_FILTER_UP`, `PNG_FILTER_AVG`, `PNG_FILTER_PAETH`, and `PNG_FILTER_NONE`.  This is only applicable for writing 32-bit PNGs.  See the [PNG Filter Spec](https://www.w3.org/TR/PNG-Filters.html) for more information.
+
+### Browser Parameters
+
+The following parameters are only applicable when running in the browser:
+
+| Parameter Name | Type | Description |
+|----------------|------|-------------|
+| `fontWeight` | String | Set the font weight, e.g. `bold` (defaults to `normal`). |
+| `fontStyle` | String | Set the font style, e.g. `italic` (defaults to `normal`). |
+| `useDataURLs` | Boolean | Use [Data URLs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) instead of [Blobs](https://developer.mozilla.org/en-US/docs/Web/API/Blob) when loading and saving images.  This may improve performance when using headless Chrome on Linux. |
 
 # Development
 
