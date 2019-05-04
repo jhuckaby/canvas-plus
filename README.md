@@ -1863,6 +1863,7 @@ Here are all the general parameters you can access using [get()](#get) and chang
 
 | Parameter Name | Type | Description |
 |----------------|------|-------------|
+| `readEXIF` | Boolean | Automatically read image EXIF data on load.  Defaults to `true` (enabled). |
 | `autoOrient` | Boolean | Automatically correct image rotation on load, using EXIF data.  Defaults to `true` (enabled). |
 | `throw` | Boolean | Enables try/catch mode (will throw on error).  Defaults to `false` (disabled).  Only recommended in Node 7+. |
 | `debug` | Boolean | Enables debug logging mode using `console.log` and `console.error`.  Defaults to `false` (disabled). |

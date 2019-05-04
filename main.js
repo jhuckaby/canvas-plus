@@ -76,6 +76,7 @@ var CanvasPlus = module.exports = Class.create({
 		height: 0,
 		maxArea: 0,
 		opacity: 1,
+		readEXIF: true,
 		autoOrient: true,
 		alpha: true, // for png, gif
 		quality: 75, // for jpeg only
