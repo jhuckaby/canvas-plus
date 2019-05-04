@@ -273,7 +273,10 @@ module.exports = Class.create({
 		
 		// detect EXIF data if present in image
 		if (this.get('readEXIF')) {
-			this.exif = EXIF.readFromBinaryFile( arr_buf );
+			try { this.exif = EXIF.readFromBinaryFile( arr_buf ); }
+			catch (err) {
+				this.logDebug(3, "Warning: Failed to read EXIF metadata: " + err);
+			}
 			if (this.exif) this.logDebug(9, "EXIF Image Data", this.exif);
 		}
 		
