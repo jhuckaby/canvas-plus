@@ -65,7 +65,7 @@ CanvasPlus.prototype.measureTextHeight = function(font_style) {
 };
 
 }).call(this,require('_process'))
-},{"./main.js":25,"_process":59,"browser-process-hrtime":27,"pixl-class":32}],2:[function(require,module,exports){
+},{"./main.js":25,"_process":61,"browser-process-hrtime":27,"pixl-class":34}],2:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Canvas Create Mixin - Browser Version
 // Copyright (c) 2017 Joseph Huckaby
@@ -143,7 +143,7 @@ module.exports = Class.create({
 		
 });
 
-},{"pixl-class":32}],3:[function(require,module,exports){
+},{"pixl-class":34}],3:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Canvas Font Mixin - Browser Version
 // Copyright (c) 2017 Joseph Huckaby
@@ -206,7 +206,7 @@ module.exports = Class.create({
 // https://github.com/dwighthouse/onfontready/blob/master/LICENSE
 function onFontReady(e,t,i,n,o){i=i||0,i.timeoutAfter&&setTimeout(function(){n&&(document.body.removeChild(n),n=0,i.onTimeout&&i.onTimeout())},i.timeoutAfter),o=function(){n&&n.firstChild.clientWidth==n.lastChild.clientWidth&&(document.body.removeChild(n),n=0,t())},o(document.body.appendChild(n=document.createElement("div")).innerHTML='<div style="position:fixed;white-space:pre;bottom:999%;right:999%;font:999px '+(i.generic?"":"'")+e+(i.generic?"":"'")+',serif">'+(i.sampleText||" ")+'</div><div style="position:fixed;white-space:pre;bottom:999%;right:999%;font:999px '+(i.generic?"":"'")+e+(i.generic?"":"'")+',monospace">'+(i.sampleText||" ")+"</div>"),n&&(n.firstChild.appendChild(e=document.createElement("iframe")).style.width="999%",e.contentWindow.onresize=o,n.lastChild.appendChild(e=document.createElement("iframe")).style.width="999%",e.contentWindow.onresize=o,e=setTimeout(o))};
 
-},{"pixl-class":32}],4:[function(require,module,exports){
+},{"pixl-class":34}],4:[function(require,module,exports){
 (function (Buffer){
 // canvas-plus - Image Transformation Engine
 // Canvas Load Mixin - Browser Version
@@ -215,6 +215,7 @@ function onFontReady(e,t,i,n,o){i=i||0,i.timeoutAfter&&setTimeout(function(){n&&
 
 var Class = require("pixl-class");
 var EXIF = require('exif-js');
+var fileType = require('file-type');
 
 module.exports = Class.create({
 	
@@ -227,11 +228,7 @@ module.exports = Class.create({
 		if (typeof(thingy) == 'string') {
 			// load from URL
 			var url = thingy;
-			var fmt = 'jpeg';
-			if (url.match(/\.(\w+)(\?|$)/)) fmt = RegExp.$1.toLowerCase();
-			
-			this.set('format', fmt);
-			this.logDebug(4, "Loading image from URL", { url: url, format: fmt } );
+			this.logDebug(4, "Loading image from URL", { url: url } );
 			this.perf.begin('download');
 			
 			var http = new XMLHttpRequest();
@@ -252,8 +249,6 @@ module.exports = Class.create({
 		}
 		else if (thingy instanceof Blob || thingy instanceof File) {
 			// load from blob or file
-			if (!this.get('format')) this.set('format', 'jpeg');
-			
 			var fileReader = new FileReader();
 			fileReader.onload = function(e) {
 				self.load( e.target.result, callback );
@@ -262,34 +257,57 @@ module.exports = Class.create({
 			return;
 		}
 		
+		// support Uint8Array or Buffer (which is a Uint8Array in disguise)
+		if (thingy instanceof Uint8Array) {
+			if ((thingy.byteOffset === 0) && (thingy.byteLength === thingy.buffer.byteLength)) {
+				thingy = thingy.buffer;
+			}
+			else if (typeof thingy.buffer.slice === 'function') {
+				thingy = thingy.buffer.slice(thingy.byteOffset, thingy.byteOffset + thingy.byteLength);
+			}
+		}
+		
 		// we should have an ArrayBuffer at this point
 		if (!(thingy instanceof ArrayBuffer)) {
-			return this.doError('load', "Failed to load image: Unknown image resource type"); 
+			return this.doError('load', "Failed to load image: Unknown image resource type: " + typeof(thingy), callback); 
 		}
 		var arr_buf = thingy;
 		
-		this.perf.begin('read');
-		this.logDebug(4, "Loading image from buffer", { size: arr_buf.byteLength } );
+		// detect file format
+		this.perf.begin('detect');
+		var info = fileType(arr_buf);
+		this.perf.end('detect');
+		
+		if (!info || !info.mime) {
+			return this.doError('load', "Failed to load image: Unsupported or unknown file type", callback);
+		}
+		this.set('format', info.mime.replace(/^image\//, ''));
+		
+		this.logDebug(4, "Loading image from buffer", { size: arr_buf.byteLength, format: this.get('format') } );
 		
 		// detect EXIF data if present in image
 		if (this.get('readEXIF')) {
+			this.perf.begin('exif');
 			try { this.exif = EXIF.readFromBinaryFile( arr_buf ); }
 			catch (err) {
 				this.logDebug(3, "Warning: Failed to read EXIF metadata: " + err);
 			}
+			this.perf.end('exif');
 			if (this.exif) this.logDebug(9, "EXIF Image Data", this.exif);
 		}
 		
 		// load image (actually happens in sync, but uses callbacks, sigh)
+		this.perf.begin('read');
 		this.image = new Image();
 		
 		// load image from buffer
-		var mime_type = "image/" + this.get('format').replace(/jpg/, 'jpeg');
+		var mime_type = info.mime;
 		var url_creator = window.URL || window.webkitURL || window.mozURL || window.msURL;
 		var object_url = null;
 		
 		this.image.onerror = function() {
 			// load failed
+			self.perf.end('read');
 			self.doError('load', "Image load failed", callback);
 			
 			// free memory
@@ -414,7 +432,7 @@ module.exports = Class.create({
 });
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":40,"exif-js":29,"pixl-class":32}],5:[function(require,module,exports){
+},{"buffer":42,"exif-js":29,"file-type":30,"pixl-class":34}],5:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Canvas Write Mixin - Browser Version
 // Copyright (c) 2017 Joseph Huckaby
@@ -477,7 +495,7 @@ module.exports = Class.create({
 		
 });
 
-},{"pixl-class":32}],6:[function(require,module,exports){
+},{"pixl-class":34}],6:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Adjust Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -705,7 +723,7 @@ function hsvToRgb(h, s, v, rgb) {
 	return rgb;
 };
 
-},{"pixl-class":32}],7:[function(require,module,exports){
+},{"pixl-class":34}],7:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Border Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -777,7 +795,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":32}],8:[function(require,module,exports){
+},{"pixl-class":34}],8:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Composite Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -896,7 +914,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":32}],9:[function(require,module,exports){
+},{"pixl-class":34}],9:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Convolve Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1152,7 +1170,7 @@ function generateGaussianKernel(dimension, sigma) {
 	return kernel.map(function (e) { return e / sum; });
 };
 
-},{"pixl-class":32}],10:[function(require,module,exports){
+},{"pixl-class":34}],10:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Crop Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1218,7 +1236,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":32}],11:[function(require,module,exports){
+},{"pixl-class":34}],11:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Curves Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1652,7 +1670,7 @@ function createInterpolant(xs, ys) {
 	};
 };
 
-},{"pixl-class":32}],12:[function(require,module,exports){
+},{"pixl-class":34}],12:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Expand Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1695,7 +1713,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":32}],13:[function(require,module,exports){
+},{"pixl-class":34}],13:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Flatten Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1759,7 +1777,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":32}],14:[function(require,module,exports){
+},{"pixl-class":34}],14:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Hash Filter Mixin
 // Copyright (c) 2018 Joseph Huckaby
@@ -1991,7 +2009,7 @@ var bmvbhash = function(data, bits) {
 	return bits_to_hexhash(result);
 };
 
-},{"pixl-class":32}],15:[function(require,module,exports){
+},{"pixl-class":34}],15:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Histogram Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -2053,7 +2071,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":32}],16:[function(require,module,exports){
+},{"pixl-class":34}],16:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Opacity Filter Mixin
 // Copyright (c) 2018 Joseph Huckaby
@@ -2095,7 +2113,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":32}],17:[function(require,module,exports){
+},{"pixl-class":34}],17:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Quantize Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -2355,7 +2373,7 @@ module.exports = Class.create({
 	
 });
 
-},{"image-q":30,"pixl-class":32}],18:[function(require,module,exports){
+},{"image-q":32,"pixl-class":34}],18:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Resize Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -2539,7 +2557,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":32}],19:[function(require,module,exports){
+},{"pixl-class":34}],19:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Text Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -2944,7 +2962,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":32}],20:[function(require,module,exports){
+},{"pixl-class":34}],20:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Transform Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3102,7 +3120,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":32}],21:[function(require,module,exports){
+},{"pixl-class":34}],21:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Trim Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3205,7 +3223,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":32}],22:[function(require,module,exports){
+},{"pixl-class":34}],22:[function(require,module,exports){
 (function (Buffer){
 // canvas-plus - Image Transformation Engine
 // GIF Output Format Mixin
@@ -3301,7 +3319,7 @@ module.exports = Class.create({
 });
 
 }).call(this,require("buffer").Buffer)
-},{"blob-to-buffer":26,"buffer":40,"omggif":31,"pixl-class":32}],23:[function(require,module,exports){
+},{"blob-to-buffer":26,"buffer":42,"omggif":33,"pixl-class":34}],23:[function(require,module,exports){
 (function (Buffer){
 // canvas-plus - Image Transformation Engine
 // JPEG Output Format Mixin
@@ -3362,7 +3380,7 @@ module.exports = Class.create({
 });
 
 }).call(this,require("buffer").Buffer)
-},{"blob-to-buffer":26,"buffer":40,"pixl-class":32}],24:[function(require,module,exports){
+},{"blob-to-buffer":26,"buffer":42,"pixl-class":34}],24:[function(require,module,exports){
 (function (Buffer){
 // canvas-plus - Image Transformation Engine
 // PNG Output Format Mixin
@@ -3427,7 +3445,7 @@ module.exports = Class.create({
 			if (this.get('useDataURLs')) {
 				this.logDebug(6, "Compressing into 32-bit PNG format (using browser)" );
 				
-				var buf = Buffer.from( this.canvas.toDataURL('image/jpeg').split(',')[1], 'base64' );
+				var buf = Buffer.from( this.canvas.toDataURL('image/png').split(',')[1], 'base64' );
 				this.logDebug(6, "PNG compression complete");
 				return callback(false, buf);
 			}
@@ -3551,7 +3569,7 @@ module.exports = Class.create({
 });
 
 }).call(this,require("buffer").Buffer)
-},{"blob-to-buffer":26,"buffer":40,"crc-32":28,"pixl-class":32,"zlib":39}],25:[function(require,module,exports){
+},{"blob-to-buffer":26,"buffer":42,"crc-32":28,"pixl-class":34,"zlib":41}],25:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Built using node-canvas and image-q
 // Copyright (c) 2017 Joseph Huckaby
@@ -4170,7 +4188,7 @@ for (var key in CanvasPlus.prototype) {
 	}
 }
 
-},{"./lib/filter/adjust.js":6,"./lib/filter/border.js":7,"./lib/filter/composite.js":8,"./lib/filter/convolve.js":9,"./lib/filter/crop.js":10,"./lib/filter/curves.js":11,"./lib/filter/expand.js":12,"./lib/filter/flatten.js":13,"./lib/filter/hash.js":14,"./lib/filter/histogram.js":15,"./lib/filter/opacity.js":16,"./lib/filter/quantize.js":17,"./lib/filter/resize.js":18,"./lib/filter/text.js":19,"./lib/filter/transform.js":20,"./lib/filter/trim.js":21,"./lib/format/gif.js":22,"./lib/format/jpeg.js":23,"./lib/format/png.js":24,"./lib/node/create.js":2,"./lib/node/font.js":3,"./lib/node/load.js":4,"./lib/node/write.js":5,"pixl-class":32,"pixl-perf":34}],26:[function(require,module,exports){
+},{"./lib/filter/adjust.js":6,"./lib/filter/border.js":7,"./lib/filter/composite.js":8,"./lib/filter/convolve.js":9,"./lib/filter/crop.js":10,"./lib/filter/curves.js":11,"./lib/filter/expand.js":12,"./lib/filter/flatten.js":13,"./lib/filter/hash.js":14,"./lib/filter/histogram.js":15,"./lib/filter/opacity.js":16,"./lib/filter/quantize.js":17,"./lib/filter/resize.js":18,"./lib/filter/text.js":19,"./lib/filter/transform.js":20,"./lib/filter/trim.js":21,"./lib/format/gif.js":22,"./lib/format/jpeg.js":23,"./lib/format/png.js":24,"./lib/node/create.js":2,"./lib/node/font.js":3,"./lib/node/load.js":4,"./lib/node/write.js":5,"pixl-class":34,"pixl-perf":36}],26:[function(require,module,exports){
 (function (Buffer){
 /* global Blob, FileReader */
 
@@ -4195,7 +4213,7 @@ module.exports = function blobToBuffer (blob, cb) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":40}],27:[function(require,module,exports){
+},{"buffer":42}],27:[function(require,module,exports){
 (function (process,global){
 module.exports = process.hrtime || hrtime
 
@@ -4226,7 +4244,7 @@ function hrtime(previousTimestamp){
   return [seconds,nanoseconds]
 }
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":59}],28:[function(require,module,exports){
+},{"_process":61}],28:[function(require,module,exports){
 /* crc32.js (C) 2014-present SheetJS -- http://sheetjs.com */
 /* vim: set ts=2: */
 /*exported CRC32 */
@@ -5357,6 +5375,1027 @@ CRC32.str = crc32_str;
 
 
 },{}],30:[function(require,module,exports){
+(function (Buffer){
+'use strict';
+const {stringToBytes, readUInt64LE, tarHeaderChecksumMatches} = require('./util');
+
+const xpiZipFilename = stringToBytes('META-INF/mozilla.rsa');
+const oxmlContentTypes = stringToBytes('[Content_Types].xml');
+const oxmlRels = stringToBytes('_rels/.rels');
+
+const fileType = input => {
+	if (!(input instanceof Uint8Array || input instanceof ArrayBuffer || Buffer.isBuffer(input))) {
+		throw new TypeError(`Expected the \`input\` argument to be of type \`Uint8Array\` or \`Buffer\` or \`ArrayBuffer\`, got \`${typeof input}\``);
+	}
+
+	const buffer = input instanceof Uint8Array ? input : new Uint8Array(input);
+
+	if (!(buffer && buffer.length > 1)) {
+		return;
+	}
+
+	const check = (header, options) => {
+		options = Object.assign({
+			offset: 0
+		}, options);
+
+		for (let i = 0; i < header.length; i++) {
+			// If a bitmask is set
+			if (options.mask) {
+				// If header doesn't equal `buf` with bits masked off
+				if (header[i] !== (options.mask[i] & buffer[i + options.offset])) {
+					return false;
+				}
+			} else if (header[i] !== buffer[i + options.offset]) {
+				return false;
+			}
+		}
+
+		return true;
+	};
+
+	const checkString = (header, options) => check(stringToBytes(header), options);
+
+	if (check([0xFF, 0xD8, 0xFF])) {
+		return {
+			ext: 'jpg',
+			mime: 'image/jpeg'
+		};
+	}
+
+	if (check([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])) {
+		return {
+			ext: 'png',
+			mime: 'image/png'
+		};
+	}
+
+	if (check([0x47, 0x49, 0x46])) {
+		return {
+			ext: 'gif',
+			mime: 'image/gif'
+		};
+	}
+
+	if (check([0x57, 0x45, 0x42, 0x50], {offset: 8})) {
+		return {
+			ext: 'webp',
+			mime: 'image/webp'
+		};
+	}
+
+	if (check([0x46, 0x4C, 0x49, 0x46])) {
+		return {
+			ext: 'flif',
+			mime: 'image/flif'
+		};
+	}
+
+	// Needs to be before `tif` check
+	if (
+		(check([0x49, 0x49, 0x2A, 0x0]) || check([0x4D, 0x4D, 0x0, 0x2A])) &&
+		check([0x43, 0x52], {offset: 8})
+	) {
+		return {
+			ext: 'cr2',
+			mime: 'image/x-canon-cr2'
+		};
+	}
+
+	if (
+		check([0x49, 0x49, 0x2A, 0x0]) ||
+		check([0x4D, 0x4D, 0x0, 0x2A])
+	) {
+		return {
+			ext: 'tif',
+			mime: 'image/tiff'
+		};
+	}
+
+	if (check([0x42, 0x4D])) {
+		return {
+			ext: 'bmp',
+			mime: 'image/bmp'
+		};
+	}
+
+	if (check([0x49, 0x49, 0xBC])) {
+		return {
+			ext: 'jxr',
+			mime: 'image/vnd.ms-photo'
+		};
+	}
+
+	if (check([0x38, 0x42, 0x50, 0x53])) {
+		return {
+			ext: 'psd',
+			mime: 'image/vnd.adobe.photoshop'
+		};
+	}
+
+	// Zip-based file formats
+	// Need to be before the `zip` check
+	if (check([0x50, 0x4B, 0x3, 0x4])) {
+		if (
+			check([0x6D, 0x69, 0x6D, 0x65, 0x74, 0x79, 0x70, 0x65, 0x61, 0x70, 0x70, 0x6C, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6F, 0x6E, 0x2F, 0x65, 0x70, 0x75, 0x62, 0x2B, 0x7A, 0x69, 0x70], {offset: 30})
+		) {
+			return {
+				ext: 'epub',
+				mime: 'application/epub+zip'
+			};
+		}
+
+		// Assumes signed `.xpi` from addons.mozilla.org
+		if (check(xpiZipFilename, {offset: 30})) {
+			return {
+				ext: 'xpi',
+				mime: 'application/x-xpinstall'
+			};
+		}
+
+		if (checkString('mimetypeapplication/vnd.oasis.opendocument.text', {offset: 30})) {
+			return {
+				ext: 'odt',
+				mime: 'application/vnd.oasis.opendocument.text'
+			};
+		}
+
+		if (checkString('mimetypeapplication/vnd.oasis.opendocument.spreadsheet', {offset: 30})) {
+			return {
+				ext: 'ods',
+				mime: 'application/vnd.oasis.opendocument.spreadsheet'
+			};
+		}
+
+		if (checkString('mimetypeapplication/vnd.oasis.opendocument.presentation', {offset: 30})) {
+			return {
+				ext: 'odp',
+				mime: 'application/vnd.oasis.opendocument.presentation'
+			};
+		}
+
+		// The docx, xlsx and pptx file types extend the Office Open XML file format:
+		// https://en.wikipedia.org/wiki/Office_Open_XML_file_formats
+		// We look for:
+		// - one entry named '[Content_Types].xml' or '_rels/.rels',
+		// - one entry indicating specific type of file.
+		// MS Office, OpenOffice and LibreOffice may put the parts in different order, so the check should not rely on it.
+		const findNextZipHeaderIndex = (arr, startAt = 0) => arr.findIndex((el, i, arr) => i >= startAt && arr[i] === 0x50 && arr[i + 1] === 0x4B && arr[i + 2] === 0x3 && arr[i + 3] === 0x4);
+
+		let zipHeaderIndex = 0; // The first zip header was already found at index 0
+		let oxmlFound = false;
+		let type;
+
+		do {
+			const offset = zipHeaderIndex + 30;
+
+			if (!oxmlFound) {
+				oxmlFound = (check(oxmlContentTypes, {offset}) || check(oxmlRels, {offset}));
+			}
+
+			if (!type) {
+				if (checkString('word/', {offset})) {
+					type = {
+						ext: 'docx',
+						mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+					};
+				} else if (checkString('ppt/', {offset})) {
+					type = {
+						ext: 'pptx',
+						mime: 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+					};
+				} else if (checkString('xl/', {offset})) {
+					type = {
+						ext: 'xlsx',
+						mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					};
+				}
+			}
+
+			if (oxmlFound && type) {
+				return type;
+			}
+
+			zipHeaderIndex = findNextZipHeaderIndex(buffer, offset);
+		} while (zipHeaderIndex >= 0);
+
+		// No more zip parts available in the buffer, but maybe we are almost certain about the type?
+		if (type) {
+			return type;
+		}
+	}
+
+	if (
+		check([0x50, 0x4B]) &&
+		(buffer[2] === 0x3 || buffer[2] === 0x5 || buffer[2] === 0x7) &&
+		(buffer[3] === 0x4 || buffer[3] === 0x6 || buffer[3] === 0x8)
+	) {
+		return {
+			ext: 'zip',
+			mime: 'application/zip'
+		};
+	}
+
+	if (
+		check([0x30, 0x30, 0x30, 0x30, 0x30, 0x30], {offset: 148, mask: [0xF8, 0xF8, 0xF8, 0xF8, 0xF8, 0xF8]}) && // Valid tar checksum
+		tarHeaderChecksumMatches(buffer)
+	) {
+		return {
+			ext: 'tar',
+			mime: 'application/x-tar'
+		};
+	}
+
+	if (
+		check([0x52, 0x61, 0x72, 0x21, 0x1A, 0x7]) &&
+		(buffer[6] === 0x0 || buffer[6] === 0x1)
+	) {
+		return {
+			ext: 'rar',
+			mime: 'application/x-rar-compressed'
+		};
+	}
+
+	if (check([0x1F, 0x8B, 0x8])) {
+		return {
+			ext: 'gz',
+			mime: 'application/gzip'
+		};
+	}
+
+	if (check([0x42, 0x5A, 0x68])) {
+		return {
+			ext: 'bz2',
+			mime: 'application/x-bzip2'
+		};
+	}
+
+	if (check([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C])) {
+		return {
+			ext: '7z',
+			mime: 'application/x-7z-compressed'
+		};
+	}
+
+	if (check([0x78, 0x01])) {
+		return {
+			ext: 'dmg',
+			mime: 'application/x-apple-diskimage'
+		};
+	}
+
+	// `mov` format variants
+	if (
+		check([0x66, 0x72, 0x65, 0x65], {offset: 4}) || // `free`
+		check([0x6D, 0x64, 0x61, 0x74], {offset: 4}) || // `mdat` MJPEG
+		check([0x6D, 0x6F, 0x6F, 0x76], {offset: 4}) || // `moov`
+		check([0x77, 0x69, 0x64, 0x65], {offset: 4}) // `wide`
+	) {
+		return {
+			ext: 'mov',
+			mime: 'video/quicktime'
+		};
+	}
+
+	// File Type Box (https://en.wikipedia.org/wiki/ISO_base_media_file_format)
+	// It's not required to be first, but it's recommended to be. Almost all ISO base media files start with `ftyp` box.
+	// `ftyp` box must contain a brand major identifier, which must consist of ISO 8859-1 printable characters.
+	// Here we check for 8859-1 printable characters (for simplicity, it's a mask which also catches one non-printable character).
+	if (
+		check([0x66, 0x74, 0x79, 0x70], {offset: 4}) && // `ftyp`
+		(buffer[8] & 0x60) !== 0x00 && (buffer[9] & 0x60) !== 0x00 && (buffer[10] & 0x60) !== 0x00 && (buffer[11] & 0x60) !== 0x00 // Brand major
+	) {
+		// They all can have MIME `video/mp4` except `application/mp4` special-case which is hard to detect.
+		// For some cases, we're specific, everything else falls to `video/mp4` with `mp4` extension.
+		const brandMajor = buffer.toString('utf8', 8, 12);
+		switch (brandMajor) {
+			case 'mif1':
+				return {ext: 'heic', mime: 'image/heif'};
+			case 'msf1':
+				return {ext: 'heic', mime: 'image/heif-sequence'};
+			case 'heic': case 'heix':
+				return {ext: 'heic', mime: 'image/heic'};
+			case 'hevc': case 'hevx':
+				return {ext: 'heic', mime: 'image/heic-sequence'};
+			case 'qt  ':
+				return {ext: 'mov', mime: 'video/quicktime'};
+			case 'M4V ': case 'M4VH': case 'M4VP':
+				return {ext: 'm4v', mime: 'video/x-m4v'};
+			case 'M4P ':
+				return {ext: 'm4p', mime: 'video/mp4'};
+			case 'M4B ':
+				return {ext: 'm4b', mime: 'audio/mp4'};
+			case 'M4A ':
+				return {ext: 'm4a', mime: 'audio/x-m4a'};
+			case 'F4V ':
+				return {ext: 'f4v', mime: 'video/mp4'};
+			case 'F4P ':
+				return {ext: 'f4p', mime: 'video/mp4'};
+			case 'F4A ':
+				return {ext: 'f4a', mime: 'audio/mp4'};
+			case 'F4B ':
+				return {ext: 'f4b', mime: 'audio/mp4'};
+			default:
+				if (brandMajor.startsWith('3g')) {
+					if (brandMajor.startsWith('3g2')) {
+						return {ext: '3g2', mime: 'video/3gpp2'};
+					}
+
+					return {ext: '3gp', mime: 'video/3gpp'};
+				}
+
+				return {ext: 'mp4', mime: 'video/mp4'};
+		}
+	}
+
+	if (check([0x4D, 0x54, 0x68, 0x64])) {
+		return {
+			ext: 'mid',
+			mime: 'audio/midi'
+		};
+	}
+
+	// https://github.com/threatstack/libmagic/blob/master/magic/Magdir/matroska
+	if (check([0x1A, 0x45, 0xDF, 0xA3])) {
+		const sliced = buffer.subarray(4, 4 + 4096);
+		const idPos = sliced.findIndex((el, i, arr) => arr[i] === 0x42 && arr[i + 1] === 0x82);
+
+		if (idPos !== -1) {
+			const docTypePos = idPos + 3;
+			const findDocType = type => [...type].every((c, i) => sliced[docTypePos + i] === c.charCodeAt(0));
+
+			if (findDocType('matroska')) {
+				return {
+					ext: 'mkv',
+					mime: 'video/x-matroska'
+				};
+			}
+
+			if (findDocType('webm')) {
+				return {
+					ext: 'webm',
+					mime: 'video/webm'
+				};
+			}
+		}
+	}
+
+	// RIFF file format which might be AVI, WAV, QCP, etc
+	if (check([0x52, 0x49, 0x46, 0x46])) {
+		if (check([0x41, 0x56, 0x49], {offset: 8})) {
+			return {
+				ext: 'avi',
+				mime: 'video/vnd.avi'
+			};
+		}
+
+		if (check([0x57, 0x41, 0x56, 0x45], {offset: 8})) {
+			return {
+				ext: 'wav',
+				mime: 'audio/vnd.wave'
+			};
+		}
+
+		// QLCM, QCP file
+		if (check([0x51, 0x4C, 0x43, 0x4D], {offset: 8})) {
+			return {
+				ext: 'qcp',
+				mime: 'audio/qcelp'
+			};
+		}
+	}
+
+	// ASF_Header_Object first 80 bytes
+	if (check([0x30, 0x26, 0xB2, 0x75, 0x8E, 0x66, 0xCF, 0x11, 0xA6, 0xD9])) {
+		// Search for header should be in first 1KB of file.
+
+		let offset = 30;
+		do {
+			const objectSize = readUInt64LE(buffer, offset + 16);
+			if (check([0x91, 0x07, 0xDC, 0xB7, 0xB7, 0xA9, 0xCF, 0x11, 0x8E, 0xE6, 0x00, 0xC0, 0x0C, 0x20, 0x53, 0x65], {offset})) {
+				// Sync on Stream-Properties-Object (B7DC0791-A9B7-11CF-8EE6-00C00C205365)
+				if (check([0x40, 0x9E, 0x69, 0xF8, 0x4D, 0x5B, 0xCF, 0x11, 0xA8, 0xFD, 0x00, 0x80, 0x5F, 0x5C, 0x44, 0x2B], {offset: offset + 24})) {
+					// Found audio:
+					return {
+						ext: 'wma',
+						mime: 'audio/x-ms-wma'
+					};
+				}
+
+				if (check([0xC0, 0xEF, 0x19, 0xBC, 0x4D, 0x5B, 0xCF, 0x11, 0xA8, 0xFD, 0x00, 0x80, 0x5F, 0x5C, 0x44, 0x2B], {offset: offset + 24})) {
+					// Found video:
+					return {
+						ext: 'wmv',
+						mime: 'video/x-ms-asf'
+					};
+				}
+
+				break;
+			}
+
+			offset += objectSize;
+		} while (offset + 24 <= buffer.length);
+
+		// Default to ASF generic extension
+		return {
+			ext: 'asf',
+			mime: 'application/vnd.ms-asf'
+		};
+	}
+
+	if (
+		check([0x0, 0x0, 0x1, 0xBA]) ||
+		check([0x0, 0x0, 0x1, 0xB3])
+	) {
+		return {
+			ext: 'mpg',
+			mime: 'video/mpeg'
+		};
+	}
+
+	// Check for MPEG header at different starting offsets
+	for (let start = 0; start < 2 && start < (buffer.length - 16); start++) {
+		if (
+			check([0x49, 0x44, 0x33], {offset: start}) || // ID3 header
+			check([0xFF, 0xE2], {offset: start, mask: [0xFF, 0xE6]}) // MPEG 1 or 2 Layer 3 header
+		) {
+			return {
+				ext: 'mp3',
+				mime: 'audio/mpeg'
+			};
+		}
+
+		if (
+			check([0xFF, 0xE4], {offset: start, mask: [0xFF, 0xE6]}) // MPEG 1 or 2 Layer 2 header
+		) {
+			return {
+				ext: 'mp2',
+				mime: 'audio/mpeg'
+			};
+		}
+
+		if (
+			check([0xFF, 0xF8], {offset: start, mask: [0xFF, 0xFC]}) // MPEG 2 layer 0 using ADTS
+		) {
+			return {
+				ext: 'mp2',
+				mime: 'audio/mpeg'
+			};
+		}
+
+		if (
+			check([0xFF, 0xF0], {offset: start, mask: [0xFF, 0xFC]}) // MPEG 4 layer 0 using ADTS
+		) {
+			return {
+				ext: 'mp4',
+				mime: 'audio/mpeg'
+			};
+		}
+	}
+
+	// Needs to be before `ogg` check
+	if (check([0x4F, 0x70, 0x75, 0x73, 0x48, 0x65, 0x61, 0x64], {offset: 28})) {
+		return {
+			ext: 'opus',
+			mime: 'audio/opus'
+		};
+	}
+
+	// If 'OggS' in first  bytes, then OGG container
+	if (check([0x4F, 0x67, 0x67, 0x53])) {
+		// This is a OGG container
+
+		// If ' theora' in header.
+		if (check([0x80, 0x74, 0x68, 0x65, 0x6F, 0x72, 0x61], {offset: 28})) {
+			return {
+				ext: 'ogv',
+				mime: 'video/ogg'
+			};
+		}
+
+		// If '\x01video' in header.
+		if (check([0x01, 0x76, 0x69, 0x64, 0x65, 0x6F, 0x00], {offset: 28})) {
+			return {
+				ext: 'ogm',
+				mime: 'video/ogg'
+			};
+		}
+
+		// If ' FLAC' in header  https://xiph.org/flac/faq.html
+		if (check([0x7F, 0x46, 0x4C, 0x41, 0x43], {offset: 28})) {
+			return {
+				ext: 'oga',
+				mime: 'audio/ogg'
+			};
+		}
+
+		// 'Speex  ' in header https://en.wikipedia.org/wiki/Speex
+		if (check([0x53, 0x70, 0x65, 0x65, 0x78, 0x20, 0x20], {offset: 28})) {
+			return {
+				ext: 'spx',
+				mime: 'audio/ogg'
+			};
+		}
+
+		// If '\x01vorbis' in header
+		if (check([0x01, 0x76, 0x6F, 0x72, 0x62, 0x69, 0x73], {offset: 28})) {
+			return {
+				ext: 'ogg',
+				mime: 'audio/ogg'
+			};
+		}
+
+		// Default OGG container https://www.iana.org/assignments/media-types/application/ogg
+		return {
+			ext: 'ogx',
+			mime: 'application/ogg'
+		};
+	}
+
+	if (check([0x66, 0x4C, 0x61, 0x43])) {
+		return {
+			ext: 'flac',
+			mime: 'audio/x-flac'
+		};
+	}
+
+	if (check([0x4D, 0x41, 0x43, 0x20])) { // 'MAC '
+		return {
+			ext: 'ape',
+			mime: 'audio/ape'
+		};
+	}
+
+	if (check([0x77, 0x76, 0x70, 0x6B])) { // 'wvpk'
+		return {
+			ext: 'wv',
+			mime: 'audio/wavpack'
+		};
+	}
+
+	if (check([0x23, 0x21, 0x41, 0x4D, 0x52, 0x0A])) {
+		return {
+			ext: 'amr',
+			mime: 'audio/amr'
+		};
+	}
+
+	if (check([0x25, 0x50, 0x44, 0x46])) {
+		return {
+			ext: 'pdf',
+			mime: 'application/pdf'
+		};
+	}
+
+	if (check([0x4D, 0x5A])) {
+		return {
+			ext: 'exe',
+			mime: 'application/x-msdownload'
+		};
+	}
+
+	if (
+		(buffer[0] === 0x43 || buffer[0] === 0x46) &&
+		check([0x57, 0x53], {offset: 1})
+	) {
+		return {
+			ext: 'swf',
+			mime: 'application/x-shockwave-flash'
+		};
+	}
+
+	if (check([0x7B, 0x5C, 0x72, 0x74, 0x66])) {
+		return {
+			ext: 'rtf',
+			mime: 'application/rtf'
+		};
+	}
+
+	if (check([0x00, 0x61, 0x73, 0x6D])) {
+		return {
+			ext: 'wasm',
+			mime: 'application/wasm'
+		};
+	}
+
+	if (
+		check([0x77, 0x4F, 0x46, 0x46]) &&
+		(
+			check([0x00, 0x01, 0x00, 0x00], {offset: 4}) ||
+			check([0x4F, 0x54, 0x54, 0x4F], {offset: 4})
+		)
+	) {
+		return {
+			ext: 'woff',
+			mime: 'font/woff'
+		};
+	}
+
+	if (
+		check([0x77, 0x4F, 0x46, 0x32]) &&
+		(
+			check([0x00, 0x01, 0x00, 0x00], {offset: 4}) ||
+			check([0x4F, 0x54, 0x54, 0x4F], {offset: 4})
+		)
+	) {
+		return {
+			ext: 'woff2',
+			mime: 'font/woff2'
+		};
+	}
+
+	if (
+		check([0x4C, 0x50], {offset: 34}) &&
+		(
+			check([0x00, 0x00, 0x01], {offset: 8}) ||
+			check([0x01, 0x00, 0x02], {offset: 8}) ||
+			check([0x02, 0x00, 0x02], {offset: 8})
+		)
+	) {
+		return {
+			ext: 'eot',
+			mime: 'application/vnd.ms-fontobject'
+		};
+	}
+
+	if (check([0x00, 0x01, 0x00, 0x00, 0x00])) {
+		return {
+			ext: 'ttf',
+			mime: 'font/ttf'
+		};
+	}
+
+	if (check([0x4F, 0x54, 0x54, 0x4F, 0x00])) {
+		return {
+			ext: 'otf',
+			mime: 'font/otf'
+		};
+	}
+
+	if (check([0x00, 0x00, 0x01, 0x00])) {
+		return {
+			ext: 'ico',
+			mime: 'image/x-icon'
+		};
+	}
+
+	if (check([0x00, 0x00, 0x02, 0x00])) {
+		return {
+			ext: 'cur',
+			mime: 'image/x-icon'
+		};
+	}
+
+	if (check([0x46, 0x4C, 0x56, 0x01])) {
+		return {
+			ext: 'flv',
+			mime: 'video/x-flv'
+		};
+	}
+
+	if (check([0x25, 0x21])) {
+		return {
+			ext: 'ps',
+			mime: 'application/postscript'
+		};
+	}
+
+	if (check([0xFD, 0x37, 0x7A, 0x58, 0x5A, 0x00])) {
+		return {
+			ext: 'xz',
+			mime: 'application/x-xz'
+		};
+	}
+
+	if (check([0x53, 0x51, 0x4C, 0x69])) {
+		return {
+			ext: 'sqlite',
+			mime: 'application/x-sqlite3'
+		};
+	}
+
+	if (check([0x4E, 0x45, 0x53, 0x1A])) {
+		return {
+			ext: 'nes',
+			mime: 'application/x-nintendo-nes-rom'
+		};
+	}
+
+	if (check([0x43, 0x72, 0x32, 0x34])) {
+		return {
+			ext: 'crx',
+			mime: 'application/x-google-chrome-extension'
+		};
+	}
+
+	if (
+		check([0x4D, 0x53, 0x43, 0x46]) ||
+		check([0x49, 0x53, 0x63, 0x28])
+	) {
+		return {
+			ext: 'cab',
+			mime: 'application/vnd.ms-cab-compressed'
+		};
+	}
+
+	// Needs to be before `ar` check
+	if (check([0x21, 0x3C, 0x61, 0x72, 0x63, 0x68, 0x3E, 0x0A, 0x64, 0x65, 0x62, 0x69, 0x61, 0x6E, 0x2D, 0x62, 0x69, 0x6E, 0x61, 0x72, 0x79])) {
+		return {
+			ext: 'deb',
+			mime: 'application/x-deb'
+		};
+	}
+
+	if (check([0x21, 0x3C, 0x61, 0x72, 0x63, 0x68, 0x3E])) {
+		return {
+			ext: 'ar',
+			mime: 'application/x-unix-archive'
+		};
+	}
+
+	if (check([0xED, 0xAB, 0xEE, 0xDB])) {
+		return {
+			ext: 'rpm',
+			mime: 'application/x-rpm'
+		};
+	}
+
+	if (
+		check([0x1F, 0xA0]) ||
+		check([0x1F, 0x9D])
+	) {
+		return {
+			ext: 'Z',
+			mime: 'application/x-compress'
+		};
+	}
+
+	if (check([0x4C, 0x5A, 0x49, 0x50])) {
+		return {
+			ext: 'lz',
+			mime: 'application/x-lzip'
+		};
+	}
+
+	if (check([0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1])) {
+		return {
+			ext: 'msi',
+			mime: 'application/x-msi'
+		};
+	}
+
+	if (check([0x06, 0x0E, 0x2B, 0x34, 0x02, 0x05, 0x01, 0x01, 0x0D, 0x01, 0x02, 0x01, 0x01, 0x02])) {
+		return {
+			ext: 'mxf',
+			mime: 'application/mxf'
+		};
+	}
+
+	if (check([0x47], {offset: 4}) && (check([0x47], {offset: 192}) || check([0x47], {offset: 196}))) {
+		return {
+			ext: 'mts',
+			mime: 'video/mp2t'
+		};
+	}
+
+	if (check([0x42, 0x4C, 0x45, 0x4E, 0x44, 0x45, 0x52])) {
+		return {
+			ext: 'blend',
+			mime: 'application/x-blender'
+		};
+	}
+
+	if (check([0x42, 0x50, 0x47, 0xFB])) {
+		return {
+			ext: 'bpg',
+			mime: 'image/bpg'
+		};
+	}
+
+	if (check([0x00, 0x00, 0x00, 0x0C, 0x6A, 0x50, 0x20, 0x20, 0x0D, 0x0A, 0x87, 0x0A])) {
+		// JPEG-2000 family
+
+		if (check([0x6A, 0x70, 0x32, 0x20], {offset: 20})) {
+			return {
+				ext: 'jp2',
+				mime: 'image/jp2'
+			};
+		}
+
+		if (check([0x6A, 0x70, 0x78, 0x20], {offset: 20})) {
+			return {
+				ext: 'jpx',
+				mime: 'image/jpx'
+			};
+		}
+
+		if (check([0x6A, 0x70, 0x6D, 0x20], {offset: 20})) {
+			return {
+				ext: 'jpm',
+				mime: 'image/jpm'
+			};
+		}
+
+		if (check([0x6D, 0x6A, 0x70, 0x32], {offset: 20})) {
+			return {
+				ext: 'mj2',
+				mime: 'image/mj2'
+			};
+		}
+	}
+
+	if (check([0x46, 0x4F, 0x52, 0x4D])) {
+		return {
+			ext: 'aif',
+			mime: 'audio/aiff'
+		};
+	}
+
+	if (checkString('<?xml ')) {
+		return {
+			ext: 'xml',
+			mime: 'application/xml'
+		};
+	}
+
+	if (check([0x42, 0x4F, 0x4F, 0x4B, 0x4D, 0x4F, 0x42, 0x49], {offset: 60})) {
+		return {
+			ext: 'mobi',
+			mime: 'application/x-mobipocket-ebook'
+		};
+	}
+
+	if (check([0xAB, 0x4B, 0x54, 0x58, 0x20, 0x31, 0x31, 0xBB, 0x0D, 0x0A, 0x1A, 0x0A])) {
+		return {
+			ext: 'ktx',
+			mime: 'image/ktx'
+		};
+	}
+
+	if (check([0x44, 0x49, 0x43, 0x4D], {offset: 128})) {
+		return {
+			ext: 'dcm',
+			mime: 'application/dicom'
+		};
+	}
+
+	// Musepack, SV7
+	if (check([0x4D, 0x50, 0x2B])) {
+		return {
+			ext: 'mpc',
+			mime: 'audio/x-musepack'
+		};
+	}
+
+	// Musepack, SV8
+	if (check([0x4D, 0x50, 0x43, 0x4B])) {
+		return {
+			ext: 'mpc',
+			mime: 'audio/x-musepack'
+		};
+	}
+
+	if (check([0x42, 0x45, 0x47, 0x49, 0x4E, 0x3A])) {
+		return {
+			ext: 'ics',
+			mime: 'text/calendar'
+		};
+	}
+
+	if (check([0x67, 0x6C, 0x54, 0x46, 0x02, 0x00, 0x00, 0x00])) {
+		return {
+			ext: 'glb',
+			mime: 'model/gltf-binary'
+		};
+	}
+
+	if (check([0xD4, 0xC3, 0xB2, 0xA1]) || check([0xA1, 0xB2, 0xC3, 0xD4])) {
+		return {
+			ext: 'pcap',
+			mime: 'application/vnd.tcpdump.pcap'
+		};
+	}
+
+	// Sony DSD Stream File (DSF)
+	if (check([0x44, 0x53, 0x44, 0x20])) {
+		return {
+			ext: 'dsf',
+			mime: 'audio/x-dsf' // Non-standard
+		};
+	}
+
+	if (check([0x4C, 0x00, 0x00, 0x00, 0x01, 0x14, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46])) {
+		return {
+			ext: 'lnk',
+			mime: 'application/x.ms.shortcut' // Invented by us
+		};
+	}
+
+	if (check([0x62, 0x6F, 0x6F, 0x6B, 0x00, 0x00, 0x00, 0x00, 0x6D, 0x61, 0x72, 0x6B, 0x00, 0x00, 0x00, 0x00])) {
+		return {
+			ext: 'alias',
+			mime: 'application/x.apple.alias' // Invented by us
+		};
+	}
+
+	if (checkString('Creative Voice File')) {
+		return {
+			ext: 'voc',
+			mime: 'audio/x-voc'
+		};
+	}
+
+	if (check([0x0B, 0x77])) {
+		return {
+			ext: 'ac3',
+			mime: 'audio/vnd.dolby.dd-raw'
+		};
+	}
+};
+
+module.exports = fileType;
+
+Object.defineProperty(fileType, 'minimumBytes', {value: 4100});
+
+fileType.stream = readableStream => new Promise((resolve, reject) => {
+	// Using `eval` to work around issues when bundling with Webpack
+	const stream = eval('require')('stream'); // eslint-disable-line no-eval
+
+	readableStream.once('readable', () => {
+		const pass = new stream.PassThrough();
+		const chunk = readableStream.read(module.exports.minimumBytes) || readableStream.read();
+		try {
+			pass.fileType = fileType(chunk);
+		} catch (error) {
+			reject(error);
+		}
+
+		readableStream.unshift(chunk);
+
+		if (stream.pipeline) {
+			resolve(stream.pipeline(readableStream, pass, () => {}));
+		} else {
+			resolve(readableStream.pipe(pass));
+		}
+	});
+});
+
+}).call(this,{"isBuffer":require("../../../../../../usr/local/lib/node_modules/browserify/node_modules/is-buffer/index.js")})
+},{"../../../../../../usr/local/lib/node_modules/browserify/node_modules/is-buffer/index.js":47,"./util":31}],31:[function(require,module,exports){
+'use strict';
+
+exports.stringToBytes = string => [...string].map(character => character.charCodeAt(0));
+
+exports.readUInt64LE = (buffer, offset = 0) => {
+	let n = buffer[offset];
+	let mul = 1;
+	let i = 0;
+
+	while (++i < 8) {
+		mul *= 0x100;
+		n += buffer[offset + i] * mul;
+	}
+
+	return n;
+};
+
+exports.tarHeaderChecksumMatches = buffer => { // Does not check if checksum field characters are valid
+	if (buffer.length < 512) { // `tar` header size, cannot compute checksum without it
+		return false;
+	}
+
+	const MASK_8TH_BIT = 0x80;
+
+	let sum = 256; // Intitalize sum, with 256 as sum of 8 spaces in checksum field
+	let signedBitSum = 0; // Initialize signed bit sum
+
+	for (let i = 0; i < 148; i++) {
+		const byte = buffer[i];
+		sum += byte;
+		signedBitSum += byte & MASK_8TH_BIT; // Add signed bit to signed bit sum
+	}
+
+	// Skip checksum field
+
+	for (let i = 156; i < 512; i++) {
+		const byte = buffer[i];
+		sum += byte;
+		signedBitSum += byte & MASK_8TH_BIT; // Add signed bit to signed bit sum
+	}
+
+	const readSum = parseInt(buffer.toString('utf8', 148, 154), 8); // Read sum in header
+
+	// Some implementations compute checksum incorrectly using signed bytes
+	return (
+		// Checksum in header equals the sum we calculated
+		readSum === sum ||
+
+		// Checksum in header equals sum we calculated plus signed-to-unsigned delta
+		readSum === (sum - (signedBitSum << 1))
+	);
+};
+
+},{}],32:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -8701,7 +9740,7 @@ return /******/ (function(modules) { // webpackBootstrap
 });
 ;
 
-},{}],31:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 // (c) Dean McNamee <dean@gmail.com>, 2013.
 //
 // https://github.com/deanm/omggif
@@ -9485,7 +10524,7 @@ function GifReaderLZWOutputIndexStream(code_stream, p, output, output_length) {
 
 try { exports.GifWriter = GifWriter; exports.GifReader = GifReader } catch(e) { }  // CommonJS.
 
-},{}],32:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 // Simple OOP Tools for Node.JS
 // Copyright (c) 2014 Joseph Huckaby
 // Released under the MIT License
@@ -9591,9 +10630,9 @@ exports.create = function create(members) {
 	return constructor;
 };
 
-},{"events":42,"util":75}],33:[function(require,module,exports){
-arguments[4][32][0].apply(exports,arguments)
-},{"dup":32,"events":42,"util":75}],34:[function(require,module,exports){
+},{"events":44,"util":77}],35:[function(require,module,exports){
+arguments[4][34][0].apply(exports,arguments)
+},{"dup":34,"events":44,"util":77}],36:[function(require,module,exports){
 (function (process){
 // High Resolution Performance Tracker for Node.JS
 // Copyright (c) 2014 Joseph Huckaby
@@ -9892,7 +10931,7 @@ var PerfMetric = Class.create({
 });
 
 }).call(this,require('_process'))
-},{"_process":59,"pixl-class":33,"util":75}],35:[function(require,module,exports){
+},{"_process":61,"pixl-class":35,"util":77}],37:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -10386,7 +11425,7 @@ var objectKeys = Object.keys || function (obj) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"util/":75}],36:[function(require,module,exports){
+},{"util/":77}],38:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -10502,9 +11541,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],37:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 
-},{}],38:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 (function (process,Buffer){
 var msg = require('pako/lib/zlib/messages');
 var zstream = require('pako/lib/zlib/zstream');
@@ -10744,7 +11783,7 @@ Zlib.prototype._error = function(status) {
 exports.Zlib = Zlib;
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":59,"buffer":40,"pako/lib/zlib/constants":49,"pako/lib/zlib/deflate.js":51,"pako/lib/zlib/inflate.js":53,"pako/lib/zlib/messages":55,"pako/lib/zlib/zstream":57}],39:[function(require,module,exports){
+},{"_process":61,"buffer":42,"pako/lib/zlib/constants":51,"pako/lib/zlib/deflate.js":53,"pako/lib/zlib/inflate.js":55,"pako/lib/zlib/messages":57,"pako/lib/zlib/zstream":59}],41:[function(require,module,exports){
 (function (process,Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -11358,7 +12397,7 @@ util.inherits(InflateRaw, Zlib);
 util.inherits(Unzip, Zlib);
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"./binding":38,"_process":59,"_stream_transform":69,"assert":35,"buffer":40,"util":75}],40:[function(require,module,exports){
+},{"./binding":40,"_process":61,"_stream_transform":71,"assert":37,"buffer":42,"util":77}],42:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -13074,7 +14113,7 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":36,"ieee754":43}],41:[function(require,module,exports){
+},{"base64-js":38,"ieee754":45}],43:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -13185,7 +14224,7 @@ function objectToString(o) {
 }
 
 }).call(this,{"isBuffer":require("../../is-buffer/index.js")})
-},{"../../is-buffer/index.js":45}],42:[function(require,module,exports){
+},{"../../is-buffer/index.js":47}],44:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -13489,7 +14528,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],43:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -13575,7 +14614,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],44:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -13600,7 +14639,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],45:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 /*!
  * Determine if an object is a Buffer
  *
@@ -13623,14 +14662,14 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
 
-},{}],46:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],47:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
 
@@ -13734,7 +14773,7 @@ exports.setTyped = function (on) {
 
 exports.setTyped(TYPED_OK);
 
-},{}],48:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 // Note: adler32 takes 12% for level 0 and 2% for level 6.
@@ -13768,7 +14807,7 @@ function adler32(adler, buf, len, pos) {
 
 module.exports = adler32;
 
-},{}],49:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 
@@ -13820,7 +14859,7 @@ module.exports = {
   //Z_NULL:                 null // Use -1 or null inline, depending on var type
 };
 
-},{}],50:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 // Note: we can't get significant speed boost here.
@@ -13863,7 +14902,7 @@ function crc32(crc, buf, len, pos) {
 
 module.exports = crc32;
 
-},{}],51:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict';
 
 var utils   = require('../utils/common');
@@ -15720,7 +16759,7 @@ exports.deflatePrime = deflatePrime;
 exports.deflateTune = deflateTune;
 */
 
-},{"../utils/common":47,"./adler32":48,"./crc32":50,"./messages":55,"./trees":56}],52:[function(require,module,exports){
+},{"../utils/common":49,"./adler32":50,"./crc32":52,"./messages":57,"./trees":58}],54:[function(require,module,exports){
 'use strict';
 
 // See state defs from inflate.js
@@ -16048,7 +17087,7 @@ module.exports = function inflate_fast(strm, start) {
   return;
 };
 
-},{}],53:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 'use strict';
 
 
@@ -17588,7 +18627,7 @@ exports.inflateSyncPoint = inflateSyncPoint;
 exports.inflateUndermine = inflateUndermine;
 */
 
-},{"../utils/common":47,"./adler32":48,"./crc32":50,"./inffast":52,"./inftrees":54}],54:[function(require,module,exports){
+},{"../utils/common":49,"./adler32":50,"./crc32":52,"./inffast":54,"./inftrees":56}],56:[function(require,module,exports){
 'use strict';
 
 
@@ -17917,7 +18956,7 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
   return 0;
 };
 
-},{"../utils/common":47}],55:[function(require,module,exports){
+},{"../utils/common":49}],57:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -17932,7 +18971,7 @@ module.exports = {
   '-6':   'incompatible version' /* Z_VERSION_ERROR (-6) */
 };
 
-},{}],56:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 'use strict';
 
 
@@ -19136,7 +20175,7 @@ exports._tr_flush_block  = _tr_flush_block;
 exports._tr_tally = _tr_tally;
 exports._tr_align = _tr_align;
 
-},{"../utils/common":47}],57:[function(require,module,exports){
+},{"../utils/common":49}],59:[function(require,module,exports){
 'use strict';
 
 
@@ -19167,7 +20206,7 @@ function ZStream() {
 
 module.exports = ZStream;
 
-},{}],58:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -19214,7 +20253,7 @@ function nextTick(fn, arg1, arg2, arg3) {
 }
 
 }).call(this,require('_process'))
-},{"_process":59}],59:[function(require,module,exports){
+},{"_process":61}],61:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -19400,7 +20439,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],60:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -19525,7 +20564,7 @@ function forEach(xs, f) {
     f(xs[i], i);
   }
 }
-},{"./_stream_readable":62,"./_stream_writable":64,"core-util-is":41,"inherits":44,"process-nextick-args":58}],61:[function(require,module,exports){
+},{"./_stream_readable":64,"./_stream_writable":66,"core-util-is":43,"inherits":46,"process-nextick-args":60}],63:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -19573,7 +20612,7 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
-},{"./_stream_transform":63,"core-util-is":41,"inherits":44}],62:[function(require,module,exports){
+},{"./_stream_transform":65,"core-util-is":43,"inherits":46}],64:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -20583,7 +21622,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./_stream_duplex":60,"./internal/streams/BufferList":65,"./internal/streams/destroy":66,"./internal/streams/stream":67,"_process":59,"core-util-is":41,"events":42,"inherits":44,"isarray":46,"process-nextick-args":58,"safe-buffer":70,"string_decoder/":71,"util":37}],63:[function(require,module,exports){
+},{"./_stream_duplex":62,"./internal/streams/BufferList":67,"./internal/streams/destroy":68,"./internal/streams/stream":69,"_process":61,"core-util-is":43,"events":44,"inherits":46,"isarray":48,"process-nextick-args":60,"safe-buffer":72,"string_decoder/":73,"util":39}],65:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -20798,7 +21837,7 @@ function done(stream, er, data) {
 
   return stream.push(null);
 }
-},{"./_stream_duplex":60,"core-util-is":41,"inherits":44}],64:[function(require,module,exports){
+},{"./_stream_duplex":62,"core-util-is":43,"inherits":46}],66:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -21465,7 +22504,7 @@ Writable.prototype._destroy = function (err, cb) {
   cb(err);
 };
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./_stream_duplex":60,"./internal/streams/destroy":66,"./internal/streams/stream":67,"_process":59,"core-util-is":41,"inherits":44,"process-nextick-args":58,"safe-buffer":70,"util-deprecate":72}],65:[function(require,module,exports){
+},{"./_stream_duplex":62,"./internal/streams/destroy":68,"./internal/streams/stream":69,"_process":61,"core-util-is":43,"inherits":46,"process-nextick-args":60,"safe-buffer":72,"util-deprecate":74}],67:[function(require,module,exports){
 'use strict';
 
 /*<replacement>*/
@@ -21540,7 +22579,7 @@ module.exports = function () {
 
   return BufferList;
 }();
-},{"safe-buffer":70}],66:[function(require,module,exports){
+},{"safe-buffer":72}],68:[function(require,module,exports){
 'use strict';
 
 /*<replacement>*/
@@ -21613,10 +22652,10 @@ module.exports = {
   destroy: destroy,
   undestroy: undestroy
 };
-},{"process-nextick-args":58}],67:[function(require,module,exports){
+},{"process-nextick-args":60}],69:[function(require,module,exports){
 module.exports = require('events').EventEmitter;
 
-},{"events":42}],68:[function(require,module,exports){
+},{"events":44}],70:[function(require,module,exports){
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = exports;
 exports.Readable = exports;
@@ -21625,10 +22664,10 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":60,"./lib/_stream_passthrough.js":61,"./lib/_stream_readable.js":62,"./lib/_stream_transform.js":63,"./lib/_stream_writable.js":64}],69:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":62,"./lib/_stream_passthrough.js":63,"./lib/_stream_readable.js":64,"./lib/_stream_transform.js":65,"./lib/_stream_writable.js":66}],71:[function(require,module,exports){
 module.exports = require('./readable').Transform
 
-},{"./readable":68}],70:[function(require,module,exports){
+},{"./readable":70}],72:[function(require,module,exports){
 /* eslint-disable node/no-deprecated-api */
 var buffer = require('buffer')
 var Buffer = buffer.Buffer
@@ -21692,7 +22731,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
   return buffer.SlowBuffer(size)
 }
 
-},{"buffer":40}],71:[function(require,module,exports){
+},{"buffer":42}],73:[function(require,module,exports){
 'use strict';
 
 var Buffer = require('safe-buffer').Buffer;
@@ -21965,7 +23004,7 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : '';
 }
-},{"safe-buffer":70}],72:[function(require,module,exports){
+},{"safe-buffer":72}],74:[function(require,module,exports){
 (function (global){
 
 /**
@@ -22036,16 +23075,16 @@ function config (name) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],73:[function(require,module,exports){
-arguments[4][44][0].apply(exports,arguments)
-},{"dup":44}],74:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
+arguments[4][46][0].apply(exports,arguments)
+},{"dup":46}],76:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],75:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -22635,4 +23674,4 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":74,"_process":59,"inherits":73}]},{},[1]);
+},{"./support/isBuffer":76,"_process":61,"inherits":75}]},{},[1]);
