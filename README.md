@@ -73,6 +73,7 @@ There are already some extremely cool image processing libraries out there.  I p
 		+ [crop](#crop)
 		+ [curves](#curves)
 		+ [desaturate](#desaturate)
+		+ [draw](#draw)
 		+ [emboss](#emboss)
 		+ [expand](#expand)
 		+ [findEdges](#findedges)
