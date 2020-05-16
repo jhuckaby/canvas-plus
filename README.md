@@ -760,8 +760,78 @@ This is similar to calling [adjust()](#adjust) and setting the `saturation` to `
 
 Example use:
 
-```
+```js
 canvas.desaturate();
+```
+
+### draw
+
+**Live Demo:** [Draw Primitives](https://jhuckaby.github.io/canvas-plus-playground/?t=create/eyJ3aWR0aCI6NjQwLCJoZWlnaHQiOjQ4MCwiYmFja2dyb3VuZCI6IiNkZGRkZGQifQ%3D%3D&t=draw/eyJtb2RlIjoicmVjdCIsIngxIjo1MCwieTEiOjUwLCJ4MiI6MTAwLCJ5MiI6MTAwLCJ4Ijo3NSwieSI6NzUsIndpZHRoIjoyMDAsImhlaWdodCI6MjAwfQ%3D%3D&t=draw/eyJ4MSI6MTUwLCJ5MSI6MTAwLCJ4MiI6MzUwLCJ5MiI6MzAwLCJ3aWR0aCI6MSwiaGVpZ2h0IjoxLCJmaWxsIjoiIiwic3Ryb2tlIjoiI2ZmMDAwMCJ9&f=png)
+
+The `draw()` method allows you to draw primitive geometric objects onto the canvas, such as rectangles, lines, or custom shapes.  This is basically just a convenience wrapper around the [HTML5 Canvas drawing API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes).  The method accepts an object containing the following properties:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `params` | Object | Optional parameters to set on the canvas context, e.g. `fillStyle`, `strokeStyle`. |
+| `commands` | Object | An array of commands to run on the canvas context, e.g. `['fill']`. |
+
+Here is an example:
+
+```js
+canvas.draw({
+	params: {
+		fillStyle: '#888888',
+		strokeStyle: '#000000'
+	},
+	commands: [
+		['rect', 50, 50, 100, 100],
+		['fill'],
+		['stroke']
+	]
+});
+```
+
+This example would draw a filled + stroked rectangle onto the canvas.  The `params` object can contain any properties you want to set on the canvas context before running the draw commands (i.e. colors, stroke width, line caps, etc.), and the `commands` array contains each draw call to make.  Each element in the `commands` array should be a nested array containing the draw call name (e.g. `rect`), followed by any additional arguments required by the call, such as coordinates for a rectangle, or points for a moveTo / lineTo.
+
+Using this syntax, you can draw complex shapes by calling any of the HTML5 Canvas API draw methods.  Here is an example which draws a filled triangle:
+
+```js
+canvas.draw({
+	params: {
+		fillStyle: '#000000'
+	},
+	commands: [
+		['beginPath'],
+		['moveTo', 75, 70],
+		['lineTo', 100, 75],
+		['lineTo', 100, 25],
+		['fill']
+	]
+});
+```
+
+Convenience properties are provided for drawing simple rectangles and lines, to make the syntax a little easier for common use cases.  Here is the list of optional properties:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `line` | Array | An array of 4 coordinates, the first two being the X/Y of the line start point, and the latter two being the X/Y of the line end point. |
+| `rect` | Array | An array of 4 coordinates, the first two being the X/Y of the rectangle's top-left corner, and the latter two being the width and height. |
+| `fill` | String | Setting this to a color will set the canvas context `fillStyle` property, and append a `['fill']` command to the end of the list. |
+| `stroke` | String | Setting this to a color will set the canvas context `strokeStyle` property, and append a `['stroke']` command to the end of the list. |
+
+Examples:
+
+```js
+canvas.draw({
+	"rect": [ 75, 75, 200, 200 ],
+	"fill": "#888888",
+	"stroke": "#000000"
+});
+
+canvas.draw({
+	"line": [ 150, 100, 350, 300 ],
+	"stroke": "#ff0000"
+});
 ```
 
 ### emboss
@@ -1415,13 +1485,13 @@ The `transform()` method applies transformations to your canvas, which can inclu
 
 | Property Name | Type | Description |
 |---------------|------|-------------|
-| `rotate` | Float | Optional degrees to rotate image.  If divisible by 90, image dimensions are shifted around to fit. |
+| `rotate` | Float | Optional degrees to rotate image. |
 | `flipH` | Boolean | Optional flip horizontal transformation. |
 | `flipV` | Boolean | Optional flip vertical transformation. |
 | `matrix` | Array | Optional [3x3 transformation matrix](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform), for custom distortions. |
 | `background` | String | Background color to use when expanding canvas, defaults to transparent. |
 | `antialias` | String | Image scaling quality, one of `best`, `good`, `fast` or `nearest`.  Defaults to `best`.  See [Anti-Aliasing](#anti-aliasing). |
-| `fixed` | Boolean | Set this to `true` to keep the canvas width/height fixed, instead of auto-expanding them.  Only applicable for rotation. |
+| `fixed` | Boolean | Set this to `true` to keep the canvas dimensions fixed, instead of auto-expanding them.  Only applicable for rotation. |
 
 Example use:
 
@@ -1433,7 +1503,7 @@ canvas.transform({
 
 Only one transformation is allowed per call to `transform()`.
 
-Note that when rotating, if the degrees are exactly `90` or `270`, the canvas width and height are swapped, so the image fits exactly into the new container.  For all other non-90-degree-angles, the canvas remains the same size, and the image is spun around the center.  You can call [expand()](#expand) to pre-extend the canvas to make more room.
+Note that when rotating, the canvas dimensions are automatically adjusted so the rotated image fits exactly into the new container.  If you do not want this behavior, set the `fixed` property to `true`.
 
 The following transform method shortcuts are provided for convenience:
 

@@ -27,10 +27,7 @@ var CanvasPlus = module.exports = Class.create({
 		require('./lib/node/load.js'),
 		require('./lib/node/write.js'),
 		
-		/*
 		require('./lib/filter/draw.js'),
-		*/
-		
 		require('./lib/filter/adjust.js'),
 		require('./lib/filter/border.js'),
 		require('./lib/filter/composite.js'),
