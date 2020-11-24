@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // Very simple CLI wrapper around canvas-plus
 // Beware: This will REPLACE local images with the specified filters applied.
 // Usage: ./cli.js FILE1 [FILE2 ...] --filter "resize/width:400/height:300" --filter "adjust/hue:-60" --filter "write/quality:90"
