@@ -1,5 +1,5 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-(function (process){
+(function (process){(function (){
 // canvas-plus - Image Transformation Engine
 // (HTML5/Browser Version)
 // Copyright (c) 2017 Joseph Huckaby
@@ -64,8 +64,8 @@ CanvasPlus.prototype.measureTextHeight = function(font_style) {
 	return height;
 };
 
-}).call(this,require('_process'))
-},{"./main.js":26,"_process":63,"browser-process-hrtime":33,"pixl-class":85}],2:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'))
+},{"./main.js":26,"_process":65,"browser-process-hrtime":33,"pixl-class":62}],2:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Canvas Create Mixin - Browser Version
 // Copyright (c) 2017 Joseph Huckaby
@@ -143,7 +143,7 @@ module.exports = Class.create({
 		
 });
 
-},{"pixl-class":85}],3:[function(require,module,exports){
+},{"pixl-class":62}],3:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Canvas Font Mixin - Browser Version
 // Copyright (c) 2017 Joseph Huckaby
@@ -206,8 +206,8 @@ module.exports = Class.create({
 // https://github.com/dwighthouse/onfontready/blob/master/LICENSE
 function onFontReady(e,t,i,n,o){i=i||0,i.timeoutAfter&&setTimeout(function(){n&&(document.body.removeChild(n),n=0,i.onTimeout&&i.onTimeout())},i.timeoutAfter),o=function(){n&&n.firstChild.clientWidth==n.lastChild.clientWidth&&(document.body.removeChild(n),n=0,t())},o(document.body.appendChild(n=document.createElement("div")).innerHTML='<div style="position:fixed;white-space:pre;bottom:999%;right:999%;font:999px '+(i.generic?"":"'")+e+(i.generic?"":"'")+',serif">'+(i.sampleText||" ")+'</div><div style="position:fixed;white-space:pre;bottom:999%;right:999%;font:999px '+(i.generic?"":"'")+e+(i.generic?"":"'")+',monospace">'+(i.sampleText||" ")+"</div>"),n&&(n.firstChild.appendChild(e=document.createElement("iframe")).style.width="999%",e.contentWindow.onresize=o,n.lastChild.appendChild(e=document.createElement("iframe")).style.width="999%",e.contentWindow.onresize=o,e=setTimeout(o))};
 
-},{"pixl-class":85}],4:[function(require,module,exports){
-(function (Buffer){
+},{"pixl-class":62}],4:[function(require,module,exports){
+(function (Buffer){(function (){
 // canvas-plus - Image Transformation Engine
 // Canvas Load Mixin - Browser Version
 // Copyright (c) 2017 Joseph Huckaby
@@ -382,6 +382,8 @@ module.exports = Class.create({
 		
 		// load image
 		this.image = new Image();
+		this.image.crossOrigin = 'anonymous';
+		this.image.setAttribute('crossorigin', 'anonymous');
 		
 		this.image.onerror = function() {
 			// load failed
@@ -431,8 +433,8 @@ module.exports = Class.create({
 	
 });
 
-}).call(this,require("buffer").Buffer)
-},{"buffer":37,"exif-js":41,"file-type":42,"pixl-class":85}],5:[function(require,module,exports){
+}).call(this)}).call(this,require("buffer").Buffer)
+},{"buffer":37,"exif-js":41,"file-type":42,"pixl-class":62}],5:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Canvas Write Mixin - Browser Version
 // Copyright (c) 2017 Joseph Huckaby
@@ -495,7 +497,7 @@ module.exports = Class.create({
 		
 });
 
-},{"pixl-class":85}],6:[function(require,module,exports){
+},{"pixl-class":62}],6:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Adjust Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -723,7 +725,7 @@ function hsvToRgb(h, s, v, rgb) {
 	return rgb;
 };
 
-},{"pixl-class":85}],7:[function(require,module,exports){
+},{"pixl-class":62}],7:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Border Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -795,7 +797,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],8:[function(require,module,exports){
+},{"pixl-class":62}],8:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Composite Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -914,7 +916,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],9:[function(require,module,exports){
+},{"pixl-class":62}],9:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Convolve Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1170,7 +1172,7 @@ function generateGaussianKernel(dimension, sigma) {
 	return kernel.map(function (e) { return e / sum; });
 };
 
-},{"pixl-class":85}],10:[function(require,module,exports){
+},{"pixl-class":62}],10:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Crop Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1236,7 +1238,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],11:[function(require,module,exports){
+},{"pixl-class":62}],11:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Curves Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1670,7 +1672,7 @@ function createInterpolant(xs, ys) {
 	};
 };
 
-},{"pixl-class":85}],12:[function(require,module,exports){
+},{"pixl-class":62}],12:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Draw Filter Mixin
 // Copyright (c) 2020 Joseph Huckaby
@@ -1749,7 +1751,7 @@ module.exports = Class.create({
 		}
 		
 		// apply all commands
-		// e.g. [ ['draw', 50, 50, 100, 100], ['fill'] ]
+		// e.g. [ ['rect', 50, 50, 100, 100], ['fill'] ]
 		opts.commands.forEach( function(args) {
 			var name = args.shift();
 			self.logDebug(9, "Executing Command: " + name, args);
@@ -1763,7 +1765,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],13:[function(require,module,exports){
+},{"pixl-class":62}],13:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Expand Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1806,7 +1808,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],14:[function(require,module,exports){
+},{"pixl-class":62}],14:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Flatten Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1870,7 +1872,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],15:[function(require,module,exports){
+},{"pixl-class":62}],15:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Hash Filter Mixin
 // Copyright (c) 2018 Joseph Huckaby
@@ -2102,7 +2104,7 @@ var bmvbhash = function(data, bits) {
 	return bits_to_hexhash(result);
 };
 
-},{"pixl-class":85}],16:[function(require,module,exports){
+},{"pixl-class":62}],16:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Histogram Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -2164,7 +2166,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],17:[function(require,module,exports){
+},{"pixl-class":62}],17:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Opacity Filter Mixin
 // Copyright (c) 2018 Joseph Huckaby
@@ -2206,7 +2208,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],18:[function(require,module,exports){
+},{"pixl-class":62}],18:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Quantize Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -2466,7 +2468,7 @@ module.exports = Class.create({
 	
 });
 
-},{"image-q":45,"pixl-class":85}],19:[function(require,module,exports){
+},{"image-q":45,"pixl-class":62}],19:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Resize Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -2650,7 +2652,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],20:[function(require,module,exports){
+},{"pixl-class":62}],20:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Text Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3055,7 +3057,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],21:[function(require,module,exports){
+},{"pixl-class":62}],21:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Transform Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3213,7 +3215,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],22:[function(require,module,exports){
+},{"pixl-class":62}],22:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Trim Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3316,8 +3318,8 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],23:[function(require,module,exports){
-(function (Buffer){
+},{"pixl-class":62}],23:[function(require,module,exports){
+(function (Buffer){(function (){
 // canvas-plus - Image Transformation Engine
 // GIF Output Format Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3411,9 +3413,9 @@ module.exports = Class.create({
 	
 });
 
-}).call(this,require("buffer").Buffer)
-},{"blob-to-buffer":32,"buffer":37,"omggif":50,"pixl-class":85}],24:[function(require,module,exports){
-(function (Buffer){
+}).call(this)}).call(this,require("buffer").Buffer)
+},{"blob-to-buffer":32,"buffer":37,"omggif":50,"pixl-class":62}],24:[function(require,module,exports){
+(function (Buffer){(function (){
 // canvas-plus - Image Transformation Engine
 // JPEG Output Format Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3472,9 +3474,9 @@ module.exports = Class.create({
 	
 });
 
-}).call(this,require("buffer").Buffer)
-},{"blob-to-buffer":32,"buffer":37,"pixl-class":85}],25:[function(require,module,exports){
-(function (Buffer){
+}).call(this)}).call(this,require("buffer").Buffer)
+},{"blob-to-buffer":32,"buffer":37,"pixl-class":62}],25:[function(require,module,exports){
+(function (Buffer){(function (){
 // canvas-plus - Image Transformation Engine
 // PNG Output Format Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3661,8 +3663,8 @@ module.exports = Class.create({
 	
 });
 
-}).call(this,require("buffer").Buffer)
-},{"blob-to-buffer":32,"buffer":37,"crc-32":39,"pixl-class":85,"zlib":36}],26:[function(require,module,exports){
+}).call(this)}).call(this,require("buffer").Buffer)
+},{"blob-to-buffer":32,"buffer":37,"crc-32":39,"pixl-class":62,"zlib":36}],26:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Built using node-canvas and image-q
 // Copyright (c) 2017 Joseph Huckaby
@@ -4278,8 +4280,8 @@ for (var key in CanvasPlus.prototype) {
 	}
 }
 
-},{"./lib/filter/adjust.js":6,"./lib/filter/border.js":7,"./lib/filter/composite.js":8,"./lib/filter/convolve.js":9,"./lib/filter/crop.js":10,"./lib/filter/curves.js":11,"./lib/filter/draw.js":12,"./lib/filter/expand.js":13,"./lib/filter/flatten.js":14,"./lib/filter/hash.js":15,"./lib/filter/histogram.js":16,"./lib/filter/opacity.js":17,"./lib/filter/quantize.js":18,"./lib/filter/resize.js":19,"./lib/filter/text.js":20,"./lib/filter/transform.js":21,"./lib/filter/trim.js":22,"./lib/format/gif.js":23,"./lib/format/jpeg.js":24,"./lib/format/png.js":25,"./lib/node/create.js":2,"./lib/node/font.js":3,"./lib/node/load.js":4,"./lib/node/write.js":5,"pixl-class":85,"pixl-perf":86}],27:[function(require,module,exports){
-(function (global){
+},{"./lib/filter/adjust.js":6,"./lib/filter/border.js":7,"./lib/filter/composite.js":8,"./lib/filter/convolve.js":9,"./lib/filter/crop.js":10,"./lib/filter/curves.js":11,"./lib/filter/draw.js":12,"./lib/filter/expand.js":13,"./lib/filter/flatten.js":14,"./lib/filter/hash.js":15,"./lib/filter/histogram.js":16,"./lib/filter/opacity.js":17,"./lib/filter/quantize.js":18,"./lib/filter/resize.js":19,"./lib/filter/text.js":20,"./lib/filter/transform.js":21,"./lib/filter/trim.js":22,"./lib/format/gif.js":23,"./lib/format/jpeg.js":24,"./lib/format/png.js":25,"./lib/node/create.js":2,"./lib/node/font.js":3,"./lib/node/load.js":4,"./lib/node/write.js":5,"pixl-class":62,"pixl-perf":63}],27:[function(require,module,exports){
+(function (global){(function (){
 'use strict';
 
 var objectAssign = require('object-assign');
@@ -4787,7 +4789,7 @@ var objectKeys = Object.keys || function (obj) {
   return keys;
 };
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"object-assign":49,"util/":30}],28:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
@@ -4821,7 +4823,7 @@ module.exports = function isBuffer(arg) {
     && typeof arg.readUInt8 === 'function';
 }
 },{}],30:[function(require,module,exports){
-(function (process,global){
+(function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5409,8 +5411,8 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":29,"_process":63,"inherits":28}],31:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./support/isBuffer":29,"_process":65,"inherits":28}],31:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -5538,9 +5540,7 @@ function fromByteArray (uint8) {
 
   // go through the array every three bytes, we'll deal with trailing stuff later
   for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
-    parts.push(encodeChunk(
-      uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)
-    ))
+    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)))
   }
 
   // pad the end with zeros, but make sure to not forget the extra bytes
@@ -5565,7 +5565,7 @@ function fromByteArray (uint8) {
 }
 
 },{}],32:[function(require,module,exports){
-(function (Buffer){
+(function (Buffer){(function (){
 /* global Blob, FileReader */
 
 module.exports = function blobToBuffer (blob, cb) {
@@ -5588,9 +5588,9 @@ module.exports = function blobToBuffer (blob, cb) {
   reader.readAsArrayBuffer(blob)
 }
 
-}).call(this,require("buffer").Buffer)
+}).call(this)}).call(this,require("buffer").Buffer)
 },{"buffer":37}],33:[function(require,module,exports){
-(function (process,global){
+(function (process,global){(function (){
 module.exports = process.hrtime || hrtime
 
 // polyfil for window.performance.now
@@ -5619,11 +5619,11 @@ function hrtime(previousTimestamp){
   }
   return [seconds,nanoseconds]
 }
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":63}],34:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"_process":65}],34:[function(require,module,exports){
 
 },{}],35:[function(require,module,exports){
-(function (process,Buffer){
+(function (process,Buffer){(function (){
 'use strict';
 /* eslint camelcase: "off" */
 
@@ -6033,9 +6033,9 @@ Zlib.prototype._reset = function () {
 };
 
 exports.Zlib = Zlib;
-}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":63,"assert":27,"buffer":37,"pako/lib/zlib/constants":53,"pako/lib/zlib/deflate.js":55,"pako/lib/zlib/inflate.js":57,"pako/lib/zlib/zstream":61}],36:[function(require,module,exports){
-(function (process){
+}).call(this)}).call(this,require('_process'),require("buffer").Buffer)
+},{"_process":65,"assert":27,"buffer":37,"pako/lib/zlib/constants":53,"pako/lib/zlib/deflate.js":55,"pako/lib/zlib/inflate.js":57,"pako/lib/zlib/zstream":61}],36:[function(require,module,exports){
+(function (process){(function (){
 'use strict';
 
 var Buffer = require('buffer').Buffer;
@@ -6645,9 +6645,9 @@ util.inherits(Gunzip, Zlib);
 util.inherits(DeflateRaw, Zlib);
 util.inherits(InflateRaw, Zlib);
 util.inherits(Unzip, Zlib);
-}).call(this,require('_process'))
-},{"./binding":35,"_process":63,"assert":27,"buffer":37,"stream":78,"util":84}],37:[function(require,module,exports){
-(function (Buffer){
+}).call(this)}).call(this,require('_process'))
+},{"./binding":35,"_process":65,"assert":27,"buffer":37,"stream":80,"util":86}],37:[function(require,module,exports){
+(function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -8426,9 +8426,9 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-}).call(this,require("buffer").Buffer)
+}).call(this)}).call(this,require("buffer").Buffer)
 },{"base64-js":31,"buffer":37,"ieee754":44}],38:[function(require,module,exports){
-(function (Buffer){
+(function (Buffer){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -8537,7 +8537,7 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 
-}).call(this,{"isBuffer":require("../../is-buffer/index.js")})
+}).call(this)}).call(this,{"isBuffer":require("../../is-buffer/index.js")})
 },{"../../is-buffer/index.js":47}],39:[function(require,module,exports){
 /* crc32.js (C) 2014-present SheetJS -- http://sheetjs.com */
 /* vim: set ts=2: */
@@ -10194,7 +10194,7 @@ function functionBindPolyfill(context) {
 
 
 },{}],42:[function(require,module,exports){
-(function (Buffer){
+(function (Buffer){(function (){
 'use strict';
 const {stringToBytes, readUInt64LE, tarHeaderChecksumMatches} = require('./util');
 
@@ -11159,7 +11159,7 @@ fileType.stream = readableStream => new Promise((resolve, reject) => {
 	});
 });
 
-}).call(this,{"isBuffer":require("../is-buffer/index.js")})
+}).call(this)}).call(this,{"isBuffer":require("../is-buffer/index.js")})
 },{"../is-buffer/index.js":47,"./util":43}],43:[function(require,module,exports){
 'use strict';
 
@@ -11215,6 +11215,7 @@ exports.tarHeaderChecksumMatches = buffer => { // Does not check if checksum fie
 };
 
 },{}],44:[function(require,module,exports){
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -21305,7 +21306,412 @@ function ZStream() {
 module.exports = ZStream;
 
 },{}],62:[function(require,module,exports){
-(function (process){
+// Simple OOP Tools for Node.JS
+// Copyright (c) 2014 Joseph Huckaby
+// Released under the MIT License
+
+var util = require("util");
+var events = require("events");
+
+exports.create = function create(members) {
+	// create new class using php-style syntax (sort of)
+	if (!members) members = {};
+	
+	// setup constructor
+	var constructor = null;
+	
+	// inherit from parent class
+	if (members.__parent) {
+		if (members.__construct) {
+			// explicit constructor passed in
+			constructor = members.__construct;
+		}
+		else {
+			// inherit parent's constructor
+			var parent = members.__parent;
+			constructor = function() {
+				var args = Array.prototype.slice.call(arguments);
+				parent.apply( this, args );
+			};
+		}
+		
+		// inherit rest of parent members
+		util.inherits(constructor, members.__parent);
+		delete members.__parent;
+	}
+	else {
+		// create new base class
+		constructor = members.__construct || function() {};
+	}
+	delete members.__construct;
+	
+	// handle static variables
+	if (members.__static) {
+		for (var key in members.__static) {
+			constructor[key] = members.__static[key];
+		}
+		delete members.__static;
+	}
+	
+	// all classes are event emitters unless explicitly disabled
+	if (members.__events !== false) {
+		if (!members.__mixins) members.__mixins = [];
+		if (members.__mixins.indexOf(events.EventEmitter) == -1) {
+			members.__mixins.push( events.EventEmitter );
+		}
+	}
+	delete members.__events;
+	
+	// handle mixins
+	if (members.__mixins) {
+		for (var idx = 0, len = members.__mixins.length; idx < len; idx++) {
+			var class_obj = members.__mixins[idx];
+			
+			for (var key in class_obj.prototype) {
+				if (!key.match(/^__/) && (typeof(constructor.prototype[key]) == 'undefined')) {
+					constructor.prototype[key] = class_obj.prototype[key];
+				}
+			}
+			var static_members = class_obj.__static;
+			if (static_members) {
+				for (var key in static_members) {
+					if (typeof(constructor[key]) == 'undefined') constructor[key] = static_members[key];
+				}
+			}
+		} // foreach mixin
+		delete members.__mixins;
+	} // mixins
+	
+	// handle promisify (node 8+)
+	if (members.__promisify && util.promisify) {
+		if (Array.isArray(members.__promisify)) {
+			// promisify some
+			members.__promisify.forEach( function(key) {
+				if (typeof(members[key]) == 'function') {
+					members[key] = util.promisify( members[key] );
+				}
+			} );
+		}
+		else {
+			// promisify all
+			for (var key in members) {
+				if (!key.match(/^__/) && (typeof(members[key]) == 'function')) {
+					members[key] = util.promisify( members[key] );
+				}
+			}
+		}
+		delete members.__promisify;
+	}
+	
+	// fill prototype members
+	for (var key in members) {
+		constructor.prototype[key] = members[key];
+	}
+	
+	// return completed class definition
+	return constructor;
+};
+
+},{"events":40,"util":86}],63:[function(require,module,exports){
+(function (process){(function (){
+// High Resolution Performance Tracker for Node.JS
+// Copyright (c) 2014 Joseph Huckaby
+// Released under the MIT License
+
+var Class = require("pixl-class");
+
+module.exports = Class.create({
+	
+	perf: null,
+	counters: null,
+	scale: 1000, // milliseconds
+	precision: 1000, // 3 digits
+	totalKey: 'total', // where to store the total
+	minMax: false, // track min/avg/max per metric
+	
+	__events: false,
+	
+	__construct: function() {
+		// class constructor
+		this.reset();
+	},
+	
+	reset: function() {
+		// reset everything
+		this.perf = {};
+		this.counters = {};
+	},
+	
+	setScale: function(scale) { 
+		// set scale for time measurements
+		// 1000000000 == nanoseconds
+		// 1000000 == microseconds
+		// 1000 == milliseconds
+		// 1 == seconds
+		this.scale = scale; 
+	},
+	
+	setPrecision: function(precision) {
+		// set precision for measurements
+		// 1 == integers only
+		// 10 == 1 digit after the decimal
+		// 100 == 2 digits after the decimal
+		// 1000 == 3 digits after the decimal
+		this.precision = precision; 
+	},
+	
+	calcElapsed: function(start) {
+		// calculate elapsed time using process.hrtime() (nanoseconds)
+		// then convert to our scale and precision
+		var diff = process.hrtime( start );
+		var nano = diff[0] * 1e9 + diff[1];
+		
+		// apply scale transform
+		var value = nano / (1000000000 / this.scale);
+		
+		return value;
+	},
+	
+	begin: function(id) {
+		// begin tracking metric
+		// ID defaults to 't' for total
+		if (!id) id = this.totalKey;
+		var now = process.hrtime();
+		
+		// only allow 't' begin to be called once per object (unless it is reset)
+		if ((id == this.totalKey) && this.perf[id]) return;
+		
+		// set start time
+		if (!this.perf[id]) this.perf[id] = { elapsed: 0 };
+		this.perf[id].start = now;
+		if (this.perf[id].end) delete this.perf[id].end;
+		
+		return new PerfMetric(this, id, now);
+	},
+	
+	end: function(id, start) {
+		// mark end of metric
+		// ID defaults to 't' for total
+		if (!id) id = this.totalKey;
+		var now = process.hrtime();
+		
+		if (!this.perf[id] && !start) return;
+		if (!this.perf[id]) this.perf[id] = { elapsed: 0 };
+		var obj = this.perf[id];
+		
+		if (start) obj.start = start;
+		obj.end = now;
+		if (!obj.start) obj.start = obj.end;
+		
+		var elapsed = Array.isArray(obj.start) ? 
+			this.calcElapsed( obj.start ) : 0;
+		
+		if (id == this.totalKey) {
+			// end of all tracking
+			// set elapsed instead of incrementing, to prevent bugs with calling end() twice.
+			obj.elapsed = elapsed;
+		}
+		else {
+			// stopped tracking single metric
+			// increment elapsed to allow for multiple trackings on same metric
+			obj.elapsed += elapsed;
+		}
+		
+		if (this.minMax) {
+			if (!obj.count || (elapsed < obj.min)) obj.min = elapsed;
+			if (!obj.count || (elapsed > obj.max)) obj.max = elapsed;
+			if (!obj.count) obj.count = 0;
+			obj.count++;
+		}
+		
+		return this.formatValue(elapsed);
+	},
+	
+	count: function(id, amount) {
+		// increment (or decrement) simple counter, unrelated to time measurement
+		if (typeof(amount) == 'undefined') amount = 1;
+		if (!(id in this.counters)) this.counters[id] = amount;
+		else this.counters[id] += amount;
+	},
+	
+	metrics: function() {
+		// get all perf metrics and counters in simple object format
+		var out = {};
+		
+		// make sure total metric is ended
+		this.end();
+		
+		// generate object containing only elapsed times of each
+		for (var id in this.perf) {
+			if (this.perf[id].end) {
+				out[id] = this.elapsed(id, true);
+			}
+		}
+		
+		return {
+			scale: this.scale,
+			perf: out,
+			counters: this.counters
+		};
+	},
+	
+	json: function() {
+		// return a JSON string with perf metrics and counters separated out
+		return JSON.stringify( this.metrics() );
+	},
+	
+	summarize: function(prefix) {
+		// Summarize performance metrics in query string format
+		var pairs = [];
+		var metrics = this.metrics();
+		if (!prefix) prefix = '';
+		
+		// start with scale
+		pairs.push( 'scale=' + this.scale );
+		
+		// make sure total is always right after scale
+		pairs.push( 'total=' + metrics.perf.total );
+		delete metrics.perf.total;
+		
+		// build summary string of other metrics
+		for (var id in metrics.perf) {
+			pairs.push( prefix + id + '=' + metrics.perf[id] );
+		}
+		
+		// add counters if applicable, prefix each with c_
+		for (var id in metrics.counters) {
+			var disp_id = id.match(/^c_/) ? id : ('c_'+id);
+			pairs.push( disp_id + '=' + metrics.counters[id] );
+		}
+		
+		return pairs.join('&');
+	},
+	
+	elapsed: function(id, display_format) {
+		// get elapsed seconds from given metric
+		if (!this.perf[id]) return 0;
+		if (!this.perf[id].elapsed) return 0;
+		
+		if (display_format) {
+			return this.formatValue( this.perf[id].elapsed );
+		}
+		else return this.perf[id].elapsed;
+	},
+	
+	get: function() {
+		// Get raw perf object
+		return this.perf;
+	},
+	
+	getCounters: function() {
+		// Get raw counters object
+		return this.counters;
+	},
+	
+	formatValue: function(value) {
+		// format value according to our precision
+		return Math.floor(value * this.precision) / this.precision;
+	},
+	
+	getMinMaxMetrics: function() {
+		// get min/max/avg/count/total for each named metric (omits total)
+		// special 'minMax' mode must be enabled
+		if (!this.minMax) return {};
+		var metrics = {};
+		
+		for (var id in this.perf) {
+			var obj = this.perf[id];
+			if (obj.end && (id != this.totalKey)) {
+				if (!obj.elapsed) obj.elapsed = 0;
+				metrics[id] = {
+					min: this.formatValue( obj.min || 0 ),
+					max: this.formatValue( obj.max || 0 ),
+					total: this.formatValue( obj.elapsed ),
+					count: obj.count || 0,
+					avg: this.formatValue( obj.elapsed / (obj.count || 1) )
+				};
+			}
+		}
+		
+		return metrics;
+	},
+	
+	import: function(perf, prefix) {
+		// import perf metrics from another object (and adjust scale to match)
+		// can be a pixl-perf instance, or an object from calling metrics()
+		if (!prefix) prefix = '';
+		
+		if (perf.perf) {
+			for (var key in perf.perf) {
+				if (key != this.totalKey) {
+					var pkey = prefix + key;
+					if (!this.perf[pkey]) this.perf[pkey] = {};
+					if (!this.perf[pkey].end) this.perf[pkey].end = 1;
+					if (!this.perf[pkey].elapsed) this.perf[pkey].elapsed = 0;
+					var elapsed = (typeof(perf.perf[key]) == 'number') ? perf.perf[key] : perf.perf[key].elapsed;
+					this.perf[pkey].elapsed += (elapsed / (perf.scale / this.scale)) || 0;
+					
+					if (this.minMax && perf.minMax) {
+						// both source and dest have minMax, so import entire min/max/count
+						var adj_min = perf.perf[key].min / (perf.scale / this.scale);
+						if (!this.perf[pkey].count || (adj_min < this.perf[pkey].min)) this.perf[pkey].min = adj_min;
+						
+						var adj_max = perf.perf[key].max / (perf.scale / this.scale);
+						if (!this.perf[pkey].count || (adj_max > this.perf[pkey].max)) this.perf[pkey].max = adj_max;
+						
+						if (!this.perf[pkey].count) this.perf[pkey].count = 0;
+						this.perf[pkey].count += perf.perf[key].count || 0;
+					} // minMax
+					else if (this.minMax) {
+						// source has no minMax, but dest does, so just import their elapsed as one measurement
+						var adj_elapsed = (elapsed / (perf.scale / this.scale)) || 0;
+						if (!this.perf[pkey].count || (adj_elapsed < this.perf[pkey].min)) this.perf[pkey].min = adj_elapsed;
+						if (!this.perf[pkey].count || (adj_elapsed > this.perf[pkey].max)) this.perf[pkey].max = adj_elapsed;
+						if (!this.perf[pkey].count) this.perf[pkey].count = 0;
+						this.perf[pkey].count++;
+					}
+				} // not totalKey
+			} // foreach perf
+		} // perf.perf
+		
+		if (perf.counters) {
+			for (var key in perf.counters) {
+				var pkey = prefix + key;
+				this.count( pkey, perf.counters[key] );
+			}
+		}
+	}
+	
+});
+
+// A PerfMetric promise is returned from each call to begin(),
+// so the user can track multiple simultaneous metrics with the same key.
+
+var PerfMetric = Class.create({
+	
+	__events: false,
+	
+	perf: null,
+	id: '',
+	start: 0,
+	
+	__construct: function(perf, id, start) {
+		// class constructor
+		this.perf = perf;
+		this.id = id;
+		this.start = start;
+	},
+	
+	end: function() {
+		// end tracking
+		return this.perf.end(this.id, this.start);
+	}
+	
+});
+
+}).call(this)}).call(this,require('_process'))
+},{"_process":65,"pixl-class":62}],64:[function(require,module,exports){
+(function (process){(function (){
 'use strict';
 
 if (typeof process === 'undefined' ||
@@ -21352,8 +21758,8 @@ function nextTick(fn, arg1, arg2, arg3) {
 }
 
 
-}).call(this,require('_process'))
-},{"_process":63}],63:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'))
+},{"_process":65}],65:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -21539,10 +21945,10 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],64:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 module.exports = require('./lib/_stream_duplex.js');
 
-},{"./lib/_stream_duplex.js":65}],65:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":67}],67:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -21588,7 +21994,7 @@ var objectKeys = Object.keys || function (obj) {
 module.exports = Duplex;
 
 /*<replacement>*/
-var util = require('core-util-is');
+var util = Object.create(require('core-util-is'));
 util.inherits = require('inherits');
 /*</replacement>*/
 
@@ -21674,7 +22080,7 @@ Duplex.prototype._destroy = function (err, cb) {
 
   pna.nextTick(cb, err);
 };
-},{"./_stream_readable":67,"./_stream_writable":69,"core-util-is":38,"inherits":46,"process-nextick-args":62}],66:[function(require,module,exports){
+},{"./_stream_readable":69,"./_stream_writable":71,"core-util-is":38,"inherits":46,"process-nextick-args":64}],68:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -21707,7 +22113,7 @@ module.exports = PassThrough;
 var Transform = require('./_stream_transform');
 
 /*<replacement>*/
-var util = require('core-util-is');
+var util = Object.create(require('core-util-is'));
 util.inherits = require('inherits');
 /*</replacement>*/
 
@@ -21722,8 +22128,8 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
-},{"./_stream_transform":68,"core-util-is":38,"inherits":46}],67:[function(require,module,exports){
-(function (process,global){
+},{"./_stream_transform":70,"core-util-is":38,"inherits":46}],69:[function(require,module,exports){
+(function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -21790,7 +22196,7 @@ function _isUint8Array(obj) {
 /*</replacement>*/
 
 /*<replacement>*/
-var util = require('core-util-is');
+var util = Object.create(require('core-util-is'));
 util.inherits = require('inherits');
 /*</replacement>*/
 
@@ -22743,8 +23149,8 @@ function indexOf(xs, x) {
   }
   return -1;
 }
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./_stream_duplex":65,"./internal/streams/BufferList":70,"./internal/streams/destroy":71,"./internal/streams/stream":72,"_process":63,"core-util-is":38,"events":40,"inherits":46,"isarray":48,"process-nextick-args":62,"safe-buffer":77,"string_decoder/":79,"util":34}],68:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./_stream_duplex":67,"./internal/streams/BufferList":72,"./internal/streams/destroy":73,"./internal/streams/stream":74,"_process":65,"core-util-is":38,"events":40,"inherits":46,"isarray":48,"process-nextick-args":64,"safe-buffer":79,"string_decoder/":81,"util":34}],70:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -22815,7 +23221,7 @@ module.exports = Transform;
 var Duplex = require('./_stream_duplex');
 
 /*<replacement>*/
-var util = require('core-util-is');
+var util = Object.create(require('core-util-is'));
 util.inherits = require('inherits');
 /*</replacement>*/
 
@@ -22959,8 +23365,8 @@ function done(stream, er, data) {
 
   return stream.push(null);
 }
-},{"./_stream_duplex":65,"core-util-is":38,"inherits":46}],69:[function(require,module,exports){
-(function (process,global,setImmediate){
+},{"./_stream_duplex":67,"core-util-is":38,"inherits":46}],71:[function(require,module,exports){
+(function (process,global,setImmediate){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -23027,7 +23433,7 @@ var Duplex;
 Writable.WritableState = WritableState;
 
 /*<replacement>*/
-var util = require('core-util-is');
+var util = Object.create(require('core-util-is'));
 util.inherits = require('inherits');
 /*</replacement>*/
 
@@ -23648,8 +24054,8 @@ Writable.prototype._destroy = function (err, cb) {
   this.end();
   cb(err);
 };
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("timers").setImmediate)
-},{"./_stream_duplex":65,"./internal/streams/destroy":71,"./internal/streams/stream":72,"_process":63,"core-util-is":38,"inherits":46,"process-nextick-args":62,"safe-buffer":77,"timers":80,"util-deprecate":81}],70:[function(require,module,exports){
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("timers").setImmediate)
+},{"./_stream_duplex":67,"./internal/streams/destroy":73,"./internal/streams/stream":74,"_process":65,"core-util-is":38,"inherits":46,"process-nextick-args":64,"safe-buffer":79,"timers":82,"util-deprecate":83}],72:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23729,7 +24135,7 @@ if (util && util.inspect && util.inspect.custom) {
     return this.constructor.name + ' ' + obj;
   };
 }
-},{"safe-buffer":77,"util":34}],71:[function(require,module,exports){
+},{"safe-buffer":79,"util":34}],73:[function(require,module,exports){
 'use strict';
 
 /*<replacement>*/
@@ -23804,13 +24210,13 @@ module.exports = {
   destroy: destroy,
   undestroy: undestroy
 };
-},{"process-nextick-args":62}],72:[function(require,module,exports){
+},{"process-nextick-args":64}],74:[function(require,module,exports){
 module.exports = require('events').EventEmitter;
 
-},{"events":40}],73:[function(require,module,exports){
+},{"events":40}],75:[function(require,module,exports){
 module.exports = require('./readable').PassThrough
 
-},{"./readable":74}],74:[function(require,module,exports){
+},{"./readable":76}],76:[function(require,module,exports){
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = exports;
 exports.Readable = exports;
@@ -23819,13 +24225,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":65,"./lib/_stream_passthrough.js":66,"./lib/_stream_readable.js":67,"./lib/_stream_transform.js":68,"./lib/_stream_writable.js":69}],75:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":67,"./lib/_stream_passthrough.js":68,"./lib/_stream_readable.js":69,"./lib/_stream_transform.js":70,"./lib/_stream_writable.js":71}],77:[function(require,module,exports){
 module.exports = require('./readable').Transform
 
-},{"./readable":74}],76:[function(require,module,exports){
+},{"./readable":76}],78:[function(require,module,exports){
 module.exports = require('./lib/_stream_writable.js');
 
-},{"./lib/_stream_writable.js":69}],77:[function(require,module,exports){
+},{"./lib/_stream_writable.js":71}],79:[function(require,module,exports){
 /* eslint-disable node/no-deprecated-api */
 var buffer = require('buffer')
 var Buffer = buffer.Buffer
@@ -23889,7 +24295,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
   return buffer.SlowBuffer(size)
 }
 
-},{"buffer":37}],78:[function(require,module,exports){
+},{"buffer":37}],80:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24018,7 +24424,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":40,"inherits":46,"readable-stream/duplex.js":64,"readable-stream/passthrough.js":73,"readable-stream/readable.js":74,"readable-stream/transform.js":75,"readable-stream/writable.js":76}],79:[function(require,module,exports){
+},{"events":40,"inherits":46,"readable-stream/duplex.js":66,"readable-stream/passthrough.js":75,"readable-stream/readable.js":76,"readable-stream/transform.js":77,"readable-stream/writable.js":78}],81:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24315,8 +24721,8 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : '';
 }
-},{"safe-buffer":77}],80:[function(require,module,exports){
-(function (setImmediate,clearImmediate){
+},{"safe-buffer":79}],82:[function(require,module,exports){
+(function (setImmediate,clearImmediate){(function (){
 var nextTick = require('process/browser.js').nextTick;
 var apply = Function.prototype.apply;
 var slice = Array.prototype.slice;
@@ -24393,9 +24799,9 @@ exports.setImmediate = typeof setImmediate === "function" ? setImmediate : funct
 exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
   delete immediateIds[id];
 };
-}).call(this,require("timers").setImmediate,require("timers").clearImmediate)
-},{"process/browser.js":63,"timers":80}],81:[function(require,module,exports){
-(function (global){
+}).call(this)}).call(this,require("timers").setImmediate,require("timers").clearImmediate)
+},{"process/browser.js":65,"timers":82}],83:[function(require,module,exports){
+(function (global){(function (){
 
 /**
  * Module exports.
@@ -24464,416 +24870,11 @@ function config (name) {
   return String(val).toLowerCase() === 'true';
 }
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],82:[function(require,module,exports){
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],84:[function(require,module,exports){
 arguments[4][28][0].apply(exports,arguments)
-},{"dup":28}],83:[function(require,module,exports){
+},{"dup":28}],85:[function(require,module,exports){
 arguments[4][29][0].apply(exports,arguments)
-},{"dup":29}],84:[function(require,module,exports){
+},{"dup":29}],86:[function(require,module,exports){
 arguments[4][30][0].apply(exports,arguments)
-},{"./support/isBuffer":83,"_process":63,"dup":30,"inherits":82}],85:[function(require,module,exports){
-// Simple OOP Tools for Node.JS
-// Copyright (c) 2014 Joseph Huckaby
-// Released under the MIT License
-
-var util = require("util");
-var events = require("events");
-
-exports.create = function create(members) {
-	// create new class using php-style syntax (sort of)
-	if (!members) members = {};
-	
-	// setup constructor
-	var constructor = null;
-	
-	// inherit from parent class
-	if (members.__parent) {
-		if (members.__construct) {
-			// explicit constructor passed in
-			constructor = members.__construct;
-		}
-		else {
-			// inherit parent's constructor
-			var parent = members.__parent;
-			constructor = function() {
-				var args = Array.prototype.slice.call(arguments);
-				parent.apply( this, args );
-			};
-		}
-		
-		// inherit rest of parent members
-		util.inherits(constructor, members.__parent);
-		delete members.__parent;
-	}
-	else {
-		// create new base class
-		constructor = members.__construct || function() {};
-	}
-	delete members.__construct;
-	
-	// handle static variables
-	if (members.__static) {
-		for (var key in members.__static) {
-			constructor[key] = members.__static[key];
-		}
-		delete members.__static;
-	}
-	
-	// all classes are event emitters unless explicitly disabled
-	if (members.__events !== false) {
-		if (!members.__mixins) members.__mixins = [];
-		if (members.__mixins.indexOf(events.EventEmitter) == -1) {
-			members.__mixins.push( events.EventEmitter );
-		}
-	}
-	delete members.__events;
-	
-	// handle mixins
-	if (members.__mixins) {
-		for (var idx = 0, len = members.__mixins.length; idx < len; idx++) {
-			var class_obj = members.__mixins[idx];
-			
-			for (var key in class_obj.prototype) {
-				if (!key.match(/^__/) && (typeof(constructor.prototype[key]) == 'undefined')) {
-					constructor.prototype[key] = class_obj.prototype[key];
-				}
-			}
-			var static_members = class_obj.__static;
-			if (static_members) {
-				for (var key in static_members) {
-					if (typeof(constructor[key]) == 'undefined') constructor[key] = static_members[key];
-				}
-			}
-		} // foreach mixin
-		delete members.__mixins;
-	} // mixins
-	
-	// handle promisify (node 8+)
-	if (members.__promisify && util.promisify) {
-		if (Array.isArray(members.__promisify)) {
-			// promisify some
-			members.__promisify.forEach( function(key) {
-				if (typeof(members[key]) == 'function') {
-					members[key] = util.promisify( members[key] );
-				}
-			} );
-		}
-		else {
-			// promisify all
-			for (var key in members) {
-				if (!key.match(/^__/) && (typeof(members[key]) == 'function')) {
-					members[key] = util.promisify( members[key] );
-				}
-			}
-		}
-		delete members.__promisify;
-	}
-	
-	// fill prototype members
-	for (var key in members) {
-		constructor.prototype[key] = members[key];
-	}
-	
-	// return completed class definition
-	return constructor;
-};
-
-},{"events":40,"util":84}],86:[function(require,module,exports){
-(function (process){
-// High Resolution Performance Tracker for Node.JS
-// Copyright (c) 2014 Joseph Huckaby
-// Released under the MIT License
-
-var Class = require("pixl-class");
-
-module.exports = Class.create({
-	
-	perf: null,
-	counters: null,
-	scale: 1000, // milliseconds
-	precision: 1000, // 3 digits
-	totalKey: 'total', // where to store the total
-	minMax: false, // track min/avg/max per metric
-	
-	__events: false,
-	
-	__construct: function() {
-		// class constructor
-		this.reset();
-	},
-	
-	reset: function() {
-		// reset everything
-		this.perf = {};
-		this.counters = {};
-	},
-	
-	setScale: function(scale) { 
-		// set scale for time measurements
-		// 1000000000 == nanoseconds
-		// 1000000 == microseconds
-		// 1000 == milliseconds
-		// 1 == seconds
-		this.scale = scale; 
-	},
-	
-	setPrecision: function(precision) {
-		// set precision for measurements
-		// 1 == integers only
-		// 10 == 1 digit after the decimal
-		// 100 == 2 digits after the decimal
-		// 1000 == 3 digits after the decimal
-		this.precision = precision; 
-	},
-	
-	calcElapsed: function(start) {
-		// calculate elapsed time using process.hrtime() (nanoseconds)
-		// then convert to our scale and precision
-		var diff = process.hrtime( start );
-		var nano = diff[0] * 1e9 + diff[1];
-		
-		// apply scale transform
-		var value = nano / (1000000000 / this.scale);
-		
-		return value;
-	},
-	
-	begin: function(id) {
-		// begin tracking metric
-		// ID defaults to 't' for total
-		if (!id) id = this.totalKey;
-		var now = process.hrtime();
-		
-		// only allow 't' begin to be called once per object (unless it is reset)
-		if ((id == this.totalKey) && this.perf[id]) return;
-		
-		// set start time
-		if (!this.perf[id]) this.perf[id] = { elapsed: 0 };
-		this.perf[id].start = now;
-		if (this.perf[id].end) delete this.perf[id].end;
-		
-		return new PerfMetric(this, id, now);
-	},
-	
-	end: function(id, start) {
-		// mark end of metric
-		// ID defaults to 't' for total
-		if (!id) id = this.totalKey;
-		var now = process.hrtime();
-		
-		if (!this.perf[id] && !start) return;
-		if (!this.perf[id]) this.perf[id] = { elapsed: 0 };
-		var obj = this.perf[id];
-		
-		if (start) obj.start = start;
-		obj.end = now;
-		if (!obj.start) obj.start = obj.end;
-		
-		var elapsed = Array.isArray(obj.start) ? 
-			this.calcElapsed( obj.start ) : 0;
-		
-		if (id == this.totalKey) {
-			// end of all tracking
-			// set elapsed instead of incrementing, to prevent bugs with calling end() twice.
-			obj.elapsed = elapsed;
-		}
-		else {
-			// stopped tracking single metric
-			// increment elapsed to allow for multiple trackings on same metric
-			obj.elapsed += elapsed;
-		}
-		
-		if (this.minMax) {
-			if (!obj.count || (elapsed < obj.min)) obj.min = elapsed;
-			if (!obj.count || (elapsed > obj.max)) obj.max = elapsed;
-			if (!obj.count) obj.count = 0;
-			obj.count++;
-		}
-		
-		return this.formatValue(elapsed);
-	},
-	
-	count: function(id, amount) {
-		// increment (or decrement) simple counter, unrelated to time measurement
-		if (typeof(amount) == 'undefined') amount = 1;
-		if (!(id in this.counters)) this.counters[id] = amount;
-		else this.counters[id] += amount;
-	},
-	
-	metrics: function() {
-		// get all perf metrics and counters in simple object format
-		var out = {};
-		
-		// make sure total metric is ended
-		this.end();
-		
-		// generate object containing only elapsed times of each
-		for (var id in this.perf) {
-			if (this.perf[id].end) {
-				out[id] = this.elapsed(id, true);
-			}
-		}
-		
-		return {
-			scale: this.scale,
-			perf: out,
-			counters: this.counters
-		};
-	},
-	
-	json: function() {
-		// return a JSON string with perf metrics and counters separated out
-		return JSON.stringify( this.metrics() );
-	},
-	
-	summarize: function(prefix) {
-		// Summarize performance metrics in query string format
-		var pairs = [];
-		var metrics = this.metrics();
-		if (!prefix) prefix = '';
-		
-		// start with scale
-		pairs.push( 'scale=' + this.scale );
-		
-		// make sure total is always right after scale
-		pairs.push( 'total=' + metrics.perf.total );
-		delete metrics.perf.total;
-		
-		// build summary string of other metrics
-		for (var id in metrics.perf) {
-			pairs.push( prefix + id + '=' + metrics.perf[id] );
-		}
-		
-		// add counters if applicable, prefix each with c_
-		for (var id in metrics.counters) {
-			var disp_id = id.match(/^c_/) ? id : ('c_'+id);
-			pairs.push( disp_id + '=' + metrics.counters[id] );
-		}
-		
-		return pairs.join('&');
-	},
-	
-	elapsed: function(id, display_format) {
-		// get elapsed seconds from given metric
-		if (!this.perf[id]) return 0;
-		if (!this.perf[id].elapsed) return 0;
-		
-		if (display_format) {
-			return this.formatValue( this.perf[id].elapsed );
-		}
-		else return this.perf[id].elapsed;
-	},
-	
-	get: function() {
-		// Get raw perf object
-		return this.perf;
-	},
-	
-	getCounters: function() {
-		// Get raw counters object
-		return this.counters;
-	},
-	
-	formatValue: function(value) {
-		// format value according to our precision
-		return Math.floor(value * this.precision) / this.precision;
-	},
-	
-	getMinMaxMetrics: function() {
-		// get min/max/avg/count/total for each named metric (omits total)
-		// special 'minMax' mode must be enabled
-		if (!this.minMax) return {};
-		var metrics = {};
-		
-		for (var id in this.perf) {
-			var obj = this.perf[id];
-			if (obj.end && (id != this.totalKey)) {
-				if (!obj.elapsed) obj.elapsed = 0;
-				metrics[id] = {
-					min: this.formatValue( obj.min || 0 ),
-					max: this.formatValue( obj.max || 0 ),
-					total: this.formatValue( obj.elapsed ),
-					count: obj.count || 0,
-					avg: this.formatValue( obj.elapsed / (obj.count || 1) )
-				};
-			}
-		}
-		
-		return metrics;
-	},
-	
-	import: function(perf, prefix) {
-		// import perf metrics from another object (and adjust scale to match)
-		// can be a pixl-perf instance, or an object from calling metrics()
-		if (!prefix) prefix = '';
-		
-		if (perf.perf) {
-			for (var key in perf.perf) {
-				if (key != this.totalKey) {
-					var pkey = prefix + key;
-					if (!this.perf[pkey]) this.perf[pkey] = {};
-					if (!this.perf[pkey].end) this.perf[pkey].end = 1;
-					if (!this.perf[pkey].elapsed) this.perf[pkey].elapsed = 0;
-					var elapsed = (typeof(perf.perf[key]) == 'number') ? perf.perf[key] : perf.perf[key].elapsed;
-					this.perf[pkey].elapsed += (elapsed / (perf.scale / this.scale)) || 0;
-					
-					if (this.minMax && perf.minMax) {
-						// both source and dest have minMax, so import entire min/max/count
-						var adj_min = perf.perf[key].min / (perf.scale / this.scale);
-						if (!this.perf[pkey].count || (adj_min < this.perf[pkey].min)) this.perf[pkey].min = adj_min;
-						
-						var adj_max = perf.perf[key].max / (perf.scale / this.scale);
-						if (!this.perf[pkey].count || (adj_max > this.perf[pkey].max)) this.perf[pkey].max = adj_max;
-						
-						if (!this.perf[pkey].count) this.perf[pkey].count = 0;
-						this.perf[pkey].count += perf.perf[key].count || 0;
-					} // minMax
-					else if (this.minMax) {
-						// source has no minMax, but dest does, so just import their elapsed as one measurement
-						var adj_elapsed = (elapsed / (perf.scale / this.scale)) || 0;
-						if (!this.perf[pkey].count || (adj_elapsed < this.perf[pkey].min)) this.perf[pkey].min = adj_elapsed;
-						if (!this.perf[pkey].count || (adj_elapsed > this.perf[pkey].max)) this.perf[pkey].max = adj_elapsed;
-						if (!this.perf[pkey].count) this.perf[pkey].count = 0;
-						this.perf[pkey].count++;
-					}
-				} // not totalKey
-			} // foreach perf
-		} // perf.perf
-		
-		if (perf.counters) {
-			for (var key in perf.counters) {
-				var pkey = prefix + key;
-				this.count( pkey, perf.counters[key] );
-			}
-		}
-	}
-	
-});
-
-// A PerfMetric promise is returned from each call to begin(),
-// so the user can track multiple simultaneous metrics with the same key.
-
-var PerfMetric = Class.create({
-	
-	__events: false,
-	
-	perf: null,
-	id: '',
-	start: 0,
-	
-	__construct: function(perf, id, start) {
-		// class constructor
-		this.perf = perf;
-		this.id = id;
-		this.start = start;
-	},
-	
-	end: function() {
-		// end tracking
-		return this.perf.end(this.id, this.start);
-	}
-	
-});
-
-}).call(this,require('_process'))
-},{"_process":63,"pixl-class":85}]},{},[1]);
+},{"./support/isBuffer":85,"_process":65,"dup":30,"inherits":84}]},{},[1]);
