@@ -1,6 +1,6 @@
 // canvas-plus - Image Transformation Engine
 // Built using node-canvas and image-q
-// Copyright (c) 2017 Joseph Huckaby
+// Copyright (c) 2017 - 2022 Joseph Huckaby
 // Released under the MIT License
 
 var Class = require('pixl-class');
@@ -16,6 +16,12 @@ var ChainBreaker = {
 if (!Math.clamp) Math.clamp = function(val, min, max) {
 	return Math.max(min, Math.min(max, val));
 };
+
+// Font Cache global
+var FontCache = {};
+
+// check runtime environment
+var isNode = (typeof process !== "undefined") && (process.versions != null) && (process.versions.node != null);
 
 var CanvasPlus = module.exports = Class.create({
 	
@@ -49,6 +55,12 @@ var CanvasPlus = module.exports = Class.create({
 		require('./lib/format/jpeg.js'),
 		require('./lib/format/png.js')
 	],
+	
+	__static: {
+		clearFontCache: function() {
+			for (var key in FontCache) { delete FontCache[key]; }
+		}
+	},
 	
 	// version: require( __dirname + '/package.json' ).version,
 	
@@ -122,6 +134,7 @@ var CanvasPlus = module.exports = Class.create({
 	
 	__construct: function() {
 		// class constructor
+		this.fontCache = FontCache;
 		this.perf = new Perf();
 		this.reset();
 		
@@ -612,3 +625,12 @@ for (var key in CanvasPlus.prototype) {
 		ChainBreaker[key] = function() { return this; };
 	}
 }
+
+// Augment font cache clear in node.js land (node-canvas)
+if (isNode) (function() {
+	var { deregisterAllFonts } = require('canvas');
+	CanvasPlus.clearFontCache = function() {
+		for (var key in FontCache) { delete FontCache[key]; }
+		deregisterAllFonts();
+	};
+})();

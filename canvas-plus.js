@@ -65,7 +65,7 @@ CanvasPlus.prototype.measureTextHeight = function(font_style) {
 };
 
 }).call(this)}).call(this,require('_process'))
-},{"./main.js":26,"_process":63,"browser-process-hrtime":33,"pixl-class":85}],2:[function(require,module,exports){
+},{"./main.js":26,"_process":67,"browser-process-hrtime":33,"pixl-class":64}],2:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Canvas Create Mixin - Browser Version
 // Copyright (c) 2017 Joseph Huckaby
@@ -143,14 +143,13 @@ module.exports = Class.create({
 		
 });
 
-},{"pixl-class":85}],3:[function(require,module,exports){
+},{"pixl-class":64}],3:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Canvas Font Mixin - Browser Version
 // Copyright (c) 2017 Joseph Huckaby
 // Released under the MIT License
 
 var Class = require("pixl-class");
-var fonts_loaded = {};
 
 module.exports = Class.create({
 	
@@ -163,11 +162,11 @@ module.exports = Class.create({
 		// load CSS font family in browser, callback is optional
 		var self = this;
 		
-		if (family in fonts_loaded) {
+		if (family in this.fontCache) {
 			if (callback) callback();
 			return;
 		}
-		fonts_loaded[family] = 1;
+		this.fontCache[family] = 1;
 		
 		// sniff format from URL
 		if (url.match(/\.(\w+)(\?|$)/)) {
@@ -206,7 +205,7 @@ module.exports = Class.create({
 // https://github.com/dwighthouse/onfontready/blob/master/LICENSE
 function onFontReady(e,t,i,n,o){i=i||0,i.timeoutAfter&&setTimeout(function(){n&&(document.body.removeChild(n),n=0,i.onTimeout&&i.onTimeout())},i.timeoutAfter),o=function(){n&&n.firstChild.clientWidth==n.lastChild.clientWidth&&(document.body.removeChild(n),n=0,t())},o(document.body.appendChild(n=document.createElement("div")).innerHTML='<div style="position:fixed;white-space:pre;bottom:999%;right:999%;font:999px '+(i.generic?"":"'")+e+(i.generic?"":"'")+',serif">'+(i.sampleText||" ")+'</div><div style="position:fixed;white-space:pre;bottom:999%;right:999%;font:999px '+(i.generic?"":"'")+e+(i.generic?"":"'")+',monospace">'+(i.sampleText||" ")+"</div>"),n&&(n.firstChild.appendChild(e=document.createElement("iframe")).style.width="999%",e.contentWindow.onresize=o,n.lastChild.appendChild(e=document.createElement("iframe")).style.width="999%",e.contentWindow.onresize=o,e=setTimeout(o))};
 
-},{"pixl-class":85}],4:[function(require,module,exports){
+},{"pixl-class":64}],4:[function(require,module,exports){
 (function (Buffer){(function (){
 // canvas-plus - Image Transformation Engine
 // Canvas Load Mixin - Browser Version
@@ -434,7 +433,7 @@ module.exports = Class.create({
 });
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":37,"exif-js":41,"file-type":42,"pixl-class":85}],5:[function(require,module,exports){
+},{"buffer":37,"exif-js":43,"file-type":44,"pixl-class":64}],5:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Canvas Write Mixin - Browser Version
 // Copyright (c) 2017 Joseph Huckaby
@@ -497,7 +496,7 @@ module.exports = Class.create({
 		
 });
 
-},{"pixl-class":85}],6:[function(require,module,exports){
+},{"pixl-class":64}],6:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Adjust Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -725,7 +724,7 @@ function hsvToRgb(h, s, v, rgb) {
 	return rgb;
 };
 
-},{"pixl-class":85}],7:[function(require,module,exports){
+},{"pixl-class":64}],7:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Border Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -797,7 +796,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],8:[function(require,module,exports){
+},{"pixl-class":64}],8:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Composite Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -916,7 +915,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],9:[function(require,module,exports){
+},{"pixl-class":64}],9:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Convolve Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1172,7 +1171,7 @@ function generateGaussianKernel(dimension, sigma) {
 	return kernel.map(function (e) { return e / sum; });
 };
 
-},{"pixl-class":85}],10:[function(require,module,exports){
+},{"pixl-class":64}],10:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Crop Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1238,7 +1237,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],11:[function(require,module,exports){
+},{"pixl-class":64}],11:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Curves Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1672,7 +1671,7 @@ function createInterpolant(xs, ys) {
 	};
 };
 
-},{"pixl-class":85}],12:[function(require,module,exports){
+},{"pixl-class":64}],12:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Draw Filter Mixin
 // Copyright (c) 2020 Joseph Huckaby
@@ -1765,7 +1764,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],13:[function(require,module,exports){
+},{"pixl-class":64}],13:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Expand Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1808,7 +1807,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],14:[function(require,module,exports){
+},{"pixl-class":64}],14:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Flatten Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -1872,7 +1871,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],15:[function(require,module,exports){
+},{"pixl-class":64}],15:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Hash Filter Mixin
 // Copyright (c) 2018 Joseph Huckaby
@@ -2104,7 +2103,7 @@ var bmvbhash = function(data, bits) {
 	return bits_to_hexhash(result);
 };
 
-},{"pixl-class":85}],16:[function(require,module,exports){
+},{"pixl-class":64}],16:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Histogram Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -2166,7 +2165,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],17:[function(require,module,exports){
+},{"pixl-class":64}],17:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Opacity Filter Mixin
 // Copyright (c) 2018 Joseph Huckaby
@@ -2208,7 +2207,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],18:[function(require,module,exports){
+},{"pixl-class":64}],18:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Quantize Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -2468,7 +2467,7 @@ module.exports = Class.create({
 	
 });
 
-},{"image-q":45,"pixl-class":85}],19:[function(require,module,exports){
+},{"image-q":47,"pixl-class":64}],19:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Resize Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -2652,7 +2651,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],20:[function(require,module,exports){
+},{"pixl-class":64}],20:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Text Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -2741,7 +2740,7 @@ module.exports = Class.create({
 		this.logDebug(9, "Canvas Font Spec: " + font_spec);
 		
 		ctx.textAlign = 'left';
-		ctx.textBaseline = 'hanging';
+		ctx.textBaseline = opts.baseline || 'hanging'; // TODO: this seems to be non-standard, why can't we just use 'top'?
 		
 		if (opts.shadowColor) {
 			ctx.shadowColor = opts.shadowColor;
@@ -3061,7 +3060,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],21:[function(require,module,exports){
+},{"pixl-class":64}],21:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Transform Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3219,7 +3218,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],22:[function(require,module,exports){
+},{"pixl-class":64}],22:[function(require,module,exports){
 // canvas-plus - Image Transformation Engine
 // Trim Filter Mixin
 // Copyright (c) 2017 Joseph Huckaby
@@ -3322,7 +3321,7 @@ module.exports = Class.create({
 	
 });
 
-},{"pixl-class":85}],23:[function(require,module,exports){
+},{"pixl-class":64}],23:[function(require,module,exports){
 (function (Buffer){(function (){
 // canvas-plus - Image Transformation Engine
 // GIF Output Format Mixin
@@ -3418,7 +3417,7 @@ module.exports = Class.create({
 });
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"blob-to-buffer":32,"buffer":37,"omggif":50,"pixl-class":85}],24:[function(require,module,exports){
+},{"blob-to-buffer":32,"buffer":37,"omggif":52,"pixl-class":64}],24:[function(require,module,exports){
 (function (Buffer){(function (){
 // canvas-plus - Image Transformation Engine
 // JPEG Output Format Mixin
@@ -3479,7 +3478,7 @@ module.exports = Class.create({
 });
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"blob-to-buffer":32,"buffer":37,"pixl-class":85}],25:[function(require,module,exports){
+},{"blob-to-buffer":32,"buffer":37,"pixl-class":64}],25:[function(require,module,exports){
 (function (Buffer){(function (){
 // canvas-plus - Image Transformation Engine
 // PNG Output Format Mixin
@@ -3668,7 +3667,8 @@ module.exports = Class.create({
 });
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"blob-to-buffer":32,"buffer":37,"crc-32":39,"pixl-class":85,"zlib":36}],26:[function(require,module,exports){
+},{"blob-to-buffer":32,"buffer":37,"crc-32":41,"pixl-class":64,"zlib":36}],26:[function(require,module,exports){
+(function (process){(function (){
 // canvas-plus - Image Transformation Engine
 // Built using node-canvas and image-q
 // Copyright (c) 2017 Joseph Huckaby
@@ -3687,6 +3687,12 @@ var ChainBreaker = {
 if (!Math.clamp) Math.clamp = function(val, min, max) {
 	return Math.max(min, Math.min(max, val));
 };
+
+// Font Cache global
+var FontCache = {};
+
+// check runtime environment
+var isNode = (typeof process !== "undefined") && (process.versions != null) && (process.versions.node != null);
 
 var CanvasPlus = module.exports = Class.create({
 	
@@ -3720,6 +3726,12 @@ var CanvasPlus = module.exports = Class.create({
 		require('./lib/format/jpeg.js'),
 		require('./lib/format/png.js')
 	],
+	
+	__static: {
+		clearFontCache: function() {
+			for (var key in FontCache) { delete FontCache[key]; }
+		}
+	},
 	
 	// version: require( __dirname + '/package.json' ).version,
 	
@@ -3793,6 +3805,7 @@ var CanvasPlus = module.exports = Class.create({
 	
 	__construct: function() {
 		// class constructor
+		this.fontCache = FontCache;
 		this.perf = new Perf();
 		this.reset();
 		
@@ -4284,7 +4297,17 @@ for (var key in CanvasPlus.prototype) {
 	}
 }
 
-},{"./lib/filter/adjust.js":6,"./lib/filter/border.js":7,"./lib/filter/composite.js":8,"./lib/filter/convolve.js":9,"./lib/filter/crop.js":10,"./lib/filter/curves.js":11,"./lib/filter/draw.js":12,"./lib/filter/expand.js":13,"./lib/filter/flatten.js":14,"./lib/filter/hash.js":15,"./lib/filter/histogram.js":16,"./lib/filter/opacity.js":17,"./lib/filter/quantize.js":18,"./lib/filter/resize.js":19,"./lib/filter/text.js":20,"./lib/filter/transform.js":21,"./lib/filter/trim.js":22,"./lib/format/gif.js":23,"./lib/format/jpeg.js":24,"./lib/format/png.js":25,"./lib/node/create.js":2,"./lib/node/font.js":3,"./lib/node/load.js":4,"./lib/node/write.js":5,"pixl-class":85,"pixl-perf":86}],27:[function(require,module,exports){
+// Augment font cache in node land (node-canvas)
+if (isNode) (function() {
+	var { deregisterAllFonts } = require('canvas');
+	CanvasPlus.clearFontCache = function() {
+		for (var key in FontCache) { delete FontCache[key]; }
+		deregisterAllFonts();
+	};
+})();
+
+}).call(this)}).call(this,require('_process'))
+},{"./lib/filter/adjust.js":6,"./lib/filter/border.js":7,"./lib/filter/composite.js":8,"./lib/filter/convolve.js":9,"./lib/filter/crop.js":10,"./lib/filter/curves.js":11,"./lib/filter/draw.js":12,"./lib/filter/expand.js":13,"./lib/filter/flatten.js":14,"./lib/filter/hash.js":15,"./lib/filter/histogram.js":16,"./lib/filter/opacity.js":17,"./lib/filter/quantize.js":18,"./lib/filter/resize.js":19,"./lib/filter/text.js":20,"./lib/filter/transform.js":21,"./lib/filter/trim.js":22,"./lib/format/gif.js":23,"./lib/format/jpeg.js":24,"./lib/format/png.js":25,"./lib/node/create.js":2,"./lib/node/font.js":3,"./lib/node/load.js":4,"./lib/node/write.js":5,"_process":67,"canvas":38,"pixl-class":64,"pixl-perf":65}],27:[function(require,module,exports){
 (function (global){(function (){
 'use strict';
 
@@ -4794,7 +4817,7 @@ var objectKeys = Object.keys || function (obj) {
 };
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"object-assign":49,"util/":30}],28:[function(require,module,exports){
+},{"object-assign":51,"util/":30}],28:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -5416,7 +5439,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":29,"_process":63,"inherits":28}],31:[function(require,module,exports){
+},{"./support/isBuffer":29,"_process":67,"inherits":28}],31:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -5624,7 +5647,7 @@ function hrtime(previousTimestamp){
   return [seconds,nanoseconds]
 }
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":63}],34:[function(require,module,exports){
+},{"_process":67}],34:[function(require,module,exports){
 
 },{}],35:[function(require,module,exports){
 (function (process,Buffer){(function (){
@@ -6038,7 +6061,7 @@ Zlib.prototype._reset = function () {
 
 exports.Zlib = Zlib;
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":63,"assert":27,"buffer":37,"pako/lib/zlib/constants":53,"pako/lib/zlib/deflate.js":55,"pako/lib/zlib/inflate.js":57,"pako/lib/zlib/zstream":61}],36:[function(require,module,exports){
+},{"_process":67,"assert":27,"buffer":37,"pako/lib/zlib/constants":55,"pako/lib/zlib/deflate.js":57,"pako/lib/zlib/inflate.js":59,"pako/lib/zlib/zstream":63}],36:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -6650,7 +6673,7 @@ util.inherits(DeflateRaw, Zlib);
 util.inherits(InflateRaw, Zlib);
 util.inherits(Unzip, Zlib);
 }).call(this)}).call(this,require('_process'))
-},{"./binding":35,"_process":63,"assert":27,"buffer":37,"stream":78,"util":84}],37:[function(require,module,exports){
+},{"./binding":35,"_process":67,"assert":27,"buffer":37,"stream":83,"util":88}],37:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -8431,8 +8454,147 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":31,"buffer":37,"ieee754":44}],38:[function(require,module,exports){
-(function (Buffer){(function (){
+},{"base64-js":31,"buffer":37,"ieee754":46}],38:[function(require,module,exports){
+/* globals document, ImageData */
+
+const parseFont = require('./lib/parse-font')
+
+exports.parseFont = parseFont
+
+exports.createCanvas = function (width, height) {
+  return Object.assign(document.createElement('canvas'), { width: width, height: height })
+}
+
+exports.createImageData = function (array, width, height) {
+  // Browser implementation of ImageData looks at the number of arguments passed
+  switch (arguments.length) {
+    case 0: return new ImageData()
+    case 1: return new ImageData(array)
+    case 2: return new ImageData(array, width)
+    default: return new ImageData(array, width, height)
+  }
+}
+
+exports.loadImage = function (src, options) {
+  return new Promise(function (resolve, reject) {
+    const image = Object.assign(document.createElement('img'), options)
+
+    function cleanup () {
+      image.onload = null
+      image.onerror = null
+    }
+
+    image.onload = function () { cleanup(); resolve(image) }
+    image.onerror = function () { cleanup(); reject(new Error('Failed to load the image "' + src + '"')) }
+
+    image.src = src
+  })
+}
+
+},{"./lib/parse-font":39}],39:[function(require,module,exports){
+'use strict'
+
+/**
+ * Font RegExp helpers.
+ */
+
+const weights = 'bold|bolder|lighter|[1-9]00'
+const styles = 'italic|oblique'
+const variants = 'small-caps'
+const stretches = 'ultra-condensed|extra-condensed|condensed|semi-condensed|semi-expanded|expanded|extra-expanded|ultra-expanded'
+const units = 'px|pt|pc|in|cm|mm|%|em|ex|ch|rem|q'
+const string = '\'([^\']+)\'|"([^"]+)"|[\\w\\s-]+'
+
+// [ [ <‘font-style’> || <font-variant-css21> || <‘font-weight’> || <‘font-stretch’> ]?
+//    <‘font-size’> [ / <‘line-height’> ]? <‘font-family’> ]
+// https://drafts.csswg.org/css-fonts-3/#font-prop
+const weightRe = new RegExp(`(${weights}) +`, 'i')
+const styleRe = new RegExp(`(${styles}) +`, 'i')
+const variantRe = new RegExp(`(${variants}) +`, 'i')
+const stretchRe = new RegExp(`(${stretches}) +`, 'i')
+const sizeFamilyRe = new RegExp(
+  `([\\d\\.]+)(${units}) *((?:${string})( *, *(?:${string}))*)`)
+
+/**
+ * Cache font parsing.
+ */
+
+const cache = {}
+
+const defaultHeight = 16 // pt, common browser default
+
+/**
+ * Parse font `str`.
+ *
+ * @param {String} str
+ * @return {Object} Parsed font. `size` is in device units. `unit` is the unit
+ *   appearing in the input string.
+ * @api private
+ */
+
+module.exports = str => {
+  // Cached
+  if (cache[str]) return cache[str]
+
+  // Try for required properties first.
+  const sizeFamily = sizeFamilyRe.exec(str)
+  if (!sizeFamily) return // invalid
+
+  // Default values and required properties
+  const font = {
+    weight: 'normal',
+    style: 'normal',
+    stretch: 'normal',
+    variant: 'normal',
+    size: parseFloat(sizeFamily[1]),
+    unit: sizeFamily[2],
+    family: sizeFamily[3].replace(/["']/g, '').replace(/ *, */g, ',')
+  }
+
+  // Optional, unordered properties.
+  let weight, style, variant, stretch
+  // Stop search at `sizeFamily.index`
+  const substr = str.substring(0, sizeFamily.index)
+  if ((weight = weightRe.exec(substr))) font.weight = weight[1]
+  if ((style = styleRe.exec(substr))) font.style = style[1]
+  if ((variant = variantRe.exec(substr))) font.variant = variant[1]
+  if ((stretch = stretchRe.exec(substr))) font.stretch = stretch[1]
+
+  // Convert to device units. (`font.unit` is the original unit)
+  // TODO: ch, ex
+  switch (font.unit) {
+    case 'pt':
+      font.size /= 0.75
+      break
+    case 'pc':
+      font.size *= 16
+      break
+    case 'in':
+      font.size *= 96
+      break
+    case 'cm':
+      font.size *= 96.0 / 2.54
+      break
+    case 'mm':
+      font.size *= 96.0 / 25.4
+      break
+    case '%':
+      // TODO disabled because existing unit tests assume 100
+      // font.size *= defaultHeight / 100 / 0.75
+      break
+    case 'em':
+    case 'rem':
+      font.size *= defaultHeight / 0.75
+      break
+    case 'q':
+      font.size *= 96 / 25.4 / 4
+      break
+  }
+
+  return (cache[str] = font)
+}
+
+},{}],40:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -8535,14 +8697,13 @@ function isPrimitive(arg) {
 }
 exports.isPrimitive = isPrimitive;
 
-exports.isBuffer = Buffer.isBuffer;
+exports.isBuffer = require('buffer').Buffer.isBuffer;
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 
-}).call(this)}).call(this,{"isBuffer":require("../../is-buffer/index.js")})
-},{"../../is-buffer/index.js":47}],39:[function(require,module,exports){
+},{"buffer":37}],41:[function(require,module,exports){
 /* crc32.js (C) 2014-present SheetJS -- http://sheetjs.com */
 /* vim: set ts=2: */
 /*exported CRC32 */
@@ -8657,7 +8818,7 @@ CRC32.buf = crc32_buf;
 CRC32.str = crc32_str;
 }));
 
-},{}],40:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -9182,7 +9343,7 @@ function functionBindPolyfill(context) {
   };
 }
 
-},{}],41:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 (function() {
 
     var debug = false;
@@ -10197,7 +10358,7 @@ function functionBindPolyfill(context) {
 }.call(this));
 
 
-},{}],42:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 (function (Buffer){(function (){
 'use strict';
 const {stringToBytes, readUInt64LE, tarHeaderChecksumMatches} = require('./util');
@@ -11164,7 +11325,7 @@ fileType.stream = readableStream => new Promise((resolve, reject) => {
 });
 
 }).call(this)}).call(this,{"isBuffer":require("../is-buffer/index.js")})
-},{"../is-buffer/index.js":47,"./util":43}],43:[function(require,module,exports){
+},{"../is-buffer/index.js":49,"./util":45}],45:[function(require,module,exports){
 'use strict';
 
 exports.stringToBytes = string => [...string].map(character => character.charCodeAt(0));
@@ -11218,7 +11379,7 @@ exports.tarHeaderChecksumMatches = buffer => { // Does not check if checksum fie
 	);
 };
 
-},{}],44:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -11305,7 +11466,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],45:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -14650,7 +14811,7 @@ return /******/ (function(modules) { // webpackBootstrap
 });
 ;
 
-},{}],46:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -14679,7 +14840,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],47:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 /*!
  * Determine if an object is a Buffer
  *
@@ -14702,14 +14863,14 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
 
-},{}],48:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],49:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -14801,7 +14962,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],50:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 // (c) Dean McNamee <dean@gmail.com>, 2013.
 //
 // https://github.com/deanm/omggif
@@ -15585,7 +15746,7 @@ function GifReaderLZWOutputIndexStream(code_stream, p, output, output_length) {
 
 try { exports.GifWriter = GifWriter; exports.GifReader = GifReader } catch(e) { }  // CommonJS.
 
-},{}],51:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict';
 
 
@@ -15692,7 +15853,7 @@ exports.setTyped = function (on) {
 
 exports.setTyped(TYPED_OK);
 
-},{}],52:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 'use strict';
 
 // Note: adler32 takes 12% for level 0 and 2% for level 6.
@@ -15745,7 +15906,7 @@ function adler32(adler, buf, len, pos) {
 
 module.exports = adler32;
 
-},{}],53:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -15815,7 +15976,7 @@ module.exports = {
   //Z_NULL:                 null // Use -1 or null inline, depending on var type
 };
 
-},{}],54:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 'use strict';
 
 // Note: we can't get significant speed boost here.
@@ -15876,7 +16037,7 @@ function crc32(crc, buf, len, pos) {
 
 module.exports = crc32;
 
-},{}],55:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -17752,7 +17913,7 @@ exports.deflatePrime = deflatePrime;
 exports.deflateTune = deflateTune;
 */
 
-},{"../utils/common":51,"./adler32":52,"./crc32":54,"./messages":59,"./trees":60}],56:[function(require,module,exports){
+},{"../utils/common":53,"./adler32":54,"./crc32":56,"./messages":61,"./trees":62}],58:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -18099,7 +18260,7 @@ module.exports = function inflate_fast(strm, start) {
   return;
 };
 
-},{}],57:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -19657,7 +19818,7 @@ exports.inflateSyncPoint = inflateSyncPoint;
 exports.inflateUndermine = inflateUndermine;
 */
 
-},{"../utils/common":51,"./adler32":52,"./crc32":54,"./inffast":56,"./inftrees":58}],58:[function(require,module,exports){
+},{"../utils/common":53,"./adler32":54,"./crc32":56,"./inffast":58,"./inftrees":60}],60:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -20002,7 +20163,7 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
   return 0;
 };
 
-},{"../utils/common":51}],59:[function(require,module,exports){
+},{"../utils/common":53}],61:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -20036,7 +20197,7 @@ module.exports = {
   '-6':   'incompatible version' /* Z_VERSION_ERROR (-6) */
 };
 
-},{}],60:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -21260,7 +21421,7 @@ exports._tr_flush_block  = _tr_flush_block;
 exports._tr_tally = _tr_tally;
 exports._tr_align = _tr_align;
 
-},{"../utils/common":51}],61:[function(require,module,exports){
+},{"../utils/common":53}],63:[function(require,module,exports){
 'use strict';
 
 // (C) 1995-2013 Jean-loup Gailly and Mark Adler
@@ -21309,7 +21470,412 @@ function ZStream() {
 
 module.exports = ZStream;
 
-},{}],62:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
+// Simple OOP Tools for Node.JS
+// Copyright (c) 2014 Joseph Huckaby
+// Released under the MIT License
+
+var util = require("util");
+var events = require("events");
+
+exports.create = function create(members) {
+	// create new class using php-style syntax (sort of)
+	if (!members) members = {};
+	
+	// setup constructor
+	var constructor = null;
+	
+	// inherit from parent class
+	if (members.__parent) {
+		if (members.__construct) {
+			// explicit constructor passed in
+			constructor = members.__construct;
+		}
+		else {
+			// inherit parent's constructor
+			var parent = members.__parent;
+			constructor = function() {
+				var args = Array.prototype.slice.call(arguments);
+				parent.apply( this, args );
+			};
+		}
+		
+		// inherit rest of parent members
+		util.inherits(constructor, members.__parent);
+		delete members.__parent;
+	}
+	else {
+		// create new base class
+		constructor = members.__construct || function() {};
+	}
+	delete members.__construct;
+	
+	// handle static variables
+	if (members.__static) {
+		for (var key in members.__static) {
+			constructor[key] = members.__static[key];
+		}
+		delete members.__static;
+	}
+	
+	// all classes are event emitters unless explicitly disabled
+	if (members.__events !== false) {
+		if (!members.__mixins) members.__mixins = [];
+		if (members.__mixins.indexOf(events.EventEmitter) == -1) {
+			members.__mixins.push( events.EventEmitter );
+		}
+	}
+	delete members.__events;
+	
+	// handle mixins
+	if (members.__mixins) {
+		for (var idx = 0, len = members.__mixins.length; idx < len; idx++) {
+			var class_obj = members.__mixins[idx];
+			
+			for (var key in class_obj.prototype) {
+				if (!key.match(/^__/) && (typeof(constructor.prototype[key]) == 'undefined')) {
+					constructor.prototype[key] = class_obj.prototype[key];
+				}
+			}
+			var static_members = class_obj.__static;
+			if (static_members) {
+				for (var key in static_members) {
+					if (typeof(constructor[key]) == 'undefined') constructor[key] = static_members[key];
+				}
+			}
+		} // foreach mixin
+		delete members.__mixins;
+	} // mixins
+	
+	// handle promisify (node 8+)
+	if (members.__promisify && util.promisify) {
+		if (Array.isArray(members.__promisify)) {
+			// promisify some
+			members.__promisify.forEach( function(key) {
+				if (typeof(members[key]) == 'function') {
+					members[key] = util.promisify( members[key] );
+				}
+			} );
+		}
+		else {
+			// promisify all
+			for (var key in members) {
+				if (!key.match(/^__/) && (typeof(members[key]) == 'function')) {
+					members[key] = util.promisify( members[key] );
+				}
+			}
+		}
+		delete members.__promisify;
+	}
+	
+	// fill prototype members
+	for (var key in members) {
+		constructor.prototype[key] = members[key];
+	}
+	
+	// return completed class definition
+	return constructor;
+};
+
+},{"events":42,"util":88}],65:[function(require,module,exports){
+(function (process){(function (){
+// High Resolution Performance Tracker for Node.JS
+// Copyright (c) 2014 Joseph Huckaby
+// Released under the MIT License
+
+var Class = require("pixl-class");
+
+module.exports = Class.create({
+	
+	perf: null,
+	counters: null,
+	scale: 1000, // milliseconds
+	precision: 1000, // 3 digits
+	totalKey: 'total', // where to store the total
+	minMax: false, // track min/avg/max per metric
+	
+	__events: false,
+	
+	__construct: function() {
+		// class constructor
+		this.reset();
+	},
+	
+	reset: function() {
+		// reset everything
+		this.perf = {};
+		this.counters = {};
+	},
+	
+	setScale: function(scale) { 
+		// set scale for time measurements
+		// 1000000000 == nanoseconds
+		// 1000000 == microseconds
+		// 1000 == milliseconds
+		// 1 == seconds
+		this.scale = scale; 
+	},
+	
+	setPrecision: function(precision) {
+		// set precision for measurements
+		// 1 == integers only
+		// 10 == 1 digit after the decimal
+		// 100 == 2 digits after the decimal
+		// 1000 == 3 digits after the decimal
+		this.precision = precision; 
+	},
+	
+	calcElapsed: function(start) {
+		// calculate elapsed time using process.hrtime() (nanoseconds)
+		// then convert to our scale and precision
+		var diff = process.hrtime( start );
+		var nano = diff[0] * 1e9 + diff[1];
+		
+		// apply scale transform
+		var value = nano / (1000000000 / this.scale);
+		
+		return value;
+	},
+	
+	begin: function(id) {
+		// begin tracking metric
+		// ID defaults to 't' for total
+		if (!id) id = this.totalKey;
+		var now = process.hrtime();
+		
+		// only allow 't' begin to be called once per object (unless it is reset)
+		if ((id == this.totalKey) && this.perf[id]) return;
+		
+		// set start time
+		if (!this.perf[id]) this.perf[id] = { elapsed: 0 };
+		this.perf[id].start = now;
+		if (this.perf[id].end) delete this.perf[id].end;
+		
+		return new PerfMetric(this, id, now);
+	},
+	
+	end: function(id, start) {
+		// mark end of metric
+		// ID defaults to 't' for total
+		if (!id) id = this.totalKey;
+		var now = process.hrtime();
+		
+		if (!this.perf[id] && !start) return;
+		if (!this.perf[id]) this.perf[id] = { elapsed: 0 };
+		var obj = this.perf[id];
+		
+		if (start) obj.start = start;
+		obj.end = now;
+		if (!obj.start) obj.start = obj.end;
+		
+		var elapsed = Array.isArray(obj.start) ? 
+			this.calcElapsed( obj.start ) : 0;
+		
+		if (id == this.totalKey) {
+			// end of all tracking
+			// set elapsed instead of incrementing, to prevent bugs with calling end() twice.
+			obj.elapsed = elapsed;
+		}
+		else {
+			// stopped tracking single metric
+			// increment elapsed to allow for multiple trackings on same metric
+			obj.elapsed += elapsed;
+		}
+		
+		if (this.minMax) {
+			if (!obj.count || (elapsed < obj.min)) obj.min = elapsed;
+			if (!obj.count || (elapsed > obj.max)) obj.max = elapsed;
+			if (!obj.count) obj.count = 0;
+			obj.count++;
+		}
+		
+		return this.formatValue(elapsed);
+	},
+	
+	count: function(id, amount) {
+		// increment (or decrement) simple counter, unrelated to time measurement
+		if (typeof(amount) == 'undefined') amount = 1;
+		if (!(id in this.counters)) this.counters[id] = amount;
+		else this.counters[id] += amount;
+	},
+	
+	metrics: function() {
+		// get all perf metrics and counters in simple object format
+		var out = {};
+		
+		// make sure total metric is ended
+		this.end();
+		
+		// generate object containing only elapsed times of each
+		for (var id in this.perf) {
+			if (this.perf[id].end) {
+				out[id] = this.elapsed(id, true);
+			}
+		}
+		
+		return {
+			scale: this.scale,
+			perf: out,
+			counters: this.counters
+		};
+	},
+	
+	json: function() {
+		// return a JSON string with perf metrics and counters separated out
+		return JSON.stringify( this.metrics() );
+	},
+	
+	summarize: function(prefix) {
+		// Summarize performance metrics in query string format
+		var pairs = [];
+		var metrics = this.metrics();
+		if (!prefix) prefix = '';
+		
+		// start with scale
+		pairs.push( 'scale=' + this.scale );
+		
+		// make sure total is always right after scale
+		pairs.push( 'total=' + metrics.perf.total );
+		delete metrics.perf.total;
+		
+		// build summary string of other metrics
+		for (var id in metrics.perf) {
+			pairs.push( prefix + id + '=' + metrics.perf[id] );
+		}
+		
+		// add counters if applicable, prefix each with c_
+		for (var id in metrics.counters) {
+			var disp_id = id.match(/^c_/) ? id : ('c_'+id);
+			pairs.push( disp_id + '=' + metrics.counters[id] );
+		}
+		
+		return pairs.join('&');
+	},
+	
+	elapsed: function(id, display_format) {
+		// get elapsed seconds from given metric
+		if (!this.perf[id]) return 0;
+		if (!this.perf[id].elapsed) return 0;
+		
+		if (display_format) {
+			return this.formatValue( this.perf[id].elapsed );
+		}
+		else return this.perf[id].elapsed;
+	},
+	
+	get: function() {
+		// Get raw perf object
+		return this.perf;
+	},
+	
+	getCounters: function() {
+		// Get raw counters object
+		return this.counters;
+	},
+	
+	formatValue: function(value) {
+		// format value according to our precision
+		return Math.floor(value * this.precision) / this.precision;
+	},
+	
+	getMinMaxMetrics: function() {
+		// get min/max/avg/count/total for each named metric (omits total)
+		// special 'minMax' mode must be enabled
+		if (!this.minMax) return {};
+		var metrics = {};
+		
+		for (var id in this.perf) {
+			var obj = this.perf[id];
+			if (obj.end && (id != this.totalKey)) {
+				if (!obj.elapsed) obj.elapsed = 0;
+				metrics[id] = {
+					min: this.formatValue( obj.min || 0 ),
+					max: this.formatValue( obj.max || 0 ),
+					total: this.formatValue( obj.elapsed ),
+					count: obj.count || 0,
+					avg: this.formatValue( obj.elapsed / (obj.count || 1) )
+				};
+			}
+		}
+		
+		return metrics;
+	},
+	
+	import: function(perf, prefix) {
+		// import perf metrics from another object (and adjust scale to match)
+		// can be a pixl-perf instance, or an object from calling metrics()
+		if (!prefix) prefix = '';
+		
+		if (perf.perf) {
+			for (var key in perf.perf) {
+				if (key != this.totalKey) {
+					var pkey = prefix + key;
+					if (!this.perf[pkey]) this.perf[pkey] = {};
+					if (!this.perf[pkey].end) this.perf[pkey].end = 1;
+					if (!this.perf[pkey].elapsed) this.perf[pkey].elapsed = 0;
+					var elapsed = (typeof(perf.perf[key]) == 'number') ? perf.perf[key] : perf.perf[key].elapsed;
+					this.perf[pkey].elapsed += (elapsed / (perf.scale / this.scale)) || 0;
+					
+					if (this.minMax && perf.minMax) {
+						// both source and dest have minMax, so import entire min/max/count
+						var adj_min = perf.perf[key].min / (perf.scale / this.scale);
+						if (!this.perf[pkey].count || (adj_min < this.perf[pkey].min)) this.perf[pkey].min = adj_min;
+						
+						var adj_max = perf.perf[key].max / (perf.scale / this.scale);
+						if (!this.perf[pkey].count || (adj_max > this.perf[pkey].max)) this.perf[pkey].max = adj_max;
+						
+						if (!this.perf[pkey].count) this.perf[pkey].count = 0;
+						this.perf[pkey].count += perf.perf[key].count || 0;
+					} // minMax
+					else if (this.minMax) {
+						// source has no minMax, but dest does, so just import their elapsed as one measurement
+						var adj_elapsed = (elapsed / (perf.scale / this.scale)) || 0;
+						if (!this.perf[pkey].count || (adj_elapsed < this.perf[pkey].min)) this.perf[pkey].min = adj_elapsed;
+						if (!this.perf[pkey].count || (adj_elapsed > this.perf[pkey].max)) this.perf[pkey].max = adj_elapsed;
+						if (!this.perf[pkey].count) this.perf[pkey].count = 0;
+						this.perf[pkey].count++;
+					}
+				} // not totalKey
+			} // foreach perf
+		} // perf.perf
+		
+		if (perf.counters) {
+			for (var key in perf.counters) {
+				var pkey = prefix + key;
+				this.count( pkey, perf.counters[key] );
+			}
+		}
+	}
+	
+});
+
+// A PerfMetric promise is returned from each call to begin(),
+// so the user can track multiple simultaneous metrics with the same key.
+
+var PerfMetric = Class.create({
+	
+	__events: false,
+	
+	perf: null,
+	id: '',
+	start: 0,
+	
+	__construct: function(perf, id, start) {
+		// class constructor
+		this.perf = perf;
+		this.id = id;
+		this.start = start;
+	},
+	
+	end: function() {
+		// end tracking
+		return this.perf.end(this.id, this.start);
+	}
+	
+});
+
+}).call(this)}).call(this,require('_process'))
+},{"_process":67,"pixl-class":64}],66:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
@@ -21358,7 +21924,7 @@ function nextTick(fn, arg1, arg2, arg3) {
 
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":63}],63:[function(require,module,exports){
+},{"_process":67}],67:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -21544,10 +22110,10 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],64:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 module.exports = require('./lib/_stream_duplex.js');
 
-},{"./lib/_stream_duplex.js":65}],65:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":69}],69:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -21679,7 +22245,7 @@ Duplex.prototype._destroy = function (err, cb) {
 
   pna.nextTick(cb, err);
 };
-},{"./_stream_readable":67,"./_stream_writable":69,"core-util-is":38,"inherits":46,"process-nextick-args":62}],66:[function(require,module,exports){
+},{"./_stream_readable":71,"./_stream_writable":73,"core-util-is":40,"inherits":48,"process-nextick-args":66}],70:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -21727,7 +22293,7 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
-},{"./_stream_transform":68,"core-util-is":38,"inherits":46}],67:[function(require,module,exports){
+},{"./_stream_transform":72,"core-util-is":40,"inherits":48}],71:[function(require,module,exports){
 (function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -22749,7 +23315,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./_stream_duplex":65,"./internal/streams/BufferList":70,"./internal/streams/destroy":71,"./internal/streams/stream":72,"_process":63,"core-util-is":38,"events":40,"inherits":46,"isarray":48,"process-nextick-args":62,"safe-buffer":77,"string_decoder/":79,"util":34}],68:[function(require,module,exports){
+},{"./_stream_duplex":69,"./internal/streams/BufferList":74,"./internal/streams/destroy":75,"./internal/streams/stream":76,"_process":67,"core-util-is":40,"events":42,"inherits":48,"isarray":50,"process-nextick-args":66,"safe-buffer":77,"string_decoder/":78,"util":34}],72:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -22964,7 +23530,7 @@ function done(stream, er, data) {
 
   return stream.push(null);
 }
-},{"./_stream_duplex":65,"core-util-is":38,"inherits":46}],69:[function(require,module,exports){
+},{"./_stream_duplex":69,"core-util-is":40,"inherits":48}],73:[function(require,module,exports){
 (function (process,global,setImmediate){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -23654,7 +24220,7 @@ Writable.prototype._destroy = function (err, cb) {
   cb(err);
 };
 }).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("timers").setImmediate)
-},{"./_stream_duplex":65,"./internal/streams/destroy":71,"./internal/streams/stream":72,"_process":63,"core-util-is":38,"inherits":46,"process-nextick-args":62,"safe-buffer":77,"timers":80,"util-deprecate":81}],70:[function(require,module,exports){
+},{"./_stream_duplex":69,"./internal/streams/destroy":75,"./internal/streams/stream":76,"_process":67,"core-util-is":40,"inherits":48,"process-nextick-args":66,"safe-buffer":77,"timers":84,"util-deprecate":85}],74:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23734,7 +24300,7 @@ if (util && util.inspect && util.inspect.custom) {
     return this.constructor.name + ' ' + obj;
   };
 }
-},{"safe-buffer":77,"util":34}],71:[function(require,module,exports){
+},{"safe-buffer":77,"util":34}],75:[function(require,module,exports){
 'use strict';
 
 /*<replacement>*/
@@ -23809,28 +24375,10 @@ module.exports = {
   destroy: destroy,
   undestroy: undestroy
 };
-},{"process-nextick-args":62}],72:[function(require,module,exports){
+},{"process-nextick-args":66}],76:[function(require,module,exports){
 module.exports = require('events').EventEmitter;
 
-},{"events":40}],73:[function(require,module,exports){
-module.exports = require('./readable').PassThrough
-
-},{"./readable":74}],74:[function(require,module,exports){
-exports = module.exports = require('./lib/_stream_readable.js');
-exports.Stream = exports;
-exports.Readable = exports;
-exports.Writable = require('./lib/_stream_writable.js');
-exports.Duplex = require('./lib/_stream_duplex.js');
-exports.Transform = require('./lib/_stream_transform.js');
-exports.PassThrough = require('./lib/_stream_passthrough.js');
-
-},{"./lib/_stream_duplex.js":65,"./lib/_stream_passthrough.js":66,"./lib/_stream_readable.js":67,"./lib/_stream_transform.js":68,"./lib/_stream_writable.js":69}],75:[function(require,module,exports){
-module.exports = require('./readable').Transform
-
-},{"./readable":74}],76:[function(require,module,exports){
-module.exports = require('./lib/_stream_writable.js');
-
-},{"./lib/_stream_writable.js":69}],77:[function(require,module,exports){
+},{"events":42}],77:[function(require,module,exports){
 /* eslint-disable node/no-deprecated-api */
 var buffer = require('buffer')
 var Buffer = buffer.Buffer
@@ -23895,135 +24443,6 @@ SafeBuffer.allocUnsafeSlow = function (size) {
 }
 
 },{"buffer":37}],78:[function(require,module,exports){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-module.exports = Stream;
-
-var EE = require('events').EventEmitter;
-var inherits = require('inherits');
-
-inherits(Stream, EE);
-Stream.Readable = require('readable-stream/readable.js');
-Stream.Writable = require('readable-stream/writable.js');
-Stream.Duplex = require('readable-stream/duplex.js');
-Stream.Transform = require('readable-stream/transform.js');
-Stream.PassThrough = require('readable-stream/passthrough.js');
-
-// Backwards-compat with node 0.4.x
-Stream.Stream = Stream;
-
-
-
-// old-style streams.  Note that the pipe method (the only relevant
-// part of this class) is overridden in the Readable class.
-
-function Stream() {
-  EE.call(this);
-}
-
-Stream.prototype.pipe = function(dest, options) {
-  var source = this;
-
-  function ondata(chunk) {
-    if (dest.writable) {
-      if (false === dest.write(chunk) && source.pause) {
-        source.pause();
-      }
-    }
-  }
-
-  source.on('data', ondata);
-
-  function ondrain() {
-    if (source.readable && source.resume) {
-      source.resume();
-    }
-  }
-
-  dest.on('drain', ondrain);
-
-  // If the 'end' option is not supplied, dest.end() will be called when
-  // source gets the 'end' or 'close' events.  Only dest.end() once.
-  if (!dest._isStdio && (!options || options.end !== false)) {
-    source.on('end', onend);
-    source.on('close', onclose);
-  }
-
-  var didOnEnd = false;
-  function onend() {
-    if (didOnEnd) return;
-    didOnEnd = true;
-
-    dest.end();
-  }
-
-
-  function onclose() {
-    if (didOnEnd) return;
-    didOnEnd = true;
-
-    if (typeof dest.destroy === 'function') dest.destroy();
-  }
-
-  // don't leave dangling pipes when there are errors.
-  function onerror(er) {
-    cleanup();
-    if (EE.listenerCount(this, 'error') === 0) {
-      throw er; // Unhandled stream error in pipe.
-    }
-  }
-
-  source.on('error', onerror);
-  dest.on('error', onerror);
-
-  // remove all the event listeners that were added.
-  function cleanup() {
-    source.removeListener('data', ondata);
-    dest.removeListener('drain', ondrain);
-
-    source.removeListener('end', onend);
-    source.removeListener('close', onclose);
-
-    source.removeListener('error', onerror);
-    dest.removeListener('error', onerror);
-
-    source.removeListener('end', cleanup);
-    source.removeListener('close', cleanup);
-
-    dest.removeListener('close', cleanup);
-  }
-
-  source.on('end', cleanup);
-  source.on('close', cleanup);
-
-  dest.on('close', cleanup);
-
-  dest.emit('pipe', source);
-
-  // Allow for unix-like usage: A.pipe(B).pipe(C)
-  return dest;
-};
-
-},{"events":40,"inherits":46,"readable-stream/duplex.js":64,"readable-stream/passthrough.js":73,"readable-stream/readable.js":74,"readable-stream/transform.js":75,"readable-stream/writable.js":76}],79:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -24320,7 +24739,154 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : '';
 }
-},{"safe-buffer":77}],80:[function(require,module,exports){
+},{"safe-buffer":77}],79:[function(require,module,exports){
+module.exports = require('./readable').PassThrough
+
+},{"./readable":80}],80:[function(require,module,exports){
+exports = module.exports = require('./lib/_stream_readable.js');
+exports.Stream = exports;
+exports.Readable = exports;
+exports.Writable = require('./lib/_stream_writable.js');
+exports.Duplex = require('./lib/_stream_duplex.js');
+exports.Transform = require('./lib/_stream_transform.js');
+exports.PassThrough = require('./lib/_stream_passthrough.js');
+
+},{"./lib/_stream_duplex.js":69,"./lib/_stream_passthrough.js":70,"./lib/_stream_readable.js":71,"./lib/_stream_transform.js":72,"./lib/_stream_writable.js":73}],81:[function(require,module,exports){
+module.exports = require('./readable').Transform
+
+},{"./readable":80}],82:[function(require,module,exports){
+module.exports = require('./lib/_stream_writable.js');
+
+},{"./lib/_stream_writable.js":73}],83:[function(require,module,exports){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+module.exports = Stream;
+
+var EE = require('events').EventEmitter;
+var inherits = require('inherits');
+
+inherits(Stream, EE);
+Stream.Readable = require('readable-stream/readable.js');
+Stream.Writable = require('readable-stream/writable.js');
+Stream.Duplex = require('readable-stream/duplex.js');
+Stream.Transform = require('readable-stream/transform.js');
+Stream.PassThrough = require('readable-stream/passthrough.js');
+
+// Backwards-compat with node 0.4.x
+Stream.Stream = Stream;
+
+
+
+// old-style streams.  Note that the pipe method (the only relevant
+// part of this class) is overridden in the Readable class.
+
+function Stream() {
+  EE.call(this);
+}
+
+Stream.prototype.pipe = function(dest, options) {
+  var source = this;
+
+  function ondata(chunk) {
+    if (dest.writable) {
+      if (false === dest.write(chunk) && source.pause) {
+        source.pause();
+      }
+    }
+  }
+
+  source.on('data', ondata);
+
+  function ondrain() {
+    if (source.readable && source.resume) {
+      source.resume();
+    }
+  }
+
+  dest.on('drain', ondrain);
+
+  // If the 'end' option is not supplied, dest.end() will be called when
+  // source gets the 'end' or 'close' events.  Only dest.end() once.
+  if (!dest._isStdio && (!options || options.end !== false)) {
+    source.on('end', onend);
+    source.on('close', onclose);
+  }
+
+  var didOnEnd = false;
+  function onend() {
+    if (didOnEnd) return;
+    didOnEnd = true;
+
+    dest.end();
+  }
+
+
+  function onclose() {
+    if (didOnEnd) return;
+    didOnEnd = true;
+
+    if (typeof dest.destroy === 'function') dest.destroy();
+  }
+
+  // don't leave dangling pipes when there are errors.
+  function onerror(er) {
+    cleanup();
+    if (EE.listenerCount(this, 'error') === 0) {
+      throw er; // Unhandled stream error in pipe.
+    }
+  }
+
+  source.on('error', onerror);
+  dest.on('error', onerror);
+
+  // remove all the event listeners that were added.
+  function cleanup() {
+    source.removeListener('data', ondata);
+    dest.removeListener('drain', ondrain);
+
+    source.removeListener('end', onend);
+    source.removeListener('close', onclose);
+
+    source.removeListener('error', onerror);
+    dest.removeListener('error', onerror);
+
+    source.removeListener('end', cleanup);
+    source.removeListener('close', cleanup);
+
+    dest.removeListener('close', cleanup);
+  }
+
+  source.on('end', cleanup);
+  source.on('close', cleanup);
+
+  dest.on('close', cleanup);
+
+  dest.emit('pipe', source);
+
+  // Allow for unix-like usage: A.pipe(B).pipe(C)
+  return dest;
+};
+
+},{"events":42,"inherits":48,"readable-stream/duplex.js":68,"readable-stream/passthrough.js":79,"readable-stream/readable.js":80,"readable-stream/transform.js":81,"readable-stream/writable.js":82}],84:[function(require,module,exports){
 (function (setImmediate,clearImmediate){(function (){
 var nextTick = require('process/browser.js').nextTick;
 var apply = Function.prototype.apply;
@@ -24399,7 +24965,7 @@ exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate :
   delete immediateIds[id];
 };
 }).call(this)}).call(this,require("timers").setImmediate,require("timers").clearImmediate)
-},{"process/browser.js":63,"timers":80}],81:[function(require,module,exports){
+},{"process/browser.js":67,"timers":84}],85:[function(require,module,exports){
 (function (global){(function (){
 
 /**
@@ -24470,415 +25036,10 @@ function config (name) {
 }
 
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],82:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 arguments[4][28][0].apply(exports,arguments)
-},{"dup":28}],83:[function(require,module,exports){
+},{"dup":28}],87:[function(require,module,exports){
 arguments[4][29][0].apply(exports,arguments)
-},{"dup":29}],84:[function(require,module,exports){
+},{"dup":29}],88:[function(require,module,exports){
 arguments[4][30][0].apply(exports,arguments)
-},{"./support/isBuffer":83,"_process":63,"dup":30,"inherits":82}],85:[function(require,module,exports){
-// Simple OOP Tools for Node.JS
-// Copyright (c) 2014 Joseph Huckaby
-// Released under the MIT License
-
-var util = require("util");
-var events = require("events");
-
-exports.create = function create(members) {
-	// create new class using php-style syntax (sort of)
-	if (!members) members = {};
-	
-	// setup constructor
-	var constructor = null;
-	
-	// inherit from parent class
-	if (members.__parent) {
-		if (members.__construct) {
-			// explicit constructor passed in
-			constructor = members.__construct;
-		}
-		else {
-			// inherit parent's constructor
-			var parent = members.__parent;
-			constructor = function() {
-				var args = Array.prototype.slice.call(arguments);
-				parent.apply( this, args );
-			};
-		}
-		
-		// inherit rest of parent members
-		util.inherits(constructor, members.__parent);
-		delete members.__parent;
-	}
-	else {
-		// create new base class
-		constructor = members.__construct || function() {};
-	}
-	delete members.__construct;
-	
-	// handle static variables
-	if (members.__static) {
-		for (var key in members.__static) {
-			constructor[key] = members.__static[key];
-		}
-		delete members.__static;
-	}
-	
-	// all classes are event emitters unless explicitly disabled
-	if (members.__events !== false) {
-		if (!members.__mixins) members.__mixins = [];
-		if (members.__mixins.indexOf(events.EventEmitter) == -1) {
-			members.__mixins.push( events.EventEmitter );
-		}
-	}
-	delete members.__events;
-	
-	// handle mixins
-	if (members.__mixins) {
-		for (var idx = 0, len = members.__mixins.length; idx < len; idx++) {
-			var class_obj = members.__mixins[idx];
-			
-			for (var key in class_obj.prototype) {
-				if (!key.match(/^__/) && (typeof(constructor.prototype[key]) == 'undefined')) {
-					constructor.prototype[key] = class_obj.prototype[key];
-				}
-			}
-			var static_members = class_obj.__static;
-			if (static_members) {
-				for (var key in static_members) {
-					if (typeof(constructor[key]) == 'undefined') constructor[key] = static_members[key];
-				}
-			}
-		} // foreach mixin
-		delete members.__mixins;
-	} // mixins
-	
-	// handle promisify (node 8+)
-	if (members.__promisify && util.promisify) {
-		if (Array.isArray(members.__promisify)) {
-			// promisify some
-			members.__promisify.forEach( function(key) {
-				if (typeof(members[key]) == 'function') {
-					members[key] = util.promisify( members[key] );
-				}
-			} );
-		}
-		else {
-			// promisify all
-			for (var key in members) {
-				if (!key.match(/^__/) && (typeof(members[key]) == 'function')) {
-					members[key] = util.promisify( members[key] );
-				}
-			}
-		}
-		delete members.__promisify;
-	}
-	
-	// fill prototype members
-	for (var key in members) {
-		constructor.prototype[key] = members[key];
-	}
-	
-	// return completed class definition
-	return constructor;
-};
-
-},{"events":40,"util":84}],86:[function(require,module,exports){
-(function (process){(function (){
-// High Resolution Performance Tracker for Node.JS
-// Copyright (c) 2014 Joseph Huckaby
-// Released under the MIT License
-
-var Class = require("pixl-class");
-
-module.exports = Class.create({
-	
-	perf: null,
-	counters: null,
-	scale: 1000, // milliseconds
-	precision: 1000, // 3 digits
-	totalKey: 'total', // where to store the total
-	minMax: false, // track min/avg/max per metric
-	
-	__events: false,
-	
-	__construct: function() {
-		// class constructor
-		this.reset();
-	},
-	
-	reset: function() {
-		// reset everything
-		this.perf = {};
-		this.counters = {};
-	},
-	
-	setScale: function(scale) { 
-		// set scale for time measurements
-		// 1000000000 == nanoseconds
-		// 1000000 == microseconds
-		// 1000 == milliseconds
-		// 1 == seconds
-		this.scale = scale; 
-	},
-	
-	setPrecision: function(precision) {
-		// set precision for measurements
-		// 1 == integers only
-		// 10 == 1 digit after the decimal
-		// 100 == 2 digits after the decimal
-		// 1000 == 3 digits after the decimal
-		this.precision = precision; 
-	},
-	
-	calcElapsed: function(start) {
-		// calculate elapsed time using process.hrtime() (nanoseconds)
-		// then convert to our scale and precision
-		var diff = process.hrtime( start );
-		var nano = diff[0] * 1e9 + diff[1];
-		
-		// apply scale transform
-		var value = nano / (1000000000 / this.scale);
-		
-		return value;
-	},
-	
-	begin: function(id) {
-		// begin tracking metric
-		// ID defaults to 't' for total
-		if (!id) id = this.totalKey;
-		var now = process.hrtime();
-		
-		// only allow 't' begin to be called once per object (unless it is reset)
-		if ((id == this.totalKey) && this.perf[id]) return;
-		
-		// set start time
-		if (!this.perf[id]) this.perf[id] = { elapsed: 0 };
-		this.perf[id].start = now;
-		if (this.perf[id].end) delete this.perf[id].end;
-		
-		return new PerfMetric(this, id, now);
-	},
-	
-	end: function(id, start) {
-		// mark end of metric
-		// ID defaults to 't' for total
-		if (!id) id = this.totalKey;
-		var now = process.hrtime();
-		
-		if (!this.perf[id] && !start) return;
-		if (!this.perf[id]) this.perf[id] = { elapsed: 0 };
-		var obj = this.perf[id];
-		
-		if (start) obj.start = start;
-		obj.end = now;
-		if (!obj.start) obj.start = obj.end;
-		
-		var elapsed = Array.isArray(obj.start) ? 
-			this.calcElapsed( obj.start ) : 0;
-		
-		if (id == this.totalKey) {
-			// end of all tracking
-			// set elapsed instead of incrementing, to prevent bugs with calling end() twice.
-			obj.elapsed = elapsed;
-		}
-		else {
-			// stopped tracking single metric
-			// increment elapsed to allow for multiple trackings on same metric
-			obj.elapsed += elapsed;
-		}
-		
-		if (this.minMax) {
-			if (!obj.count || (elapsed < obj.min)) obj.min = elapsed;
-			if (!obj.count || (elapsed > obj.max)) obj.max = elapsed;
-			if (!obj.count) obj.count = 0;
-			obj.count++;
-		}
-		
-		return this.formatValue(elapsed);
-	},
-	
-	count: function(id, amount) {
-		// increment (or decrement) simple counter, unrelated to time measurement
-		if (typeof(amount) == 'undefined') amount = 1;
-		if (!(id in this.counters)) this.counters[id] = amount;
-		else this.counters[id] += amount;
-	},
-	
-	metrics: function() {
-		// get all perf metrics and counters in simple object format
-		var out = {};
-		
-		// make sure total metric is ended
-		this.end();
-		
-		// generate object containing only elapsed times of each
-		for (var id in this.perf) {
-			if (this.perf[id].end) {
-				out[id] = this.elapsed(id, true);
-			}
-		}
-		
-		return {
-			scale: this.scale,
-			perf: out,
-			counters: this.counters
-		};
-	},
-	
-	json: function() {
-		// return a JSON string with perf metrics and counters separated out
-		return JSON.stringify( this.metrics() );
-	},
-	
-	summarize: function(prefix) {
-		// Summarize performance metrics in query string format
-		var pairs = [];
-		var metrics = this.metrics();
-		if (!prefix) prefix = '';
-		
-		// start with scale
-		pairs.push( 'scale=' + this.scale );
-		
-		// make sure total is always right after scale
-		pairs.push( 'total=' + metrics.perf.total );
-		delete metrics.perf.total;
-		
-		// build summary string of other metrics
-		for (var id in metrics.perf) {
-			pairs.push( prefix + id + '=' + metrics.perf[id] );
-		}
-		
-		// add counters if applicable, prefix each with c_
-		for (var id in metrics.counters) {
-			var disp_id = id.match(/^c_/) ? id : ('c_'+id);
-			pairs.push( disp_id + '=' + metrics.counters[id] );
-		}
-		
-		return pairs.join('&');
-	},
-	
-	elapsed: function(id, display_format) {
-		// get elapsed seconds from given metric
-		if (!this.perf[id]) return 0;
-		if (!this.perf[id].elapsed) return 0;
-		
-		if (display_format) {
-			return this.formatValue( this.perf[id].elapsed );
-		}
-		else return this.perf[id].elapsed;
-	},
-	
-	get: function() {
-		// Get raw perf object
-		return this.perf;
-	},
-	
-	getCounters: function() {
-		// Get raw counters object
-		return this.counters;
-	},
-	
-	formatValue: function(value) {
-		// format value according to our precision
-		return Math.floor(value * this.precision) / this.precision;
-	},
-	
-	getMinMaxMetrics: function() {
-		// get min/max/avg/count/total for each named metric (omits total)
-		// special 'minMax' mode must be enabled
-		if (!this.minMax) return {};
-		var metrics = {};
-		
-		for (var id in this.perf) {
-			var obj = this.perf[id];
-			if (obj.end && (id != this.totalKey)) {
-				if (!obj.elapsed) obj.elapsed = 0;
-				metrics[id] = {
-					min: this.formatValue( obj.min || 0 ),
-					max: this.formatValue( obj.max || 0 ),
-					total: this.formatValue( obj.elapsed ),
-					count: obj.count || 0,
-					avg: this.formatValue( obj.elapsed / (obj.count || 1) )
-				};
-			}
-		}
-		
-		return metrics;
-	},
-	
-	import: function(perf, prefix) {
-		// import perf metrics from another object (and adjust scale to match)
-		// can be a pixl-perf instance, or an object from calling metrics()
-		if (!prefix) prefix = '';
-		
-		if (perf.perf) {
-			for (var key in perf.perf) {
-				if (key != this.totalKey) {
-					var pkey = prefix + key;
-					if (!this.perf[pkey]) this.perf[pkey] = {};
-					if (!this.perf[pkey].end) this.perf[pkey].end = 1;
-					if (!this.perf[pkey].elapsed) this.perf[pkey].elapsed = 0;
-					var elapsed = (typeof(perf.perf[key]) == 'number') ? perf.perf[key] : perf.perf[key].elapsed;
-					this.perf[pkey].elapsed += (elapsed / (perf.scale / this.scale)) || 0;
-					
-					if (this.minMax && perf.minMax) {
-						// both source and dest have minMax, so import entire min/max/count
-						var adj_min = perf.perf[key].min / (perf.scale / this.scale);
-						if (!this.perf[pkey].count || (adj_min < this.perf[pkey].min)) this.perf[pkey].min = adj_min;
-						
-						var adj_max = perf.perf[key].max / (perf.scale / this.scale);
-						if (!this.perf[pkey].count || (adj_max > this.perf[pkey].max)) this.perf[pkey].max = adj_max;
-						
-						if (!this.perf[pkey].count) this.perf[pkey].count = 0;
-						this.perf[pkey].count += perf.perf[key].count || 0;
-					} // minMax
-					else if (this.minMax) {
-						// source has no minMax, but dest does, so just import their elapsed as one measurement
-						var adj_elapsed = (elapsed / (perf.scale / this.scale)) || 0;
-						if (!this.perf[pkey].count || (adj_elapsed < this.perf[pkey].min)) this.perf[pkey].min = adj_elapsed;
-						if (!this.perf[pkey].count || (adj_elapsed > this.perf[pkey].max)) this.perf[pkey].max = adj_elapsed;
-						if (!this.perf[pkey].count) this.perf[pkey].count = 0;
-						this.perf[pkey].count++;
-					}
-				} // not totalKey
-			} // foreach perf
-		} // perf.perf
-		
-		if (perf.counters) {
-			for (var key in perf.counters) {
-				var pkey = prefix + key;
-				this.count( pkey, perf.counters[key] );
-			}
-		}
-	}
-	
-});
-
-// A PerfMetric promise is returned from each call to begin(),
-// so the user can track multiple simultaneous metrics with the same key.
-
-var PerfMetric = Class.create({
-	
-	__events: false,
-	
-	perf: null,
-	id: '',
-	start: 0,
-	
-	__construct: function(perf, id, start) {
-		// class constructor
-		this.perf = perf;
-		this.id = id;
-		this.start = start;
-	},
-	
-	end: function() {
-		// end tracking
-		return this.perf.end(this.id, this.start);
-	}
-	
-});
-
-}).call(this)}).call(this,require('_process'))
-},{"_process":63,"pixl-class":85}]},{},[1]);
+},{"./support/isBuffer":87,"_process":67,"dup":30,"inherits":86}]},{},[1]);
