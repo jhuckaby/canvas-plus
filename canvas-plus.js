@@ -2546,11 +2546,11 @@ module.exports = Class.create({
 		}
 		
 		// extrapolate width or height if missing, maintaining aspect ratio
-		var target_width = opts.width || Math.floor( orig_width * (target_height / orig_height) );
-		var target_height = opts.height || Math.floor( orig_height * (target_width / orig_width) );
+		var target_width = opts.width || Math.round( orig_width * (target_height / orig_height) );
+		var target_height = opts.height || Math.round( orig_height * (target_width / orig_width) );
 		
-		target_width = Math.max(1, Math.floor(target_width));
-		target_height = Math.max(1, Math.floor(target_height));
+		target_width = Math.max(1, Math.round(target_width));
+		target_height = Math.max(1, Math.round(target_height));
 		
 		// calculate final destination width/height preserving aspect ratio
 		var ratios = [ target_width / orig_width, target_height / orig_height ];
@@ -2562,8 +2562,8 @@ module.exports = Class.create({
 		if (dir.match(/shrink/i)) ratio = Math.min( 1.0, ratio );
 		else if (dir.match(/enlarge/i)) ratio = Math.max( 1.0, ratio );
 		
-		var dest_width = Math.max(1, Math.floor( orig_width * ratio ));
-		var dest_height = Math.max(1, Math.floor( orig_height * ratio ));
+		var dest_width = Math.max(1, Math.round( orig_width * ratio ));
+		var dest_height = Math.max(1, Math.round( orig_height * ratio ));
 		
 		// special scale mode = ignore aspect ratio (distort)
 		// direction is ignored in this mode
@@ -3671,7 +3671,7 @@ module.exports = Class.create({
 (function (process){(function (){
 // canvas-plus - Image Transformation Engine
 // Built using node-canvas and image-q
-// Copyright (c) 2017 Joseph Huckaby
+// Copyright (c) 2017 - 2022 Joseph Huckaby
 // Released under the MIT License
 
 var Class = require('pixl-class');
@@ -3792,7 +3792,7 @@ var CanvasPlus = module.exports = Class.create({
 		// Canvas specific settings:
 		globalCompositeOperation: 'source-over',
 		imageSmoothingEnabled: true,
-		imageSmoothingQuality: 'high',
+		imageSmoothingQuality: isNode ? 'high' : 'medium',
 		globalAlpha: 1.0
 	},
 	
@@ -4297,7 +4297,7 @@ for (var key in CanvasPlus.prototype) {
 	}
 }
 
-// Augment font cache in node land (node-canvas)
+// Augment font cache clear in node.js land (node-canvas)
 if (isNode) (function() {
 	var { deregisterAllFonts } = require('canvas');
 	CanvasPlus.clearFontCache = function() {

@@ -121,7 +121,7 @@ var CanvasPlus = module.exports = Class.create({
 		// Canvas specific settings:
 		globalCompositeOperation: 'source-over',
 		imageSmoothingEnabled: true,
-		imageSmoothingQuality: 'high',
+		imageSmoothingQuality: isNode ? 'high' : 'medium',
 		globalAlpha: 1.0
 	},
 	
