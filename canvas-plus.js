@@ -2807,7 +2807,7 @@ module.exports = Class.create({
 				var sw_precision = opts.shrinkWrapPrecision || 4;
 				var attempts = 256;
 				
-				while (lines.length * line_height > temp_avail_height) {
+				while ((lines.length * line_height) - opts.lineSpacing > temp_avail_height) {
 					temp_avail_width += sw_precision;
 					temp_avail_height += (sw_precision * (avail_height / avail_width));
 					lines = this.wordWrapText(opts.text, temp_avail_width, opts);
@@ -2842,7 +2842,7 @@ module.exports = Class.create({
 		} // foreach line
 		
 		var text_width = longest_line_width;
-		var text_height = lines.length * line_height;
+		var text_height = (lines.length * line_height) - opts.lineSpacing;
 		var gravity = opts.gravity;
 		
 		// define inline function for performing the actual rendering
@@ -2854,10 +2854,20 @@ module.exports = Class.create({
 			else if (gravity.match(/(south|bottom)/i)) y = ((height - my) - text_height) - dy;
 			else y = ((height / 2) - (text_height / 2)) + dy;
 			
+			if (opts.autoFix) {
+				if (y + text_height > height) y = height - text_height;
+				if (y < 0) y = 0;
+			}
+			
 			if (opts.background) {
 				if (gravity.match(/(west|left)/i)) x = 0 + mx + dx;
 				else if (gravity.match(/(east|right)/i)) x = ((width - mx) - text_width) - dx;
 				else x = ((width / 2) - (text_width / 2)) + dx;
+				
+				if (opts.autoFix) {
+					if (x + text_width > width) x = width - text_width;
+					if (x < 0) x = 0;
+				}
 				
 				ctx.fillStyle = opts.background;
 				ctx.fillRect( x, y, text_width, text_height );
@@ -2877,6 +2887,13 @@ module.exports = Class.create({
 				if (gravity.match(/(west|left)/i)) x = 0 + mx + dx;
 				else if (gravity.match(/(east|right)/i)) x = ((width - mx) - line_width) - dx;
 				else x = ((width / 2) - (line_width / 2)) + dx;
+				
+				if (opts.autoFix) {
+					if (x + line_width > width) x = width - line_width;
+					if (x < 0) x = 0;
+				}
+				
+				self.logDebug(9, "Rendering line", { idx, line, x, y });
 				
 				if (kerning != 0) {
 					// for custom kerning, we have to render each char separately
