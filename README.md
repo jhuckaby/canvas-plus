@@ -1612,7 +1612,7 @@ The `getEXIF()` method returns an object containing all the parsed [EXIF](https:
 }
 ```
 
-We use the awesome [exif-js](https://www.npmjs.com/package/exif-js) module for parsing this data.
+We use the [exifreader](https://www.npmjs.com/package/exifreader) module for parsing this data.
 
 Please note that if you want to capture EXIF data from images, you should do it immediately after loading.  Any transforms or filters that rebuild the canvas will scrub the EXIF data.
 
@@ -1993,7 +1993,7 @@ CanvasPlus would not be possible without these awesome libraries:
 | [canvas](https://www.npmjs.com/package/canvas) | Cairo backed Canvas implementation for Node.js. | MIT |
 | [image-q](https://www.npmjs.com/package/image-q) | Complete Image Quantization Library | MIT |
 | [omggif](https://www.npmjs.com/package/omggif) | GIF 89a encoder and decoder | MIT |
-| [exif-js](https://www.npmjs.com/package/exif-js) | Read EXIF meta data from image files. | MIT |
+| [exifreader](https://www.npmjs.com/package/exifreader) | Read EXIF meta data from image files. | MPL 2.0 |
 | [browserify](https://www.npmjs.com/package/browserify) | Browser-side require() the node.js way | MIT |
 
 Also, special thanks go to:
@@ -2010,7 +2010,7 @@ Also, special thanks go to:
 
 The MIT License (MIT)
 
-Copyright (c) 2017 - 2019 Joseph Huckaby.
+Copyright (c) 2017 - 2023 Joseph Huckaby.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -2029,3 +2029,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+Please note that the [exifreader](https://www.npmjs.com/package/exifreader) package, one of our dependencies, is [MPL 2.0 licensed](https://github.com/mattiasw/ExifReader/blob/main/LICENSE).  This license is a bit more restrictive than the MIT license, so please use with caution.  If you don't need any EXIF features, it would be relatively easy to fork canvas-plus and remove the dependency.

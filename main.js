@@ -613,7 +613,8 @@ var CanvasPlus = module.exports = Class.create({
 		}
 		else if (this.get('debug')) {
 			// log to console
-			console.log( '[DEBUG] ' + msg, data ? JSON.stringify(data) : '' );
+			if (data) console.log( '[DEBUG] ' + msg, data );
+			else console.log( '[DEBUG] ' + msg );
 		}
 	}
 	

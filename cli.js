@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // Very simple CLI wrapper around canvas-plus
-// Beware: This will REPLACE local images with the specified filters applied.
+// Beware: This will REPLACE local images with the specified filters applied, unless "--output FILE" is specified.
 // Usage: ./cli.js FILE1 [FILE2 ...] --filter "resize/width:400/height:300" --filter "adjust/hue:-60" --filter "write/quality:90"
 
 var fs = require('fs');
@@ -68,10 +68,10 @@ async.eachSeries( files,
 			canvas.write( write_opts, function(err, buf) {
 				if (err) return callback(err);
 				
-				fs.writeFile( file, buf, function(err) {
+				fs.writeFile( args.output || file, buf, function(err) {
 					if (err) return callback(err);
 					
-					print("Wrote: " + file + "\n");
+					print("Wrote: " + (args.output || file) + "\n");
 					callback();
 				});
 			} );
