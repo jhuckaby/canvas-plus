@@ -30,9 +30,10 @@ Check out our [live demo playground](https://jhuckaby.github.io/canvas-plus-play
 - Crop images
 	- Manual or automatic based on corner pixel
 - Rotation and flip horizontal / vertical
-- Save as JPEG, PNG or GIF
-	- True support for indexed palette PNGs and GIFs
-	- True support for alpha PNGs, even indexed alpha
+- Read/Write JPEG, PNG, GIF and WebP images
+	- Full support for indexed palette PNGs and GIFs
+	- Full support for alpha PNGs, even indexed alpha
+	- Full support for alpha WebP images.
 
 ## Why
 
