@@ -1,6 +1,6 @@
 // canvas-plus - Image Transformation Engine
 // Built using node-canvas and image-q
-// Copyright (c) 2017 - 2022 Joseph Huckaby
+// Copyright (c) 2017 - 2023 Joseph Huckaby
 // Released under the MIT License
 
 var Class = require('pixl-class');
@@ -53,7 +53,8 @@ var CanvasPlus = module.exports = Class.create({
 		
 		require('./lib/format/gif.js'),
 		require('./lib/format/jpeg.js'),
-		require('./lib/format/png.js')
+		require('./lib/format/png.js'),
+		require('./lib/format/webp.js')
 	],
 	
 	__static: {
