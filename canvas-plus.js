@@ -849,9 +849,6 @@ module.exports = Class.create({
 		this.perf.begin('composite');
 		this.logDebug(6, "Compositing image", opts);
 		
-		// import settings into opts
-		opts = this.applySettings(opts);
-		
 		// image can be canvas-plus, Canvas or Image
 		if (image.__name == "CanvasPlus") {
 			if (image.image) image = image.image;
@@ -876,6 +873,9 @@ module.exports = Class.create({
 		
 		var iwidth = opts.width || image.width;
 		var iheight = opts.height || image.height;
+		
+		// import settings into opts
+		opts = this.applySettings(opts);
 		
 		var ctx = this.context;
 		var width = this.get('width');
@@ -1756,9 +1756,14 @@ module.exports = Class.create({
 		ctx.save();
 		
 		// optionally specify properties to set on context
-		// (e.g. fillStyle, strokeStyle, globalCompositeOperation)
+		// (e.g. fillStyle, strokeStyle, lineWidth, globalCompositeOperation)
 		if (opts.params) {
 			for (var key in opts.params) { ctx[key] = opts.params[key]; }
+		}
+		
+		// apply antialias if specified
+		if (opts.antialias) {
+			this.applyAntialias( opts.antialias );
 		}
 		
 		// apply all commands
@@ -1769,6 +1774,7 @@ module.exports = Class.create({
 			ctx[name].apply( ctx, args );
 		});
 		
+		ctx.restore();
 		this.perf.end('draw');
 		this.logDebug(6, "Draw complete");
 		return this;

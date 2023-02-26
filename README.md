@@ -779,6 +779,7 @@ The `draw()` method allows you to draw primitive geometric objects onto the canv
 |---------------|------|-------------|
 | `params` | Object | Optional parameters to set on the canvas context, e.g. `fillStyle`, `strokeStyle`. |
 | `commands` | Object | An array of commands to run on the canvas context, e.g. `['fill']`. |
+| `antialias` | String | Draw rendering quality, one of `best`, `good`, `fast` or `nearest`.  Defaults to `best`.  See [Anti-Aliasing](#anti-aliasing). |
 
 Here is an example:
 
@@ -786,7 +787,8 @@ Here is an example:
 canvas.draw({
 	params: {
 		fillStyle: '#888888',
-		strokeStyle: '#000000'
+		strokeStyle: '#000000',
+		lineWidth: 2
 	},
 	commands: [
 		['rect', 50, 50, 100, 100],
@@ -1491,8 +1493,8 @@ The `transform()` method applies transformations to your canvas, which can inclu
 | Property Name | Type | Description |
 |---------------|------|-------------|
 | `rotate` | Float | Optional degrees to rotate image. |
-| `flipH` | Boolean | Optional flip horizontal transformation. |
-| `flipV` | Boolean | Optional flip vertical transformation. |
+| `fliph` | Boolean | Optional flip horizontal transformation. |
+| `flipv` | Boolean | Optional flip vertical transformation. |
 | `matrix` | Array | Optional [3x3 transformation matrix](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform), for custom distortions. |
 | `background` | String | Background color to use when expanding canvas, defaults to transparent. |
 | `antialias` | String | Image scaling quality, one of `best`, `good`, `fast` or `nearest`.  Defaults to `best`.  See [Anti-Aliasing](#anti-aliasing). |
@@ -1902,7 +1904,7 @@ Here are all the possible `gravity` parameter values, and what they mean.  Note 
 
 ## Anti-Aliasing
 
-The `antialias` parameter is used by several filters including [resize](#resize), [transform](#transform), [composite](#composite) and [mask](#mask).  Here are all the possible `antialias` parameter values, and what they mean.  Note that this is highly implementation-dependent, as in your results may vary between browsers and Node.js [canvas](https://www.npmjs.com/package/canvas).  All strings are case-insensitive.  The default is always `best`.
+The `antialias` parameter is used by several filters including [resize](#resize), [transform](#transform), [composite](#composite), [mask](#mask), and [draw](#draw).  Here are all the possible `antialias` parameter values, and what they mean.  Note that this is highly implementation-dependent, as in your results may vary between browsers and Node.js [canvas](https://www.npmjs.com/package/canvas).  All strings are case-insensitive.  The default is always `best`.
 
 | Value | Description |
 |-------|-------------|
@@ -1940,7 +1942,7 @@ Here are all the general parameters you can access using [get()](#get) and chang
 |----------------|------|-------------|
 | `readEXIF` | Boolean | Automatically read image EXIF data on load.  Defaults to `true` (enabled). |
 | `autoOrient` | Boolean | Automatically correct image rotation on load, using EXIF data.  Defaults to `true` (enabled). |
-| `throw` | Boolean | Enables try/catch mode (will throw on error).  Defaults to `false` (disabled).  Only recommended in Node 7+. |
+| `throw` | Boolean | Enables try/catch mode (will throw on error).  Defaults to `false` (disabled). |
 | `debug` | Boolean | Enables debug logging mode using `console.log` and `console.error`.  Defaults to `false` (disabled). |
 | `gravity` | String | Default gravity (alignment) for filters such as [composite()](#composite), [expand()](#expand), [resize()](#resize) and [text()](#text).  Defaults to `center`. |
 | `colors` | Integer | Default number of palette colors for quantization.  Defaults to `256`. |
@@ -1950,6 +1952,7 @@ Here are all the general parameters you can access using [get()](#get) and chang
 | `mode` | String | Current [internal mode](#modes) of the canvas.  Do not change this manually. |
 | `width` | Number | Current canvas width in pixels.  Do not change this manually (use [resize()](#resize)). |
 | `height` | Number | Current canvas height in pixels.  Do not change this manually (use [resize()](#resize)). |
+| `maxArea` | Number | Maximum allowed canvas area in square pixels (designed to limit memory usage).  Defaults to `0` (no limit). |
 
 ### Node Parameters
 
@@ -1986,7 +1989,7 @@ This should generate the `canvas-plus.js` standalone file.
 
 # Acknowledgments
 
-CanvasPlus would not be possible without these awesome libraries:
+CanvasPlus would not be possible without these awesome open-source packages:
 
 | Module Name | Description | License |
 |-------------|-------------|---------|
@@ -1995,6 +1998,7 @@ CanvasPlus would not be possible without these awesome libraries:
 | [omggif](https://www.npmjs.com/package/omggif) | GIF 89a encoder and decoder | MIT |
 | [exifreader](https://www.npmjs.com/package/exifreader) | Read EXIF meta data from image files. | MPL 2.0 |
 | [browserify](https://www.npmjs.com/package/browserify) | Browser-side require() the node.js way | MIT |
+| [squoosh](https://github.com/GoogleChromeLabs/squoosh) | Make images smaller using best-in-class codecs, right in the browser. | Apache 2.0 |
 
 Also, special thanks go to:
 
@@ -2031,3 +2035,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Please note that the [exifreader](https://www.npmjs.com/package/exifreader) package, one of our dependencies, is [MPL 2.0 licensed](https://github.com/mattiasw/ExifReader/blob/main/LICENSE).  This license is a bit more restrictive than the MIT license, so please use with caution.  If you don't need any EXIF features, it would be relatively easy to fork canvas-plus and remove the dependency.
+
+Please note that the WebP implementation we use in Node.js is borrowed from [Squoosh](https://github.com/GoogleChromeLabs/squoosh), which is [Apache 2.0 licensed](https://github.com/GoogleChromeLabs/squoosh/blob/dev/LICENSE).  This license is a bit more restrictive than the MIT license, so please use with caution.  If you don't need any WebP features, it would be relatively easy to fork canvas-plus and remove the dependency.
