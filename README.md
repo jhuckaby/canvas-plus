@@ -246,7 +246,7 @@ The background color can be any CSS-compatible color string, including RGBA, e.g
 
 ## Loading
 
-You can load images from a variety of sources, including buffers, files and URLs.  JPEGs, PNGs and GIFs are supported, and possibly others depending on your environment:
+You can load images from a variety of sources, including buffers, files and URLs.  JPEGs, PNGs, GIFs and WebP are supported, and possibly others depending on your environment:
 
 | Environment | Sources | Image Formats |
 |-------------|---------|---------------|
