@@ -72,6 +72,7 @@ async.eachSeries( files,
 					if (err) return callback(err);
 					
 					print("Wrote: " + (args.output || file) + "\n");
+					canvas.logDebug(3, "Performance Metrics: ", canvas.getMetrics() );
 					callback();
 				});
 			} );

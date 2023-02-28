@@ -164,7 +164,7 @@ var CanvasPlus = module.exports = Class.create({
 			key = arguments[0];
 			var value = arguments[1];
 			this.settings[key] = value;
-			this.logDebug(9, "Setting property: " + key + ": " + value);
+			this.logDebug(9, "Setting property: " + key + ": " + JSON.stringify(value));
 			
 			// pass along to active canvas if we have one
 			if (this.canvasSettingsKeys[key] && this.context) {

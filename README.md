@@ -1965,6 +1965,7 @@ The following parameters are only applicable in Node.js, when using the [canvas]
 | `chromaSubsampling` | Boolean | Optionally save JPEGs with [chroma subsampling](https://en.wikipedia.org/wiki/Chroma_subsampling).  Defaults to `true`. |
 | `compressionLevel` | Integer | Compression level for PNG images.  Defaults to `6`. |
 | `pngFilter` | String | PNG filter algorithm, for 32-bit PNG images.  Defaults to `PNG_ALL_FILTERS`.  See below. |
+| `webp` | Object | WebP encoding settings.  See [webp-wasm](https://github.com/jhuckaby/webp-wasm#encode) for details. |
 
 The `pngFilter` parameter specifies the algorithm for preparing the PNG data for compression.  The available values are: `PNG_ALL_FILTERS`, `PNG_FILTER_SUB`, `PNG_FILTER_UP`, `PNG_FILTER_AVG`, `PNG_FILTER_PAETH`, and `PNG_FILTER_NONE`.  This is only applicable for writing 32-bit PNGs.  See the [PNG Filter Spec](https://www.w3.org/TR/PNG-Filters.html) for more information.
 
