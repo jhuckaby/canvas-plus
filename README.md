@@ -250,8 +250,8 @@ You can load images from a variety of sources, including buffers, files and URLs
 
 | Environment | Sources | Image Formats |
 |-------------|---------|---------------|
-| **Node.js** | Buffer, File Path, URL | JPEG, PNG, GIF |
-| **Browser** | ArrayBuffer, File, Blob, URL | JPEG, PNG, GIF, BMP, WebP (Chrome only) |
+| **Node.js** | Buffer, File Path, URL | JPEG, PNG, GIF, WebP |
+| **Browser** | ArrayBuffer, File, Blob, URL | JPEG, PNG, GIF, BMP, WebP |
 
 To load an image, pass the source (e.g. file path, URL) to the [load()](#load) method.  Please note that this is an asynchronous call, so you need to provide a callback, or you can use the promise / async / await pattern with Node 8+.  Example with callback:
 
@@ -290,7 +290,7 @@ canvas.write({"format":"jpeg", "quality":90}, function(err, buf) {
 });
 ```
 
-Or with Node 8+:
+Or with async/await:
 
 ```js
 try {
@@ -302,7 +302,7 @@ catch (err) {
 }
 ```
 
-The `format` property should be one of `jpeg`, `png` or `gif`.  The `quality` property is only used for JPEGs, and should be a number from `0` to `100`.
+The `format` property should be one of `jpeg`, `png`, `gif` or `webp`.  The `quality` property is only used for JPEGs and WebP, and should be a number from `0` to `100`.
 
 Note that in the browser the buffer is provided using the [buffer](https://www.npmjs.com/package/buffer) module, which is is a subclass of [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array).  So there is no need to explicitly convert to typed array -- just use the buffer as you would a native Uint8Array.
 
