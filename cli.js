@@ -48,6 +48,12 @@ async.eachSeries( files,
 		var canvas = new CanvasPlus();
 		if (args.debug || args.verbose) canvas.set('debug', true);
 		
+		var obj = {};
+		for (var key in args) {
+			if (key.match(/^params\.(.+)$/)) Tools.setPath(obj, RegExp.$1, args[key]);
+		}
+		canvas.set(obj);
+		
 		canvas.load( file, function(err) {
 			if (err) return callback(err);
 			var write_opts = {};
