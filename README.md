@@ -447,7 +447,7 @@ Canvases are always created in 32-bit RGBA mode.
 
 ### load
 
-The `load()` method loads an image into CanvasPlus.  It accepts buffers, files and URLs.  For image formats, JPEGs, PNGs and GIFs are supported, and possibly others depending on your environment.  Please note that this is an asynchronous call, so you need to provide a callback as the 2nd argument.  Example use:
+The `load()` method loads an image into CanvasPlus.  It accepts buffers, files and URLs.  For image formats, JPEGs, PNGs, GIFs and WebP are supported, and possibly others depending on your environment.  Please note that this is an asynchronous call, so you need to provide a callback as the 2nd argument.  Example use:
 
 ```js
 canvas.load( 'waterfall.jpg', function(err) {
@@ -490,7 +490,7 @@ Note that due to browser security restrictions we have no access to the raw bina
 
 ### write
 
-The `write()` method will compress your canvas into a JPEG, PNG or GIF, and provide you with a [Buffer](https://nodejs.org/api/buffer.html) object.  Please note that this is an asynchronous call, so you need to provide a callback.
+The `write()` method will compress your canvas into a JPEG, PNG, GIF or WebP, and provide you with a [Buffer](https://nodejs.org/api/buffer.html) object.  Please note that this is an asynchronous call, so you need to provide a callback.
 
 ```js
 canvas.write({"format":"jpeg", "quality":90}, function(err, buf) {
@@ -500,7 +500,7 @@ canvas.write({"format":"jpeg", "quality":90}, function(err, buf) {
 });
 ```
 
-The `format` property should be one of `jpeg`, `png` or `gif`.  The `quality` property is only used for JPEGs, and should be a number from `0` to `100`.
+The `format` property should be one of `jpeg`, `png`, `gif` or `webp`.  The `quality` property is only used for JPEGs and WebP, and should be a number from `0` to `100`.
 
 Note that in the browser the buffer is provided using the [buffer](https://www.npmjs.com/package/buffer) module, which is is a subclass of [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array). So there is no need to explicitly convert to typed array.  Just use the buffer as you would a native Uint8Array.
 
