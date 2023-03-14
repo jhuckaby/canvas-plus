@@ -1554,6 +1554,83 @@ module.exports = Class.create({
 		return this.curves(opts);
 	},
 	
+	lighting: function(opts) {
+		// apply lighting functions, e.g. shadows, highlights
+		// opts: { shadows, highlights, channels, clip }
+		opts = this.copyHash( opts || {} );
+		var curve = [ [0,0], [63,63], [191,191], [255,255] ];
+		
+		// shadows
+		if (opts.shadows) {
+			curve[1][1] += opts.shadows;
+		}
+		
+		// highlights
+		if (opts.highlights) {
+			curve[2][1] += opts.highlights;
+		}
+		
+		for (var idx = 0, len = curve.length; idx < len; idx++) {
+			curve[idx][1] = Math.max(0, Math.min(255, curve[idx][1]) );
+		}
+		
+		var channels = opts.channels || 'rgb';
+		delete opts.channels;
+		
+		if (channels.match(/rgb/i)) opts.rgb = curve;
+		else {
+			if (channels.match(/r/i)) opts.red = curve;
+			if (channels.match(/g/i)) opts.green = curve;
+			if (channels.match(/b/i)) opts.blue = curve;
+		}
+		if (channels.match(/a/i)) opts.alpha = curve;
+		
+		return this.curves(opts);
+	},
+	
+	exposure: function(opts) {
+		// apply exposure adjustment
+		// opts: { amount, channels, clip }
+		if (typeof(opts) == 'number') {
+			opts = { amount: opts };
+		}
+		opts = this.copyHash( opts || {} );
+		var curve = [ 0, 63, 127, 191, 255 ];
+		
+		// exposure
+		if (opts.amount) {
+			if (opts.amount > 0) {
+				curve[1] += (opts.amount * 2);
+				curve[2] += (opts.amount * 3);
+				curve[3] += (opts.amount * 4);
+			}
+			else {
+				opts.amount /= 2;
+				curve[4] += (opts.amount * 5);
+				curve[3] += (opts.amount * 4);
+				curve[2] += (opts.amount * 3);
+				curve[1] += (opts.amount * 2);
+			}
+		}
+		
+		for (var idx = 0, len = curve.length; idx < len; idx++) {
+			curve[idx] = Math.max(0, Math.min(255, curve[idx]) );
+		}
+		
+		var channels = opts.channels || 'rgb';
+		delete opts.channels;
+		
+		if (channels.match(/rgb/i)) opts.rgb = curve;
+		else {
+			if (channels.match(/r/i)) opts.red = curve;
+			if (channels.match(/g/i)) opts.green = curve;
+			if (channels.match(/b/i)) opts.blue = curve;
+		}
+		if (channels.match(/a/i)) opts.alpha = curve;
+		
+		return this.curves(opts);
+	},
+	
 	generateCurve: function(points) {
 		// Generate curve from points using monotone cubic interpolation.
 		// This is somewhat like Adobe Photoshop's 'Curves' filter.
@@ -3765,7 +3842,7 @@ module.exports = Class.create({
 			this.logDebug(6, "Compressing into WebP format", opts );
 			
 			this.webp.encode( imgData, opts, function(err, data) {
-				if (err) return doError('webp', "WebP Encode Error: " + err, callback);
+				if (err) return self.doError('webp', "WebP Encode Error: " + err, callback);
 				self.logDebug(6, "WebP compression complete");
 				callback(null, data);
 			} );

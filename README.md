@@ -897,6 +897,32 @@ This would *increase* the canvas size by 100px horizontally and vertically, esse
 
 Note that expanding regenerates the underlying canvas object.  It effectively creates a new canvas at the expanded size, then copies the source into the destination, then discards the source.
 
+### exposure
+
+**Live Demo:** [Exposure](https://jhuckaby.github.io/canvas-plus-playground/?t=load/eyJpbWFnZSI6ImtpdHRlbi5qcGcifQ%3D%3D&t=exposure/eyJhbW91bnQiOjI1fQ%3D%3D&f=png)
+
+The `exposure()` method simulates increasing or decreasing the camera film exposure.  Interally, this is accomplished by a special [curve](#curves).  To use, specify an `amount` between -100 (darken) and 100 (lighten).  The method accepts an object containing the following properties:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `amount` | Integer | Exposure adjustment, from -100 (darken) to 100 (lighten). | 
+| `channels` | String | Which channels to apply the filter to, defaults to `rgb`.  See [Channels](#channels). |
+| `clip` | Object | Optional clipping rectangle (see [Clipping](#clipping) below). |
+
+Example use:
+
+```js
+canvas.exposure({
+	"amount": 25
+});
+```
+
+Note that if `amount` is the sole argument, you can simply pass the number itself:
+
+```js
+canvas.exposure( 25 );
+```
+
 ### findEdges
 
 **Live Demo:** [Find Edges](https://jhuckaby.github.io/canvas-plus-playground/?t=load/eyJpbWFnZSI6InN1bnNldC5qcGcifQ%3D%3D&t=resize/eyJ3aWR0aCI6NjQwLCJoZWlnaHQiOjQ4MCwibW9kZSI6ImZpdCJ9&t=findEdges/e30%3D&f=png)
@@ -1016,6 +1042,27 @@ Inversion is implemented using a [curve](#curves), and is functionally equivalen
 ```js
 canvas.curves({
 	"rgb": [255, 0]
+});
+```
+
+### lighting
+
+**Live Demo:** [Shadow Detail](https://jhuckaby.github.io/canvas-plus-playground/?t=load/eyJpbWFnZSI6InN1bnNldC5qcGcifQ%3D%3D&t=lighting/eyJzaGFkb3dzIjo1MH0%3D&f=png)
+
+The `lighting()` method can adjust both shadows and highlights, to bring out hidden details.  Interally, this is accomplished by a special multi-point [curve](#curves).  The method accepts an object containing the following properties:
+
+| Property Name | Type | Description |
+|---------------|------|-------------|
+| `shadows` | Integer | Shadow detail adjustment, from -100 (darken) to 100 (lighten). | 
+| `highlights` | Integer | Highlight detail adjustment, from -100 (darken) to 100 (lighten). | 
+| `channels` | String | Which channels to apply the filter to, defaults to `rgb`.  See [Channels](#channels). |
+| `clip` | Object | Optional clipping rectangle (see [Clipping](#clipping) below). |
+
+Example use:
+
+```js
+canvas.lighting({
+	"shadows": 25
 });
 ```
 
