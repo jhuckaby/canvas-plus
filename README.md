@@ -149,8 +149,8 @@ Please note that the [canvas](https://www.npmjs.com/package/canvas) module depen
 Here is a simple usage example:
 
 ```js
-var CanvasPlus = require('pixl-canvas-plus');
-var canvas = new CanvasPlus();
+const CanvasPlus = require('pixl-canvas-plus');
+let canvas = new CanvasPlus();
 
 canvas.load( 'waterfall.jpg', function(err) {
 	if (err) throw err;
@@ -189,7 +189,7 @@ This will expose a global `CanvasPlus` class in the window object.  Here is how 
 ```html
 <script src="canvas-plus.js"></script>
 <script>
-	var canvas = new CanvasPlus();
+	let canvas = new CanvasPlus();
 	
 	canvas.load( 'waterfall.jpg', function(err) {
 		if (err) throw err;
@@ -209,11 +209,11 @@ This will expose a global `CanvasPlus` class in the window object.  Here is how 
 			if (err) throw err;
 			
 			// 'buf' will be a binary buffer containing final image...
-			var blob = new Blob( [ buf ], { type: "image/jpeg" } );
-			var object_url = URL.createObjectURL( blob );
+			let blob = new Blob( [ buf ], { type: "image/jpeg" } );
+			let object_url = URL.createObjectURL( blob );
 			
 			// insert new image into DOM
-			var img = new Image();
+			let img = new Image();
 			img.src = object_url;
 			document.body.appendChild( img );
 		});
@@ -227,14 +227,19 @@ This will expose a global `CanvasPlus` class in the window object.  Here is how 
 To create a blank canvas, and optionally fill with a background color, you can pass arguments to the constructor, like this:
 
 ```js
-var canvas = new CanvasPlus( 640, 480 );
-var canvas = new CanvasPlus( 640, 480, "#FF0000" );
+let canvas = new CanvasPlus( 640, 480 );
+```
+
+Or with an optional background color:
+
+```js
+let canvas = new CanvasPlus( 640, 480, "#FF0000" );
 ```
 
 Or you can use the explicit [create()](#create) method:
 
 ```js
-var canvas = new CanvasPlus();
+let canvas = new CanvasPlus();
 canvas.create({
 	width: 640,
 	height: 480,
@@ -256,7 +261,7 @@ You can load images from a variety of sources, including buffers, files and URLs
 To load an image, pass the source (e.g. file path, URL) to the [load()](#load) method.  Please note that this is an asynchronous call, so you need to provide a callback, or you can use the promise / async / await pattern with Node 8+.  Example with callback:
 
 ```js
-var canvas = new CanvasPlus();
+let canvas = new CanvasPlus();
 
 canvas.load( 'waterfall.jpg', function(err) {
 	if (err) throw err;
@@ -294,7 +299,7 @@ Or with async/await:
 
 ```js
 try {
-	var buf = await canvas.write({"format":"jpeg", "quality":90});
+	let buf = await canvas.write({"format":"jpeg", "quality":90});
 	// 'buf' will be a binary buffer containing final image
 }
 catch (err) {
@@ -308,7 +313,7 @@ Note that in the browser the buffer is provided using the [buffer](https://www.n
 
 ## Errors
 
-All filter functions are synchronous, so they do not follow the callback pattern.  So by default all filter methods do not throw (however you can enable this behavior if you want, see below).  Instead, they set an internal error state which you can query after the fact.  Example:
+All filter methods are synchronous, so they do not follow the callback pattern.  So by default all filter methods do not throw (however you can enable this behavior if you want, see below).  Instead, they set an internal error state which you can query after the fact.  Example:
 
 ```js
 canvas.adjust({
@@ -317,7 +322,7 @@ canvas.adjust({
 });
 if (canvas.getLastError()) {
 	// an error occurred
-	var err = canvas.getLastError();
+	let err = canvas.getLastError();
 }
 ```
 
@@ -328,7 +333,7 @@ canvas.desaturate().normalize().solarize().sepia().rotate(45);
 
 if (canvas.getLastError()) {
 	// an error occurred
-	var err = canvas.getLastError();
+	let err = canvas.getLastError();
 }
 ```
 
@@ -393,9 +398,9 @@ Example debug log, which is emitted using `console.log()` (and `console.error()`
 In Node.js, you can attach a log agent compatible with our [pixl-logger](https://www.npmjs.com/package/pixl-logger) module, or write your own that implements the interface.  Example of the former:
 
 ```js
-var Logger = require('pixl-logger');
-var columns = ['hires_epoch', 'date', 'hostname', 'component', 'category', 'code', 'msg', 'data'];
-var logger = new Logger( 'logs/debug.log', columns );
+const Logger = require('pixl-logger');
+let columns = ['hires_epoch', 'date', 'hostname', 'component', 'category', 'code', 'msg', 'data'];
+let logger = new Logger( 'logs/debug.log', columns );
 
 canvas.attachLogAgent( logger );
 ```
@@ -403,7 +408,7 @@ canvas.attachLogAgent( logger );
 Example custom logger implementation:
 
 ```js
-var logger = {
+let logger = {
 	debug: function(level, msg, data) {
 		if (data) msg += " (" + JSON.stringify(data) + ")";
 		console.log('[DEBUG]['+level+'] ' + msg);
@@ -466,7 +471,7 @@ By default, CanvasPlus will automatically orient (rotate) your image on load, so
 If you do not want this behavior for some reason, you can disable the feature by calling [set()](#set) before loading your image, and disabling the `autoOrient` parameter.  Example:
 
 ```js
-var canvas = new CanvasPlus();
+let canvas = new CanvasPlus();
 canvas.set('autoOrient', false);
 
 canvas.load( 'waterfall.jpg', function(err) {
@@ -479,7 +484,7 @@ canvas.load( 'waterfall.jpg', function(err) {
 The `loadRemote()` method is a special, browser-only API, which allows you to load 3rd party image URLs.  That is, images that are hosted on 3rd party domains, and do not provide proper [CORS headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).  Example use:
 
 ```js
-var url = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/1024px-HTML5_logo_and_wordmark.svg.png";
+let url = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/1024px-HTML5_logo_and_wordmark.svg.png";
 
 canvas.loadRemote( url, function(err) {
 	if (err) throw err;
@@ -509,7 +514,7 @@ Note that in the browser the buffer is provided using the [buffer](https://www.n
 The `clone()` method makes a copy of your canvas, including the raw pixel data, settings and all.  This is a synchronous call, and the new cloned object is returned.  Example use:
 
 ```js
-var copy = canvas.clone();
+let copy = canvas.clone();
 ```
 
 ## Filters
@@ -1418,7 +1423,7 @@ When specifying fonts via the `font` property, please note that things are handl
 
 ```js
 // Node.js text example
-var canvas = new CanvasPlus();
+let canvas = new CanvasPlus();
 canvas.loadFont( "/path/to/fonts/Arial-Narrow-bold.otf" ); // do this first!
 canvas.create({
 	width: 640,
@@ -1681,19 +1686,19 @@ The `getPixels()` method returns a direct pointer to the raw pixels in the curre
 In `rgba` mode, `getPixels()` returns a [Uint8ClampedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray) of RGBA pixels, obtained from the `data` property of the current canvas [ImageData](https://developer.mozilla.org/en-US/docs/Web/API/ImageData).  Each element in the array is one 8-bit channel value of one pixel, and every 4 elements is one full 32-bit pixel.  Example:
 
 ```js
-var width = canvas.get('width');
-var height = canvas.get('height');
-var data = canvas.getPixels();
-var offset = 0;
+let width = canvas.get('width');
+let height = canvas.get('height');
+let data = canvas.getPixels();
+let offset = 0;
 
-for (var y = 0; y < height; y++) {
+for (let y = 0; y < height; y++) {
 	// foreach row
-	for (var x = 0; x < width; x++) {
+	for (let x = 0; x < width; x++) {
 		// for each pixel
-		var red = data[ offset + 0 ];
-		var green = data[ offset + 1 ];
-		var blue = data[ offset + 2 ];
-		var alpha = data[ offset + 3 ];
+		let red = data[ offset + 0 ];
+		let green = data[ offset + 1 ];
+		let blue = data[ offset + 2 ];
+		let alpha = data[ offset + 3 ];
 		offset += 4;
 	} // x loop
 } // y loop
@@ -1704,21 +1709,21 @@ In `indexed` mode, `getPixels()` returns a [Uint8Array](https://developer.mozill
 ```js
 canvas.quantize({ colors: 256, dither: true });
 
-var width = canvas.get('width');
-var height = canvas.get('height');
-var pixels = canvas.getPixels();
-var colors = canvas.getPalette();
-var offset = 0;
+let width = canvas.get('width');
+let height = canvas.get('height');
+let pixels = canvas.getPixels();
+let colors = canvas.getPalette();
+let offset = 0;
 
-for (var y = 0; y < height; y++) {
+for (let y = 0; y < height; y++) {
 	// foreach row
-	for (var x = 0; x < width; x++) {
+	for (let x = 0; x < width; x++) {
 		// for each pixel
-		var color = colors[ pixels[offset] ];
-		var red = color.r;
-		var green = color.g;
-		var blue = color.b;
-		var alpha = color.a;
+		let color = colors[ pixels[offset] ];
+		let red = color.r;
+		let green = color.g;
+		let blue = color.b;
+		let alpha = color.a;
 		offset++;
 	} // x loop
 } // y loop
@@ -1745,8 +1750,8 @@ To convert your canvas into `indexed` mode, call [quantize()](#quantize) or [qua
 The `get()` method is a generic accessor for fetching named parameters on the CanvasPlus object.  Using this you can retrieve the current canvas width, height, image mode, and more.  Many are used as defaults for filters.  See [Parameters](#parameters) below for the full list.  Example:
 
 ```js
-var width = canvas.get('width');
-var height = canvas.get('height');
+let width = canvas.get('width');
+let height = canvas.get('height');
 ```
 
 ### width
@@ -1754,7 +1759,7 @@ var height = canvas.get('height');
 The `width()` method is an alias for `get('width')`.  It returns the current canvas width in pixels.  Example:
 
 ```js
-var width = canvas.width();
+let width = canvas.width();
 ```
 
 ### height
@@ -1762,7 +1767,7 @@ var width = canvas.width();
 The `height()` method is an alias for `get('height')`.  It returns the current canvas height in pixels.  Example:
 
 ```js
-var height = canvas.height();
+let height = canvas.height();
 ```
 
 ## Misc
@@ -1789,7 +1794,7 @@ The `attachLogAgent()` method allows you to attach your own debug and error logg
 The `importImage()` method allows you to import your own native HTML [Image](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement) object into CanvasPlus.  Please note that the image *must* be completely loaded before importing, otherwise an error will be raised.  Example use:
 
 ```js
-var img = new Image();
+let img = new Image();
 img.onload = function() {
 	canvas.importImage( img );
 };
@@ -1842,7 +1847,7 @@ The `histogram()` method generates an [image histogram](https://en.wikipedia.org
 Example use:
 
 ```js
-var histo = canvas.histogram();
+let histo = canvas.histogram();
 ```
 
 For example, let's say you had an image that contained a large amount of pure black (`rgb(0, 0, 0)`).  Your histogram would therefore contain high numbers for the first (zeroth) array indexes in each color channel.  The array indexes are the color channel brightnesses, and the values are the counts of pixels in that specific brightness slice.  In this case `histo.red[0]`, `histo.green[0]` and `histo.blue[0]` would all contain high numbers, because those elements are literally "counts" of the darkest pixels.
@@ -1856,7 +1861,7 @@ The histogram feature only works in `rgba` mode (see [Modes](#modes) below), and
 The `hash()` method generates a [perceptual hash](https://en.wikipedia.org/wiki/Perceptual_hashing) of the current canvas pixels, using the fast [Blockhash](http://blockhash.io/) algorithm.  This is basically a unique ID or thumbprint for the image, represented as a 16-character hexadecimal string, which is *almost always* the same when compared to similar images.  Example use:
 
 ```js
-var hash = canvas.hash();
+let hash = canvas.hash();
 // "02fe3c3c7ca2471b"
 ```
 
@@ -1864,7 +1869,7 @@ The basic idea with these hash IDs is that you can compare them using a [Hamming
 
 ```js
 // compute initial hash
-var hash1 = canvas.hash();
+let hash1 = canvas.hash();
 
 // filter image
 canvas.adjust({
@@ -1875,10 +1880,10 @@ canvas.adjust({
 });
 
 // compute new hash
-var hash2 = canvas.hash();
+let hash2 = canvas.hash();
 
 // get hamming distance
-var dist = canvas.hammingDistance( hash1, hash2 );
+let dist = canvas.hammingDistance( hash1, hash2 );
 
 console.log("Initial Image Hash: " + hash1);
 console.log("Final Image Hash:   " + hash2);
