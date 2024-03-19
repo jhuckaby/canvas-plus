@@ -77,11 +77,13 @@ There are already some extremely cool image processing libraries out there.  I p
 		+ [draw](#draw)
 		+ [emboss](#emboss)
 		+ [expand](#expand)
+		+ [exposure](#exposure)
 		+ [findEdges](#findedges)
 		+ [flatten](#flatten)
 		+ [gamma](#gamma)
 		+ [gaussianBlur](#gaussianblur)
 		+ [invert](#invert)
+		+ [lighting](#lighting)
 		+ [mask](#mask)
 		+ [normalize](#normalize)
 		+ [opacity](#opacity)
@@ -906,7 +908,7 @@ Note that expanding regenerates the underlying canvas object.  It effectively cr
 
 **Live Demo:** [Exposure](https://jhuckaby.github.io/canvas-plus-playground/?t=load/eyJpbWFnZSI6ImtpdHRlbi5qcGcifQ%3D%3D&t=exposure/eyJhbW91bnQiOjI1fQ%3D%3D&f=png)
 
-The `exposure()` method simulates increasing or decreasing the camera film exposure.  Interally, this is accomplished by a special [curve](#curves).  To use, specify an `amount` between -100 (darken) and 100 (lighten).  The method accepts an object containing the following properties:
+The `exposure()` method simulates increasing or decreasing the camera film exposure.  Internally, this is accomplished by a special [curve](#curves).  To use, specify an `amount` between -100 (darken) and 100 (lighten).  The method accepts an object containing the following properties:
 
 | Property Name | Type | Description |
 |---------------|------|-------------|
@@ -1054,7 +1056,7 @@ canvas.curves({
 
 **Live Demo:** [Shadow Detail](https://jhuckaby.github.io/canvas-plus-playground/?t=load/eyJpbWFnZSI6InN1bnNldC5qcGcifQ%3D%3D&t=lighting/eyJzaGFkb3dzIjo1MH0%3D&f=png)
 
-The `lighting()` method can adjust both shadows and highlights, to bring out hidden details.  Interally, this is accomplished by a special multi-point [curve](#curves).  The method accepts an object containing the following properties:
+The `lighting()` method can adjust both shadows and highlights, to bring out hidden details.  Internally, this is accomplished by a special multi-point [curve](#curves).  The method accepts an object containing the following properties:
 
 | Property Name | Type | Description |
 |---------------|------|-------------|

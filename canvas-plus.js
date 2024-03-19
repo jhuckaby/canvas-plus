@@ -357,6 +357,20 @@ module.exports = Class.create({
 			self.pixels = null;
 			self.palette = null;
 			
+			// special handling needed for GIF89a images
+			if (self.get('format') == 'gif') {
+				self.logDebug(6, "Premultiplying alpha for GIF");
+				self.render();
+				
+				// bug in node-canvas: GIF89a with transparency needs alpha premultiplied
+				var ctx = self.getContext();
+				var imgData = ctx.getImageData( 0, 0, self.width(), self.height() );
+				for (var idx = 0, len = imgData.data.length; idx < len; idx += 4) {
+					if (imgData.data[idx + 3] == 0) { imgData.data[idx] = imgData.data[idx + 1] = imgData.data[idx + 2] = 0; }
+				}
+				ctx.putImageData( imgData, 0, 0 );
+			} // gif
+			
 			self.logDebug(5, "Image load complete");
 			if (callback) callback(false);
 			
@@ -2641,11 +2655,14 @@ module.exports = Class.create({
 		}
 		
 		// extrapolate width or height if missing, maintaining aspect ratio
-		var target_width = opts.width || Math.round( orig_width * (target_height / orig_height) );
-		var target_height = opts.height || Math.round( orig_height * (target_width / orig_width) );
+		var target_width = opts.width || 0;
+		var target_height = opts.height || 0;
 		
-		target_width = Math.max(1, Math.round(target_width));
-		target_height = Math.max(1, Math.round(target_height));
+		if (!target_width) target_width = orig_width * (target_height / orig_height);
+		if (!target_height) target_height = orig_height * (target_width / orig_width);
+		
+		if (target_width < 1) target_width = 1;
+		if (target_height < 1) target_height = 1;
 		
 		// calculate final destination width/height preserving aspect ratio
 		var ratios = [ target_width / orig_width, target_height / orig_height ];
@@ -2659,6 +2676,9 @@ module.exports = Class.create({
 		
 		var dest_width = Math.max(1, Math.round( orig_width * ratio ));
 		var dest_height = Math.max(1, Math.round( orig_height * ratio ));
+		
+		target_width = Math.round(target_width);
+		target_height = Math.round(target_height);
 		
 		// special scale mode = ignore aspect ratio (distort)
 		// direction is ignored in this mode

@@ -1,6 +1,6 @@
 {
   "name": "pixl-canvas-plus",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "description": "A universal library for manipulating images, built on canvas.",
   "author": "Joseph Huckaby <jhuckaby@gmail.com>",
   "homepage": "https://github.com/jhuckaby/canvas-plus",
@@ -24,7 +24,7 @@
     "file-type": "11.0.0",
     "canvas": "2.9.0",
     "crc-32": "1.2.0",
-    "exifreader": "4.9.1",
+    "exifreader": "4.21.1",
     "image-q": "1.1.1",
     "image-size": "1.0.2",
     "omggif": "1.0.8",
