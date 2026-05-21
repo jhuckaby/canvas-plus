@@ -621,6 +621,7 @@ The `composite()` method superimposes a separate image or canvas atop the curren
 | `image` | Object | **(Required)** Source image or canvas to superimpose atop current canvas. |
 | `width` | Integer | Optional desired width, will trigger a resize during composite. |
 | `height` | Integer | Optional desired height, will trigger a resize during composite. |
+| `scale` | Float | Optional scaling multiplier for the source image.  Example: `0.5` for half size, `2.0` for double size. |
 | `gravity` | String | Image starting position (alignment), which can be further adjusted with margins and/or offsets.  See [Gravity](#gravity). |
 | `marginX` | Integer | Horizontal margin in pixels, defaults to `0`. |
 | `marginY` | Integer | Vertical margin in pixels, defaults to `0`. |
@@ -641,7 +642,17 @@ canvas.composite({
 });
 ```
 
-Note that when `width` and/or `height` are specified here, the image is resized in *exact* (scale) mode.
+You can also use `scale` to quickly resize the source image by a relative amount before it is composited:
+
+```js
+canvas.composite({
+	"image": my_other_canvas,
+	"scale": 0.5,
+	"gravity": "center"
+});
+```
+
+Note that when `width`, `height` and/or `scale` are specified here, the image is resized in *exact* (scale) mode.  If `scale` is combined with `width` and/or `height`, the multiplier is applied after those dimensions are resolved.
 
 ### convolve
 
@@ -1084,6 +1095,7 @@ The `mask()` method applies a separate image or canvas as a mask onto the curren
 | `image` | Object | **(Required)** Source image or canvas to apply as a mask. |
 | `width` | Integer | Optional desired width, will trigger a resize during composite. |
 | `height` | Integer | Optional desired height, will trigger a resize during composite. |
+| `scale` | Float | Optional scaling multiplier for the mask image.  Example: `0.5` for half size, `2.0` for double size. |
 | `gravity` | String | Image starting position (alignment), which can be further adjusted with margins and/or offsets.  See [Gravity](#gravity). |
 | `marginX` | Integer | Horizontal margin in pixels, defaults to `0`. |
 | `marginY` | Integer | Vertical margin in pixels, defaults to `0`. |
@@ -1101,9 +1113,19 @@ canvas.mask({
 });
 ```
 
+You can also use `scale` to resize the mask by a relative amount before applying it:
+
+```js
+canvas.mask({
+	"image": my_mask_image,
+	"scale": 0.5,
+	"gravity": "center"
+});
+```
+
 Masking is effectively the same as calling [composite()](#composite) with the `mode` set to `destination-in`.
 
-Note that when `width` and/or `height` are specified, the mask is resized in *exact* (scale) mode.
+Note that when `width`, `height` and/or `scale` are specified, the mask is resized in *exact* (scale) mode.  If `scale` is combined with `width` and/or `height`, the multiplier is applied after those dimensions are resolved.
 
 ### normalize
 
@@ -1237,6 +1259,7 @@ The `resize()` method scales the canvas to the desired pixel width and/or height
 |---------------|------|-------------|
 | `width` | Integer | Desired canvas width in pixels.  Can be omitted if `height` is specified. |
 | `height` | Integer | Desired canvas height in pixels.  Can be omitted if `width` is specified. |
+| `scale` | Float | Optional scaling multiplier for the canvas.  Example: `0.5` for half size, `2.0` for double size. |
 | `mode` | String | Resize mode, one of `fit`, `fitPad`, `fitOver` or `scale` (case-insensitive).  Defaults to `fit`.  See below. |
 | `background` | String | Background padding color, for `fitPad` mode only. |
 | `gravity` | String | Image alignment, which can be further adjusted with offsets.  See [Gravity](#gravity). |
@@ -1271,6 +1294,16 @@ canvas.resize({
 	"width": "50%"
 });
 ```
+
+You can also use the `scale` property as a shortcut for resizing both dimensions by the same multiplier:
+
+```js
+canvas.resize({
+	"scale": 0.5
+});
+```
+
+When `scale` is specified, it replaces `width` and `height` with dimensions calculated from the original canvas size.  Other resize options such as `mode`, `direction`, `gravity` and `antialias` still apply normally.
 
 Here is a description of all the available resize modes:
 
