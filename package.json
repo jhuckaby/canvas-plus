@@ -1,6 +1,6 @@
 {
   "name": "pixl-canvas-plus",
-  "version": "2.1.9",
+  "version": "3.0.0",
   "description": "A universal library for manipulating images, built on canvas.",
   "author": "Joseph Huckaby <jhuckaby@gmail.com>",
   "homepage": "https://github.com/jhuckaby/canvas-plus",
@@ -22,7 +22,7 @@
   "dependencies": {
     "blob-to-buffer": "1.2.6",
     "file-type": "11.0.0",
-    "canvas": "2.11.2",
+    "canvas": "3.2.3",
     "crc-32": "1.2.0",
     "exifreader": "4.21.1",
     "image-q": "1.1.1",
@@ -30,14 +30,14 @@
     "omggif": "1.0.8",
     "pixl-class": "^1.0.3",
     "pixl-perf": "^1.0.0",
-    "pixl-tools": "^1.0.0",
+    "pixl-tools": "^2.0.0",
 	"pixl-request": "^2.0.0",
 	"pixl-cli": "^1.0.0",
 	"webp-wasm": "^1.0.2"
   },
   "devDependencies": {
     "browser-process-hrtime": "0.1.2",
-    "browserify": "16.5.1"
+    "browserify": "17.0.1"
   },
   "browser": {
     "./lib/node/create.js": "./lib/browser/create.js",
