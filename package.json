@@ -24,15 +24,15 @@
     "file-type": "11.0.0",
     "canvas": "3.2.3",
     "crc-32": "1.2.0",
-    "exifreader": "4.39.0",
+    "exifreader": "4.40.1",
     "image-q": "1.1.1",
-    "image-size": "1.0.2",
     "omggif": "1.0.8",
     "pixl-class": "^1.0.3",
     "pixl-perf": "^1.0.0",
     "pixl-tools": "^2.0.0",
     "pixl-request": "^2.0.0",
     "pixl-cli": "^1.0.0",
+    "probe-image-size": "7.3.0",
     "webp-wasm": "^1.0.2"
   },
   "devDependencies": {
@@ -50,6 +50,6 @@
   },
   "allowScripts": {
     "canvas@3.2.3": true,
-    "exifreader@4.39.0": true
+    "exifreader@4.40.1": true
   }
 }

@@ -2086,6 +2086,7 @@ CanvasPlus would not be possible without these awesome open-source packages:
 | [image-q](https://www.npmjs.com/package/image-q) | Complete Image Quantization Library | MIT |
 | [omggif](https://www.npmjs.com/package/omggif) | GIF 89a encoder and decoder | MIT |
 | [exifreader](https://www.npmjs.com/package/exifreader) | Read EXIF meta data from image files. | MPL 2.0 |
+| [probe-image-size](https://www.npmjs.com/package/probe-image-size) | Read image dimensions from image headers. | MIT |
 | [browserify](https://www.npmjs.com/package/browserify) | Browser-side require() the node.js way | MIT |
 | [squoosh](https://github.com/GoogleChromeLabs/squoosh) | Make images smaller using best-in-class codecs, right in the browser. | Apache 2.0 |
 
