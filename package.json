@@ -1,6 +1,6 @@
 {
   "name": "pixl-canvas-plus",
-  "version": "3.0.5",
+  "version": "4.0.0",
   "description": "A universal library for manipulating images, built on canvas.",
   "author": "Joseph Huckaby <jhuckaby@gmail.com>",
   "homepage": "https://github.com/jhuckaby/canvas-plus",
@@ -21,23 +21,28 @@
   ],
   "dependencies": {
     "blob-to-buffer": "1.2.6",
-    "file-type": "11.0.0",
     "canvas": "3.2.3",
     "crc-32": "1.2.0",
     "exifreader": "4.40.1",
+    "file-type": "11.0.0",
     "image-q": "1.1.1",
     "omggif": "1.0.8",
     "pixl-class": "^1.0.3",
-    "pixl-perf": "^1.0.0",
-    "pixl-tools": "^2.0.0",
-    "pixl-request": "^2.0.0",
     "pixl-cli": "^1.0.0",
+    "pixl-perf": "^1.0.0",
+    "pixl-request": "^2.0.0",
+    "pixl-tools": "^2.0.0",
     "probe-image-size": "7.3.0",
     "webp-wasm": "^1.0.2"
   },
   "devDependencies": {
     "browser-process-hrtime": "0.1.2",
-    "browserify": "17.0.1"
+    "buffer": "6.0.3",
+    "esbuild": "0.28.2",
+    "events": "3.3.0",
+    "pako": "3.0.1",
+    "process": "0.11.10",
+    "util": "0.12.5"
   },
   "browser": {
     "./lib/node/create.js": "./lib/browser/create.js",
@@ -46,10 +51,11 @@
     "./lib/node/write.js": "./lib/browser/write.js"
   },
   "scripts": {
-    "browserify": "browserify browser.js > canvas-plus.js"
+    "build": "node scripts/build-browser.js"
   },
   "allowScripts": {
     "canvas@3.2.3": true,
-    "exifreader@4.40.1": true
+    "exifreader@4.40.1": true,
+    "esbuild@0.28.2": true
   }
 }

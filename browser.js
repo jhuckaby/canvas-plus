@@ -4,7 +4,7 @@
 // Released under the MIT License
 
 // To compile:
-//		browserify browser.js > bundle.js
+//		npm run build
 
 // polyfill for canvas.toBlob
 if (!HTMLCanvasElement.prototype.toBlob) {
@@ -23,7 +23,7 @@ if (!HTMLCanvasElement.prototype.toBlob) {
 	});
 }
 
-// monkey-patch process.hrtime, as it isn't provided by browserify
+// monkey-patch process.hrtime, as it isn't provided by the browser
 // (this is needed by pixl-perf)
 process.hrtime = require('browser-process-hrtime');
 

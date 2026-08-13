@@ -180,7 +180,7 @@ canvas.load( 'waterfall.jpg', function(err) {
 
 ## Browser
 
-For the browser we use the native built-in [HTML5 Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API), and there are no dependencies.  Simply download and host this pre-built file (compiled using [browserify](http://browserify.org/)) on your own web server:
+For the browser we use the native built-in [HTML5 Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API), and there are no runtime dependencies.  Simply download and host this pre-built file (compiled using [esbuild](https://esbuild.github.io/)) on your own web server:
 
 ```
 https://raw.githubusercontent.com/jhuckaby/canvas-plus/master/canvas-plus.js
@@ -2068,13 +2068,13 @@ The following parameters are only applicable when running in the browser:
 
 # Development
 
-To compile the browser version of the library from the Node.js source, you will need to have [browserify](http://browserify.org/) installed.  Then change into the main package directory and type:
+To compile the browser version of the library from the Node.js source, install the development dependencies, then change into the main package directory and type:
 
 ```
-npm run browserify
+npm run build
 ```
 
-This should generate the `canvas-plus.js` standalone file.
+This uses [esbuild](https://esbuild.github.io/) to generate the standalone `canvas-plus.js` file.  The Node.js source remains CommonJS, while the package `browser` mappings select the browser-specific implementations during bundling.
 
 # Acknowledgments
 
@@ -2087,7 +2087,8 @@ CanvasPlus would not be possible without these awesome open-source packages:
 | [omggif](https://www.npmjs.com/package/omggif) | GIF 89a encoder and decoder | MIT |
 | [exifreader](https://www.npmjs.com/package/exifreader) | Read EXIF meta data from image files. | MPL 2.0 |
 | [probe-image-size](https://www.npmjs.com/package/probe-image-size) | Read image dimensions from image headers. | MIT |
-| [browserify](https://www.npmjs.com/package/browserify) | Browser-side require() the node.js way | MIT |
+| [esbuild](https://www.npmjs.com/package/esbuild) | JavaScript bundler used to build the standalone browser library. | MIT |
+| [pako](https://www.npmjs.com/package/pako) | Zlib-compatible DEFLATE compression for indexed PNGs in the browser. | MIT and Zlib |
 | [squoosh](https://github.com/GoogleChromeLabs/squoosh) | Make images smaller using best-in-class codecs, right in the browser. | Apache 2.0 |
 
 Also, special thanks go to:
