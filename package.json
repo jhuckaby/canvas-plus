@@ -1,6 +1,6 @@
 {
   "name": "pixl-canvas-plus",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "A universal library for manipulating images, built on canvas.",
   "author": "Joseph Huckaby <jhuckaby@gmail.com>",
   "homepage": "https://github.com/jhuckaby/canvas-plus",
@@ -19,11 +19,14 @@
     "canvas",
     "rgba"
   ],
+  "overrides": {
+    "basic-ftp": "6.2.1"
+  },
   "dependencies": {
     "blob-to-buffer": "1.2.6",
     "canvas": "3.2.3",
     "crc-32": "1.2.0",
-    "exifreader": "4.40.1",
+    "exifreader": "4.52.0",
     "file-type": "11.0.0",
     "image-q": "1.1.1",
     "omggif": "1.0.8",
@@ -32,7 +35,7 @@
     "pixl-perf": "^1.0.0",
     "pixl-request": "^2.0.0",
     "pixl-tools": "^2.0.0",
-    "probe-image-size": "7.3.0",
+    "probe-image-size": "7.5.0",
     "webp-wasm": "^1.0.2"
   },
   "devDependencies": {
@@ -55,7 +58,7 @@
   },
   "allowScripts": {
     "canvas@3.2.3": true,
-    "exifreader@4.40.1": true,
+    "exifreader@4.52.0": true,
     "esbuild@0.28.2": true
   }
 }

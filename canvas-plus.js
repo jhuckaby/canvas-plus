@@ -20,6 +20,10 @@
       throw mod = 0, e;
     }
   };
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
+  };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
       for (let key of __getOwnPropNames(from))
@@ -36,6 +40,7 @@
     isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
     mod
   ));
+  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
   // node_modules/process/browser.js
   var require_browser = __commonJS({
@@ -949,7 +954,7 @@
             byteOffset /= 2;
           }
         }
-        function read(buf, i2) {
+        function read18(buf, i2) {
           if (indexSize === 1) {
             return buf[i2];
           } else {
@@ -960,7 +965,7 @@
         if (dir) {
           let foundIndex = -1;
           for (i = byteOffset; i < arrLength; i++) {
-            if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
+            if (read18(arr, i) === read18(val, foundIndex === -1 ? 0 : i - foundIndex)) {
               if (foundIndex === -1) foundIndex = i;
               if (i - foundIndex + 1 === valLength) return foundIndex * indexSize;
             } else {
@@ -973,7 +978,7 @@
           for (i = byteOffset; i >= 0; i--) {
             let found = true;
             for (let j = 0; j < valLength; j++) {
-              if (read(arr, i + j) !== read(val, j)) {
+              if (read18(arr, i + j) !== read18(val, j)) {
                 found = false;
                 break;
               }
@@ -1735,9 +1740,9 @@
         }
         return this;
       };
-      var errors = {};
+      var errors2 = {};
       function E(sym, getMessage, Base) {
-        errors[sym] = class NodeError extends Base {
+        errors2[sym] = class NodeError extends Base {
           constructor() {
             super();
             Object.defineProperty(this, "message", {
@@ -1829,24 +1834,24 @@
           } else {
             range = `>= ${min}${n} and <= ${max}${n}`;
           }
-          throw new errors.ERR_OUT_OF_RANGE("value", range, value);
+          throw new errors2.ERR_OUT_OF_RANGE("value", range, value);
         }
         checkBounds(buf, offset, byteLength2);
       }
       function validateNumber(value, name) {
         if (typeof value !== "number") {
-          throw new errors.ERR_INVALID_ARG_TYPE(name, "number", value);
+          throw new errors2.ERR_INVALID_ARG_TYPE(name, "number", value);
         }
       }
       function boundsError(value, length, type) {
         if (Math.floor(value) !== value) {
           validateNumber(value, type);
-          throw new errors.ERR_OUT_OF_RANGE(type || "offset", "an integer", value);
+          throw new errors2.ERR_OUT_OF_RANGE(type || "offset", "an integer", value);
         }
         if (length < 0) {
-          throw new errors.ERR_BUFFER_OUT_OF_BOUNDS();
+          throw new errors2.ERR_BUFFER_OUT_OF_BOUNDS();
         }
-        throw new errors.ERR_OUT_OF_RANGE(
+        throw new errors2.ERR_OUT_OF_RANGE(
           type || "offset",
           `>= ${type ? 1 : 0} and <= ${length}`,
           value
@@ -3213,7 +3218,7 @@
           }
         }
       };
-      function isArray(x) {
+      function isArray2(x) {
         return toStr.call(x) === "[object Array]";
       }
       module2.exports = function forEach(list, iterator, thisArg) {
@@ -3224,7 +3229,7 @@
         if (arguments.length >= 3) {
           receiver = thisArg;
         }
-        if (isArray(list)) {
+        if (isArray2(list)) {
           forEachArray(list, iterator, receiver);
         } else if (typeof list === "string") {
           forEachString(list, iterator, receiver);
@@ -3492,7 +3497,7 @@
           var fn = arr.slice || arr.set;
           if (fn) {
             var bound = (
-              /** @type {BoundSlice | BoundSet} */
+              /** @type {typeof BoundSlice | typeof BoundSet} */
               // @ts-expect-error TODO FIXME
               callBind(fn)
             );
@@ -3545,7 +3550,7 @@
       function isTATag(tag) {
         return $indexOf(typedArrays, tag) > -1;
       }
-      module2.exports = function whichTypedArray(value) {
+      function whichTypedArray(value) {
         if (!value || typeof value !== "object") {
           return false;
         }
@@ -3563,7 +3568,8 @@
           return null;
         }
         return tryTypedArrays(value);
-      };
+      }
+      module2.exports = whichTypedArray;
     }
   });
 
@@ -3867,7 +3873,7 @@
       };
       var formatRegExp = /%[sdj%]/g;
       exports2.format = function(f) {
-        if (!isString(f)) {
+        if (!isString2(f)) {
           var objects = [];
           for (var i = 0; i < arguments.length; i++) {
             objects.push(inspect(arguments[i]));
@@ -3896,7 +3902,7 @@
           }
         });
         for (var x = args[i]; i < len2; x = args[++i]) {
-          if (isNull(x) || !isObject(x)) {
+          if (isNull(x) || !isObject2(x)) {
             str += " " + x;
           } else {
             str += " " + inspect(x);
@@ -4022,7 +4028,7 @@
         value.inspect !== exports2.inspect && // Also filter out any prototype objects using the circular check.
         !(value.constructor && value.constructor.prototype === value)) {
           var ret = value.inspect(recurseTimes, ctx);
-          if (!isString(ret)) {
+          if (!isString2(ret)) {
             ret = formatValue(ctx, ret, recurseTimes);
           }
           return ret;
@@ -4055,7 +4061,7 @@
           }
         }
         var base = "", array = false, braces = ["{", "}"];
-        if (isArray(value)) {
+        if (isArray2(value)) {
           array = true;
           braces = ["[", "]"];
         }
@@ -4097,7 +4103,7 @@
       function formatPrimitive(ctx, value) {
         if (isUndefined(value))
           return ctx.stylize("undefined", "undefined");
-        if (isString(value)) {
+        if (isString2(value)) {
           var simple = "'" + JSON.stringify(value).replace(/^"|"$/g, "").replace(/'/g, "\\'").replace(/\\"/g, '"') + "'";
           return ctx.stylize(simple, "string");
         }
@@ -4208,10 +4214,10 @@
         return braces[0] + base + " " + output.join(", ") + " " + braces[1];
       }
       exports2.types = require_types();
-      function isArray(ar) {
+      function isArray2(ar) {
         return Array.isArray(ar);
       }
-      exports2.isArray = isArray;
+      exports2.isArray = isArray2;
       function isBoolean(arg) {
         return typeof arg === "boolean";
       }
@@ -4228,10 +4234,10 @@
         return typeof arg === "number";
       }
       exports2.isNumber = isNumber;
-      function isString(arg) {
+      function isString2(arg) {
         return typeof arg === "string";
       }
-      exports2.isString = isString;
+      exports2.isString = isString2;
       function isSymbol(arg) {
         return typeof arg === "symbol";
       }
@@ -4241,21 +4247,21 @@
       }
       exports2.isUndefined = isUndefined;
       function isRegExp(re) {
-        return isObject(re) && objectToString(re) === "[object RegExp]";
+        return isObject2(re) && objectToString(re) === "[object RegExp]";
       }
       exports2.isRegExp = isRegExp;
       exports2.types.isRegExp = isRegExp;
-      function isObject(arg) {
+      function isObject2(arg) {
         return typeof arg === "object" && arg !== null;
       }
-      exports2.isObject = isObject;
+      exports2.isObject = isObject2;
       function isDate(d) {
-        return isObject(d) && objectToString(d) === "[object Date]";
+        return isObject2(d) && objectToString(d) === "[object Date]";
       }
       exports2.isDate = isDate;
       exports2.types.isDate = isDate;
       function isError(e) {
-        return isObject(e) && (objectToString(e) === "[object Error]" || e instanceof Error);
+        return isObject2(e) && (objectToString(e) === "[object Error]" || e instanceof Error);
       }
       exports2.isError = isError;
       exports2.types.isNativeError = isError;
@@ -4272,7 +4278,7 @@
       function objectToString(o) {
         return Object.prototype.toString.call(o);
       }
-      function pad(n) {
+      function pad2(n) {
         return n < 10 ? "0" + n.toString(10) : n.toString(10);
       }
       var months = [
@@ -4292,9 +4298,9 @@
       function timestamp() {
         var d = /* @__PURE__ */ new Date();
         var time = [
-          pad(d.getHours()),
-          pad(d.getMinutes()),
-          pad(d.getSeconds())
+          pad2(d.getHours()),
+          pad2(d.getMinutes()),
+          pad2(d.getSeconds())
         ].join(":");
         return [d.getDate(), months[d.getMonth()], time].join(" ");
       }
@@ -4303,7 +4309,7 @@
       };
       exports2.inherits = require_inherits_browser();
       exports2._extend = function(origin, add) {
-        if (!add || !isObject(add)) return origin;
+        if (!add || !isObject2(add)) return origin;
         var keys = Object.keys(add);
         var i = keys.length;
         while (i--) {
@@ -4389,9 +4395,9 @@
           if (typeof maybeCb !== "function") {
             throw new TypeError("The last argument must be of type Function");
           }
-          var self2 = this;
+          var self = this;
           var cb = function() {
-            return maybeCb.apply(self2, arguments);
+            return maybeCb.apply(self, arguments);
           };
           original.apply(this, args).then(
             function(ret) {
@@ -4783,9 +4789,9 @@
     }
   });
 
-  // node_modules/pixl-class/class.js
+  // ../pixl-class/class.js
   var require_class = __commonJS({
-    "node_modules/pixl-class/class.js"(exports2) {
+    "../pixl-class/class.js"(exports2) {
       init_esbuild_shims();
       var util = require_util();
       var events = require_events();
@@ -4863,9 +4869,9 @@
     }
   });
 
-  // node_modules/pixl-perf/perf.js
+  // ../pixl-perf/perf.js
   var require_perf = __commonJS({
-    "node_modules/pixl-perf/perf.js"(exports2, module2) {
+    "../pixl-perf/perf.js"(exports2, module2) {
       init_esbuild_shims();
       var Class2 = require_class();
       module2.exports = Class2.create({
@@ -5123,7 +5129,7 @@
           return family;
         },
         loadFont: function(family, url, callback) {
-          var self2 = this;
+          var self = this;
           if (family in this.fontCache) {
             if (callback) callback();
             return;
@@ -5142,19 +5148,19 @@
               family,
               function() {
                 pf.end();
-                self2.logDebug(5, "Font loaded successfully: " + family + ": " + url);
+                self.logDebug(5, "Font loaded successfully: " + family + ": " + url);
                 if (callback) callback();
               },
               {
                 timeoutAfter: 5e3,
                 onTimeout: function() {
                   pf.end();
-                  return self2.doError("font", "Failed to load font after 5 seconds: " + family, callback);
+                  return self.doError("font", "Failed to load font after 5 seconds: " + family, callback);
                 }
               }
             );
           } else {
-            self2.doError("font", "Cannot determine font format from URL: " + url, callback);
+            self.doError("font", "Cannot determine font format from URL: " + url, callback);
           }
         }
       });
@@ -5168,8795 +5174,8070 @@
     }
   });
 
-  // empty-node-module:https
-  var require_https = __commonJS({
-    "empty-node-module:https"(exports2, module2) {
-      init_esbuild_shims();
-      module2.exports = {};
+  // node_modules/exifreader/src/utils.js
+  function getDataView(data, byteOffset, byteLength) {
+    return new DataView(data, byteOffset, byteLength);
+  }
+  function getDataViewFromBytes(data) {
+    if (isArrayBufferViewLike(data)) {
+      return new DataView(data.buffer, data.byteOffset, data.byteLength);
     }
-  });
-
-  // empty-node-module:http
-  var require_http = __commonJS({
-    "empty-node-module:http"(exports2, module2) {
-      init_esbuild_shims();
-      module2.exports = {};
+    try {
+      return new DataView(data);
+    } catch (error) {
+      throw new TypeError("Passed data type is unsupported. Pass an ArrayBuffer, SharedArrayBuffer, DataView, a typed array such as a Uint8Array or Node Buffer, or a File.");
     }
-  });
-
-  // empty-node-module:fs
-  var require_fs = __commonJS({
-    "empty-node-module:fs"(exports2, module2) {
-      init_esbuild_shims();
-      module2.exports = {};
+  }
+  function isArrayBufferViewLike(data) {
+    return !!data && !!data.buffer && typeof data.byteOffset === "number" && typeof data.byteLength === "number";
+  }
+  function getStringFromDataView(dataView, offset, length) {
+    const chars = [];
+    for (let i = 0; i < length && offset + i < dataView.byteLength; i++) {
+      chars.push(dataView.getUint8(offset + i));
     }
-  });
-
-  // node_modules/@xmldom/xmldom/lib/conventions.js
-  var require_conventions = __commonJS({
-    "node_modules/@xmldom/xmldom/lib/conventions.js"(exports2) {
-      "use strict";
-      init_esbuild_shims();
-      function find(list, predicate, ac) {
-        if (ac === void 0) {
-          ac = Array.prototype;
+    return getStringValueFromArray(chars);
+  }
+  function getNullTerminatedStringFromDataView(dataView, offset, end = dataView.byteLength) {
+    const readEnd = Math.min(end, dataView.byteLength);
+    const chars = [];
+    let i = 0;
+    while (offset + i < readEnd) {
+      const char = dataView.getUint8(offset + i);
+      if (char === 0) {
+        break;
+      }
+      chars.push(char);
+      i++;
+    }
+    return getStringValueFromArray(chars);
+  }
+  function getUnicodeStringFromDataView(dataView, offset, length) {
+    const chars = [];
+    for (let i = 0; i + 2 <= length && offset + i + 2 <= dataView.byteLength; i += 2) {
+      chars.push(dataView.getUint16(offset + i));
+    }
+    if (chars[chars.length - 1] === 0) {
+      chars.pop();
+    }
+    return getStringValueFromArray(chars);
+  }
+  function getPascalStringFromDataView(dataView, offset) {
+    const size = dataView.getUint8(offset);
+    const string = getStringFromDataView(dataView, offset + 1, size);
+    return [size, string];
+  }
+  function getStringValueFromArray(charArray) {
+    if (!Array.isArray(charArray)) {
+      throw new TypeError("Expected an array.");
+    }
+    const chunks = [];
+    const charCodes = [];
+    let count = 0;
+    for (let i = 0; i < charArray.length; i++) {
+      if (i in charArray) {
+        charCodes[count++] = charArray[i];
+        if (count === MAX_CHARS_PER_CALL) {
+          chunks.push(String.fromCharCode.apply(null, charCodes));
+          count = 0;
         }
-        if (list && typeof ac.find === "function") {
-          return ac.find.call(list, predicate);
+      }
+    }
+    charCodes.length = count;
+    chunks.push(String.fromCharCode.apply(null, charCodes));
+    return chunks.join("");
+  }
+  function getByteString(bytes, start = 0, end = bytes.length, charCodes = []) {
+    if (end - start <= MAX_CHARS_PER_CALL) {
+      return getChunkString(bytes, start, end, charCodes);
+    }
+    const chunks = [];
+    for (let chunkStart = start; chunkStart < end; chunkStart += MAX_CHARS_PER_CALL) {
+      chunks.push(getChunkString(bytes, chunkStart, Math.min(chunkStart + MAX_CHARS_PER_CALL, end), charCodes));
+    }
+    return chunks.join("");
+  }
+  function getChunkString(bytes, start, end, charCodes) {
+    for (let i = start; i < end; i++) {
+      charCodes[i - start] = bytes[i];
+    }
+    charCodes.length = end - start;
+    return String.fromCharCode.apply(null, charCodes);
+  }
+  function joinMapped(values, getText, separator) {
+    if (!Array.isArray(values)) {
+      throw new TypeError("Expected an array.");
+    }
+    const texts = [];
+    const chunks = [];
+    for (let chunkStart = 0; chunkStart < values.length; chunkStart += JOIN_CHUNK_SIZE) {
+      chunks.push(getJoinedChunk(values, chunkStart, Math.min(chunkStart + JOIN_CHUNK_SIZE, values.length), getText, separator, texts));
+    }
+    return chunks.join(separator);
+  }
+  function getJoinedChunk(values, start, end, getText, separator, texts) {
+    for (let i = start; i < end; i++) {
+      texts[i - start] = getText(values[i]);
+    }
+    texts.length = end - start;
+    return texts.join(separator);
+  }
+  function decodeUtf8ByteString(byteString) {
+    const decoded = tryDecodeUtf8ByteString(byteString);
+    if (decoded === void 0) {
+      return byteString;
+    }
+    return decoded;
+  }
+  function tryDecodeUtf8ByteString(byteString) {
+    let isAscii = true;
+    for (let index = 0; index < byteString.length; ) {
+      const sequenceLength = getWellFormedUtf8SequenceLength(byteString, index);
+      if (sequenceLength === 0) {
+        return void 0;
+      }
+      if (sequenceLength > 1) {
+        isAscii = false;
+      }
+      index += sequenceLength;
+    }
+    if (isAscii) {
+      return byteString;
+    }
+    return decodeURIComponent(escape(byteString));
+  }
+  function getWellFormedUtf8SequenceLength(byteString, index) {
+    const lead = byteString.charCodeAt(index);
+    if (lead < 128) {
+      return 1;
+    }
+    let length;
+    let secondMin = 128;
+    let secondMax = 191;
+    if (lead >= 194 && lead <= 223) {
+      length = 2;
+    } else if (lead >= 224 && lead <= 239) {
+      length = 3;
+      if (lead === 224) {
+        secondMin = 160;
+      } else if (lead === 237) {
+        secondMax = 159;
+      }
+    } else if (lead >= 240 && lead <= 244) {
+      length = 4;
+      if (lead === 240) {
+        secondMin = 144;
+      } else if (lead === 244) {
+        secondMax = 143;
+      }
+    } else {
+      return 0;
+    }
+    if (index + length > byteString.length) {
+      return 0;
+    }
+    const second = byteString.charCodeAt(index + 1);
+    if (!(second >= secondMin && second <= secondMax)) {
+      return 0;
+    }
+    for (let offset = 2; offset < length; offset++) {
+      const continuation = byteString.charCodeAt(index + offset);
+      if (!(continuation >= 128 && continuation <= 191)) {
+        return 0;
+      }
+    }
+    return length;
+  }
+  function pushMetadataBlock(metadataBlocks, type, start, end) {
+    if (!metadataBlocks || !type) {
+      return;
+    }
+    if (metadataBlocks.length < MAX_METADATA_BLOCKS) {
+      metadataBlocks.push({ type, start, end });
+    } else {
+      const lastBlock = metadataBlocks[metadataBlocks.length - 1];
+      lastBlock.start = Math.min(lastBlock.start, start);
+      lastBlock.end = Math.max(lastBlock.end, end);
+    }
+  }
+  function assertPromiseSupport() {
+    if (typeof Promise === "undefined") {
+      throw new Error("Promise is required when async mode is enabled.");
+    }
+  }
+  function objectAssign() {
+    for (let i = 1; i < arguments.length; i++) {
+      for (const property in arguments[i]) {
+        setProperty(arguments[0], property, arguments[i][property]);
+      }
+    }
+    return arguments[0];
+  }
+  function setProperty(object, key, value) {
+    if (key === "__proto__") {
+      Object.defineProperty(object, key, { value, enumerable: true, writable: true, configurable: true });
+      return;
+    }
+    object[key] = value;
+  }
+  function getTagKey(name) {
+    if (name !== "__proto__" && Object.prototype.hasOwnProperty.call(Object.prototype, name)) {
+      return name + "_";
+    }
+    return name;
+  }
+  function deferInit(object, key, initializer) {
+    let initialized = false;
+    Object.defineProperty(object, key, {
+      get() {
+        if (!initialized) {
+          initialized = true;
+          Object.defineProperty(object, key, {
+            configurable: true,
+            enumerable: true,
+            value: initializer.apply(object),
+            writable: true
+          });
         }
-        for (var i = 0; i < list.length; i++) {
-          if (hasOwn(list, i)) {
-            var item = list[i];
-            if (predicate.call(void 0, item, i, list)) {
-              return item;
+        return object[key];
+      },
+      configurable: true,
+      enumerable: true
+    });
+  }
+  function getBase64Image(image) {
+    if (typeof image === "string" && typeof btoa !== "undefined") {
+      return btoa(image);
+    }
+    if (hasBufferFrom()) {
+      return Buffer.from(image).toString("base64");
+    }
+    if (typeof btoa !== "undefined") {
+      return btoa(getByteString(new Uint8Array(image)));
+    }
+    if (typeof Buffer === "undefined") {
+      return void 0;
+    }
+    return new Buffer(image).toString("base64");
+  }
+  function hasBufferFrom() {
+    return typeof Buffer !== "undefined" && typeof Buffer.from !== "undefined" && Buffer.from !== Uint8Array.from;
+  }
+  function dataUriToBuffer(dataUri) {
+    const commaIndex = dataUri.indexOf(",");
+    const header = dataUri.substring(0, commaIndex);
+    const data = dataUri.substring(commaIndex + 1);
+    if (header.indexOf(";base64") !== -1) {
+      const base64 = percentDecodeBase64Payload(data);
+      if (typeof atob !== "undefined") {
+        return binaryStringToArrayBuffer(atob(base64));
+      }
+      if (typeof Buffer === "undefined") {
+        return void 0;
+      }
+      if (typeof Buffer.from !== "undefined") {
+        return Buffer.from(base64, "base64");
+      }
+      return new Buffer(base64, "base64");
+    }
+    return percentDecodeToBytes(data).buffer;
+  }
+  function percentDecodeBase64Payload(data) {
+    if (data.indexOf("%") === -1 || /[\u0080-\uffff]/.test(data)) {
+      return data;
+    }
+    return getByteString(percentDecodeToBytes(data));
+  }
+  function binaryStringToArrayBuffer(string) {
+    const bytes = new Uint8Array(string.length);
+    for (let i = 0; i < string.length; i++) {
+      bytes[i] = string.charCodeAt(i);
+    }
+    return bytes.buffer;
+  }
+  function percentDecodeToBytes(string) {
+    const byteString = /[\u0080-\uffff]/.test(string) ? unescape(encodeURIComponent(string)) : string;
+    const bytes = new Uint8Array(byteString.length - 2 * countPercentEscapes(byteString));
+    let byteIndex = 0;
+    for (let i = 0; i < byteString.length; i++) {
+      if (isPercentEscape(byteString, i)) {
+        bytes[byteIndex++] = getHexDigitValue(byteString.charCodeAt(i + 1)) * 16 + getHexDigitValue(byteString.charCodeAt(i + 2));
+        i += 2;
+      } else {
+        bytes[byteIndex++] = byteString.charCodeAt(i);
+      }
+    }
+    return bytes;
+  }
+  function countPercentEscapes(byteString) {
+    let count = 0;
+    for (let i = 0; i < byteString.length; i++) {
+      if (isPercentEscape(byteString, i)) {
+        count++;
+        i += 2;
+      }
+    }
+    return count;
+  }
+  function isPercentEscape(byteString, index) {
+    return byteString.charCodeAt(index) === 37 && index + 2 < byteString.length && getHexDigitValue(byteString.charCodeAt(index + 1)) !== -1 && getHexDigitValue(byteString.charCodeAt(index + 2)) !== -1;
+  }
+  function getHexDigitValue(charCode) {
+    if (charCode >= 48 && charCode <= 57) {
+      return charCode - 48;
+    }
+    if (charCode >= 65 && charCode <= 70) {
+      return charCode - 65 + 10;
+    }
+    if (charCode >= 97 && charCode <= 102) {
+      return charCode - 97 + 10;
+    }
+    return -1;
+  }
+  function padStart(string, length, character) {
+    const padding = strRepeat(character, Math.max(0, length - string.length));
+    return padding + string;
+  }
+  function parseFloatRadix(string, radix) {
+    return parseInt(string.replace(".", ""), radix) / Math.pow(radix, (string.split(".")[1] || "").length);
+  }
+  function strRepeat(string, num) {
+    return new Array(num + 1).join(string);
+  }
+  function withDecompressBudget(decompressConfig) {
+    return {
+      brotli: decompressConfig ? decompressConfig.brotli : void 0,
+      deflate: decompressConfig ? decompressConfig.deflate : void 0,
+      maxDecompressedSize: decompressConfig ? decompressConfig.maxDecompressedSize : void 0,
+      budget: { remaining: getMaxDecompressedSize(decompressConfig), warned: false, failed: false, pending: void 0 }
+    };
+  }
+  function decompress(dataView, compressionMethod, encoding, returnType = "string", decompressConfig) {
+    const maxDecompressedSize = getMaxDecompressedSize(decompressConfig);
+    const budget = getDecompressBudget(decompressConfig, maxDecompressedSize);
+    if (compressionMethod !== COMPRESSION_METHOD_NONE && budget.remaining < 0) {
+      return rejectExceedsMax(budget, maxDecompressedSize);
+    }
+    const decompressType = getDecompressType(compressionMethod);
+    if (decompressConfig && decompressType) {
+      const customFn = decompressConfig[decompressType];
+      if (typeof customFn === "function") {
+        return decompressWithCustomFunctionInTurn(customFn, dataView, returnType, encoding, budget, maxDecompressedSize);
+      }
+    }
+    if (compressionMethod === COMPRESSION_METHOD_DEFLATE) {
+      if (typeof DecompressionStream === "function") {
+        return readBoundedDecompressedStream(dataView, "deflate", budget, maxDecompressedSize).then((arrayBuffer) => decodeBuffer(arrayBuffer, returnType, encoding));
+      }
+    }
+    if (compressionMethod === COMPRESSION_METHOD_BROTLI) {
+      if (typeof DecompressionStream === "function") {
+        try {
+          return readBoundedDecompressedStream(dataView, "brotli", budget, maxDecompressedSize).then((arrayBuffer) => decodeBuffer(arrayBuffer, returnType, encoding));
+        } catch (_error) {
+        }
+      }
+      return Promise.reject("Brotli decompression is not supported in this environment. Pass in a brotli decompression function via the decompress option.");
+    }
+    if (compressionMethod !== void 0) {
+      return Promise.reject(`Unknown compression method ${compressionMethod}.`);
+    }
+    if (returnType === "string") {
+      try {
+        return new TextDecoder(encoding).decode(dataView);
+      } catch (error) {
+        return dataView ? getByteString(getUint8View(dataView)) : "";
+      }
+    }
+    return dataView;
+  }
+  function getDecompressType(compressionMethod) {
+    if (compressionMethod === COMPRESSION_METHOD_DEFLATE) {
+      return "deflate";
+    }
+    if (compressionMethod === COMPRESSION_METHOD_BROTLI) {
+      return "brotli";
+    }
+    return void 0;
+  }
+  function getMaxDecompressedSize(decompressConfig) {
+    if (decompressConfig && typeof decompressConfig.maxDecompressedSize === "number") {
+      return decompressConfig.maxDecompressedSize;
+    }
+    return DEFAULT_MAX_DECOMPRESSED_SIZE;
+  }
+  function getDecompressBudget(decompressConfig, maxDecompressedSize) {
+    if (decompressConfig && decompressConfig.budget) {
+      return decompressConfig.budget;
+    }
+    return { remaining: maxDecompressedSize, warned: false, failed: false, pending: void 0 };
+  }
+  function decompressWithCustomFunctionInTurn(customFn, dataView, returnType, encoding, budget, maxDecompressedSize) {
+    return new Promise((resolve2) => {
+      if (budget.pending) {
+        resolve2(queueCustomFunctionCall(customFn, dataView, returnType, encoding, budget, maxDecompressedSize));
+      } else {
+        resolve2(decompressWithCustomFunction(customFn, dataView, returnType, encoding, budget, maxDecompressedSize));
+      }
+    });
+  }
+  function queueCustomFunctionCall(customFn, dataView, returnType, encoding, budget, maxDecompressedSize) {
+    const previousCall = budget.pending;
+    const inputCopy = new DataView(dataView.buffer.slice(dataView.byteOffset, dataView.byteOffset + dataView.byteLength));
+    return holdTurn(budget, previousCall.then(() => {
+      if (budget.remaining < 0) {
+        return rejectExceedsMax(budget, maxDecompressedSize);
+      }
+      return decompressWithCustomFunction(customFn, inputCopy, returnType, encoding, budget, maxDecompressedSize);
+    }));
+  }
+  function holdTurn(budget, call) {
+    const settled = call.then(() => void 0, () => void 0);
+    budget.pending = settled;
+    settled.then(() => {
+      if (budget.pending === settled) {
+        budget.pending = void 0;
+      }
+    });
+    return call;
+  }
+  function decompressWithCustomFunction(customFn, dataView, returnType, encoding, budget, maxDecompressedSize) {
+    const maxOutputLength = Math.min(budget.remaining + 1, MAX_CUSTOM_OUTPUT_LENGTH);
+    let result2;
+    try {
+      result2 = customFn(getUint8View(dataView), { maxOutputLength });
+    } catch (error) {
+      return rejectCustomFunctionError(error, budget, maxDecompressedSize, maxOutputLength);
+    }
+    if (isThenable(result2)) {
+      const charged = Promise.resolve(result2).then(
+        (resolvedResult) => chargeCustomResult(resolvedResult, returnType, encoding, budget, maxDecompressedSize),
+        (error) => rejectCustomFunctionError(error, budget, maxDecompressedSize, maxOutputLength)
+      );
+      return budget.pending ? charged : holdTurn(budget, charged);
+    }
+    return chargeCustomResult(result2, returnType, encoding, budget, maxDecompressedSize);
+  }
+  function rejectCustomFunctionError(error, budget, maxDecompressedSize, maxOutputLength) {
+    if (error && error.code === "ERR_BUFFER_TOO_LARGE") {
+      budget.remaining = -1;
+      return rejectExceedsMax(budget, maxDecompressedSize);
+    }
+    chargeFailedCall(budget, maxOutputLength);
+    return Promise.reject(error);
+  }
+  function chargeFailedCall(budget, maxOutputLength) {
+    if (budget.failed) {
+      budget.remaining -= maxOutputLength;
+    } else {
+      budget.failed = true;
+    }
+  }
+  function isThenable(value) {
+    return !!value && typeof value.then === "function";
+  }
+  function chargeCustomResult(result2, returnType, encoding, budget, maxDecompressedSize) {
+    budget.remaining -= getResultByteLength(result2);
+    if (budget.remaining < 0) {
+      return rejectExceedsMax(budget, maxDecompressedSize);
+    }
+    return convertCustomResult(result2, returnType, encoding);
+  }
+  function convertCustomResult(result2, returnType, encoding) {
+    if (returnType === "dataview") {
+      if (result2 instanceof ArrayBuffer) {
+        return new DataView(result2);
+      }
+      if (result2.byteOffset === 0 && result2.byteLength === result2.buffer.byteLength) {
+        return new DataView(result2.buffer);
+      }
+      return new DataView(result2.buffer.slice(result2.byteOffset, result2.byteOffset + result2.byteLength));
+    }
+    return new TextDecoder(encoding).decode(result2);
+  }
+  function getUint8View(dataView) {
+    return new Uint8Array(dataView.buffer, dataView.byteOffset, dataView.byteLength);
+  }
+  function readBoundedDecompressedStream(dataView, format, budget, maxDecompressedSize) {
+    const decompressionStream = new DecompressionStream(format);
+    const decompressedStream = new Blob([dataView]).stream().pipeThrough(decompressionStream);
+    const reader = decompressedStream.getReader();
+    const chunks = [];
+    let total = 0;
+    return pump();
+    function pump() {
+      return reader.read().then(({ done, value }) => {
+        if (done) {
+          return concatChunks(chunks, total);
+        }
+        total += value.byteLength;
+        budget.remaining -= value.byteLength;
+        if (budget.remaining < 0) {
+          return reader.cancel().then(() => rejectExceedsMax(budget, maxDecompressedSize));
+        }
+        chunks.push(value);
+        return pump();
+      });
+    }
+  }
+  function concatChunks(chunks, total) {
+    const out = new Uint8Array(total);
+    let offset = 0;
+    for (let i = 0; i < chunks.length; i++) {
+      out.set(chunks[i], offset);
+      offset += chunks[i].byteLength;
+    }
+    return out.buffer;
+  }
+  function decodeBuffer(arrayBuffer, returnType, encoding) {
+    if (returnType === "dataview") {
+      return new DataView(arrayBuffer);
+    }
+    return new TextDecoder(encoding).decode(arrayBuffer);
+  }
+  function getResultByteLength(result2) {
+    if (result2 && typeof result2.byteLength === "number") {
+      return result2.byteLength;
+    }
+    return 0;
+  }
+  function rejectExceedsMax(budget, maxDecompressedSize) {
+    if (!budget.warned && typeof console !== "undefined" && typeof console.warn === "function") {
+      budget.warned = true;
+      console.warn(`ExifReader: the total decompressed metadata size for this call would exceed the maximum of ${maxDecompressedSize} bytes, so this and any later compressed metadata blocks are skipped.`);
+    }
+    return Promise.reject(`Decompressed metadata exceeded the maximum allowed total size of ${maxDecompressedSize} bytes.`);
+  }
+  var MAX_CHARS_PER_CALL, JOIN_CHUNK_SIZE, MAX_METADATA_BLOCKS, COMPRESSION_METHOD_NONE, COMPRESSION_METHOD_DEFLATE, COMPRESSION_METHOD_BROTLI, DEFAULT_MAX_DECOMPRESSED_SIZE, MAX_CUSTOM_OUTPUT_LENGTH;
+  var init_utils = __esm({
+    "node_modules/exifreader/src/utils.js"() {
+      init_esbuild_shims();
+      MAX_CHARS_PER_CALL = 8192;
+      JOIN_CHUNK_SIZE = 65536;
+      MAX_METADATA_BLOCKS = 4096;
+      COMPRESSION_METHOD_NONE = void 0;
+      COMPRESSION_METHOD_DEFLATE = 0;
+      COMPRESSION_METHOD_BROTLI = "brotli";
+      DEFAULT_MAX_DECOMPRESSED_SIZE = 128 * 1024 * 1024;
+      MAX_CUSTOM_OUTPUT_LENGTH = 1024 * 1024 * 1024 - 1;
+    }
+  });
+
+  // node_modules/exifreader/src/node-require.js
+  function builtin(name) {
+    return firstLoaded(name, [webpackRequire, getBuiltinModule, mainModuleRequire]);
+  }
+  function optionalPackage(name) {
+    return firstLoaded(name, [webpackRequire]);
+  }
+  function firstLoaded(name, loaders) {
+    for (let i = 0; i < loaders.length; i++) {
+      try {
+        return loaders[i](name);
+      } catch (error) {
+      }
+    }
+    return void 0;
+  }
+  function webpackRequire(name) {
+    switch (name) {
+      case "fs":
+        try {
+          return __non_webpack_require__("fs");
+        } catch (error) {
+          throw error;
+        }
+      case "http":
+        return __non_webpack_require__("http");
+      case "https":
+        return __non_webpack_require__("https");
+      case "@xmldom/xmldom":
+        try {
+          return __non_webpack_require__("@xmldom/xmldom");
+        } catch (error) {
+          throw error;
+        }
+      default:
+        throw new Error(`No webpack require for ${name}.`);
+    }
+  }
+  function getBuiltinModule(name) {
+    return globalThis.process.getBuiltinModule(name);
+  }
+  function mainModuleRequire(name) {
+    return globalThis.process.mainModule.require(name);
+  }
+  var node_require_default;
+  var init_node_require = __esm({
+    "node_modules/exifreader/src/node-require.js"() {
+      init_esbuild_shims();
+      node_require_default = {
+        builtin,
+        optionalPackage
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/file-loaders.js
+  function isFilePathOrURL(data) {
+    return typeof data === "string";
+  }
+  function isBrowserFileObject(data) {
+    return typeof File !== "undefined" && data instanceof File;
+  }
+  function isDataUri(filename) {
+    return /^data:[^;,]*(;base64)?,/.test(filename);
+  }
+  function loadFile(filename, options) {
+    const range = legacyRange(options);
+    if (!range) {
+      return rejectInvalidLength();
+    }
+    if (/^\w+:\/\//.test(filename)) {
+      if (typeof fetch !== "undefined") {
+        return fetchRange(filename, range).then((r) => r.buffer);
+      }
+      return nodeGetRange(filename, range).then((r) => r.buffer);
+    }
+    if (isDataUri(filename)) {
+      return Promise.resolve().then(() => dataUriToBuffer(filename));
+    }
+    return readLocalFileRange(filename, range).then((r) => r.buffer);
+  }
+  function loadFileObject(file, options) {
+    const range = legacyRange(options);
+    if (!range) {
+      return rejectInvalidLength();
+    }
+    return readFileObjectRange(file, range).then((r) => r.buffer);
+  }
+  function legacyRange(options) {
+    const length = options ? options.length : void 0;
+    if (length === void 0 || length === null) {
+      return { start: 0 };
+    }
+    if (Number.isFinite(length) && length >= 0) {
+      const end = Math.floor(length);
+      return { start: 0, end, maxBytes: end };
+    }
+    return void 0;
+  }
+  function rejectInvalidLength() {
+    return Promise.reject(new Error('The length option must be a finite non-negative number or "auto".'));
+  }
+  function fetchRange(url, { start = 0, end, maxBytes } = {}) {
+    if (isEmptyRange(start, end)) {
+      return Promise.resolve({ buffer: new ArrayBuffer(0), totalSize: void 0, status: void 0 });
+    }
+    const options = { method: "GET" };
+    if (start > 0 || end !== void 0 && end !== Infinity) {
+      options.headers = { range: buildRangeHeader(start, end) };
+    }
+    return fetch(url, options).then((response) => {
+      const status = response && typeof response.status === "number" ? response.status : void 0;
+      if (status !== void 0 && !isAcceptableFetchStatus(status)) {
+        cancelQuietly(response.body);
+        const statusText = response.statusText || "";
+        return Promise.reject(new Error(`Could not fetch file: ${status} ${statusText}`.trim()));
+      }
+      const totalSize = totalSizeFromFetchResponse(response);
+      if (status === HTTP_STATUS_RANGE_NOT_SATISFIABLE) {
+        cancelQuietly(response.body);
+        return { buffer: new ArrayBuffer(0), totalSize, status };
+      }
+      return readFetchBody(response, maxBytes).then((buffer) => ({ buffer, totalSize, status }));
+    });
+  }
+  function readFetchBody(response, maxBytes) {
+    if (!isByteLimit(maxBytes)) {
+      return Promise.resolve(response.arrayBuffer());
+    }
+    if (response.body && typeof response.body.getReader === "function") {
+      return readStreamUpTo(response.body.getReader(), maxBytes);
+    }
+    return Promise.resolve(response.arrayBuffer()).then((buffer) => buffer.slice(0, maxBytes));
+  }
+  function isByteLimit(maxBytes) {
+    return Number.isInteger(maxBytes) && maxBytes >= 0;
+  }
+  function readStreamUpTo(reader, maxBytes) {
+    return new Promise((resolve2, reject2) => {
+      const collector = createByteCollector(maxBytes);
+      readNextChunk();
+      function readNextChunk() {
+        if (collector.isFull()) {
+          resolve2(collector.toArrayBuffer());
+          cancelQuietly(reader);
+          return;
+        }
+        reader.read().then(onChunk).then(void 0, onFailure);
+      }
+      function onChunk(result2) {
+        if (result2.done) {
+          resolve2(collector.toArrayBuffer());
+          return;
+        }
+        collector.add(result2.value);
+        readNextChunk();
+      }
+      function onFailure(error) {
+        reject2(error);
+        cancelQuietly(reader);
+      }
+    });
+  }
+  function cancelQuietly(cancellable) {
+    Promise.resolve().then(() => cancellable.cancel()).then(void 0, () => void 0);
+  }
+  function createByteCollector(maxBytes) {
+    let bytes = new Uint8Array(0);
+    let count = 0;
+    return {
+      add(chunk) {
+        const size = Math.min(chunk.byteLength, maxBytes - count);
+        if (count + size > bytes.length) {
+          grow(count + size);
+        }
+        bytes.set(chunk.subarray(0, size), count);
+        count += size;
+      },
+      isFull() {
+        return count >= maxBytes;
+      },
+      toArrayBuffer() {
+        if (bytes.length === count) {
+          return bytes.buffer;
+        }
+        const exact = new Uint8Array(count);
+        exact.set(bytes.subarray(0, count));
+        return exact.buffer;
+      }
+    };
+    function grow(needed) {
+      const larger = new Uint8Array(Math.min(maxBytes, Math.max(needed, 2 * bytes.length)));
+      larger.set(bytes.subarray(0, count));
+      bytes = larger;
+    }
+  }
+  function isEmptyRange(start, end) {
+    return end !== void 0 && end !== Infinity && end <= start;
+  }
+  function buildRangeHeader(start, end) {
+    if (end === void 0 || end === Infinity) {
+      return `bytes=${start}-`;
+    }
+    return `bytes=${start}-${end - 1}`;
+  }
+  function totalSizeFromFetchResponse(response) {
+    if (!response || !response.headers || typeof response.headers.get !== "function") {
+      return void 0;
+    }
+    return totalSizeFromRangeHeaders(response.headers.get("Content-Range"), response.headers.get("Content-Length"));
+  }
+  function isAcceptableFetchStatus(status) {
+    if (status >= HTTP_STATUS_OK && status <= HTTP_STATUS_SUCCESS_MAX) {
+      return true;
+    }
+    return status === HTTP_STATUS_RANGE_NOT_SATISFIABLE;
+  }
+  function nodeGetRange(url, { start = 0, end, maxBytes } = {}) {
+    if (isEmptyRange(start, end)) {
+      return Promise.resolve({ buffer: Buffer.alloc(0), totalSize: void 0, status: void 0 });
+    }
+    return new Promise((resolve2, reject2) => {
+      const options = {};
+      if (start > 0 || end !== void 0 && end !== Infinity) {
+        options.headers = { range: buildRangeHeader(start, end) };
+      }
+      const get5 = requireNodeGet(url);
+      if (!get5) {
+        return reject2(new Error("Node http support is not available."));
+      }
+      get5(url, options, (response) => {
+        if (response.statusCode >= HTTP_STATUS_OK && response.statusCode <= HTTP_STATUS_SUCCESS_MAX) {
+          const totalSize = totalSizeFromNodeResponse(response);
+          if (isByteLimit(maxBytes)) {
+            readNodeResponseUpTo(response, maxBytes, (buffer) => resolve2({
+              buffer,
+              totalSize,
+              status: response.statusCode
+            }), reject2);
+          } else {
+            const data = [];
+            response.on("data", (chunk) => data.push(Buffer.from(chunk)));
+            response.on("error", (error) => reject2(error));
+            response.on("end", () => resolve2({
+              buffer: Buffer.concat(data),
+              totalSize,
+              status: response.statusCode
+            }));
+          }
+        } else if (response.statusCode === HTTP_STATUS_RANGE_NOT_SATISFIABLE) {
+          const totalSize = totalSizeFromNodeResponse(response);
+          response.destroy();
+          resolve2({ buffer: Buffer.alloc(0), totalSize, status: response.statusCode });
+        } else {
+          reject2(new Error(`Could not fetch file: ${response.statusCode} ${response.statusMessage}`));
+          response.destroy();
+        }
+      }).on("error", (error) => reject2(error));
+    });
+  }
+  function readNodeResponseUpTo(response, maxBytes, onBuffer, onError) {
+    const collector = createByteCollector(maxBytes);
+    let finished = false;
+    response.on("error", onError);
+    if (collector.isFull()) {
+      finish();
+      response.destroy();
+    } else {
+      response.on("data", onData);
+      response.on("end", finish);
+    }
+    function onData(chunk) {
+      if (finished) {
+        return;
+      }
+      collector.add(chunk);
+      if (collector.isFull()) {
+        finish();
+        response.destroy();
+      }
+    }
+    function finish() {
+      finished = true;
+      onBuffer(Buffer.from(collector.toArrayBuffer()));
+    }
+  }
+  function totalSizeFromNodeResponse(response) {
+    if (!response || !response.headers) {
+      return void 0;
+    }
+    return totalSizeFromRangeHeaders(response.headers["content-range"], response.headers["content-length"]);
+  }
+  function totalSizeFromRangeHeaders(contentRange, contentLength) {
+    if (contentRange) {
+      const match = /\/(\d+|\*)$/.exec(contentRange);
+      if (match && match[1] !== "*") {
+        return parseInt(match[1], 10);
+      }
+    }
+    if (contentLength) {
+      const n = parseInt(contentLength, 10);
+      if (Number.isFinite(n)) {
+        return n;
+      }
+    }
+    return void 0;
+  }
+  function requireNodeGet(url) {
+    const http = node_require_default.builtin(/^https:\/\//.test(url) ? "https" : "http");
+    return http && http.get;
+  }
+  function readLocalFileRange(filename, { start = 0, end, totalSize } = {}) {
+    return new Promise((resolve2, reject2) => {
+      const fs = node_require_default.builtin("fs");
+      if (!fs) {
+        return reject2(new Error("Node file system support is not available."));
+      }
+      fs.open(filename, (openErr, fd) => {
+        if (openErr) {
+          return reject2(openErr);
+        }
+        resolveTotalSize(fs, filename, totalSize, (statErr, total) => {
+          if (statErr) {
+            return fs.close(fd, () => reject2(statErr));
+          }
+          const effectiveEnd = end === void 0 || end === Infinity || end > total ? total : end;
+          const effectiveStart = Math.min(Math.max(0, start), effectiveEnd);
+          const size = effectiveEnd - effectiveStart;
+          const buffer = Buffer.alloc(size);
+          if (size === 0) {
+            return fs.close(fd, (closeErr) => finishLocalRead(filename, closeErr, buffer, total, resolve2));
+          }
+          fs.read(fd, { buffer, length: size, position: effectiveStart }, (readErr) => {
+            if (readErr) {
+              return fs.close(fd, () => reject2(readErr));
             }
-          }
-        }
-      }
-      function freeze(object, oc) {
-        if (oc === void 0) {
-          oc = Object;
-        }
-        if (oc && typeof oc.getOwnPropertyDescriptors === "function") {
-          object = oc.create(null, oc.getOwnPropertyDescriptors(object));
-        }
-        return oc && typeof oc.freeze === "function" ? oc.freeze(object) : object;
-      }
-      function hasOwn(object, key) {
-        return Object.prototype.hasOwnProperty.call(object, key);
-      }
-      function assign(target, source) {
-        if (target === null || typeof target !== "object") {
-          throw new TypeError("target is not an object");
-        }
-        for (var key in source) {
-          if (hasOwn(source, key)) {
-            target[key] = source[key];
-          }
-        }
-        return target;
-      }
-      var HTML_BOOLEAN_ATTRIBUTES = freeze({
-        allowfullscreen: true,
-        async: true,
-        autofocus: true,
-        autoplay: true,
-        checked: true,
-        controls: true,
-        default: true,
-        defer: true,
-        disabled: true,
-        formnovalidate: true,
-        hidden: true,
-        ismap: true,
-        itemscope: true,
-        loop: true,
-        multiple: true,
-        muted: true,
-        nomodule: true,
-        novalidate: true,
-        open: true,
-        playsinline: true,
-        readonly: true,
-        required: true,
-        reversed: true,
-        selected: true
+            fs.close(fd, (closeErr) => finishLocalRead(filename, closeErr, buffer, total, resolve2));
+          });
+        });
       });
-      function isHTMLBooleanAttribute(name) {
-        return hasOwn(HTML_BOOLEAN_ATTRIBUTES, name.toLowerCase());
-      }
-      var HTML_VOID_ELEMENTS = freeze({
-        area: true,
-        base: true,
-        br: true,
-        col: true,
-        embed: true,
-        hr: true,
-        img: true,
-        input: true,
-        link: true,
-        meta: true,
-        param: true,
-        source: true,
-        track: true,
-        wbr: true
-      });
-      function isHTMLVoidElement(tagName) {
-        return hasOwn(HTML_VOID_ELEMENTS, tagName.toLowerCase());
-      }
-      var HTML_RAW_TEXT_ELEMENTS = freeze({
-        script: false,
-        style: false,
-        textarea: true,
-        title: true
-      });
-      function isHTMLRawTextElement(tagName) {
-        var key = tagName.toLowerCase();
-        return hasOwn(HTML_RAW_TEXT_ELEMENTS, key) && !HTML_RAW_TEXT_ELEMENTS[key];
-      }
-      function isHTMLEscapableRawTextElement(tagName) {
-        var key = tagName.toLowerCase();
-        return hasOwn(HTML_RAW_TEXT_ELEMENTS, key) && HTML_RAW_TEXT_ELEMENTS[key];
-      }
-      function isHTMLMimeType(mimeType) {
-        return mimeType === MIME_TYPE.HTML;
-      }
-      function hasDefaultHTMLNamespace(mimeType) {
-        return isHTMLMimeType(mimeType) || mimeType === MIME_TYPE.XML_XHTML_APPLICATION;
-      }
-      var MIME_TYPE = freeze({
-        /**
-         * `text/html`, the only mime type that triggers treating an XML document as HTML.
-         *
-         * @see https://www.iana.org/assignments/media-types/text/html IANA MimeType registration
-         * @see https://en.wikipedia.org/wiki/HTML Wikipedia
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/DOMParser/parseFromString MDN
-         * @see https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#dom-domparser-parsefromstring
-         *      WHATWG HTML Spec
-         */
-        HTML: "text/html",
-        /**
-         * `application/xml`, the standard mime type for XML documents.
-         *
-         * @see https://www.iana.org/assignments/media-types/application/xml IANA MimeType
-         *      registration
-         * @see https://tools.ietf.org/html/rfc7303#section-9.1 RFC 7303
-         * @see https://en.wikipedia.org/wiki/XML_and_MIME Wikipedia
-         */
-        XML_APPLICATION: "application/xml",
-        /**
-         * `text/xml`, an alias for `application/xml`.
-         *
-         * @see https://tools.ietf.org/html/rfc7303#section-9.2 RFC 7303
-         * @see https://www.iana.org/assignments/media-types/text/xml IANA MimeType registration
-         * @see https://en.wikipedia.org/wiki/XML_and_MIME Wikipedia
-         */
-        XML_TEXT: "text/xml",
-        /**
-         * `application/xhtml+xml`, indicates an XML document that has the default HTML namespace,
-         * but is parsed as an XML document.
-         *
-         * @see https://www.iana.org/assignments/media-types/application/xhtml+xml IANA MimeType
-         *      registration
-         * @see https://dom.spec.whatwg.org/#dom-domimplementation-createdocument WHATWG DOM Spec
-         * @see https://en.wikipedia.org/wiki/XHTML Wikipedia
-         */
-        XML_XHTML_APPLICATION: "application/xhtml+xml",
-        /**
-         * `image/svg+xml`,
-         *
-         * @see https://www.iana.org/assignments/media-types/image/svg+xml IANA MimeType registration
-         * @see https://www.w3.org/TR/SVG11/ W3C SVG 1.1
-         * @see https://en.wikipedia.org/wiki/Scalable_Vector_Graphics Wikipedia
-         */
-        XML_SVG_IMAGE: "image/svg+xml"
-      });
-      var _MIME_TYPES = Object.keys(MIME_TYPE).map(function(key) {
-        return MIME_TYPE[key];
-      });
-      function isValidMimeType(mimeType) {
-        return _MIME_TYPES.indexOf(mimeType) > -1;
-      }
-      var NAMESPACE = freeze({
-        /**
-         * The XHTML namespace.
-         *
-         * @see http://www.w3.org/1999/xhtml
-         */
-        HTML: "http://www.w3.org/1999/xhtml",
-        /**
-         * The SVG namespace.
-         *
-         * @see http://www.w3.org/2000/svg
-         */
-        SVG: "http://www.w3.org/2000/svg",
-        /**
-         * The `xml:` namespace.
-         *
-         * @see http://www.w3.org/XML/1998/namespace
-         */
-        XML: "http://www.w3.org/XML/1998/namespace",
-        /**
-         * The `xmlns:` namespace.
-         *
-         * @see https://www.w3.org/2000/xmlns/
-         */
-        XMLNS: "http://www.w3.org/2000/xmlns/"
-      });
-      exports2.assign = assign;
-      exports2.find = find;
-      exports2.freeze = freeze;
-      exports2.HTML_BOOLEAN_ATTRIBUTES = HTML_BOOLEAN_ATTRIBUTES;
-      exports2.HTML_RAW_TEXT_ELEMENTS = HTML_RAW_TEXT_ELEMENTS;
-      exports2.HTML_VOID_ELEMENTS = HTML_VOID_ELEMENTS;
-      exports2.hasDefaultHTMLNamespace = hasDefaultHTMLNamespace;
-      exports2.hasOwn = hasOwn;
-      exports2.isHTMLBooleanAttribute = isHTMLBooleanAttribute;
-      exports2.isHTMLRawTextElement = isHTMLRawTextElement;
-      exports2.isHTMLEscapableRawTextElement = isHTMLEscapableRawTextElement;
-      exports2.isHTMLMimeType = isHTMLMimeType;
-      exports2.isHTMLVoidElement = isHTMLVoidElement;
-      exports2.isValidMimeType = isValidMimeType;
-      exports2.MIME_TYPE = MIME_TYPE;
-      exports2.NAMESPACE = NAMESPACE;
+    });
+  }
+  function resolveTotalSize(fs, filename, totalSize, cb) {
+    if (totalSize !== void 0) {
+      return cb(null, totalSize);
+    }
+    fs.stat(filename, (err, stat) => cb(err, err ? void 0 : stat.size));
+  }
+  function finishLocalRead(filename, closeErr, buffer, total, resolve2) {
+    if (closeErr) {
+      console.warn(`Could not close file ${filename}:`, closeErr);
+    }
+    resolve2({ buffer, totalSize: total });
+  }
+  function readFileObjectRange(file, { start = 0, end } = {}) {
+    return new Promise((resolve2) => {
+      const totalSize = typeof file.size === "number" ? file.size : void 0;
+      const blob = sliceFileObject(file, start, end, totalSize);
+      resolve2(readBlob(blob).then((buffer) => ({ buffer, totalSize })));
+    });
+  }
+  function sliceFileObject(file, start, end, totalSize) {
+    const hasSlice = file && typeof file.slice === "function";
+    if (hasSlice && (start > 0 || end !== void 0 && end !== Infinity)) {
+      const sliceEnd = end === void 0 || end === Infinity ? totalSize : end;
+      return file.slice(start, sliceEnd);
+    }
+    return file;
+  }
+  function readBlob(blob) {
+    if (typeof blob.arrayBuffer === "function") {
+      return Promise.resolve(blob.arrayBuffer());
+    }
+    return new Promise((resolve2, reject2) => {
+      const reader = new FileReader();
+      reader.onload = (readerEvent) => resolve2(readerEvent.target.result);
+      reader.onerror = () => reject2(reader.error);
+      reader.readAsArrayBuffer(blob);
+    });
+  }
+  function concatBuffers(a, b) {
+    if (!a) {
+      return b;
+    }
+    if (!b) {
+      return a;
+    }
+    if (typeof Buffer !== "undefined" && Buffer.isBuffer(a) && Buffer.isBuffer(b)) {
+      return Buffer.concat([a, b]);
+    }
+    const aBytes = bufferToBytes(a);
+    const bBytes = bufferToBytes(b);
+    const out = new Uint8Array(aBytes.byteLength + bBytes.byteLength);
+    out.set(aBytes, 0);
+    out.set(bBytes, aBytes.byteLength);
+    return out.buffer;
+  }
+  function bufferToBytes(b) {
+    if (b instanceof ArrayBuffer) {
+      return new Uint8Array(b);
+    }
+    if (typeof Buffer !== "undefined" && Buffer.isBuffer(b)) {
+      return new Uint8Array(b.buffer, b.byteOffset, b.byteLength);
+    }
+    if (isArrayBufferViewLike(b)) {
+      return new Uint8Array(b.buffer, b.byteOffset, b.byteLength);
+    }
+    return new Uint8Array(b);
+  }
+  var HTTP_STATUS_OK, HTTP_STATUS_SUCCESS_MAX, HTTP_STATUS_RANGE_NOT_SATISFIABLE;
+  var init_file_loaders = __esm({
+    "node_modules/exifreader/src/file-loaders.js"() {
+      init_esbuild_shims();
+      init_utils();
+      init_node_require();
+      HTTP_STATUS_OK = 200;
+      HTTP_STATUS_SUCCESS_MAX = 299;
+      HTTP_STATUS_RANGE_NOT_SATISFIABLE = 416;
     }
   });
 
-  // node_modules/@xmldom/xmldom/lib/errors.js
-  var require_errors = __commonJS({
-    "node_modules/@xmldom/xmldom/lib/errors.js"(exports2) {
-      "use strict";
-      init_esbuild_shims();
-      var conventions = require_conventions();
-      function extendError(constructor, writableName) {
-        constructor.prototype = Object.create(Error.prototype, {
-          constructor: { value: constructor },
-          name: { value: constructor.name, enumerable: true, writable: writableName }
+  // node_modules/exifreader/src/load-auto.js
+  function validateAutoOptions(options) {
+    if (options.expanded !== true || options.includeOffsets !== true) {
+      throw new Error('length: "auto" requires both expanded: true and includeOffsets: true.');
+    }
+  }
+  function makeLoadAuto(loadFromData2) {
+    return function loadAuto(data, options) {
+      assertPromiseSupport();
+      const asyncOptions = objectAssign({}, options, { async: true });
+      if (isFilePathOrURL(data)) {
+        return loadAdaptiveFromFilenameOrUrl(data, asyncOptions);
+      }
+      if (isBrowserFileObject(data)) {
+        return loadAdaptiveFromFileObject(data, asyncOptions);
+      }
+      return loadAdaptiveFromMemory(data, asyncOptions);
+    };
+    function loadAdaptiveFromFilenameOrUrl(filename, options) {
+      if (/^\w+:\/\//.test(filename)) {
+        if (typeof fetch !== "undefined") {
+          return adaptiveLoop({
+            readRange: (start, end) => fetchRange(filename, { start, end, maxBytes: end }),
+            options
+          });
+        }
+        return adaptiveLoop({
+          readRange: (start, end) => nodeGetRange(filename, { start, end, maxBytes: end }),
+          options
         });
       }
-      var DOMExceptionName = conventions.freeze({
-        /**
-         * the default value as defined by the spec
-         */
-        Error: "Error",
-        /**
-         * @deprecated
-         * Use RangeError instead.
-         */
-        IndexSizeError: "IndexSizeError",
-        /**
-         * @deprecated
-         * Just to match the related static code, not part of the spec.
-         */
-        DomstringSizeError: "DomstringSizeError",
-        HierarchyRequestError: "HierarchyRequestError",
-        WrongDocumentError: "WrongDocumentError",
-        InvalidCharacterError: "InvalidCharacterError",
-        /**
-         * @deprecated
-         * Just to match the related static code, not part of the spec.
-         */
-        NoDataAllowedError: "NoDataAllowedError",
-        NoModificationAllowedError: "NoModificationAllowedError",
-        NotFoundError: "NotFoundError",
-        NotSupportedError: "NotSupportedError",
-        InUseAttributeError: "InUseAttributeError",
-        InvalidStateError: "InvalidStateError",
-        SyntaxError: "SyntaxError",
-        InvalidModificationError: "InvalidModificationError",
-        NamespaceError: "NamespaceError",
-        /**
-         * @deprecated
-         * Use TypeError for invalid arguments,
-         * "NotSupportedError" DOMException for unsupported operations,
-         * and "NotAllowedError" DOMException for denied requests instead.
-         */
-        InvalidAccessError: "InvalidAccessError",
-        /**
-         * @deprecated
-         * Just to match the related static code, not part of the spec.
-         */
-        ValidationError: "ValidationError",
-        /**
-         * @deprecated
-         * Use TypeError instead.
-         */
-        TypeMismatchError: "TypeMismatchError",
-        SecurityError: "SecurityError",
-        NetworkError: "NetworkError",
-        AbortError: "AbortError",
-        /**
-         * @deprecated
-         * Just to match the related static code, not part of the spec.
-         */
-        URLMismatchError: "URLMismatchError",
-        QuotaExceededError: "QuotaExceededError",
-        TimeoutError: "TimeoutError",
-        InvalidNodeTypeError: "InvalidNodeTypeError",
-        DataCloneError: "DataCloneError",
-        EncodingError: "EncodingError",
-        NotReadableError: "NotReadableError",
-        UnknownError: "UnknownError",
-        ConstraintError: "ConstraintError",
-        DataError: "DataError",
-        TransactionInactiveError: "TransactionInactiveError",
-        ReadOnlyError: "ReadOnlyError",
-        VersionError: "VersionError",
-        OperationError: "OperationError",
-        NotAllowedError: "NotAllowedError",
-        OptOutError: "OptOutError"
+      if (isDataUri(filename)) {
+        return Promise.resolve().then(() => dataUriToBuffer(filename)).then((buffer) => loadAdaptiveFromMemory(buffer, options));
+      }
+      return adaptiveLoop({
+        readRange: (start, end, ctx) => readLocalFileRange(filename, {
+          start,
+          end,
+          totalSize: ctx ? ctx.totalSize : void 0
+        }),
+        options
       });
-      var DOMExceptionNames = Object.keys(DOMExceptionName);
-      function isValidDomExceptionCode(value) {
-        return typeof value === "number" && value >= 1 && value <= 25;
-      }
-      function endsWithError(value) {
-        return typeof value === "string" && value.substring(value.length - DOMExceptionName.Error.length) === DOMExceptionName.Error;
-      }
-      function DOMException(messageOrCode, nameOrMessage) {
-        if (isValidDomExceptionCode(messageOrCode)) {
-          this.name = DOMExceptionNames[messageOrCode];
-          this.message = nameOrMessage || "";
-        } else {
-          this.message = messageOrCode;
-          this.name = endsWithError(nameOrMessage) ? nameOrMessage : DOMExceptionName.Error;
-        }
-        if (Error.captureStackTrace) Error.captureStackTrace(this, DOMException);
-      }
-      extendError(DOMException, true);
-      Object.defineProperties(DOMException.prototype, {
-        code: {
-          enumerable: true,
-          get: function() {
-            var code = DOMExceptionNames.indexOf(this.name);
-            if (isValidDomExceptionCode(code)) return code;
-            return 0;
-          }
-        }
+    }
+    function loadAdaptiveFromFileObject(file, options) {
+      return adaptiveLoop({
+        readRange: (start, end) => readFileObjectRange(file, { start, end }),
+        options
       });
-      var ExceptionCode = {
-        INDEX_SIZE_ERR: 1,
-        DOMSTRING_SIZE_ERR: 2,
-        HIERARCHY_REQUEST_ERR: 3,
-        WRONG_DOCUMENT_ERR: 4,
-        INVALID_CHARACTER_ERR: 5,
-        NO_DATA_ALLOWED_ERR: 6,
-        NO_MODIFICATION_ALLOWED_ERR: 7,
-        NOT_FOUND_ERR: 8,
-        NOT_SUPPORTED_ERR: 9,
-        INUSE_ATTRIBUTE_ERR: 10,
-        INVALID_STATE_ERR: 11,
-        SYNTAX_ERR: 12,
-        INVALID_MODIFICATION_ERR: 13,
-        NAMESPACE_ERR: 14,
-        INVALID_ACCESS_ERR: 15,
-        VALIDATION_ERR: 16,
-        TYPE_MISMATCH_ERR: 17,
-        SECURITY_ERR: 18,
-        NETWORK_ERR: 19,
-        ABORT_ERR: 20,
-        URL_MISMATCH_ERR: 21,
-        QUOTA_EXCEEDED_ERR: 22,
-        TIMEOUT_ERR: 23,
-        INVALID_NODE_TYPE_ERR: 24,
-        DATA_CLONE_ERR: 25
-      };
-      var entries = Object.entries(ExceptionCode);
-      for (i = 0; i < entries.length; i++) {
-        key = entries[i][0];
-        DOMException[key] = entries[i][1];
+    }
+    function loadAdaptiveFromMemory(data, options) {
+      return Promise.resolve().then(() => loadFromData2(data, options)).then((tags) => {
+        if (!tags || !tags.metadataRange) {
+          throw new Error(AUTO_MEMORY_UNSUPPORTED_ERROR);
+        }
+        const end = tags.metadataRange.end;
+        tags.metadataRange.buffer = sliceInputBuffer(data, end);
+        tags.metadataRange.fetched = bufferByteLength(tags.metadataRange.buffer);
+        tags.metadataRange.requests = 0;
+        return tags;
+      });
+    }
+    function adaptiveLoop({ readRange, options }) {
+      return runAdaptiveIteration({
+        readRange,
+        options,
+        buffer: null,
+        fetched: 0,
+        requests: 0,
+        totalSize: void 0,
+        need: AUTO_INITIAL_LENGTH,
+        iter: 0
+      });
+    }
+    function runAdaptiveIteration(state) {
+      if (state.iter >= AUTO_MAX_ITERATIONS) {
+        return runAdaptiveFallback(state);
       }
-      var key;
-      var i;
-      function ParseError(message, locator) {
-        this.message = message;
-        this.locator = locator;
-        if (Error.captureStackTrace) Error.captureStackTrace(this, ParseError);
+      if (state.totalSize !== void 0) {
+        state.need = Math.min(state.need, state.totalSize);
       }
-      extendError(ParseError);
-      exports2.DOMException = DOMException;
-      exports2.DOMExceptionName = DOMExceptionName;
-      exports2.ExceptionCode = ExceptionCode;
-      exports2.ParseError = ParseError;
+      if (state.need <= state.fetched) {
+        return runAdaptiveFallback(state);
+      }
+      return state.readRange(state.fetched, state.need, { totalSize: state.totalSize }).then((chunk) => {
+        state.requests++;
+        if (chunk.status === HTTP_STATUS_RANGE_NOT_SATISFIABLE) {
+          return handleAdaptive416(state);
+        }
+        mergeAdaptiveChunk(state, chunk);
+        return Promise.resolve(loadFromData2(state.buffer, state.options)).then((tags) => decideAdaptiveNext(state, tags));
+      });
+    }
+    function decideAdaptiveNext(state, tags) {
+      const range = tags && tags.metadataRange;
+      if (range && range.complete) {
+        return attachAdaptiveFields(tags, state.buffer, state.fetched, state.requests);
+      }
+      const reachedEnd = state.totalSize !== void 0 && state.fetched >= state.totalSize;
+      if (!range && reachedEnd) {
+        throw new Error(AUTO_UNSUPPORTED_ERROR);
+      }
+      const nextNeed = pickNextNeed({ range, totalSize: state.totalSize, fetched: state.fetched });
+      if (nextNeed <= state.fetched) {
+        if (range) {
+          return attachAdaptiveFields(tags, state.buffer, state.fetched, state.requests);
+        }
+        throw new Error(AUTO_UNSUPPORTED_ERROR);
+      }
+      state.need = nextNeed;
+      state.iter++;
+      return runAdaptiveIteration(state);
+    }
+    function handleAdaptive416(state) {
+      return state.readRange(0, Infinity, { totalSize: void 0 }).then((full) => {
+        state.requests++;
+        state.buffer = full.buffer;
+        state.fetched = bufferByteLength(state.buffer);
+        if (full.totalSize !== void 0) {
+          state.totalSize = full.totalSize;
+        }
+        return Promise.resolve(loadFromData2(state.buffer, state.options));
+      }).then((tags) => {
+        if (!tags || !tags.metadataRange) {
+          throw new Error(AUTO_UNSUPPORTED_ERROR);
+        }
+        return attachAdaptiveFields(tags, state.buffer, state.fetched, state.requests);
+      });
+    }
+    function runAdaptiveFallback(state) {
+      console.warn(
+        // eslint-disable-line no-console
+        `ExifReader: length:"auto" did not converge in ${AUTO_MAX_ITERATIONS} iterations; falling back to full read.`
+      );
+      let chunkPromise;
+      if (state.totalSize !== void 0 && state.fetched < state.totalSize) {
+        chunkPromise = state.readRange(state.fetched, state.totalSize, { totalSize: state.totalSize }).then((chunk) => {
+          state.requests++;
+          mergeAdaptiveChunk(state, chunk);
+        });
+      } else if (state.totalSize === void 0) {
+        chunkPromise = state.readRange(state.fetched, Infinity, { totalSize: state.totalSize }).then((chunk) => {
+          state.requests++;
+          mergeAdaptiveChunk(state, chunk);
+        });
+      } else {
+        chunkPromise = Promise.resolve();
+      }
+      return chunkPromise.then(() => Promise.resolve(loadFromData2(state.buffer, state.options))).then((tags) => {
+        if (!tags || !tags.metadataRange) {
+          throw new Error(AUTO_UNSUPPORTED_ERROR);
+        }
+        return attachAdaptiveFields(tags, state.buffer, state.fetched, state.requests);
+      });
+    }
+  }
+  function mergeAdaptiveChunk(state, chunk) {
+    if (chunk.status === HTTP_STATUS_OK && state.fetched > 0) {
+      state.buffer = chunk.buffer;
+      state.fetched = bufferByteLength(state.buffer);
+      if (chunk.totalSize !== void 0) {
+        state.totalSize = chunk.totalSize;
+      }
+      return;
+    }
+    if (chunk.totalSize !== void 0 && state.totalSize === void 0) {
+      state.totalSize = chunk.totalSize;
+    }
+    state.buffer = concatBuffers(state.buffer, chunk.buffer);
+    state.fetched = bufferByteLength(state.buffer);
+  }
+  function attachAdaptiveFields(tags, buffer, fetched, requests) {
+    const end = tags.metadataRange.end;
+    tags.metadataRange.buffer = sliceBufferToEnd(buffer, end);
+    tags.metadataRange.fetched = fetched;
+    tags.metadataRange.requests = requests;
+    return tags;
+  }
+  function pickNextNeed({ range, totalSize, fetched }) {
+    if (range) {
+      return Math.min(
+        Math.max(range.end, fetched * 2),
+        totalSize !== void 0 ? totalSize : Infinity
+      );
+    }
+    if (totalSize !== void 0) {
+      return totalSize;
+    }
+    return fetched * 2;
+  }
+  function sliceBufferToEnd(buffer, end) {
+    if (!buffer || typeof end !== "number" || end < 0) {
+      return buffer;
+    }
+    if (typeof Buffer !== "undefined" && Buffer.isBuffer(buffer)) {
+      return Buffer.from(buffer.subarray(0, Math.min(end, buffer.length)));
+    }
+    if (buffer instanceof ArrayBuffer) {
+      return buffer.slice(0, Math.min(end, buffer.byteLength));
+    }
+    if (typeof SharedArrayBuffer !== "undefined" && buffer instanceof SharedArrayBuffer) {
+      return buffer.slice(0, Math.min(end, buffer.byteLength));
+    }
+    return buffer;
+  }
+  function sliceInputBuffer(data, end) {
+    if (typeof Buffer !== "undefined" && Buffer.isBuffer(data)) {
+      return Buffer.from(data.subarray(0, end));
+    }
+    if (data instanceof ArrayBuffer) {
+      return data.slice(0, end);
+    }
+    if (typeof SharedArrayBuffer !== "undefined" && data instanceof SharedArrayBuffer) {
+      return data.slice(0, end);
+    }
+    if (isArrayBufferViewLike(data)) {
+      const viewEnd = Math.max(0, Math.min(end, data.byteLength));
+      return data.buffer.slice(data.byteOffset, data.byteOffset + viewEnd);
+    }
+    return data;
+  }
+  function bufferByteLength(buffer) {
+    if (!buffer) {
+      return 0;
+    }
+    if (typeof buffer.byteLength === "number") {
+      return buffer.byteLength;
+    }
+    if (typeof buffer.length === "number") {
+      return buffer.length;
+    }
+    return 0;
+  }
+  var AUTO_INITIAL_LENGTH, AUTO_MAX_ITERATIONS, AUTO_UNSUPPORTED_ERROR, AUTO_MEMORY_UNSUPPORTED_ERROR;
+  var init_load_auto = __esm({
+    "node_modules/exifreader/src/load-auto.js"() {
+      init_esbuild_shims();
+      init_file_loaders();
+      init_utils();
+      AUTO_INITIAL_LENGTH = 128 * 1024;
+      AUTO_MAX_ITERATIONS = 4;
+      AUTO_UNSUPPORTED_ERROR = 'length: "auto" could not locate metadata in this file (no metadata blocks found after reading the file \u2014 e.g. plain TIFF, bare JPEG XL codestream, or a file with no recognizable metadata).';
+      AUTO_MEMORY_UNSUPPORTED_ERROR = 'length: "auto" is not supported for this file type (no leading metadata container \u2014 e.g. plain TIFF or bare JPEG XL codestream).';
     }
   });
 
-  // node_modules/@xmldom/xmldom/lib/grammar.js
-  var require_grammar = __commonJS({
-    "node_modules/@xmldom/xmldom/lib/grammar.js"(exports2) {
-      "use strict";
+  // node_modules/exifreader/src/constants.js
+  var constants_default;
+  var init_constants = __esm({
+    "node_modules/exifreader/src/constants.js"() {
       init_esbuild_shims();
-      function detectUnicodeSupport(RegExpImpl) {
-        try {
-          if (typeof RegExpImpl !== "function") {
-            RegExpImpl = RegExp;
-          }
-          var match = new RegExpImpl("\u{1D306}", "u").exec("\u{1D306}");
-          return !!match && match[0].length === 2;
-        } catch (error) {
+      constants_default = {
+        USE_FILE: true,
+        USE_JFIF: true,
+        USE_PNG_FILE: true,
+        USE_EXIF: true,
+        USE_IPTC: true,
+        USE_XMP: true,
+        USE_ICC: true,
+        USE_MPF: true,
+        USE_PHOTOSHOP: true,
+        USE_THUMBNAIL: true,
+        USE_TIFF: true,
+        USE_JPEG: true,
+        USE_PNG: true,
+        USE_HEIC: true,
+        USE_AVIF: true,
+        USE_JXL: true,
+        USE_WEBP: true,
+        USE_GIF: true,
+        USE_MAKER_NOTES: true
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/tag-names-utils.js
+  function getEncodedString(value) {
+    if (value.length >= 8) {
+      const encoding = getStringValueFromArray(value.slice(0, 8));
+      if (encoding === "ASCII\0\0\0") {
+        return getByteString(value, 8);
+      } else if (encoding === "JIS\0\0\0\0\0") {
+        return "[JIS encoded text]";
+      } else if (encoding === "UNICODE\0") {
+        return "[Unicode encoded text]";
+      } else if (encoding === "\0\0\0\0\0\0\0\0") {
+        const text = getByteString(value, 8);
+        if (/[\x20-\x7e]/.test(text)) {
+          return text;
         }
+        return "[Undefined encoding]";
+      }
+    }
+    return "Undefined";
+  }
+  function getVersionString(value) {
+    if (Array.isArray(value)) {
+      if (value.some(isString)) {
+        return value.filter(isString).join(", ");
+      }
+      return getByteString(value);
+    }
+    return value;
+  }
+  function isString(item) {
+    return typeof item === "string";
+  }
+  function getTableDescription(table, value) {
+    const key = String(value);
+    return Object.prototype.hasOwnProperty.call(table, key) ? table[key] : "Unknown";
+  }
+  function getCalculatedGpsValue(value) {
+    return value[0][0] / value[0][1] + value[1][0] / value[1][1] / 60 + value[2][0] / value[2][1] / 3600;
+  }
+  var init_tag_names_utils = __esm({
+    "node_modules/exifreader/src/tag-names-utils.js"() {
+      init_esbuild_shims();
+      init_utils();
+    }
+  });
+
+  // node_modules/exifreader/src/byte-order.js
+  function getByteOrder(dataView, tiffHeaderOffset) {
+    if (dataView.getUint16(tiffHeaderOffset) === LITTLE_ENDIAN) {
+      return LITTLE_ENDIAN;
+    } else if (dataView.getUint16(tiffHeaderOffset) === BIG_ENDIAN) {
+      return BIG_ENDIAN;
+    }
+    throw new Error("Illegal byte order value. Faulty image.");
+  }
+  var LITTLE_ENDIAN, BIG_ENDIAN, byte_order_default;
+  var init_byte_order = __esm({
+    "node_modules/exifreader/src/byte-order.js"() {
+      init_esbuild_shims();
+      LITTLE_ENDIAN = 18761;
+      BIG_ENDIAN = 19789;
+      byte_order_default = {
+        BIG_ENDIAN,
+        LITTLE_ENDIAN,
+        getByteOrder
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/image-header-iso-bmff-utils.js
+  function get64BitValue(dataView, offset) {
+    return dataView.getUint32(offset + 4);
+  }
+  function hasBytes(dataView, offset, length) {
+    return offset + length <= dataView.byteLength;
+  }
+  var init_image_header_iso_bmff_utils = __esm({
+    "node_modules/exifreader/src/image-header-iso-bmff-utils.js"() {
+      init_esbuild_shims();
+    }
+  });
+
+  // node_modules/exifreader/src/image-header-iso-bmff-iloc.js
+  function parseItemLocationBox(dataView, startOffset, version, contentOffset, boxLength, containerEnd) {
+    const FLAGS_SIZE = 3;
+    const { offsets, sizes } = getItemLocationBoxOffsetsAndSizes(version, contentOffset + FLAGS_SIZE);
+    const offsetSize = dataView.getUint8(offsets.offsetSize) >> 4;
+    sizes.item.extent.extentOffset = offsetSize;
+    const lengthSize = dataView.getUint8(offsets.lengthSize) & 15;
+    sizes.item.extent.extentLength = lengthSize;
+    const baseOffsetSize = dataView.getUint8(offsets.baseOffsetSize) >> 4;
+    sizes.item.baseOffset = baseOffsetSize;
+    const indexSize = getIndexSize(dataView, offsets.indexSize, version);
+    sizes.item.extent.extentIndex = indexSize !== void 0 ? indexSize : 0;
+    const itemCount = getItemCount(dataView, offsets.itemCount, version);
+    const boxEnd = Math.min(startOffset + boxLength, containerEnd);
+    return {
+      type: "iloc",
+      items: getItems(dataView, boxEnd, version, offsets, sizes, offsetSize, lengthSize, indexSize, itemCount),
+      uses64BitFields: hasAny64BitField(offsetSize, lengthSize, baseOffsetSize, indexSize),
+      length: boxLength
+    };
+  }
+  function getItemLocationBoxOffsetsAndSizes(version, contentOffset) {
+    const sizes = {
+      item: {
+        dataReferenceIndex: 2,
+        extentCount: 2,
+        extent: {}
+      }
+    };
+    if (version < 2) {
+      sizes.itemCount = 2;
+      sizes.item.itemId = 2;
+    } else if (version === 2) {
+      sizes.itemCount = 4;
+      sizes.item.itemId = 4;
+    }
+    if (version === 1 || version === 2) {
+      sizes.item.constructionMethod = 2;
+    } else {
+      sizes.item.constructionMethod = 0;
+    }
+    const offsets = {
+      offsetSize: contentOffset,
+      lengthSize: contentOffset,
+      baseOffsetSize: contentOffset + 1,
+      indexSize: contentOffset + 1
+    };
+    offsets.itemCount = contentOffset + 2;
+    offsets.items = offsets.itemCount + sizes.itemCount;
+    offsets.item = {
+      itemId: 0
+    };
+    offsets.item.constructionMethod = offsets.item.itemId + sizes.item.itemId;
+    offsets.item.dataReferenceIndex = offsets.item.constructionMethod + sizes.item.constructionMethod;
+    return { offsets, sizes };
+  }
+  function getIndexSize(dataView, offset, version) {
+    if (version === 1 || version === 2) {
+      return dataView.getUint8(offset) & 15;
+    }
+    return void 0;
+  }
+  function getItemCount(dataView, offset, version) {
+    if (version < 2) {
+      return dataView.getUint16(offset);
+    } else if (version === 2) {
+      return dataView.getUint32(offset);
+    }
+    return void 0;
+  }
+  function getItems(dataView, boxEnd, version, offsets, sizes, offsetSize, lengthSize, indexSize, itemCount) {
+    if (itemCount === void 0) {
+      return [];
+    }
+    const items = [];
+    let offset = offsets.items;
+    const extentByteSize = sizes.item.extent.extentIndex + sizes.item.extent.extentOffset + sizes.item.extent.extentLength;
+    const itemHeaderByteSize = sizes.item.itemId + sizes.item.constructionMethod + sizes.item.dataReferenceIndex + sizes.item.baseOffset + sizes.item.extentCount;
+    let totalExtents = 0;
+    for (let i = 0; i < itemCount; i++) {
+      if (offset + itemHeaderByteSize > boxEnd) {
+        break;
+      }
+      const item = { extents: [] };
+      item.itemId = getItemId(dataView, offset, version);
+      offset += sizes.item.itemId;
+      item.constructionMethod = version === 1 || version === 2 ? dataView.getUint16(offset) & 15 : void 0;
+      offset += sizes.item.constructionMethod;
+      item.dataReferenceIndex = dataView.getUint16(offset);
+      offset += sizes.item.dataReferenceIndex;
+      item.baseOffset = getVariableSizedValue(dataView, offset, sizes.item.baseOffset);
+      offset += sizes.item.baseOffset;
+      item.extentCount = dataView.getUint16(offset);
+      offset += sizes.item.extentCount;
+      const extentCount = getBoundedExtentCount(item.extentCount, extentByteSize, offset, boxEnd, MAX_TOTAL_EXTENTS - totalExtents);
+      for (let j = 0; j < extentCount; j++) {
+        const extent = {};
+        extent.extentIndex = getExtentIndex(dataView, version, offset, indexSize);
+        offset += sizes.item.extent.extentIndex;
+        extent.extentOffset = getVariableSizedValue(dataView, offset, offsetSize);
+        offset += sizes.item.extent.extentOffset;
+        extent.extentLength = getVariableSizedValue(dataView, offset, lengthSize);
+        offset += sizes.item.extent.extentLength;
+        item.extents.push(extent);
+      }
+      totalExtents += extentCount;
+      items.push(item);
+      if ((item.extentCount - extentCount) * extentByteSize > 0) {
+        break;
+      }
+    }
+    return items;
+  }
+  function getBoundedExtentCount(declaredCount, extentByteSize, offset, boxEnd, remainingBudget) {
+    if (extentByteSize === 0) {
+      return 0;
+    }
+    const fitInBox = Math.floor((boxEnd - offset) / extentByteSize);
+    return Math.max(0, Math.min(declaredCount, fitInBox, remainingBudget));
+  }
+  function getItemId(dataView, offset, version) {
+    if (version < 2) {
+      return dataView.getUint16(offset);
+    } else if (version === 2) {
+      return dataView.getUint32(offset);
+    }
+    return void 0;
+  }
+  function getExtentIndex(dataView, version, offset, indexSize) {
+    if ((version === 1 || version === 2) && indexSize > 0) {
+      return getVariableSizedValue(dataView, offset, indexSize);
+    }
+    return void 0;
+  }
+  function getVariableSizedValue(dataView, offset, size) {
+    if (size === 4) {
+      return dataView.getUint32(offset);
+    }
+    if (size === 8) {
+      return get64BitValue(dataView, offset);
+    }
+    return 0;
+  }
+  function hasAny64BitField(offsetSize, lengthSize, baseOffsetSize, indexSize) {
+    return offsetSize === 8 || lengthSize === 8 || baseOffsetSize === 8 || indexSize === 8;
+  }
+  var MAX_TOTAL_EXTENTS;
+  var init_image_header_iso_bmff_iloc = __esm({
+    "node_modules/exifreader/src/image-header-iso-bmff-iloc.js"() {
+      init_esbuild_shims();
+      init_image_header_iso_bmff_utils();
+      MAX_TOTAL_EXTENTS = 1024 * 1024;
+    }
+  });
+
+  // node_modules/exifreader/src/image-header-iso-bmff.js
+  function parseBox(dataView, offset, containerEnd = dataView.byteLength) {
+    const VERSION_SIZE = 1;
+    if (!hasBytes(dataView, offset, BOX_MIN_LENGTH)) {
+      return void 0;
+    }
+    try {
+      const { length, contentOffset } = getBoxLength(dataView, offset);
+      if (length < contentOffset - offset || contentOffset > containerEnd) {
+        return void 0;
+      }
+      const type = dataView.getUint32(offset + BOX_TYPE_OFFSET);
+      if (type === TYPE_FTYP) {
+        return parseFileTypeBox(dataView, contentOffset, length);
+      }
+      if (type === TYPE_IPRP) {
+        return parseItemPropertiesBox(dataView, offset, contentOffset, length, containerEnd);
+      }
+      if (type === TYPE_IPCO) {
+        return parseItemPropertyContainerBox(dataView, offset, contentOffset, length, containerEnd);
+      }
+      if (type === TYPE_COLR) {
+        return parseColorInformationBox(dataView, contentOffset, length);
+      }
+      if (type === TYPE_IDAT) {
+        return parseItemDataBox(contentOffset, length);
+      }
+      if (!hasBytes(dataView, contentOffset, VERSION_SIZE)) {
+        return void 0;
+      }
+      const version = dataView.getUint8(contentOffset);
+      if (type === TYPE_META) {
+        return parseMetadataBox(dataView, offset, contentOffset + VERSION_SIZE, length, containerEnd);
+      }
+      if (type === TYPE_ILOC) {
+        return parseItemLocationBox(dataView, offset, version, contentOffset + VERSION_SIZE, length, containerEnd);
+      }
+      if (type === TYPE_IINF) {
+        return parseItemInformationBox(dataView, offset, version, contentOffset + VERSION_SIZE, length, containerEnd);
+      }
+      if (type === TYPE_INFE) {
+        return parseItemInformationEntryBox(dataView, offset, version, contentOffset + VERSION_SIZE, length, containerEnd);
+      }
+      if (type === TYPE_PITM) {
+        return parsePrimaryItemBox(dataView, offset, version, contentOffset, length, containerEnd);
+      }
+      if (type === TYPE_IPMA) {
+        return parseItemPropertyAssociationBox(dataView, offset, version, contentOffset, length, containerEnd);
+      }
+      if (type === TYPE_ISPE) {
+        return parseImageSpatialExtentsBox(dataView, offset, contentOffset, length, containerEnd);
+      }
+      if (type === TYPE_PIXI) {
+        return parsePixelInformationBox(dataView, offset, version, contentOffset, length, containerEnd);
+      }
+      return getUnknownBox(length);
+    } catch (error) {
+      return void 0;
+    }
+  }
+  function hasMajorBrand(dataView, brands) {
+    if (!dataView) {
+      return false;
+    }
+    try {
+      const headerBox = parseBox(dataView, 0);
+      return headerBox !== void 0 && brands.indexOf(headerBox.majorBrand) !== -1;
+    } catch (error) {
+      return false;
+    }
+  }
+  function getBoxLength(dataView, offset) {
+    const BOX_LENGTH_SIZE = 4;
+    const BOX_TYPE_SIZE = 4;
+    const BOX_EXTENDED_SIZE = 8;
+    const BOX_EXTENDED_SIZE_LOW_OFFSET = 12;
+    const BOX_EXTENDED_FULL_SIZE = BOX_LENGTH_SIZE + BOX_TYPE_SIZE + BOX_EXTENDED_SIZE;
+    const boxLength = dataView.getUint32(offset);
+    if (extendsToEndOfFile(boxLength)) {
+      return {
+        length: dataView.byteLength - offset,
+        contentOffset: offset + BOX_LENGTH_SIZE + BOX_TYPE_SIZE
+      };
+    }
+    if (hasExtendedSize(boxLength)) {
+      if (!hasBytes(dataView, offset, BOX_EXTENDED_FULL_SIZE)) {
+        return { length: 0, contentOffset: offset + BOX_LENGTH_SIZE + BOX_TYPE_SIZE };
+      }
+      if (hasEmptyHighBits(dataView, offset)) {
+        return {
+          length: dataView.getUint32(offset + BOX_EXTENDED_SIZE_LOW_OFFSET),
+          contentOffset: offset + BOX_LENGTH_SIZE + BOX_TYPE_SIZE + BOX_EXTENDED_SIZE
+        };
+      }
+    }
+    return {
+      length: boxLength,
+      contentOffset: offset + BOX_LENGTH_SIZE + BOX_TYPE_SIZE
+    };
+  }
+  function extendsToEndOfFile(boxLength) {
+    return boxLength === 0;
+  }
+  function hasExtendedSize(boxLength) {
+    return boxLength === 1;
+  }
+  function hasEmptyHighBits(dataView, offset) {
+    const BOX_EXTENDED_SIZE_OFFSET = 8;
+    return dataView.getUint32(offset + BOX_EXTENDED_SIZE_OFFSET) === 0;
+  }
+  function findOffsets(dataView, metadataBlocks) {
+    const metaBox = findMetaBox(dataView);
+    const offsets = findMetadataOffsets(dataView, metaBox, metadataBlocks);
+    const { imageDimensionsOffset, pixelInformationOffset } = findPrimaryItemPropertyOffsets(dataView, metaBox);
+    if (imageDimensionsOffset !== void 0) {
+      offsets.imageDimensionsOffset = imageDimensionsOffset;
+    }
+    if (pixelInformationOffset !== void 0) {
+      offsets.pixelInformationOffset = pixelInformationOffset;
+    }
+    return offsets;
+  }
+  function findMetaBox(dataView) {
+    const BOX_LENGTH_SIZE = 4;
+    const BOX_TYPE_SIZE = 4;
+    let offset = 0;
+    while (offset + BOX_LENGTH_SIZE + BOX_TYPE_SIZE <= dataView.byteLength) {
+      const box = parseBox(dataView, offset);
+      if (box === void 0) {
+        break;
+      }
+      if (box.type === "meta") {
+        return box;
+      }
+      offset += box.length;
+    }
+    return void 0;
+  }
+  function findMetadataOffsets(dataView, metaBox, metadataBlocks) {
+    const offsets = {};
+    if (!metaBox) {
+      return { hasAppMarkers: false };
+    }
+    warnIfUnsupportedFieldSize(metaBox);
+    const exif = findExifOffset(dataView, metaBox, metadataBlocks);
+    if (exif !== void 0) {
+      offsets.tiffHeaderOffset = exif.tiffHeaderOffset;
+      if (exif.dataView !== void 0) {
+        offsets.exifDataView = exif.dataView;
+      }
+    }
+    const xmp = findXmpChunks(dataView, metaBox, metadataBlocks);
+    if (xmp !== void 0) {
+      offsets.xmpChunks = xmp.chunks;
+      if (xmp.dataView !== void 0) {
+        offsets.xmpDataView = xmp.dataView;
+      }
+    }
+    offsets.iccChunks = findIccChunks(metaBox, metadataBlocks);
+    offsets.hasAppMarkers = offsets.tiffHeaderOffset !== void 0 || offsets.xmpChunks !== void 0 || offsets.iccChunks !== void 0;
+    return offsets;
+  }
+  function warnIfUnsupportedFieldSize(metaBox) {
+    const ilocBox = metaBox.subBoxes.find((box) => box.type === "iloc");
+    if (ilocBox && ilocBox.uses64BitFields) {
+      console.warn("This file uses 8-byte iloc offset, length or index fields which are currently not fully supported by ExifReader. Contact the maintainer to get it fixed.");
+    }
+  }
+  function findExifOffset(dataView, metaBox, metadataBlocks) {
+    try {
+      const exifItemId = findIinfExifItemId(metaBox).itemId;
+      const ilocItem = findIlocItem(metaBox, exifItemId);
+      warnIfUnsupportedConstructionMethod(ilocItem);
+      const idatContentOffset = findIdatContentOffset(metaBox);
+      pushIlocExtentBlocks(metadataBlocks, ilocItem, "exif", idatContentOffset);
+      if (ilocItem.extents.length > 1) {
+        const assembled = assembleExtents(dataView, ilocItem, idatContentOffset);
+        if (assembled === void 0) {
+          return void 0;
+        }
+        return {
+          tiffHeaderOffset: getTiffHeaderOffset(assembled, 0),
+          dataView: assembled
+        };
+      }
+      const exifOffset = resolveExtentToFileOffset(ilocItem, ilocItem.extents[0], idatContentOffset);
+      if (exifOffset === void 0) {
+        return void 0;
+      }
+      return { tiffHeaderOffset: getTiffHeaderOffset(dataView, exifOffset) };
+    } catch (error) {
+      return void 0;
+    }
+  }
+  function pushIlocExtentBlocks(metadataBlocks, ilocItem, blockType, idatContentOffset) {
+    if (!metadataBlocks) {
+      return;
+    }
+    for (let i = 0; i < ilocItem.extents.length; i++) {
+      const extent = ilocItem.extents[i];
+      const start = resolveExtentToFileOffset(ilocItem, extent, idatContentOffset);
+      if (start === void 0) {
+        continue;
+      }
+      pushMetadataBlock(metadataBlocks, blockType, start, start + extent.extentLength);
+    }
+  }
+  function resolveExtentToFileOffset(ilocItem, extent, idatContentOffset) {
+    const cm = ilocItem.constructionMethod;
+    if (cm === void 0 || cm === 0) {
+      return ilocItem.baseOffset + extent.extentOffset;
+    }
+    if (cm === 1 && idatContentOffset !== void 0) {
+      return idatContentOffset + ilocItem.baseOffset + extent.extentOffset;
+    }
+    return void 0;
+  }
+  function findIdatContentOffset(metaBox) {
+    const idatBox = metaBox.subBoxes.find((box) => box.type === "idat");
+    return idatBox ? idatBox.contentOffset : void 0;
+  }
+  function warnIfUnsupportedConstructionMethod(ilocItem) {
+    if (ilocItem.constructionMethod === 2) {
+      console.warn("This file uses iloc constructionMethod 2 (item_offset) which is currently not supported by ExifReader. Contact the maintainer to get it fixed.");
+    }
+  }
+  function assembleExtents(dataView, ilocItem, idatContentOffset) {
+    const resolved = [];
+    let totalLength = 0;
+    for (let i = 0; i < ilocItem.extents.length; i++) {
+      const extent = ilocItem.extents[i];
+      const start = resolveExtentToFileOffset(ilocItem, extent, idatContentOffset);
+      if (start === void 0 || start + extent.extentLength > dataView.byteLength) {
+        return void 0;
+      }
+      resolved.push({ start, length: extent.extentLength });
+      totalLength += extent.extentLength;
+      if (totalLength > dataView.byteLength) {
+        return void 0;
+      }
+    }
+    const buffer = new Uint8Array(totalLength);
+    let writeOffset = 0;
+    for (let i = 0; i < resolved.length; i++) {
+      const { start, length } = resolved[i];
+      for (let j = 0; j < length; j++) {
+        buffer[writeOffset + j] = dataView.getUint8(start + j);
+      }
+      writeOffset += length;
+    }
+    return new DataView(buffer.buffer);
+  }
+  function findIinfExifItemId(metaBox) {
+    return metaBox.subBoxes.find((box) => box.type === "iinf").itemInfos.find((itemInfo) => itemInfo.itemType === ITEM_INFO_TYPE_EXIF);
+  }
+  function findIlocItem(metaBox, itemId) {
+    return metaBox.subBoxes.find((box) => box.type === "iloc").items.find((item) => item.itemId === itemId);
+  }
+  function getTiffHeaderOffset(dataView, exifOffset) {
+    const TIFF_HEADER_OFFSET_SIZE = 4;
+    return exifOffset + TIFF_HEADER_OFFSET_SIZE + dataView.getUint32(exifOffset);
+  }
+  function findXmpChunks(dataView, metaBox, metadataBlocks) {
+    try {
+      const xmpItemId = findIinfXmpItemId(metaBox).itemId;
+      const ilocItem = findIlocItem(metaBox, xmpItemId);
+      warnIfUnsupportedConstructionMethod(ilocItem);
+      const idatContentOffset = findIdatContentOffset(metaBox);
+      pushIlocExtentBlocks(metadataBlocks, ilocItem, "xmp", idatContentOffset);
+      if (ilocItem.extents.length > 1) {
+        const assembled = assembleExtents(dataView, ilocItem, idatContentOffset);
+        if (assembled === void 0) {
+          return void 0;
+        }
+        return {
+          chunks: [{ dataOffset: 0, length: assembled.byteLength }],
+          dataView: assembled
+        };
+      }
+      const ilocItemExtent = ilocItem.extents[0];
+      const dataOffset = resolveExtentToFileOffset(ilocItem, ilocItemExtent, idatContentOffset);
+      if (dataOffset === void 0) {
+        return void 0;
+      }
+      return {
+        chunks: [
+          {
+            dataOffset,
+            length: ilocItemExtent.extentLength
+          }
+        ]
+      };
+    } catch (error) {
+      return void 0;
+    }
+  }
+  function findIinfXmpItemId(metaBox) {
+    return metaBox.subBoxes.find((box) => box.type === "iinf").itemInfos.find((itemInfo) => itemInfo.itemType === ITEM_INFO_TYPE_MIME && itemInfo.contentType === "application/rdf+xml");
+  }
+  function findIccChunks(metaBox, metadataBlocks) {
+    try {
+      const icc = metaBox.subBoxes.find((box) => box.type === "iprp").subBoxes.find((box) => box.type === "ipco").properties.find((box) => box.type === "colr").icc;
+      if (icc) {
+        pushMetadataBlock(metadataBlocks, "icc", icc.offset, icc.offset + icc.length);
+        return [icc];
+      }
+    } catch (error) {
+    }
+    return void 0;
+  }
+  function findPrimaryItemPropertyOffsets(dataView, metaBox) {
+    try {
+      if (!metaBox) {
+        return {};
+      }
+      const pitm = metaBox.subBoxes.find((box) => box.type === "pitm");
+      const iprp = metaBox.subBoxes.find((box) => box.type === "iprp");
+      if (!pitm || !iprp) {
+        return {};
+      }
+      const ipco = iprp.subBoxes.find((box) => box.type === "ipco");
+      if (!ipco) {
+        return {};
+      }
+      const propertyIndexes = findItemPropertyIndexes(dataView, iprp.subBoxes, pitm.itemId);
+      if (!propertyIndexes) {
+        return {};
+      }
+      const ispe = findProperty(propertyIndexes, ipco.properties, "ispe");
+      const pixi = findProperty(propertyIndexes, ipco.properties, "pixi");
+      return {
+        imageDimensionsOffset: ispe && ispe.dimensionsOffset,
+        pixelInformationOffset: pixi && pixi.channelCountOffset
+      };
+    } catch (error) {
+      return {};
+    }
+  }
+  function findItemPropertyIndexes(dataView, iprpSubBoxes, itemId) {
+    for (let i = 0; i < iprpSubBoxes.length; i++) {
+      if (iprpSubBoxes[i].type === "ipma") {
+        const propertyIndexes = findItemPropertyIndexesInIpma(dataView, iprpSubBoxes[i], itemId);
+        if (propertyIndexes) {
+          return propertyIndexes;
+        }
+      }
+    }
+    return void 0;
+  }
+  function findItemPropertyIndexesInIpma(dataView, ipma, itemId) {
+    const ENTRY_COUNT_SIZE = 4;
+    const ASSOCIATION_COUNT_SIZE = 1;
+    const itemIdSize = ipma.version === 0 ? 2 : 4;
+    const associationSize = (ipma.flags & 1) === 1 ? 2 : 1;
+    const entryCount = dataView.getUint32(ipma.entryCountOffset);
+    let offset = ipma.entryCountOffset + ENTRY_COUNT_SIZE;
+    for (let i = 0; i < entryCount && offset + itemIdSize + ASSOCIATION_COUNT_SIZE <= ipma.end; i++) {
+      const entryItemId = itemIdSize === 2 ? dataView.getUint16(offset) : dataView.getUint32(offset);
+      const count = dataView.getUint8(offset + itemIdSize);
+      offset += itemIdSize + ASSOCIATION_COUNT_SIZE;
+      if (entryItemId === itemId) {
+        const countWithinBox = Math.min(count, Math.floor((ipma.end - offset) / associationSize));
+        return readPropertyIndexes(dataView, offset, countWithinBox, associationSize);
+      }
+      offset += count * associationSize;
+    }
+    return void 0;
+  }
+  function readPropertyIndexes(dataView, offset, count, associationSize) {
+    const indexMask = associationSize === 2 ? 32767 : 127;
+    const propertyIndexes = [];
+    for (let i = 0; i < count; i++) {
+      const associationOffset = offset + i * associationSize;
+      const association = associationSize === 2 ? dataView.getUint16(associationOffset) : dataView.getUint8(associationOffset);
+      propertyIndexes.push(association & indexMask);
+    }
+    return propertyIndexes;
+  }
+  function findProperty(propertyIndexes, properties, type) {
+    for (let i = 0; i < propertyIndexes.length; i++) {
+      const property = properties[propertyIndexes[i] - 1];
+      if (property !== void 0 && property.type === type) {
+        return property;
+      }
+    }
+    return void 0;
+  }
+  function parseFileTypeBox(dataView, contentOffset, boxLength) {
+    const MAJOR_BRAND_SIZE = 4;
+    const majorBrand = getStringFromDataView(dataView, contentOffset, MAJOR_BRAND_SIZE);
+    return {
+      type: "ftyp",
+      majorBrand,
+      length: boxLength
+    };
+  }
+  function parseItemPropertiesBox(dataView, startOffset, contentOffset, length, containerEnd) {
+    return {
+      type: "iprp",
+      subBoxes: parseSubBoxes(dataView, contentOffset, length - (contentOffset - startOffset), containerEnd),
+      length
+    };
+  }
+  function parseItemPropertyContainerBox(dataView, startOffset, contentOffset, length, containerEnd) {
+    return {
+      type: "ipco",
+      properties: parseProperties(dataView, contentOffset, length - (contentOffset - startOffset), containerEnd),
+      length
+    };
+  }
+  function parseProperties(dataView, offset, length, containerEnd) {
+    const properties = [];
+    walkSubBoxes(dataView, offset, length, containerEnd, (box) => {
+      properties.push(box.type !== void 0 ? box : UNKNOWN_PROPERTY);
+    });
+    return properties;
+  }
+  function parseColorInformationBox(dataView, contentOffset, length) {
+    return {
+      type: "colr",
+      icc: parseIcc(dataView, contentOffset),
+      length
+    };
+  }
+  function parseIcc(dataView, contentOffset) {
+    const COLOR_TYPE_SIZE = 4;
+    const colorType = getStringFromDataView(dataView, contentOffset, COLOR_TYPE_SIZE);
+    if (colorType !== "prof" && colorType !== "rICC") {
+      return void 0;
+    }
+    return {
+      offset: contentOffset + COLOR_TYPE_SIZE,
+      length: dataView.getUint32(contentOffset + COLOR_TYPE_SIZE),
+      chunkNumber: 1,
+      chunksTotal: 1
+    };
+  }
+  function parseMetadataBox(dataView, startOffset, contentOffset, length, containerEnd) {
+    const FLAGS_SIZE = 3;
+    return {
+      type: "meta",
+      subBoxes: parseSubBoxes(dataView, contentOffset + FLAGS_SIZE, length - (contentOffset + FLAGS_SIZE - startOffset), containerEnd),
+      length
+    };
+  }
+  function parseItemDataBox(contentOffset, length) {
+    return {
+      type: "idat",
+      contentOffset,
+      length
+    };
+  }
+  function parsePrimaryItemBox(dataView, startOffset, version, contentOffset, length, containerEnd) {
+    const itemIdOffset = contentOffset + FULL_BOX_VERSION_AND_FLAGS_SIZE;
+    const itemIdSize = version === 0 ? 2 : 4;
+    if (itemIdOffset + itemIdSize > getBoxEnd(dataView, startOffset, length, containerEnd)) {
+      return getUnknownBox(length);
+    }
+    return {
+      type: "pitm",
+      itemId: version === 0 ? dataView.getUint16(itemIdOffset) : dataView.getUint32(itemIdOffset),
+      length
+    };
+  }
+  function parseItemPropertyAssociationBox(dataView, startOffset, version, contentOffset, length, containerEnd) {
+    const ENTRY_COUNT_SIZE = 4;
+    const FLAGS_MASK = 16777215;
+    const entryCountOffset = contentOffset + FULL_BOX_VERSION_AND_FLAGS_SIZE;
+    const end = getBoxEnd(dataView, startOffset, length, containerEnd);
+    if (entryCountOffset + ENTRY_COUNT_SIZE > end) {
+      return getUnknownBox(length);
+    }
+    return {
+      type: "ipma",
+      version,
+      flags: dataView.getUint32(contentOffset) & FLAGS_MASK,
+      entryCountOffset,
+      end,
+      length
+    };
+  }
+  function parseImageSpatialExtentsBox(dataView, startOffset, contentOffset, length, containerEnd) {
+    const DIMENSIONS_SIZE2 = 8;
+    const dimensionsOffset = contentOffset + FULL_BOX_VERSION_AND_FLAGS_SIZE;
+    if (dimensionsOffset + DIMENSIONS_SIZE2 > getBoxEnd(dataView, startOffset, length, containerEnd)) {
+      return getUnknownBox(length);
+    }
+    return {
+      type: "ispe",
+      dimensionsOffset,
+      length
+    };
+  }
+  function parsePixelInformationBox(dataView, startOffset, version, contentOffset, length, containerEnd) {
+    const CHANNEL_COUNT_SIZE2 = 1;
+    const channelCountOffset = contentOffset + FULL_BOX_VERSION_AND_FLAGS_SIZE;
+    const end = getBoxEnd(dataView, startOffset, length, containerEnd);
+    if (version !== 0 || channelCountOffset + CHANNEL_COUNT_SIZE2 > end) {
+      return getUnknownBox(length);
+    }
+    const channelCount = dataView.getUint8(channelCountOffset);
+    if (channelCountOffset + CHANNEL_COUNT_SIZE2 + channelCount > end) {
+      return getUnknownBox(length);
+    }
+    return {
+      type: "pixi",
+      channelCountOffset,
+      length
+    };
+  }
+  function getBoxEnd(dataView, startOffset, length, containerEnd) {
+    return Math.min(startOffset + length, containerEnd, dataView.byteLength);
+  }
+  function getUnknownBox(length) {
+    return {
+      type: void 0,
+      length
+    };
+  }
+  function parseSubBoxes(dataView, offset, length, containerEnd) {
+    const ACCEPTED_ITEM_INFO_TYPES = [
+      ITEM_INFO_TYPE_EXIF,
+      ITEM_INFO_TYPE_MIME
+    ];
+    const subBoxes = [];
+    walkSubBoxes(dataView, offset, length, containerEnd, (box) => {
+      if (box.type !== void 0 && (box.itemType === void 0 || ACCEPTED_ITEM_INFO_TYPES.indexOf(box.itemType) !== -1)) {
+        subBoxes.push(box);
+      }
+    });
+    return subBoxes;
+  }
+  function walkSubBoxes(dataView, offset, length, containerEnd, onBox) {
+    const subBoxesEnd = Math.min(offset + length, containerEnd);
+    let currentOffset = offset;
+    while (currentOffset + BOX_MIN_LENGTH <= subBoxesEnd) {
+      const box = parseBox(dataView, currentOffset, subBoxesEnd);
+      if (box === void 0) {
+        break;
+      }
+      onBox(box);
+      currentOffset += box.length;
+    }
+  }
+  function parseItemInformationBox(dataView, startOffset, version, contentOffset, length, containerEnd) {
+    const FLAGS_SIZE = 3;
+    const entryCountSize = version === 0 ? 2 : 4;
+    const itemInfosOffset = contentOffset + FLAGS_SIZE + entryCountSize;
+    return {
+      type: "iinf",
+      itemInfos: parseSubBoxes(dataView, itemInfosOffset, length - (itemInfosOffset - startOffset), containerEnd),
+      length
+    };
+  }
+  function parseItemInformationEntryBox(dataView, startOffset, version, contentOffset, length, containerEnd) {
+    const FLAGS_SIZE = 3;
+    contentOffset += FLAGS_SIZE;
+    const entry = { type: "infe", length };
+    const entryEnd = Math.min(startOffset + length, containerEnd);
+    if (version === 0 || version === 1) {
+      entry.itemId = dataView.getUint16(contentOffset);
+      contentOffset += 2;
+      entry.itemProtectionIndex = dataView.getUint16(contentOffset);
+      contentOffset += 2;
+      entry.itemName = readEntryString(dataView, contentOffset, entryEnd).value;
+      contentOffset += entry.itemName.length + 1;
+    }
+    if (version >= 2) {
+      if (version === 2) {
+        entry.itemId = dataView.getUint16(contentOffset);
+        contentOffset += 2;
+      } else if (version === 3) {
+        entry.itemId = dataView.getUint32(contentOffset);
+        contentOffset += 4;
+      }
+      entry.itemProtectionIndex = dataView.getUint16(contentOffset);
+      contentOffset += 2;
+      entry.itemType = dataView.getUint32(contentOffset);
+      contentOffset += 4;
+      const itemName = readEntryString(dataView, contentOffset, entryEnd);
+      entry.itemName = itemName.value;
+      if (!itemName.isTerminated) {
+        return entry;
+      }
+      contentOffset += entry.itemName.length + 1;
+      if (entry.itemType === ITEM_INFO_TYPE_MIME) {
+        const contentType = readEntryString(dataView, contentOffset, entryEnd);
+        entry.contentType = contentType.value;
+        if (!contentType.isTerminated) {
+          return entry;
+        }
+        contentOffset += entry.contentType.length + 1;
+        if (entryEnd > contentOffset) {
+          entry.contentEncoding = readEntryString(dataView, contentOffset, entryEnd).value;
+        }
+      } else if (entry.itemType === ITEM_INFO_TYPE_URI) {
+        entry.itemUri = readEntryString(dataView, contentOffset, entryEnd).value;
+      }
+    }
+    return entry;
+  }
+  function readEntryString(dataView, offset, entryEnd) {
+    const limit = Math.min(entryEnd, offset + MAX_INFE_STRING_LENGTH);
+    const value = getNullTerminatedStringFromDataView(dataView, offset, limit);
+    return { value, isTerminated: offset + value.length < limit };
+  }
+  var TYPE_FTYP, TYPE_IPRP, TYPE_META, TYPE_ILOC, TYPE_IDAT, TYPE_IINF, TYPE_INFE, TYPE_IPCO, TYPE_COLR, TYPE_PITM, TYPE_IPMA, TYPE_ISPE, TYPE_PIXI, ITEM_INFO_TYPE_EXIF, ITEM_INFO_TYPE_MIME, ITEM_INFO_TYPE_URI, MAX_INFE_STRING_LENGTH, BOX_TYPE_OFFSET, BOX_MIN_LENGTH, FULL_BOX_VERSION_AND_FLAGS_SIZE, UNKNOWN_PROPERTY;
+  var init_image_header_iso_bmff = __esm({
+    "node_modules/exifreader/src/image-header-iso-bmff.js"() {
+      init_esbuild_shims();
+      init_utils();
+      init_image_header_iso_bmff_iloc();
+      init_image_header_iso_bmff_utils();
+      TYPE_FTYP = 1718909296;
+      TYPE_IPRP = 1768977008;
+      TYPE_META = 1835365473;
+      TYPE_ILOC = 1768714083;
+      TYPE_IDAT = 1768186228;
+      TYPE_IINF = 1768517222;
+      TYPE_INFE = 1768842853;
+      TYPE_IPCO = 1768973167;
+      TYPE_COLR = 1668246642;
+      TYPE_PITM = 1885959277;
+      TYPE_IPMA = 1768975713;
+      TYPE_ISPE = 1769173093;
+      TYPE_PIXI = 1885960297;
+      ITEM_INFO_TYPE_EXIF = 1165519206;
+      ITEM_INFO_TYPE_MIME = 1835625829;
+      ITEM_INFO_TYPE_URI = 1970432288;
+      MAX_INFE_STRING_LENGTH = 65536;
+      BOX_TYPE_OFFSET = 4;
+      BOX_MIN_LENGTH = 8;
+      FULL_BOX_VERSION_AND_FLAGS_SIZE = 4;
+      UNKNOWN_PROPERTY = { type: void 0 };
+    }
+  });
+
+  // node_modules/exifreader/src/tiff-constants.js
+  var TIFF_BYTE_ORDER_OFFSET, TIFF_ID_OFFSET, TIFF_IFD_OFFSET_OFFSET, TIFF_HEADER_LENGTH, TIFF_ID, IFD_ENTRY_COUNT_LENGTH, IFD_ENTRY_LENGTH, NEXT_IFD_POINTER_LENGTH;
+  var init_tiff_constants = __esm({
+    "node_modules/exifreader/src/tiff-constants.js"() {
+      init_esbuild_shims();
+      TIFF_BYTE_ORDER_OFFSET = 0;
+      TIFF_ID_OFFSET = 2;
+      TIFF_IFD_OFFSET_OFFSET = 4;
+      TIFF_HEADER_LENGTH = 8;
+      TIFF_ID = 42;
+      IFD_ENTRY_COUNT_LENGTH = 2;
+      IFD_ENTRY_LENGTH = 12;
+      NEXT_IFD_POINTER_LENGTH = 4;
+    }
+  });
+
+  // node_modules/exifreader/src/image-header-tiff.js
+  function isTiffFile(dataView) {
+    const MIN_TIFF_DATA_BUFFER_LENGTH = 4;
+    return !!dataView && dataView.byteLength >= MIN_TIFF_DATA_BUFFER_LENGTH && hasTiffMarker(dataView);
+  }
+  function hasTiffMarker(dataView) {
+    const littleEndian = dataView.getUint16(0) === byte_order_default.LITTLE_ENDIAN;
+    return dataView.getUint16(TIFF_ID_OFFSET, littleEndian) === TIFF_ID;
+  }
+  function findTiffOffsets() {
+    const TIFF_FILE_HEADER_OFFSET = 0;
+    return {
+      hasAppMarkers: true,
+      tiffHeaderOffset: TIFF_FILE_HEADER_OFFSET
+    };
+  }
+  var image_header_tiff_default;
+  var init_image_header_tiff = __esm({
+    "node_modules/exifreader/src/image-header-tiff.js"() {
+      init_esbuild_shims();
+      init_byte_order();
+      init_tiff_constants();
+      image_header_tiff_default = {
+        isTiffFile,
+        findTiffOffsets
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/image-header-jpeg.js
+  function isJpegFile(dataView) {
+    return !!dataView && dataView.byteLength >= MIN_JPEG_DATA_BUFFER_LENGTH && dataView.getUint16(0) === JPEG_ID;
+  }
+  function findJpegOffsets(dataView, metadataBlocks) {
+    let appMarkerPosition = JPEG_ID_SIZE;
+    let fieldLength;
+    let sof0DataOffset;
+    let sof2DataOffset;
+    let jfifDataOffset;
+    let tiffHeaderOffset;
+    let iptcDataOffset;
+    let xmpChunks;
+    let iccChunks;
+    let mpfDataOffset;
+    let exifSegmentCount = 0;
+    let bestExifSegment;
+    let sawSos = false;
+    while (appMarkerPosition + APP_ID_OFFSET + 5 <= dataView.byteLength) {
+      let blockType;
+      if (dataView.getUint16(appMarkerPosition) === SOS_MARKER) {
+        sawSos = true;
+      }
+      if (isSOF0Marker(dataView, appMarkerPosition)) {
+        fieldLength = dataView.getUint16(appMarkerPosition + APP_MARKER_SIZE);
+        sof0DataOffset = appMarkerPosition + APP_MARKER_SIZE;
+        blockType = "file";
+      } else if (isSOF2Marker(dataView, appMarkerPosition)) {
+        fieldLength = dataView.getUint16(appMarkerPosition + APP_MARKER_SIZE);
+        sof2DataOffset = appMarkerPosition + APP_MARKER_SIZE;
+        blockType = "file";
+      } else if (isApp0JfifMarker(dataView, appMarkerPosition)) {
+        fieldLength = dataView.getUint16(appMarkerPosition + APP_MARKER_SIZE);
+        jfifDataOffset = appMarkerPosition + JFIF_DATA_OFFSET;
+        blockType = "jfif";
+      } else if (isApp1ExifMarker(dataView, appMarkerPosition)) {
+        fieldLength = dataView.getUint16(appMarkerPosition + APP_MARKER_SIZE);
+        exifSegmentCount++;
+        const currentTiffHeaderOffset = appMarkerPosition + TIFF_HEADER_OFFSET;
+        if (exifSegmentCount === 1) {
+          bestExifSegment = {
+            appMarkerPosition,
+            fieldLength,
+            tiffHeaderOffset: currentTiffHeaderOffset,
+            score: void 0
+          };
+        } else {
+          if (bestExifSegment.score === void 0) {
+            bestExifSegment.score = getExifMarkerScore(
+              dataView,
+              bestExifSegment.appMarkerPosition,
+              bestExifSegment.fieldLength,
+              bestExifSegment.tiffHeaderOffset
+            );
+          }
+          const currentExifSegmentScore = getExifMarkerScore(
+            dataView,
+            appMarkerPosition,
+            fieldLength,
+            currentTiffHeaderOffset
+          );
+          if (currentExifSegmentScore > bestExifSegment.score) {
+            bestExifSegment = {
+              appMarkerPosition,
+              fieldLength,
+              tiffHeaderOffset: currentTiffHeaderOffset,
+              score: currentExifSegmentScore
+            };
+          }
+        }
+        tiffHeaderOffset = bestExifSegment.tiffHeaderOffset;
+        blockType = "exif";
+      } else if (isApp1XmpMarker(dataView, appMarkerPosition)) {
+        if (!xmpChunks) {
+          xmpChunks = [];
+        }
+        fieldLength = dataView.getUint16(appMarkerPosition + APP_MARKER_SIZE);
+        if (xmpChunks.length < MAX_XMP_CHUNKS) {
+          xmpChunks.push(getXmpChunkDetails(appMarkerPosition, fieldLength));
+        }
+        blockType = "xmp";
+      } else if (isApp1ExtendedXmpMarker(dataView, appMarkerPosition)) {
+        if (!xmpChunks) {
+          xmpChunks = [];
+        }
+        fieldLength = dataView.getUint16(appMarkerPosition + APP_MARKER_SIZE);
+        if (xmpChunks.length < MAX_XMP_CHUNKS) {
+          xmpChunks.push(getExtendedXmpChunkDetails(appMarkerPosition, fieldLength));
+        }
+        blockType = "xmp";
+      } else if (isApp13PhotoshopMarker(dataView, appMarkerPosition)) {
+        fieldLength = dataView.getUint16(appMarkerPosition + APP_MARKER_SIZE);
+        iptcDataOffset = appMarkerPosition + IPTC_DATA_OFFSET;
+        blockType = "iptc";
+      } else if (isApp2ICCMarker(dataView, appMarkerPosition)) {
+        fieldLength = dataView.getUint16(appMarkerPosition + APP_MARKER_SIZE);
+        if (!iccChunks) {
+          iccChunks = [];
+        }
+        if (iccChunks.length < MAX_ICC_CHUNKS) {
+          const iccDataOffset = appMarkerPosition + APP2_ICC_DATA_OFFSET;
+          const iccDataLength = fieldLength - (APP2_ICC_DATA_OFFSET - APP_MARKER_SIZE);
+          const iccChunkNumber = dataView.getUint8(appMarkerPosition + ICC_CHUNK_NUMBER_OFFSET);
+          const iccChunksTotal = dataView.getUint8(appMarkerPosition + ICC_TOTAL_CHUNKS_OFFSET);
+          iccChunks.push({ offset: iccDataOffset, length: iccDataLength, chunkNumber: iccChunkNumber, chunksTotal: iccChunksTotal });
+        }
+        blockType = "icc";
+      } else if (isApp2MPFMarker(dataView, appMarkerPosition)) {
+        fieldLength = dataView.getUint16(appMarkerPosition + APP_MARKER_SIZE);
+        mpfDataOffset = appMarkerPosition + MPF_DATA_OFFSET;
+        blockType = "mpf";
+      } else if (isAppMarker(dataView, appMarkerPosition)) {
+        fieldLength = dataView.getUint16(appMarkerPosition + APP_MARKER_SIZE);
+      } else if (isFillByte(dataView, appMarkerPosition)) {
+        appMarkerPosition++;
+        continue;
+      } else {
+        break;
+      }
+      pushMetadataBlock(metadataBlocks, blockType, appMarkerPosition, appMarkerPosition + APP_MARKER_SIZE + fieldLength);
+      appMarkerPosition += APP_MARKER_SIZE + fieldLength;
+    }
+    if (exifSegmentCount > 1) {
+      warnAboutMultipleExifSegments(exifSegmentCount);
+    }
+    if (metadataBlocks) {
+      if (!sawSos && appMarkerPosition + APP_MARKER_SIZE <= dataView.byteLength && dataView.getUint16(appMarkerPosition) === SOS_MARKER) {
+        sawSos = true;
+      }
+      metadataBlocks.truncated = !sawSos;
+    }
+    return {
+      hasAppMarkers: appMarkerPosition > JPEG_ID_SIZE,
+      fileDataOffset: sof0DataOffset || sof2DataOffset,
+      jfifDataOffset,
+      tiffHeaderOffset,
+      iptcDataOffset,
+      xmpChunks,
+      iccChunks,
+      mpfDataOffset
+    };
+  }
+  function isSOF0Marker(dataView, appMarkerPosition) {
+    return dataView.getUint16(appMarkerPosition) === SOF0_MARKER;
+  }
+  function isSOF2Marker(dataView, appMarkerPosition) {
+    return dataView.getUint16(appMarkerPosition) === SOF2_MARKER;
+  }
+  function isApp2ICCMarker(dataView, appMarkerPosition) {
+    const markerIdLength = APP2_ICC_IDENTIFIER.length;
+    return dataView.getUint16(appMarkerPosition) === APP2_MARKER && appMarkerPosition + ICC_TOTAL_CHUNKS_OFFSET < dataView.byteLength && getStringFromDataView(dataView, appMarkerPosition + APP_ID_OFFSET, markerIdLength) === APP2_ICC_IDENTIFIER;
+  }
+  function isApp2MPFMarker(dataView, appMarkerPosition) {
+    const markerIdLength = APP2_MPF_IDENTIFIER.length;
+    return dataView.getUint16(appMarkerPosition) === APP2_MARKER && getStringFromDataView(dataView, appMarkerPosition + APP_ID_OFFSET, markerIdLength) === APP2_MPF_IDENTIFIER;
+  }
+  function isApp0JfifMarker(dataView, appMarkerPosition) {
+    const markerIdLength = APP0_JFIF_IDENTIFIER.length;
+    return dataView.getUint16(appMarkerPosition) === APP0_MARKER && getStringFromDataView(dataView, appMarkerPosition + APP_ID_OFFSET, markerIdLength) === APP0_JFIF_IDENTIFIER && dataView.getUint8(appMarkerPosition + APP_ID_OFFSET + markerIdLength) === 0;
+  }
+  function isApp1ExifMarker(dataView, appMarkerPosition) {
+    const markerIdLength = APP1_EXIF_IDENTIFIER.length;
+    return dataView.getUint16(appMarkerPosition) === APP1_MARKER && getStringFromDataView(dataView, appMarkerPosition + APP_ID_OFFSET, markerIdLength) === APP1_EXIF_IDENTIFIER && dataView.getUint8(appMarkerPosition + APP_ID_OFFSET + markerIdLength) === 0;
+  }
+  function isApp1XmpMarker(dataView, appMarkerPosition) {
+    return dataView.getUint16(appMarkerPosition) === APP1_MARKER && isXmpIdentifier(dataView, appMarkerPosition);
+  }
+  function isXmpIdentifier(dataView, appMarkerPosition) {
+    const markerIdLength = APP1_XMP_IDENTIFIER.length;
+    return getStringFromDataView(dataView, appMarkerPosition + APP_ID_OFFSET, markerIdLength) === APP1_XMP_IDENTIFIER;
+  }
+  function isApp1ExtendedXmpMarker(dataView, appMarkerPosition) {
+    return dataView.getUint16(appMarkerPosition) === APP1_MARKER && isExtendedXmpIdentifier(dataView, appMarkerPosition);
+  }
+  function isExtendedXmpIdentifier(dataView, appMarkerPosition) {
+    const markerIdLength = APP1_XMP_EXTENDED_IDENTIFIER.length;
+    return getStringFromDataView(dataView, appMarkerPosition + APP_ID_OFFSET, markerIdLength) === APP1_XMP_EXTENDED_IDENTIFIER;
+  }
+  function getXmpChunkDetails(appMarkerPosition, fieldLength) {
+    return {
+      dataOffset: appMarkerPosition + XMP_DATA_OFFSET,
+      length: fieldLength - (XMP_DATA_OFFSET - APP_MARKER_SIZE)
+    };
+  }
+  function getExtendedXmpChunkDetails(appMarkerPosition, fieldLength) {
+    return {
+      dataOffset: appMarkerPosition + XMP_EXTENDED_DATA_OFFSET,
+      length: fieldLength - (XMP_EXTENDED_DATA_OFFSET - APP_MARKER_SIZE)
+    };
+  }
+  function isApp13PhotoshopMarker(dataView, appMarkerPosition) {
+    const markerIdLength = APP13_IPTC_IDENTIFIER.length;
+    const resourceIdentifierLength = APP13_RESOURCE_BLOCK_IDENTIFIER.length;
+    const resourceIdentifierOffset = appMarkerPosition + APP_ID_OFFSET + markerIdLength + 1;
+    return resourceIdentifierOffset + resourceIdentifierLength <= dataView.byteLength && dataView.getUint16(appMarkerPosition) === APP13_MARKER && getStringFromDataView(dataView, appMarkerPosition + APP_ID_OFFSET, markerIdLength) === APP13_IPTC_IDENTIFIER && dataView.getUint8(appMarkerPosition + APP_ID_OFFSET + markerIdLength) === 0 && getStringFromDataView(dataView, resourceIdentifierOffset, resourceIdentifierLength) === APP13_RESOURCE_BLOCK_IDENTIFIER;
+  }
+  function isAppMarker(dataView, appMarkerPosition) {
+    const appMarker = dataView.getUint16(appMarkerPosition);
+    return appMarker >= APP0_MARKER && appMarker <= APP15_MARKER || appMarker === COMMENT_MARKER || appMarker === SOF0_MARKER || appMarker === SOF2_MARKER || appMarker === DHT_MARKER || appMarker === DQT_MARKER || appMarker === DRI_MARKER || appMarker === SOS_MARKER;
+  }
+  function isFillByte(dataView, appMarkerPosition) {
+    return dataView.getUint16(appMarkerPosition) === FILL_BYTE;
+  }
+  function getExifMarkerScore(dataView, appMarkerPosition, fieldLength, tiffHeaderOffset) {
+    const segmentEnd = appMarkerPosition + APP_MARKER_SIZE + fieldLength;
+    const details = getExifTiffHeaderDetails(dataView, tiffHeaderOffset, segmentEnd);
+    if (!details) {
+      return 0;
+    }
+    const ifdEntriesScore = Number.isInteger(details.ifdEntries) ? details.ifdEntries : 0;
+    return (details.isValid ? 1e9 : 0) + ifdEntriesScore * 1e6 + fieldLength;
+  }
+  function getExifTiffHeaderDetails(dataView, tiffHeaderOffset, segmentEnd) {
+    try {
+      if (tiffHeaderOffset + TIFF_HEADER_LENGTH > segmentEnd) {
+        return void 0;
+      }
+      const byteOrderRaw = dataView.getUint16(
+        tiffHeaderOffset + TIFF_BYTE_ORDER_OFFSET
+      );
+      const isLittleEndian = byteOrderRaw === byte_order_default.LITTLE_ENDIAN;
+      if (!isLittleEndian && byteOrderRaw !== byte_order_default.BIG_ENDIAN) {
+        return void 0;
+      }
+      const tiffId = dataView.getUint16(
+        tiffHeaderOffset + TIFF_ID_OFFSET,
+        isLittleEndian
+      );
+      if (tiffId !== TIFF_ID) {
+        return void 0;
+      }
+      const ifdOffset = dataView.getUint32(
+        tiffHeaderOffset + TIFF_IFD_OFFSET_OFFSET,
+        isLittleEndian
+      );
+      const ifdEntryCountOffset = tiffHeaderOffset + ifdOffset;
+      if (ifdEntryCountOffset + IFD_ENTRY_COUNT_LENGTH > segmentEnd) {
+        return void 0;
+      }
+      const ifdEntries = dataView.getUint16(ifdEntryCountOffset, isLittleEndian);
+      const ifdTotalLength = IFD_ENTRY_COUNT_LENGTH + ifdEntries * IFD_ENTRY_LENGTH + NEXT_IFD_POINTER_LENGTH;
+      const hasFullIfd = ifdEntryCountOffset + ifdTotalLength <= segmentEnd;
+      const isValid = hasFullIfd && ifdEntries > 0;
+      return { ifdEntries, isValid };
+    } catch (error) {
+      return void 0;
+    }
+  }
+  function warnAboutMultipleExifSegments(exifSegmentCount) {
+    if (typeof console === "undefined" || typeof console.warn !== "function") {
+      return;
+    }
+    console.warn(
+      `ExifReader: Found ${exifSegmentCount} Exif segments (APP1). Will pick the best candidate segment.`
+    );
+  }
+  var image_header_jpeg_default, MIN_JPEG_DATA_BUFFER_LENGTH, JPEG_ID, JPEG_ID_SIZE, APP_ID_OFFSET, APP_MARKER_SIZE, JFIF_DATA_OFFSET, TIFF_HEADER_OFFSET, IPTC_DATA_OFFSET, XMP_DATA_OFFSET, XMP_EXTENDED_DATA_OFFSET, APP2_ICC_DATA_OFFSET, MPF_DATA_OFFSET, APP2_ICC_IDENTIFIER, ICC_CHUNK_NUMBER_OFFSET, ICC_TOTAL_CHUNKS_OFFSET, MAX_ICC_CHUNKS, MAX_XMP_CHUNKS, APP2_MPF_IDENTIFIER, SOF0_MARKER, SOF2_MARKER, DHT_MARKER, DQT_MARKER, DRI_MARKER, SOS_MARKER, APP0_MARKER, APP1_MARKER, APP2_MARKER, APP13_MARKER, APP15_MARKER, COMMENT_MARKER, FILL_BYTE, APP0_JFIF_IDENTIFIER, APP1_EXIF_IDENTIFIER, APP1_XMP_IDENTIFIER, APP1_XMP_EXTENDED_IDENTIFIER, APP13_IPTC_IDENTIFIER, APP13_RESOURCE_BLOCK_IDENTIFIER;
+  var init_image_header_jpeg = __esm({
+    "node_modules/exifreader/src/image-header-jpeg.js"() {
+      init_esbuild_shims();
+      init_utils();
+      init_byte_order();
+      init_tiff_constants();
+      image_header_jpeg_default = {
+        isJpegFile,
+        findJpegOffsets
+      };
+      MIN_JPEG_DATA_BUFFER_LENGTH = 2;
+      JPEG_ID = 65496;
+      JPEG_ID_SIZE = 2;
+      APP_ID_OFFSET = 4;
+      APP_MARKER_SIZE = 2;
+      JFIF_DATA_OFFSET = 2;
+      TIFF_HEADER_OFFSET = 10;
+      IPTC_DATA_OFFSET = 18;
+      XMP_DATA_OFFSET = 33;
+      XMP_EXTENDED_DATA_OFFSET = 79;
+      APP2_ICC_DATA_OFFSET = 18;
+      MPF_DATA_OFFSET = 8;
+      APP2_ICC_IDENTIFIER = "ICC_PROFILE\0";
+      ICC_CHUNK_NUMBER_OFFSET = APP_ID_OFFSET + APP2_ICC_IDENTIFIER.length;
+      ICC_TOTAL_CHUNKS_OFFSET = ICC_CHUNK_NUMBER_OFFSET + 1;
+      MAX_ICC_CHUNKS = 255;
+      MAX_XMP_CHUNKS = 1024;
+      APP2_MPF_IDENTIFIER = "MPF\0";
+      SOF0_MARKER = 65472;
+      SOF2_MARKER = 65474;
+      DHT_MARKER = 65476;
+      DQT_MARKER = 65499;
+      DRI_MARKER = 65501;
+      SOS_MARKER = 65498;
+      APP0_MARKER = 65504;
+      APP1_MARKER = 65505;
+      APP2_MARKER = 65506;
+      APP13_MARKER = 65517;
+      APP15_MARKER = 65519;
+      COMMENT_MARKER = 65534;
+      FILL_BYTE = 65535;
+      APP0_JFIF_IDENTIFIER = "JFIF";
+      APP1_EXIF_IDENTIFIER = "Exif";
+      APP1_XMP_IDENTIFIER = "http://ns.adobe.com/xap/1.0/\0";
+      APP1_XMP_EXTENDED_IDENTIFIER = "http://ns.adobe.com/xmp/extension/\0";
+      APP13_IPTC_IDENTIFIER = "Photoshop 3.0";
+      APP13_RESOURCE_BLOCK_IDENTIFIER = "8BIM";
+    }
+  });
+
+  // node_modules/exifreader/src/image-header-png.js
+  function isPngFile(dataView) {
+    return !!dataView && getStringFromDataView(dataView, 0, PNG_ID.length) === PNG_ID;
+  }
+  function findPngOffsets(dataView, async, metadataBlocks) {
+    const PNG_CRC_SIZE = 4;
+    const TYPE_IEND = "IEND";
+    const offsets = {
+      hasAppMarkers: false
+    };
+    let offset = PNG_ID.length;
+    let sawIEnd = false;
+    while (offset + PNG_CHUNK_LENGTH_SIZE + PNG_CHUNK_TYPE_SIZE <= dataView.byteLength) {
+      let blockType;
+      const chunkDataLength = dataView.getUint32(offset + PNG_CHUNK_LENGTH_OFFSET);
+      if (metadataBlocks && getStringFromDataView(dataView, offset + PNG_CHUNK_TYPE_OFFSET, PNG_CHUNK_TYPE_SIZE) === TYPE_IEND) {
+        sawIEnd = true;
+      }
+      if (isPngImageHeaderChunk(dataView, offset)) {
+        offsets.hasAppMarkers = true;
+        offsets.pngHeaderOffset = offset + PNG_CHUNK_DATA_OFFSET;
+        blockType = "file";
+      } else if (isPngXmpChunk(dataView, offset)) {
+        const dataOffset = getPngXmpDataOffset(dataView, offset);
+        if (dataOffset !== void 0) {
+          offsets.hasAppMarkers = true;
+          offsets.xmpChunks = [{
+            dataOffset,
+            length: chunkDataLength - (dataOffset - (offset + PNG_CHUNK_DATA_OFFSET))
+          }];
+          blockType = "xmp";
+        }
+      } else if (isPngTextChunk(dataView, offset, async)) {
+        offsets.hasAppMarkers = true;
+        if (!offsets.pngTextChunks) {
+          offsets.pngTextChunks = [];
+        }
+        offsets.pngTextChunks.push(offset + PNG_CHUNK_LENGTH_OFFSET);
+        blockType = "png";
+      } else if (isPngExifChunk(dataView, offset)) {
+        offsets.hasAppMarkers = true;
+        offsets.tiffHeaderOffset = offset + PNG_CHUNK_DATA_OFFSET;
+        blockType = "exif";
+      } else if (async && isPngIccpChunk(dataView, offset)) {
+        const iccHeaderOffset = offset + PNG_CHUNK_DATA_OFFSET;
+        const iccHeader = parseIccHeader(dataView, iccHeaderOffset, chunkDataLength);
+        if (iccHeader !== void 0) {
+          offsets.hasAppMarkers = true;
+          if (!offsets.iccChunks) {
+            offsets.iccChunks = [{
+              offset: iccHeader.compressedProfileOffset,
+              length: chunkDataLength - (iccHeader.compressedProfileOffset - iccHeaderOffset),
+              chunkNumber: 1,
+              chunksTotal: 1,
+              profileName: iccHeader.profileName,
+              compressionMethod: iccHeader.compressionMethod
+            }];
+          }
+          blockType = "icc";
+        }
+      } else if (isPngChunk(dataView, offset)) {
+        offsets.hasAppMarkers = true;
+        if (!offsets.pngChunkOffsets) {
+          offsets.pngChunkOffsets = [];
+        }
+        offsets.pngChunkOffsets.push(offset + PNG_CHUNK_LENGTH_OFFSET);
+        blockType = "png";
+      }
+      const chunkTotalSize = chunkDataLength + PNG_CHUNK_LENGTH_SIZE + PNG_CHUNK_TYPE_SIZE + PNG_CRC_SIZE;
+      pushMetadataBlock(metadataBlocks, blockType, offset, offset + chunkTotalSize);
+      offset += chunkTotalSize;
+    }
+    if (metadataBlocks) {
+      metadataBlocks.truncated = !sawIEnd;
+    }
+    return offsets;
+  }
+  function isPngImageHeaderChunk(dataView, offset) {
+    const PNG_CHUNK_TYPE_IMAGE_HEADER = "IHDR";
+    return getStringFromDataView(dataView, offset + PNG_CHUNK_TYPE_OFFSET, PNG_CHUNK_TYPE_SIZE) === PNG_CHUNK_TYPE_IMAGE_HEADER;
+  }
+  function isPngXmpChunk(dataView, offset) {
+    return getStringFromDataView(dataView, offset + PNG_CHUNK_TYPE_OFFSET, PNG_CHUNK_TYPE_SIZE) === TYPE_ITXT && getStringFromDataView(dataView, offset + PNG_CHUNK_DATA_OFFSET, PNG_XMP_PREFIX.length) === PNG_XMP_PREFIX;
+  }
+  function isPngTextChunk(dataView, offset, async) {
+    const chunkType = getStringFromDataView(dataView, offset + PNG_CHUNK_TYPE_OFFSET, PNG_CHUNK_TYPE_SIZE);
+    return chunkType === TYPE_TEXT || chunkType === TYPE_ITXT || chunkType === TYPE_ZTXT && async;
+  }
+  function isPngExifChunk(dataView, offset) {
+    return getStringFromDataView(dataView, offset + PNG_CHUNK_TYPE_OFFSET, PNG_CHUNK_TYPE_SIZE) === TYPE_EXIF;
+  }
+  function isPngIccpChunk(dataView, offset) {
+    return getStringFromDataView(dataView, offset + PNG_CHUNK_TYPE_OFFSET, PNG_CHUNK_TYPE_SIZE) === TYPE_ICCP;
+  }
+  function isPngChunk(dataView, offset) {
+    const SUPPORTED_PNG_CHUNK_TYPES = [TYPE_PHYS, TYPE_TIME];
+    const chunkType = getStringFromDataView(dataView, offset + PNG_CHUNK_TYPE_OFFSET, PNG_CHUNK_TYPE_SIZE);
+    return SUPPORTED_PNG_CHUNK_TYPES.includes(chunkType);
+  }
+  function getPngXmpDataOffset(dataView, offset) {
+    const COMPRESSION_FLAG_SIZE = 1;
+    const COMPRESSION_METHOD_SIZE = 1;
+    offset += PNG_CHUNK_DATA_OFFSET + PNG_XMP_PREFIX.length + COMPRESSION_FLAG_SIZE + COMPRESSION_METHOD_SIZE;
+    let numberOfNullSeparators = 0;
+    while (numberOfNullSeparators < 2 && offset < dataView.byteLength) {
+      if (dataView.getUint8(offset) === 0) {
+        numberOfNullSeparators++;
+      }
+      offset++;
+    }
+    if (numberOfNullSeparators < 2) {
+      return void 0;
+    }
+    return offset;
+  }
+  function parseIccHeader(dataView, offset, chunkDataLength) {
+    const NULL_SEPARATOR_SIZE = 1;
+    const COMPRESSION_METHOD_SIZE = 1;
+    const chunkEnd = Math.min(offset + chunkDataLength, dataView.byteLength);
+    const profileNameLength = getIccProfileNameLength(dataView, offset, chunkEnd);
+    if (profileNameLength === void 0) {
+      return void 0;
+    }
+    const compressionMethodOffset = offset + profileNameLength + NULL_SEPARATOR_SIZE;
+    if (compressionMethodOffset + COMPRESSION_METHOD_SIZE > chunkEnd) {
+      return void 0;
+    }
+    return {
+      profileName: getStringFromDataView(dataView, offset, profileNameLength),
+      compressionMethod: dataView.getUint8(compressionMethodOffset),
+      compressedProfileOffset: compressionMethodOffset + COMPRESSION_METHOD_SIZE
+    };
+  }
+  function getIccProfileNameLength(dataView, offset, chunkEnd) {
+    for (let i = 0; i <= MAX_ICC_PROFILE_NAME_LENGTH && offset + i < chunkEnd; i++) {
+      if (dataView.getUint8(offset + i) === 0) {
+        return i;
+      }
+    }
+    return void 0;
+  }
+  var image_header_png_default, PNG_ID, PNG_CHUNK_LENGTH_SIZE, PNG_CHUNK_TYPE_SIZE, PNG_CHUNK_LENGTH_OFFSET, PNG_CHUNK_TYPE_OFFSET, PNG_CHUNK_DATA_OFFSET, PNG_XMP_PREFIX, TYPE_TEXT, TYPE_ITXT, TYPE_ZTXT, TYPE_PHYS, TYPE_TIME, TYPE_EXIF, TYPE_ICCP, MAX_ICC_PROFILE_NAME_LENGTH;
+  var init_image_header_png = __esm({
+    "node_modules/exifreader/src/image-header-png.js"() {
+      init_esbuild_shims();
+      init_utils();
+      image_header_png_default = {
+        isPngFile,
+        findPngOffsets
+      };
+      PNG_ID = "\x89PNG\r\n\n";
+      PNG_CHUNK_LENGTH_SIZE = 4;
+      PNG_CHUNK_TYPE_SIZE = 4;
+      PNG_CHUNK_LENGTH_OFFSET = 0;
+      PNG_CHUNK_TYPE_OFFSET = PNG_CHUNK_LENGTH_SIZE;
+      PNG_CHUNK_DATA_OFFSET = PNG_CHUNK_LENGTH_SIZE + PNG_CHUNK_TYPE_SIZE;
+      PNG_XMP_PREFIX = "XML:com.adobe.xmp\0";
+      TYPE_TEXT = "tEXt";
+      TYPE_ITXT = "iTXt";
+      TYPE_ZTXT = "zTXt";
+      TYPE_PHYS = "pHYs";
+      TYPE_TIME = "tIME";
+      TYPE_EXIF = "eXIf";
+      TYPE_ICCP = "iCCP";
+      MAX_ICC_PROFILE_NAME_LENGTH = 79;
+    }
+  });
+
+  // node_modules/exifreader/src/image-header-heic.js
+  function isHeicFile(dataView) {
+    return hasMajorBrand(dataView, HEIC_MAJOR_BRANDS);
+  }
+  function findHeicOffsets(dataView, metadataBlocks) {
+    return findOffsets(dataView, metadataBlocks);
+  }
+  var image_header_heic_default, HEIC_MAJOR_BRANDS;
+  var init_image_header_heic = __esm({
+    "node_modules/exifreader/src/image-header-heic.js"() {
+      init_esbuild_shims();
+      init_image_header_iso_bmff();
+      image_header_heic_default = {
+        isHeicFile,
+        findHeicOffsets
+      };
+      HEIC_MAJOR_BRANDS = ["heic", "heix", "hevc", "hevx", "heim", "heis", "hevm", "hevs", "mif1"];
+    }
+  });
+
+  // node_modules/exifreader/src/image-header-avif.js
+  function isAvifFile(dataView) {
+    return hasMajorBrand(dataView, AVIF_MAJOR_BRANDS);
+  }
+  function findAvifOffsets(dataView, metadataBlocks) {
+    return findOffsets(dataView, metadataBlocks);
+  }
+  var image_header_avif_default, AVIF_MAJOR_BRANDS;
+  var init_image_header_avif = __esm({
+    "node_modules/exifreader/src/image-header-avif.js"() {
+      init_esbuild_shims();
+      init_image_header_iso_bmff();
+      image_header_avif_default = {
+        isAvifFile,
+        findAvifOffsets
+      };
+      AVIF_MAJOR_BRANDS = ["avif"];
+    }
+  });
+
+  // node_modules/exifreader/src/image-header-jxl.js
+  function isJxlFile(dataView) {
+    try {
+      return isJxlContainer(dataView) || isJxlCodestream(dataView);
+    } catch (_error) {
+      return false;
+    }
+  }
+  function isJxlContainer(dataView) {
+    if (!dataView || dataView.byteLength < JXL_CONTAINER_SIGNATURE.length) {
+      return false;
+    }
+    for (let i = 0; i < JXL_CONTAINER_SIGNATURE.length; i++) {
+      if (dataView.getUint8(i) !== JXL_CONTAINER_SIGNATURE[i]) {
         return false;
       }
-      var UNICODE_SUPPORT = detectUnicodeSupport();
-      function chars(regexp) {
-        if (regexp.source[0] !== "[") {
-          throw new Error(regexp + " can not be used with chars");
-        }
-        return regexp.source.slice(1, regexp.source.lastIndexOf("]"));
+    }
+    return true;
+  }
+  function isJxlCodestream(dataView) {
+    if (!dataView || dataView.byteLength < JXL_CODESTREAM_SIGNATURE.length) {
+      return false;
+    }
+    return dataView.getUint8(0) === JXL_CODESTREAM_SIGNATURE[0] && dataView.getUint8(1) === JXL_CODESTREAM_SIGNATURE[1];
+  }
+  function findJxlOffsets(dataView, metadataBlocks) {
+    let offset = 0;
+    let tiffHeaderOffset;
+    let xmpChunks;
+    let brobExifChunk;
+    let brobXmpChunk;
+    let jxlCodestreamOffset;
+    if (isJxlCodestream(dataView)) {
+      return {
+        hasAppMarkers: true,
+        tiffHeaderOffset: void 0,
+        xmpChunks: void 0,
+        brobExifChunk: void 0,
+        brobXmpChunk: void 0,
+        jxlCodestreamOffset: 0
+      };
+    }
+    while (offset + BOX_MIN_LENGTH <= dataView.byteLength) {
+      const { length, contentOffset } = getBoxLength(dataView, offset);
+      if (length < contentOffset - offset) {
+        break;
       }
-      function chars_without(regexp, search) {
-        if (regexp.source[0] !== "[") {
-          throw new Error("/" + regexp.source + "/ can not be used with chars_without");
+      const contentEnd = Math.min(offset + length, dataView.byteLength);
+      const boxType = dataView.getUint32(offset + BOX_TYPE_OFFSET);
+      let blockType;
+      if (boxType === TYPE_EXIF2) {
+        if (contentOffset + EXIF_TIFF_HEADER_OFFSET_SIZE <= contentEnd) {
+          tiffHeaderOffset = getTiffHeaderOffset(dataView, contentOffset);
         }
-        if (!search || typeof search !== "string") {
-          throw new Error(JSON.stringify(search) + " is not a valid search");
+        blockType = "exif";
+      }
+      if (boxType === TYPE_XML) {
+        xmpChunks = [{
+          dataOffset: contentOffset,
+          length: length - (contentOffset - offset)
+        }];
+        blockType = "xmp";
+      }
+      if (boxType === TYPE_JXLC && jxlCodestreamOffset === void 0) {
+        jxlCodestreamOffset = contentOffset;
+      }
+      if (boxType === TYPE_JXLP && jxlCodestreamOffset === void 0 && contentOffset + JXLP_SEQUENCE_NUMBER_SIZE <= contentEnd) {
+        const sequenceNumber = dataView.getUint32(contentOffset) & 2147483647;
+        if (sequenceNumber === 0) {
+          jxlCodestreamOffset = contentOffset + JXLP_SEQUENCE_NUMBER_SIZE;
         }
-        if (regexp.source.indexOf(search) === -1) {
-          throw new Error('"' + search + '" is not is /' + regexp.source + "/");
+      }
+      if (boxType === TYPE_BROB && contentOffset + BROB_ORIGINAL_TYPE_SIZE <= contentEnd) {
+        const originalType = dataView.getUint32(contentOffset);
+        const compressedDataOffset = contentOffset + BROB_ORIGINAL_TYPE_SIZE;
+        const compressedDataLength = length - (compressedDataOffset - offset);
+        if (originalType === TYPE_EXIF2) {
+          blockType = "exif";
+          if (tiffHeaderOffset === void 0 && !brobExifChunk) {
+            brobExifChunk = {
+              dataOffset: compressedDataOffset,
+              length: compressedDataLength
+            };
+          }
         }
-        if (search === "-" && regexp.source.indexOf(search) !== 1) {
-          throw new Error('"' + search + '" is not at the first postion of /' + regexp.source + "/");
+        if (originalType === TYPE_XML) {
+          blockType = "xmp";
+          if (!xmpChunks && !brobXmpChunk) {
+            brobXmpChunk = {
+              dataOffset: compressedDataOffset,
+              length: compressedDataLength
+            };
+          }
         }
-        return new RegExp(regexp.source.replace(search, ""), UNICODE_SUPPORT ? "u" : "");
       }
-      function reg(args) {
-        var self2 = this;
-        return new RegExp(
-          Array.prototype.slice.call(arguments).map(function(part) {
-            var isStr = typeof part === "string";
-            if (isStr && self2 === void 0 && part === "|") {
-              throw new Error("use regg instead of reg to wrap expressions with `|`!");
-            }
-            return isStr ? part : part.source;
-          }).join(""),
-          UNICODE_SUPPORT ? "mu" : "m"
-        );
-      }
-      function regg(args) {
-        if (arguments.length === 0) {
-          throw new Error("no parameters provided");
-        }
-        return reg.apply(regg, ["(?:"].concat(Array.prototype.slice.call(arguments), [")"]));
-      }
-      var UNICODE_REPLACEMENT_CHARACTER = "\uFFFD";
-      var Char = /[-\x09\x0A\x0D\x20-\x2C\x2E-\uD7FF\uE000-\uFFFD]/;
-      if (UNICODE_SUPPORT) {
-        Char = reg("[", chars(Char), "\\u{10000}-\\u{10FFFF}", "]");
-      }
-      var InvalidChar = new RegExp("[^" + chars(Char) + "]", UNICODE_SUPPORT ? "u" : "");
-      var _SChar = /[\x20\x09\x0D\x0A]/;
-      var SChar_s = chars(_SChar);
-      var S = reg(_SChar, "+");
-      var S_OPT = reg(_SChar, "*");
-      var NameStartChar = /[:_a-zA-Z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD]/;
-      if (UNICODE_SUPPORT) {
-        NameStartChar = reg("[", chars(NameStartChar), "\\u{10000}-\\u{10FFFF}", "]");
-      }
-      var NameStartChar_s = chars(NameStartChar);
-      var NameChar = reg("[", NameStartChar_s, chars(/[-.0-9\xB7]/), chars(/[\u0300-\u036F\u203F-\u2040]/), "]");
-      var Name = reg(NameStartChar, NameChar, "*");
-      var Nmtoken = reg(NameChar, "+");
-      var EntityRef = reg("&", Name, ";");
-      var CharRef = regg(/&#[0-9]+;|&#x[0-9a-fA-F]+;/);
-      var Reference = regg(EntityRef, "|", CharRef);
-      var PEReference = reg("%", Name, ";");
-      var EntityValue = regg(
-        reg('"', regg(/[^%&"]/, "|", PEReference, "|", Reference), "*", '"'),
-        "|",
-        reg("'", regg(/[^%&']/, "|", PEReference, "|", Reference), "*", "'")
-      );
-      var AttValue = regg('"', regg(/[^<&"]/, "|", Reference), "*", '"', "|", "'", regg(/[^<&']/, "|", Reference), "*", "'");
-      var NCNameStartChar = chars_without(NameStartChar, ":");
-      var NCNameChar = chars_without(NameChar, ":");
-      var NCName = reg(NCNameStartChar, NCNameChar, "*");
-      var QName = reg(NCName, regg(":", NCName), "?");
-      var QName_exact = reg("^", QName, "$");
-      var QName_group = reg("(", QName, ")");
-      var SystemLiteral = regg(/"[^"]*"|'[^']*'/);
-      var PI = reg(/^<\?/, "(", Name, ")", regg(S, "(", Char, "*?)"), "?", /\?>/);
-      var PubidChar = /[\x20\x0D\x0Aa-zA-Z0-9-'()+,./:=?;!*#@$_%]/;
-      var PubidLiteral = regg('"', PubidChar, '*"', "|", "'", chars_without(PubidChar, "'"), "*'");
-      var COMMENT_START = "<!--";
-      var COMMENT_END = "-->";
-      var Comment = reg(COMMENT_START, regg(chars_without(Char, "-"), "|", reg("-", chars_without(Char, "-"))), "*", COMMENT_END);
-      var PCDATA = "#PCDATA";
-      var Mixed = regg(
-        reg(/\(/, S_OPT, PCDATA, regg(S_OPT, /\|/, S_OPT, QName), "*", S_OPT, /\)\*/),
-        "|",
-        reg(/\(/, S_OPT, PCDATA, S_OPT, /\)/)
-      );
-      var _children_quantity = /[?*+]?/;
-      var children = reg(
-        /\([^>]+\)/,
-        _children_quantity
-        /*regg(choice, '|', seq), _children_quantity*/
-      );
-      var contentspec = regg("EMPTY", "|", "ANY", "|", Mixed, "|", children);
-      var ELEMENTDECL_START = "<!ELEMENT";
-      var elementdecl = reg(ELEMENTDECL_START, S, regg(QName, "|", PEReference), S, regg(contentspec, "|", PEReference), S_OPT, ">");
-      var NotationType = reg("NOTATION", S, /\(/, S_OPT, Name, regg(S_OPT, /\|/, S_OPT, Name), "*", S_OPT, /\)/);
-      var Enumeration = reg(/\(/, S_OPT, Nmtoken, regg(S_OPT, /\|/, S_OPT, Nmtoken), "*", S_OPT, /\)/);
-      var EnumeratedType = regg(NotationType, "|", Enumeration);
-      var AttType = regg(/CDATA|ID|IDREF|IDREFS|ENTITY|ENTITIES|NMTOKEN|NMTOKENS/, "|", EnumeratedType);
-      var DefaultDecl = regg(/#REQUIRED|#IMPLIED/, "|", regg(regg("#FIXED", S), "?", AttValue));
-      var AttDef = regg(S, Name, S, AttType, S, DefaultDecl);
-      var ATTLIST_DECL_START = "<!ATTLIST";
-      var AttlistDecl = reg(ATTLIST_DECL_START, S, Name, AttDef, "*", S_OPT, ">");
-      var ABOUT_LEGACY_COMPAT = "about:legacy-compat";
-      var ABOUT_LEGACY_COMPAT_SystemLiteral = regg('"' + ABOUT_LEGACY_COMPAT + '"', "|", "'" + ABOUT_LEGACY_COMPAT + "'");
-      var SYSTEM = "SYSTEM";
-      var PUBLIC = "PUBLIC";
-      var ExternalID = regg(regg(SYSTEM, S, SystemLiteral), "|", regg(PUBLIC, S, PubidLiteral, S, SystemLiteral));
-      var ExternalID_match = reg(
-        "^",
-        regg(
-          regg(SYSTEM, S, "(?<SystemLiteralOnly>", SystemLiteral, ")"),
-          "|",
-          regg(PUBLIC, S, "(?<PubidLiteral>", PubidLiteral, ")", S, "(?<SystemLiteral>", SystemLiteral, ")")
-        )
-      );
-      var PubidLiteral_match = reg("^", PubidLiteral, "$");
-      var SystemLiteral_match = reg("^", SystemLiteral, "$");
-      var NDataDecl = regg(S, "NDATA", S, Name);
-      var EntityDef = regg(EntityValue, "|", regg(ExternalID, NDataDecl, "?"));
-      var ENTITY_DECL_START = "<!ENTITY";
-      var GEDecl = reg(ENTITY_DECL_START, S, Name, S, EntityDef, S_OPT, ">");
-      var PEDef = regg(EntityValue, "|", ExternalID);
-      var PEDecl = reg(ENTITY_DECL_START, S, "%", S, Name, S, PEDef, S_OPT, ">");
-      var EntityDecl = regg(GEDecl, "|", PEDecl);
-      var PublicID = reg(PUBLIC, S, PubidLiteral);
-      var NotationDecl = reg("<!NOTATION", S, Name, S, regg(ExternalID, "|", PublicID), S_OPT, ">");
-      var Eq = reg(S_OPT, "=", S_OPT);
-      var VersionNum = /1[.]\d+/;
-      var VersionInfo = reg(S, "version", Eq, regg("'", VersionNum, "'", "|", '"', VersionNum, '"'));
-      var EncName = /[A-Za-z][-A-Za-z0-9._]*/;
-      var EncodingDecl = regg(S, "encoding", Eq, regg('"', EncName, '"', "|", "'", EncName, "'"));
-      var SDDecl = regg(S, "standalone", Eq, regg("'", regg("yes", "|", "no"), "'", "|", '"', regg("yes", "|", "no"), '"'));
-      var XMLDecl = reg(/^<\?xml/, VersionInfo, EncodingDecl, "?", SDDecl, "?", S_OPT, /\?>/);
-      var DOCTYPE_DECL_START = "<!DOCTYPE";
-      var CDATA_START = "<![CDATA[";
-      var CDATA_END = "]]>";
-      var CDStart = /<!\[CDATA\[/;
-      var CDEnd = /\]\]>/;
-      var CData = reg(Char, "*?", CDEnd);
-      var CDSect = reg(CDStart, CData);
-      exports2.chars = chars;
-      exports2.chars_without = chars_without;
-      exports2.detectUnicodeSupport = detectUnicodeSupport;
-      exports2.reg = reg;
-      exports2.regg = regg;
-      exports2.ABOUT_LEGACY_COMPAT = ABOUT_LEGACY_COMPAT;
-      exports2.ABOUT_LEGACY_COMPAT_SystemLiteral = ABOUT_LEGACY_COMPAT_SystemLiteral;
-      exports2.AttlistDecl = AttlistDecl;
-      exports2.CDATA_START = CDATA_START;
-      exports2.CDATA_END = CDATA_END;
-      exports2.CDSect = CDSect;
-      exports2.Char = Char;
-      exports2.Comment = Comment;
-      exports2.COMMENT_START = COMMENT_START;
-      exports2.COMMENT_END = COMMENT_END;
-      exports2.DOCTYPE_DECL_START = DOCTYPE_DECL_START;
-      exports2.elementdecl = elementdecl;
-      exports2.EntityDecl = EntityDecl;
-      exports2.EntityValue = EntityValue;
-      exports2.ExternalID = ExternalID;
-      exports2.ExternalID_match = ExternalID_match;
-      exports2.Name = Name;
-      exports2.NotationDecl = NotationDecl;
-      exports2.Reference = Reference;
-      exports2.PEReference = PEReference;
-      exports2.PI = PI;
-      exports2.PUBLIC = PUBLIC;
-      exports2.PubidLiteral = PubidLiteral;
-      exports2.PubidLiteral_match = PubidLiteral_match;
-      exports2.QName = QName;
-      exports2.QName_exact = QName_exact;
-      exports2.QName_group = QName_group;
-      exports2.S = S;
-      exports2.SChar_s = SChar_s;
-      exports2.S_OPT = S_OPT;
-      exports2.SYSTEM = SYSTEM;
-      exports2.SystemLiteral = SystemLiteral;
-      exports2.SystemLiteral_match = SystemLiteral_match;
-      exports2.InvalidChar = InvalidChar;
-      exports2.UNICODE_REPLACEMENT_CHARACTER = UNICODE_REPLACEMENT_CHARACTER;
-      exports2.UNICODE_SUPPORT = UNICODE_SUPPORT;
-      exports2.XMLDecl = XMLDecl;
+      pushMetadataBlock(metadataBlocks, blockType, offset, offset + length);
+      offset += length;
+    }
+    const hasAppMarkers = tiffHeaderOffset !== void 0 || xmpChunks !== void 0 || brobExifChunk !== void 0 || brobXmpChunk !== void 0 || jxlCodestreamOffset !== void 0;
+    return {
+      hasAppMarkers,
+      tiffHeaderOffset,
+      xmpChunks,
+      brobExifChunk,
+      brobXmpChunk,
+      jxlCodestreamOffset
+    };
+  }
+  var image_header_jxl_default, JXL_CONTAINER_SIGNATURE, JXL_CODESTREAM_SIGNATURE, TYPE_EXIF2, TYPE_XML, TYPE_BROB, TYPE_JXLC, TYPE_JXLP, JXLP_SEQUENCE_NUMBER_SIZE, BROB_ORIGINAL_TYPE_SIZE, EXIF_TIFF_HEADER_OFFSET_SIZE;
+  var init_image_header_jxl = __esm({
+    "node_modules/exifreader/src/image-header-jxl.js"() {
+      init_esbuild_shims();
+      init_image_header_iso_bmff();
+      init_utils();
+      image_header_jxl_default = {
+        isJxlFile,
+        findJxlOffsets
+      };
+      JXL_CONTAINER_SIGNATURE = [
+        0,
+        0,
+        0,
+        12,
+        74,
+        88,
+        76,
+        32,
+        13,
+        10,
+        135,
+        10
+      ];
+      JXL_CODESTREAM_SIGNATURE = [255, 10];
+      TYPE_EXIF2 = 1165519206;
+      TYPE_XML = 2020437024;
+      TYPE_BROB = 1651666786;
+      TYPE_JXLC = 1786276963;
+      TYPE_JXLP = 1786276976;
+      JXLP_SEQUENCE_NUMBER_SIZE = 4;
+      BROB_ORIGINAL_TYPE_SIZE = 4;
+      EXIF_TIFF_HEADER_OFFSET_SIZE = 4;
     }
   });
 
-  // node_modules/@xmldom/xmldom/lib/dom.js
-  var require_dom = __commonJS({
-    "node_modules/@xmldom/xmldom/lib/dom.js"(exports2) {
-      "use strict";
+  // node_modules/exifreader/src/image-header-webp.js
+  function isWebpFile(dataView) {
+    const RIFF_ID_OFFSET = 0;
+    const RIFF_ID = "RIFF";
+    const WEBP_MARKER_OFFSET = 8;
+    const WEBP_MARKER = "WEBP";
+    return !!dataView && getStringFromDataView(dataView, RIFF_ID_OFFSET, RIFF_ID.length) === RIFF_ID && getStringFromDataView(dataView, WEBP_MARKER_OFFSET, WEBP_MARKER.length) === WEBP_MARKER;
+  }
+  function findOffsets2(dataView, metadataBlocks) {
+    const SUB_CHUNK_START_OFFSET = 12;
+    const CHUNK_SIZE_OFFSET = 4;
+    const EXIF_IDENTIFIER = "Exif\0\0";
+    const CHUNK_HEADER_SIZE = 8;
+    let offset = SUB_CHUNK_START_OFFSET;
+    let hasAppMarkers = false;
+    let tiffHeaderOffset;
+    let xmpChunks;
+    let iccChunks;
+    let vp8xChunkOffset;
+    while (offset + CHUNK_HEADER_SIZE < dataView.byteLength) {
+      const chunkId = getStringFromDataView(dataView, offset, 4);
+      const chunkSize = dataView.getUint32(offset + CHUNK_SIZE_OFFSET, true);
+      let blockType;
+      if (chunkId === "EXIF") {
+        hasAppMarkers = true;
+        if (getStringFromDataView(dataView, offset + CHUNK_HEADER_SIZE, EXIF_IDENTIFIER.length) === EXIF_IDENTIFIER) {
+          tiffHeaderOffset = offset + CHUNK_HEADER_SIZE + EXIF_IDENTIFIER.length;
+        } else {
+          tiffHeaderOffset = offset + CHUNK_HEADER_SIZE;
+        }
+        blockType = "exif";
+      } else if (chunkId === "XMP ") {
+        hasAppMarkers = true;
+        xmpChunks = [{
+          dataOffset: offset + CHUNK_HEADER_SIZE,
+          length: chunkSize
+        }];
+        blockType = "xmp";
+      } else if (chunkId === "ICCP") {
+        hasAppMarkers = true;
+        iccChunks = [{
+          offset: offset + CHUNK_HEADER_SIZE,
+          length: chunkSize,
+          chunkNumber: 1,
+          chunksTotal: 1
+        }];
+        blockType = "icc";
+      } else if (chunkId === "VP8X") {
+        hasAppMarkers = true;
+        vp8xChunkOffset = offset + CHUNK_HEADER_SIZE;
+        blockType = "riff";
+      }
+      const chunkTotalSize = CHUNK_HEADER_SIZE + (chunkSize % 2 === 0 ? chunkSize : chunkSize + 1);
+      pushMetadataBlock(metadataBlocks, blockType, offset, offset + chunkTotalSize);
+      offset += chunkTotalSize;
+    }
+    return {
+      hasAppMarkers,
+      tiffHeaderOffset,
+      xmpChunks,
+      iccChunks,
+      vp8xChunkOffset
+    };
+  }
+  var image_header_webp_default;
+  var init_image_header_webp = __esm({
+    "node_modules/exifreader/src/image-header-webp.js"() {
       init_esbuild_shims();
-      var conventions = require_conventions();
-      var find = conventions.find;
-      var hasDefaultHTMLNamespace = conventions.hasDefaultHTMLNamespace;
-      var hasOwn = conventions.hasOwn;
-      var isHTMLMimeType = conventions.isHTMLMimeType;
-      var isHTMLRawTextElement = conventions.isHTMLRawTextElement;
-      var isHTMLVoidElement = conventions.isHTMLVoidElement;
-      var MIME_TYPE = conventions.MIME_TYPE;
-      var NAMESPACE = conventions.NAMESPACE;
-      var PDC = /* @__PURE__ */ Symbol();
-      var errors = require_errors();
-      var DOMException = errors.DOMException;
-      var DOMExceptionName = errors.DOMExceptionName;
-      var g = require_grammar();
-      function checkSymbol(symbol) {
-        if (symbol !== PDC) {
-          throw new TypeError("Illegal constructor");
-        }
-      }
-      function notEmptyString(input) {
-        return input !== "";
-      }
-      function splitOnASCIIWhitespace(input) {
-        return input ? input.split(/[\t\n\f\r ]+/).filter(notEmptyString) : [];
-      }
-      function orderedSetReducer(current, element) {
-        if (!hasOwn(current, element)) {
-          current[element] = true;
-        }
-        return current;
-      }
-      function toOrderedSet(input) {
-        if (!input) return [];
-        var list = splitOnASCIIWhitespace(input);
-        return Object.keys(list.reduce(orderedSetReducer, {}));
-      }
-      function arrayIncludes(list) {
-        return function(element) {
-          return list && list.indexOf(element) !== -1;
-        };
-      }
-      function validateQualifiedName(qualifiedName) {
-        if (!g.QName_exact.test(qualifiedName)) {
-          throw new DOMException(DOMException.INVALID_CHARACTER_ERR, 'invalid character in qualified name "' + qualifiedName + '"');
-        }
-      }
-      function validateAndExtract(namespace, qualifiedName) {
-        validateQualifiedName(qualifiedName);
-        namespace = namespace || null;
-        var prefix = null;
-        var localName = qualifiedName;
-        if (qualifiedName.indexOf(":") >= 0) {
-          var splitResult = qualifiedName.split(":");
-          prefix = splitResult[0];
-          localName = splitResult[1];
-        }
-        if (prefix !== null && namespace === null) {
-          throw new DOMException(DOMException.NAMESPACE_ERR, "prefix is non-null and namespace is null");
-        }
-        if (prefix === "xml" && namespace !== conventions.NAMESPACE.XML) {
-          throw new DOMException(DOMException.NAMESPACE_ERR, 'prefix is "xml" and namespace is not the XML namespace');
-        }
-        if ((prefix === "xmlns" || qualifiedName === "xmlns") && namespace !== conventions.NAMESPACE.XMLNS) {
-          throw new DOMException(
-            DOMException.NAMESPACE_ERR,
-            'either qualifiedName or prefix is "xmlns" and namespace is not the XMLNS namespace'
-          );
-        }
-        if (namespace === conventions.NAMESPACE.XMLNS && prefix !== "xmlns" && qualifiedName !== "xmlns") {
-          throw new DOMException(
-            DOMException.NAMESPACE_ERR,
-            'namespace is the XMLNS namespace and neither qualifiedName nor prefix is "xmlns"'
-          );
-        }
-        return [namespace, prefix, localName];
-      }
-      function copy(src, dest) {
-        for (var p in src) {
-          if (hasOwn(src, p)) {
-            dest[p] = src[p];
-          }
-        }
-      }
-      function _extends(Class2, Super) {
-        var pt = Class2.prototype;
-        if (!(pt instanceof Super)) {
-          let t = function() {
-          };
-          t.prototype = Super.prototype;
-          t = new t();
-          copy(pt, t);
-          Class2.prototype = pt = t;
-        }
-        if (pt.constructor != Class2) {
-          if (typeof Class2 != "function") {
-            console.error("unknown Class:" + Class2);
-          }
-          pt.constructor = Class2;
-        }
-      }
-      var NodeType = {};
-      var ELEMENT_NODE = NodeType.ELEMENT_NODE = 1;
-      var ATTRIBUTE_NODE = NodeType.ATTRIBUTE_NODE = 2;
-      var TEXT_NODE = NodeType.TEXT_NODE = 3;
-      var CDATA_SECTION_NODE = NodeType.CDATA_SECTION_NODE = 4;
-      var ENTITY_REFERENCE_NODE = NodeType.ENTITY_REFERENCE_NODE = 5;
-      var ENTITY_NODE = NodeType.ENTITY_NODE = 6;
-      var PROCESSING_INSTRUCTION_NODE = NodeType.PROCESSING_INSTRUCTION_NODE = 7;
-      var COMMENT_NODE = NodeType.COMMENT_NODE = 8;
-      var DOCUMENT_NODE = NodeType.DOCUMENT_NODE = 9;
-      var DOCUMENT_TYPE_NODE = NodeType.DOCUMENT_TYPE_NODE = 10;
-      var DOCUMENT_FRAGMENT_NODE = NodeType.DOCUMENT_FRAGMENT_NODE = 11;
-      var NOTATION_NODE = NodeType.NOTATION_NODE = 12;
-      var DocumentPosition = conventions.freeze({
-        DOCUMENT_POSITION_DISCONNECTED: 1,
-        DOCUMENT_POSITION_PRECEDING: 2,
-        DOCUMENT_POSITION_FOLLOWING: 4,
-        DOCUMENT_POSITION_CONTAINS: 8,
-        DOCUMENT_POSITION_CONTAINED_BY: 16,
-        DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: 32
-      });
-      function commonAncestor(a, b) {
-        if (b.length < a.length) return commonAncestor(b, a);
-        var c = null;
-        for (var n in a) {
-          if (a[n] !== b[n]) return c;
-          c = a[n];
-        }
-        return c;
-      }
-      function docGUID(doc) {
-        if (!doc.guid) doc.guid = Math.random();
-        return doc.guid;
-      }
-      function NodeList() {
-      }
-      NodeList.prototype = {
-        /**
-         * The number of nodes in the list. The range of valid child node indices is 0 to length-1
-         * inclusive.
-         *
-         * @type {number}
-         */
-        length: 0,
-        /**
-         * Returns the item at `index`. If index is greater than or equal to the number of nodes in
-         * the list, this returns null.
-         *
-         * @param index
-         * Unsigned long Index into the collection.
-         * @returns {Node | null}
-         * The node at position `index` in the NodeList,
-         * or null if that is not a valid index.
-         */
-        item: function(index) {
-          return index >= 0 && index < this.length ? this[index] : null;
-        },
-        /**
-         * Returns a string representation of the NodeList.
-         *
-         * Accepts the same `options` object as `XMLSerializer.prototype.serializeToString`
-         * (`requireWellFormed`, `splitCDATASections`, `nodeFilter`). Passing a function is treated as
-         * a legacy `nodeFilter` for backward compatibility.
-         *
-         * @param {Object | function} [options]
-         * @param {boolean} [options.requireWellFormed=false]
-         * @param {boolean} [options.splitCDATASections=true]
-         * @param {function} [options.nodeFilter]
-         * @returns {string}
-         */
-        toString: function(options) {
-          var opts;
-          if (typeof options === "function") {
-            opts = { requireWellFormed: false, splitCDATASections: true, nodeFilter: options };
-          } else if (!!options) {
-            opts = {
-              requireWellFormed: !!options.requireWellFormed,
-              splitCDATASections: options.splitCDATASections !== false,
-              nodeFilter: options.nodeFilter || null
-            };
-          } else {
-            opts = { requireWellFormed: false, splitCDATASections: true, nodeFilter: null };
-          }
-          for (var buf = [], i = 0; i < this.length; i++) {
-            serializeToString(this[i], buf, null, opts);
-          }
-          return buf.join("");
-        },
-        /**
-         * Filters the NodeList based on a predicate.
-         *
-         * @param {function(Node): boolean} predicate
-         * - A predicate function to filter the NodeList.
-         * @returns {Node[]}
-         * An array of nodes that satisfy the predicate.
-         * @private
-         */
-        filter: function(predicate) {
-          return Array.prototype.filter.call(this, predicate);
-        },
-        /**
-         * Returns the first index at which a given node can be found in the NodeList, or -1 if it is
-         * not present.
-         *
-         * @param {Node} item
-         * - The Node item to locate in the NodeList.
-         * @returns {number}
-         * The first index of the node in the NodeList; -1 if not found.
-         * @private
-         */
-        indexOf: function(item) {
-          return Array.prototype.indexOf.call(this, item);
-        }
+      init_utils();
+      image_header_webp_default = {
+        isWebpFile,
+        findOffsets: findOffsets2
       };
-      NodeList.prototype[Symbol.iterator] = function() {
-        var me = this;
-        var index = 0;
-        return {
-          next: function() {
-            if (index < me.length) {
-              return {
-                value: me[index++],
-                done: false
-              };
-            } else {
-              return {
-                done: true
-              };
-            }
-          },
-          return: function() {
-            return {
-              done: true
-            };
-          }
-        };
+    }
+  });
+
+  // node_modules/exifreader/src/image-header-gif.js
+  function isGifFile(dataView) {
+    return !!dataView && GIF_SIGNATURES.includes(getStringFromDataView(dataView, 0, GIF_SIGNATURE_SIZE));
+  }
+  function findOffsets3(_dataView, metadataBlocks) {
+    pushMetadataBlock(metadataBlocks, "gif", 0, GIF_HEADER_SIZE);
+    return {
+      gifHeaderOffset: 0
+    };
+  }
+  var image_header_gif_default, GIF_SIGNATURE_SIZE, GIF_SIGNATURES, GIF_HEADER_SIZE;
+  var init_image_header_gif = __esm({
+    "node_modules/exifreader/src/image-header-gif.js"() {
+      init_esbuild_shims();
+      init_utils();
+      image_header_gif_default = {
+        isGifFile,
+        findOffsets: findOffsets3
       };
-      function LiveNodeList(node, refresh) {
-        this._node = node;
-        this._refresh = refresh;
-        _updateLiveList(this);
-      }
-      function _updateLiveList(list) {
-        var inc = list._node._inc || list._node.ownerDocument._inc;
-        if (list._inc !== inc) {
-          var ls = list._refresh(list._node);
-          __set__(list, "length", ls.length);
-          if (!list.$$length || ls.length < list.$$length) {
-            for (var i = ls.length; i in list; i++) {
-              if (hasOwn(list, i)) {
-                delete list[i];
-              }
-            }
-          }
-          copy(ls, list);
-          list._inc = inc;
-        }
-      }
-      LiveNodeList.prototype.item = function(i) {
-        _updateLiveList(this);
-        return this[i] || null;
-      };
-      _extends(LiveNodeList, NodeList);
-      function NamedNodeMap() {
-      }
-      function _findNodeIndex(list, node) {
-        var i = 0;
-        while (i < list.length) {
-          if (list[i] === node) {
-            return i;
-          }
-          i++;
-        }
-      }
-      function _addNamedNode(el, list, newAttr, oldAttr) {
-        if (oldAttr) {
-          list[_findNodeIndex(list, oldAttr)] = newAttr;
-        } else {
-          list[list.length] = newAttr;
-          list.length++;
-        }
-        if (el) {
-          newAttr.ownerElement = el;
-          var doc = el.ownerDocument;
-          if (doc) {
-            oldAttr && _onRemoveAttribute(doc, el, oldAttr);
-            _onAddAttribute(doc, el, newAttr);
-          }
-        }
-      }
-      function _removeNamedNode(el, list, attr) {
-        var i = _findNodeIndex(list, attr);
-        if (i >= 0) {
-          var lastIndex = list.length - 1;
-          while (i <= lastIndex) {
-            list[i] = list[++i];
-          }
-          list.length = lastIndex;
-          if (el) {
-            var doc = el.ownerDocument;
-            if (doc) {
-              _onRemoveAttribute(doc, el, attr);
-            }
-            attr.ownerElement = null;
-          }
-        }
-      }
-      NamedNodeMap.prototype = {
-        length: 0,
-        item: NodeList.prototype.item,
-        /**
-         * Get an attribute by name. Note: Name is in lower case in case of HTML namespace and
-         * document.
-         *
-         * @param {string} localName
-         * The local name of the attribute.
-         * @returns {Attr | null}
-         * The attribute with the given local name, or null if no such attribute exists.
-         * @see https://dom.spec.whatwg.org/#concept-element-attributes-get-by-name
-         */
-        getNamedItem: function(localName) {
-          if (this._ownerElement && this._ownerElement._isInHTMLDocumentAndNamespace()) {
-            localName = localName.toLowerCase();
-          }
-          var i = 0;
-          while (i < this.length) {
-            var attr = this[i];
-            if (attr.nodeName === localName) {
-              return attr;
-            }
-            i++;
-          }
-          return null;
-        },
-        /**
-         * Set an attribute.
-         *
-         * @param {Attr} attr
-         * The attribute to set.
-         * @returns {Attr | null}
-         * The old attribute with the same local name and namespace URI as the new one, or null if no
-         * such attribute exists.
-         * @throws {DOMException}
-         * With code:
-         * - {@link INUSE_ATTRIBUTE_ERR} - If the attribute is already an attribute of another
-         * element.
-         * @see https://dom.spec.whatwg.org/#concept-element-attributes-set
-         */
-        setNamedItem: function(attr) {
-          var el = attr.ownerElement;
-          if (el && el !== this._ownerElement) {
-            throw new DOMException(DOMException.INUSE_ATTRIBUTE_ERR);
-          }
-          var oldAttr = this.getNamedItemNS(attr.namespaceURI, attr.localName);
-          if (oldAttr === attr) {
-            return attr;
-          }
-          _addNamedNode(this._ownerElement, this, attr, oldAttr);
-          return oldAttr;
-        },
-        /**
-         * Set an attribute, replacing an existing attribute with the same local name and namespace
-         * URI if one exists.
-         *
-         * @param {Attr} attr
-         * The attribute to set.
-         * @returns {Attr | null}
-         * The old attribute with the same local name and namespace URI as the new one, or null if no
-         * such attribute exists.
-         * @throws {DOMException}
-         * Throws a DOMException with the name "InUseAttributeError" if the attribute is already an
-         * attribute of another element.
-         * @see https://dom.spec.whatwg.org/#concept-element-attributes-set
-         */
-        setNamedItemNS: function(attr) {
-          return this.setNamedItem(attr);
-        },
-        /**
-         * Removes an attribute specified by the local name.
-         *
-         * @param {string} localName
-         * The local name of the attribute to be removed.
-         * @returns {Attr}
-         * The attribute node that was removed.
-         * @throws {DOMException}
-         * With code:
-         * - {@link DOMException.NOT_FOUND_ERR} if no attribute with the given name is found.
-         * @see https://dom.spec.whatwg.org/#dom-namednodemap-removenameditem
-         * @see https://dom.spec.whatwg.org/#concept-element-attributes-remove-by-name
-         */
-        removeNamedItem: function(localName) {
-          var attr = this.getNamedItem(localName);
-          if (!attr) {
-            throw new DOMException(DOMException.NOT_FOUND_ERR, localName);
-          }
-          _removeNamedNode(this._ownerElement, this, attr);
-          return attr;
-        },
-        /**
-         * Removes an attribute specified by the namespace and local name.
-         *
-         * @param {string | null} namespaceURI
-         * The namespace URI of the attribute to be removed.
-         * @param {string} localName
-         * The local name of the attribute to be removed.
-         * @returns {Attr}
-         * The attribute node that was removed.
-         * @throws {DOMException}
-         * With code:
-         * - {@link DOMException.NOT_FOUND_ERR} if no attribute with the given namespace URI and local
-         * name is found.
-         * @see https://dom.spec.whatwg.org/#dom-namednodemap-removenameditemns
-         * @see https://dom.spec.whatwg.org/#concept-element-attributes-remove-by-namespace
-         */
-        removeNamedItemNS: function(namespaceURI, localName) {
-          var attr = this.getNamedItemNS(namespaceURI, localName);
-          if (!attr) {
-            throw new DOMException(DOMException.NOT_FOUND_ERR, namespaceURI ? namespaceURI + " : " + localName : localName);
-          }
-          _removeNamedNode(this._ownerElement, this, attr);
-          return attr;
-        },
-        /**
-         * Get an attribute by namespace and local name.
-         *
-         * @param {string | null} namespaceURI
-         * The namespace URI of the attribute.
-         * @param {string} localName
-         * The local name of the attribute.
-         * @returns {Attr | null}
-         * The attribute with the given namespace URI and local name, or null if no such attribute
-         * exists.
-         * @see https://dom.spec.whatwg.org/#concept-element-attributes-get-by-namespace
-         */
-        getNamedItemNS: function(namespaceURI, localName) {
-          if (!namespaceURI) {
-            namespaceURI = null;
-          }
-          var i = 0;
-          while (i < this.length) {
-            var node = this[i];
-            if (node.localName === localName && node.namespaceURI === namespaceURI) {
-              return node;
-            }
-            i++;
-          }
-          return null;
-        }
-      };
-      NamedNodeMap.prototype[Symbol.iterator] = function() {
-        var me = this;
-        var index = 0;
-        return {
-          next: function() {
-            if (index < me.length) {
-              return {
-                value: me[index++],
-                done: false
-              };
-            } else {
-              return {
-                done: true
-              };
-            }
-          },
-          return: function() {
-            return {
-              done: true
-            };
-          }
-        };
-      };
-      function DOMImplementation() {
-      }
-      DOMImplementation.prototype = {
-        /**
-         * Test if the DOM implementation implements a specific feature and version, as specified in
-         * {@link https://www.w3.org/TR/DOM-Level-3-Core/core.html#DOMFeatures DOM Features}.
-         *
-         * The DOMImplementation.hasFeature() method returns a Boolean flag indicating if a given
-         * feature is supported. The different implementations fairly diverged in what kind of
-         * features were reported. The latest version of the spec settled to force this method to
-         * always return true, where the functionality was accurate and in use.
-         *
-         * @deprecated
-         * It is deprecated and modern browsers return true in all cases.
-         * @function DOMImplementation#hasFeature
-         * @param {string} feature
-         * The name of the feature to test.
-         * @param {string} [version]
-         * This is the version number of the feature to test.
-         * @returns {boolean}
-         * Always returns true.
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/hasFeature MDN
-         * @see https://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html#ID-5CED94D7 DOM Level 1 Core
-         * @see https://dom.spec.whatwg.org/#dom-domimplementation-hasfeature DOM Living Standard
-         * @see https://www.w3.org/TR/DOM-Level-3-Core/core.html#ID-5CED94D7 DOM Level 3 Core
-         */
-        hasFeature: function(feature, version) {
-          return true;
-        },
-        /**
-         * Creates a DOM Document object of the specified type with its document element. Note that
-         * based on the {@link DocumentType}
-         * given to create the document, the implementation may instantiate specialized
-         * {@link Document} objects that support additional features than the "Core", such as "HTML"
-         * {@link https://www.w3.org/TR/DOM-Level-3-Core/references.html#DOM2HTML DOM Level 2 HTML}.
-         * On the other hand, setting the {@link DocumentType} after the document was created makes
-         * this very unlikely to happen. Alternatively, specialized {@link Document} creation methods,
-         * such as createHTMLDocument
-         * {@link https://www.w3.org/TR/DOM-Level-3-Core/references.html#DOM2HTML DOM Level 2 HTML},
-         * can be used to obtain specific types of {@link Document} objects.
-         *
-         * __It behaves slightly different from the description in the living standard__:
-         * - There is no interface/class `XMLDocument`, it returns a `Document`
-         * instance (with it's `type` set to `'xml'`).
-         * - `encoding`, `mode`, `origin`, `url` fields are currently not declared.
-         *
-         * @function DOMImplementation.createDocument
-         * @param {string | null} namespaceURI
-         * The
-         * {@link https://www.w3.org/TR/DOM-Level-3-Core/glossary.html#dt-namespaceURI namespace URI}
-         * of the document element to create or null.
-         * @param {string | null} qualifiedName
-         * The
-         * {@link https://www.w3.org/TR/DOM-Level-3-Core/glossary.html#dt-qualifiedname qualified name}
-         * of the document element to be created or null.
-         * @param {DocumentType | null} [doctype=null]
-         * The type of document to be created or null. When doctype is not null, its
-         * {@link Node#ownerDocument} attribute is set to the document being created. Default is
-         * `null`
-         * @returns {Document}
-         * A new {@link Document} object with its document element. If the NamespaceURI,
-         * qualifiedName, and doctype are null, the returned {@link Document} is empty with no
-         * document element.
-         * @throws {DOMException}
-         * With code:
-         *
-         * - `INVALID_CHARACTER_ERR`: Raised if the specified qualified name is not an XML name
-         * according to {@link https://www.w3.org/TR/DOM-Level-3-Core/references.html#XML XML 1.0}.
-         * - `NAMESPACE_ERR`: Raised if the qualifiedName is malformed, if the qualifiedName has a
-         * prefix and the namespaceURI is null, or if the qualifiedName is null and the namespaceURI
-         * is different from null, or if the qualifiedName has a prefix that is "xml" and the
-         * namespaceURI is different from "{@link http://www.w3.org/XML/1998/namespace}"
-         * {@link https://www.w3.org/TR/DOM-Level-3-Core/references.html#Namespaces XML Namespaces},
-         * or if the DOM implementation does not support the "XML" feature but a non-null namespace
-         * URI was provided, since namespaces were defined by XML.
-         * - `WRONG_DOCUMENT_ERR`: Raised if doctype has already been used with a different document
-         * or was created from a different implementation.
-         * - `NOT_SUPPORTED_ERR`: May be raised if the implementation does not support the feature
-         * "XML" and the language exposed through the Document does not support XML Namespaces (such
-         * as {@link https://www.w3.org/TR/DOM-Level-3-Core/references.html#HTML40 HTML 4.01}).
-         * @since DOM Level 2.
-         * @see {@link #createHTMLDocument}
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/createDocument MDN
-         * @see https://dom.spec.whatwg.org/#dom-domimplementation-createdocument DOM Living Standard
-         * @see https://www.w3.org/TR/DOM-Level-3-Core/core.html#Level-2-Core-DOM-createDocument DOM
-         *      Level 3 Core
-         * @see https://www.w3.org/TR/DOM-Level-2-Core/core.html#Level-2-Core-DOM-createDocument DOM
-         *      Level 2 Core (initial)
-         */
-        createDocument: function(namespaceURI, qualifiedName, doctype) {
-          var contentType = MIME_TYPE.XML_APPLICATION;
-          if (namespaceURI === NAMESPACE.HTML) {
-            contentType = MIME_TYPE.XML_XHTML_APPLICATION;
-          } else if (namespaceURI === NAMESPACE.SVG) {
-            contentType = MIME_TYPE.XML_SVG_IMAGE;
-          }
-          var doc = new Document(PDC, { contentType });
-          doc.implementation = this;
-          doc.childNodes = new NodeList();
-          doc.doctype = doctype || null;
-          if (doctype) {
-            doc.appendChild(doctype);
-          }
-          if (qualifiedName) {
-            var root = doc.createElementNS(namespaceURI, qualifiedName);
-            doc.appendChild(root);
-          }
-          return doc;
-        },
-        /**
-         * Creates an empty DocumentType node. Entity declarations and notations are not made
-         * available. Entity reference expansions and default attribute additions do not occur.
-         *
-         * **This behavior is slightly different from the one in the specs**:
-         * - `encoding`, `mode`, `origin`, `url` fields are currently not declared.
-         * - `publicId` and `systemId` contain the raw data including any possible quotes,
-         *   so they can always be serialized back to the original value
-         * - `internalSubset` contains the raw string between `[` and `]` if present,
-         *   but is not parsed or validated in any form.
-         *
-         * @function DOMImplementation#createDocumentType
-         * @param {string} qualifiedName
-         * The {@link https://www.w3.org/TR/DOM-Level-3-Core/glossary.html#dt-qualifiedname qualified
-         * name} of the document type to be created.
-         * @param {string} [publicId]
-         * The external subset public identifier. Stored verbatim including surrounding quotes.
-         * When serialized with `requireWellFormed: true`, the serializer throws `InvalidStateError`
-         * if the value is non-empty and does not match the XML `PubidLiteral` production
-         * (W3C DOM Parsing §3.2.1.3; XML 1.0 production [12]). Creation-time validation is not
-         * enforced — deferred to a future breaking release.
-         * @param {string} [systemId]
-         * The external subset system identifier. Stored verbatim including surrounding quotes.
-         * When serialized with `requireWellFormed: true`, the serializer throws `InvalidStateError`
-         * if the value is non-empty and does not match the XML `SystemLiteral` production
-         * (W3C DOM Parsing §3.2.1.3; XML 1.0 production [11]). Creation-time validation is not
-         * enforced — deferred to a future breaking release.
-         * @param {string} [internalSubset]
-         * The internal subset or an empty string if it is not present. Stored verbatim.
-         * When serialized with `requireWellFormed: true`, the serializer throws `InvalidStateError`
-         * if the value contains `"]>"`. Creation-time validation is not enforced.
-         * @returns {DocumentType}
-         * A new {@link DocumentType} node with {@link Node#ownerDocument} set to null.
-         * @throws {DOMException}
-         * With code:
-         *
-         * - `INVALID_CHARACTER_ERR`: Raised if the specified qualified name is not an XML name
-         * according to {@link https://www.w3.org/TR/DOM-Level-3-Core/references.html#XML XML 1.0}.
-         * - `NAMESPACE_ERR`: Raised if the qualifiedName is malformed.
-         * - `NOT_SUPPORTED_ERR`: May be raised if the implementation does not support the feature
-         * "XML" and the language exposed through the Document does not support XML Namespaces (such
-         * as {@link https://www.w3.org/TR/DOM-Level-3-Core/references.html#HTML40 HTML 4.01}).
-         * @since DOM Level 2.
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/DOMImplementation/createDocumentType
-         *      MDN
-         * @see https://dom.spec.whatwg.org/#dom-domimplementation-createdocumenttype DOM Living
-         *      Standard
-         * @see https://www.w3.org/TR/DOM-Level-3-Core/core.html#Level-3-Core-DOM-createDocType DOM
-         *      Level 3 Core
-         * @see https://www.w3.org/TR/DOM-Level-2-Core/core.html#Level-2-Core-DOM-createDocType DOM
-         *      Level 2 Core
-         * @see https://github.com/xmldom/xmldom/blob/master/CHANGELOG.md#050
-         * @see https://www.w3.org/TR/DOM-Level-2-Core/#core-ID-Core-DocType-internalSubset
-         * @prettierignore
-         */
-        createDocumentType: function(qualifiedName, publicId, systemId, internalSubset) {
-          validateQualifiedName(qualifiedName);
-          var node = new DocumentType(PDC);
-          node.name = qualifiedName;
-          node.nodeName = qualifiedName;
-          node.publicId = publicId || "";
-          node.systemId = systemId || "";
-          node.internalSubset = internalSubset || "";
-          node.childNodes = new NodeList();
-          return node;
-        },
-        /**
-         * Returns an HTML document, that might already have a basic DOM structure.
-         *
-         * __It behaves slightly different from the description in the living standard__:
-         * - If the first argument is `false` no initial nodes are added (steps 3-7 in the specs are
-         * omitted)
-         * - `encoding`, `mode`, `origin`, `url` fields are currently not declared.
-         *
-         * @param {string | false} [title]
-         * A string containing the title to give the new HTML document.
-         * @returns {Document}
-         * The HTML document.
-         * @since WHATWG Living Standard.
-         * @see {@link #createDocument}
-         * @see https://dom.spec.whatwg.org/#dom-domimplementation-createhtmldocument
-         * @see https://dom.spec.whatwg.org/#html-document
-         */
-        createHTMLDocument: function(title) {
-          var doc = new Document(PDC, { contentType: MIME_TYPE.HTML });
-          doc.implementation = this;
-          doc.childNodes = new NodeList();
-          if (title !== false) {
-            doc.doctype = this.createDocumentType("html");
-            doc.doctype.ownerDocument = doc;
-            doc.appendChild(doc.doctype);
-            var htmlNode = doc.createElement("html");
-            doc.appendChild(htmlNode);
-            var headNode = doc.createElement("head");
-            htmlNode.appendChild(headNode);
-            if (typeof title === "string") {
-              var titleNode = doc.createElement("title");
-              titleNode.appendChild(doc.createTextNode(title));
-              headNode.appendChild(titleNode);
-            }
-            htmlNode.appendChild(doc.createElement("body"));
-          }
-          return doc;
-        }
-      };
-      function Node(symbol) {
-        checkSymbol(symbol);
-      }
-      Node.prototype = {
-        /**
-         * The first child of this node.
-         *
-         * @type {Node | null}
-         */
-        firstChild: null,
-        /**
-         * The last child of this node.
-         *
-         * @type {Node | null}
-         */
-        lastChild: null,
-        /**
-         * The previous sibling of this node.
-         *
-         * @type {Node | null}
-         */
-        previousSibling: null,
-        /**
-         * The next sibling of this node.
-         *
-         * @type {Node | null}
-         */
-        nextSibling: null,
-        /**
-         * The parent node of this node.
-         *
-         * @type {Node | null}
-         */
-        parentNode: null,
-        /**
-         * The parent element of this node.
-         *
-         * @type {Element | null}
-         */
-        get parentElement() {
-          return this.parentNode && this.parentNode.nodeType === this.ELEMENT_NODE ? this.parentNode : null;
-        },
-        /**
-         * The child nodes of this node.
-         *
-         * @type {NodeList}
-         */
-        childNodes: null,
-        /**
-         * The document object associated with this node.
-         *
-         * @type {Document | null}
-         */
-        ownerDocument: null,
-        /**
-         * The value of this node.
-         *
-         * @type {string | null}
-         */
-        nodeValue: null,
-        /**
-         * The namespace URI of this node.
-         *
-         * @type {string | null}
-         */
-        namespaceURI: null,
-        /**
-         * The prefix of the namespace for this node.
-         *
-         * @type {string | null}
-         */
-        prefix: null,
-        /**
-         * The local part of the qualified name of this node.
-         *
-         * @type {string | null}
-         */
-        localName: null,
-        /**
-         * The baseURI is currently always `about:blank`,
-         * since that's what happens when you create a document from scratch.
-         *
-         * @type {'about:blank'}
-         */
-        baseURI: "about:blank",
-        /**
-         * Is true if this node is part of a document.
-         *
-         * @type {boolean}
-         */
-        get isConnected() {
-          var rootNode = this.getRootNode();
-          return rootNode && rootNode.nodeType === rootNode.DOCUMENT_NODE;
-        },
-        /**
-         * Checks whether `other` is an inclusive descendant of this node.
-         *
-         * @param {Node | null | undefined} other
-         * The node to check.
-         * @returns {boolean}
-         * True if `other` is an inclusive descendant of this node; false otherwise.
-         * @see https://dom.spec.whatwg.org/#dom-node-contains
-         */
-        contains: function(other) {
-          if (!other) return false;
-          var parent = other;
-          do {
-            if (this === parent) return true;
-            parent = parent.parentNode;
-          } while (parent);
-          return false;
-        },
-        /**
-         * @typedef GetRootNodeOptions
-         * @property {boolean} [composed=false]
-         */
-        /**
-         * Searches for the root node of this node.
-         *
-         * **This behavior is slightly different from the in the specs**:
-         * - ignores `options.composed`, since `ShadowRoot`s are unsupported, always returns root.
-         *
-         * @param {GetRootNodeOptions} [options]
-         * @returns {Node}
-         * Root node.
-         * @see https://dom.spec.whatwg.org/#dom-node-getrootnode
-         * @see https://dom.spec.whatwg.org/#concept-shadow-including-root
-         */
-        getRootNode: function(options) {
-          var parent = this;
-          do {
-            if (!parent.parentNode) {
-              return parent;
-            }
-            parent = parent.parentNode;
-          } while (parent);
-        },
-        /**
-         * Checks whether the given node is equal to this node.
-         *
-         * Two nodes are equal when they have the same type, defining characteristics (for the type),
-         * and the same childNodes. The comparison is iterative to avoid stack overflows on
-         * deeply-nested trees. Attribute nodes of each Element pair are also pushed onto the stack
-         * and compared the same way.
-         *
-         * @param {Node} [otherNode]
-         * @returns {boolean}
-         * @see https://dom.spec.whatwg.org/#concept-node-equals
-         * @see ../docs/walk-dom.md.
-         */
-        isEqualNode: function(otherNode) {
-          if (!otherNode) return false;
-          var stack = [{ node: this, other: otherNode }];
-          while (stack.length > 0) {
-            var pair = stack.pop();
-            var node = pair.node;
-            var other = pair.other;
-            if (node.nodeType !== other.nodeType) return false;
-            switch (node.nodeType) {
-              case node.DOCUMENT_TYPE_NODE:
-                if (node.name !== other.name) return false;
-                if (node.publicId !== other.publicId) return false;
-                if (node.systemId !== other.systemId) return false;
-                break;
-              case node.ELEMENT_NODE:
-                if (node.namespaceURI !== other.namespaceURI) return false;
-                if (node.prefix !== other.prefix) return false;
-                if (node.localName !== other.localName) return false;
-                if (node.attributes.length !== other.attributes.length) return false;
-                for (var i = 0; i < node.attributes.length; i++) {
-                  var attr = node.attributes.item(i);
-                  var otherAttr = other.getAttributeNodeNS(attr.namespaceURI, attr.localName);
-                  if (!otherAttr) return false;
-                  stack.push({ node: attr, other: otherAttr });
-                }
-                break;
-              case node.ATTRIBUTE_NODE:
-                if (node.namespaceURI !== other.namespaceURI) return false;
-                if (node.localName !== other.localName) return false;
-                if (node.value !== other.value) return false;
-                break;
-              case node.PROCESSING_INSTRUCTION_NODE:
-                if (node.target !== other.target || node.data !== other.data) return false;
-                break;
-              case node.TEXT_NODE:
-              case node.CDATA_SECTION_NODE:
-              case node.COMMENT_NODE:
-                if (node.data !== other.data) return false;
-                break;
-            }
-            if (node.childNodes.length !== other.childNodes.length) return false;
-            for (var i = node.childNodes.length - 1; i >= 0; i--) {
-              stack.push({ node: node.childNodes[i], other: other.childNodes[i] });
-            }
-          }
-          return true;
-        },
-        /**
-         * Checks whether or not the given node is this node.
-         *
-         * @param {Node} [otherNode]
-         */
-        isSameNode: function(otherNode) {
-          return this === otherNode;
-        },
-        /**
-         * Inserts a node before a reference node as a child of this node.
-         *
-         * @param {Node} newChild
-         * The new child node to be inserted.
-         * @param {Node | null} refChild
-         * The reference node before which newChild will be inserted.
-         * @returns {Node}
-         * The new child node successfully inserted.
-         * @throws {DOMException}
-         * Throws a DOMException if inserting the node would result in a DOM tree that is not
-         * well-formed, or if `child` is provided but is not a child of `parent`.
-         * See {@link _insertBefore} for more details.
-         * @since Modified in DOM L2
-         */
-        insertBefore: function(newChild, refChild) {
-          return _insertBefore(this, newChild, refChild);
-        },
-        /**
-         * Replaces an old child node with a new child node within this node.
-         *
-         * @param {Node} newChild
-         * The new node that is to replace the old node.
-         * If it already exists in the DOM, it is removed from its original position.
-         * @param {Node} oldChild
-         * The existing child node to be replaced.
-         * @returns {Node}
-         * Returns the replaced child node.
-         * @throws {DOMException}
-         * Throws a DOMException if replacing the node would result in a DOM tree that is not
-         * well-formed, or if `oldChild` is not a child of `this`.
-         * This can also occur if the pre-replacement validity assertion fails.
-         * See {@link _insertBefore}, {@link Node.removeChild}, and
-         * {@link assertPreReplacementValidityInDocument} for more details.
-         * @see https://dom.spec.whatwg.org/#concept-node-replace
-         */
-        replaceChild: function(newChild, oldChild) {
-          _insertBefore(this, newChild, oldChild, assertPreReplacementValidityInDocument);
-          if (oldChild) {
-            this.removeChild(oldChild);
-          }
-        },
-        /**
-         * Removes an existing child node from this node.
-         *
-         * @param {Node} oldChild
-         * The child node to be removed.
-         * @returns {Node}
-         * Returns the removed child node.
-         * @throws {DOMException}
-         * Throws a DOMException if `oldChild` is not a child of `this`.
-         * See {@link _removeChild} for more details.
-         */
-        removeChild: function(oldChild) {
-          return _removeChild(this, oldChild);
-        },
-        /**
-         * Appends a child node to this node.
-         *
-         * @param {Node} newChild
-         * The child node to be appended to this node.
-         * If it already exists in the DOM, it is removed from its original position.
-         * @returns {Node}
-         * Returns the appended child node.
-         * @throws {DOMException}
-         * Throws a DOMException if appending the node would result in a DOM tree that is not
-         * well-formed, or if `newChild` is not a valid Node.
-         * See {@link insertBefore} for more details.
-         */
-        appendChild: function(newChild) {
-          return this.insertBefore(newChild, null);
-        },
-        /**
-         * Determines whether this node has any child nodes.
-         *
-         * @returns {boolean}
-         * Returns true if this node has any child nodes, and false otherwise.
-         */
-        hasChildNodes: function() {
-          return this.firstChild != null;
-        },
-        /**
-         * Creates a copy of the calling node.
-         *
-         * @param {boolean} deep
-         * If true, the contents of the node are recursively copied.
-         * If false, only the node itself (and its attributes, if it is an element) are copied.
-         * @returns {Node}
-         * Returns the newly created copy of the node.
-         * @throws {DOMException}
-         * May throw a DOMException if operations within {@link Element#setAttributeNode} or
-         * {@link Node#appendChild} (which are potentially invoked in this method) do not meet their
-         * specific constraints.
-         * @see {@link cloneNode}
-         */
-        cloneNode: function(deep) {
-          return cloneNode(this.ownerDocument || this, this, deep);
-        },
-        /**
-         * Puts the specified node and all of its subtree into a "normalized" form. In a normalized
-         * subtree, no text nodes in the subtree are empty and there are no adjacent text nodes.
-         *
-         * Specifically, this method merges any adjacent text nodes (i.e., nodes for which `nodeType`
-         * is `TEXT_NODE`) into a single node with the combined data. It also removes any empty text
-         * nodes.
-         *
-         * This method iterativly traverses all child nodes to normalize all descendent nodes within
-         * the subtree.
-         *
-         * @throws {DOMException}
-         * May throw a DOMException if operations within removeChild or appendData (which are
-         * potentially invoked in this method) do not meet their specific constraints.
-         * @since Modified in DOM Level 2
-         * @see {@link Node.removeChild}
-         * @see {@link CharacterData.appendData}
-         * @see ../docs/walk-dom.md.
-         */
-        normalize: function() {
-          walkDOM(this, null, {
-            enter: function(node) {
-              var child = node.firstChild;
-              while (child) {
-                var next = child.nextSibling;
-                if (next !== null && next.nodeType === TEXT_NODE && child.nodeType === TEXT_NODE) {
-                  node.removeChild(next);
-                  child.appendData(next.data);
-                } else {
-                  child = next;
-                }
-              }
-              return true;
-            }
-          });
-        },
-        /**
-         * Checks whether the DOM implementation implements a specific feature and its version.
-         *
-         * @deprecated
-         * Since `DOMImplementation.hasFeature` is deprecated and always returns true.
-         * @param {string} feature
-         * The package name of the feature to test. This is the same name that can be passed to the
-         * method `hasFeature` on `DOMImplementation`.
-         * @param {string} version
-         * This is the version number of the package name to test.
-         * @returns {boolean}
-         * Returns true in all cases in the current implementation.
-         * @since Introduced in DOM Level 2
-         * @see {@link DOMImplementation.hasFeature}
-         */
-        isSupported: function(feature, version) {
-          return this.ownerDocument.implementation.hasFeature(feature, version);
-        },
-        /**
-         * Look up the prefix associated to the given namespace URI, starting from this node.
-         * **The default namespace declarations are ignored by this method.**
-         * See Namespace Prefix Lookup for details on the algorithm used by this method.
-         *
-         * **This behavior is different from the in the specs**:
-         * - no node type specific handling
-         * - uses the internal attribute _nsMap for resolving namespaces that is updated when changing attributes
-         *
-         * @param {string | null} namespaceURI
-         * The namespace URI for which to find the associated prefix.
-         * @returns {string | null}
-         * The associated prefix, if found; otherwise, null.
-         * @see https://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-lookupNamespacePrefix
-         * @see https://www.w3.org/TR/DOM-Level-3-Core/namespaces-algorithms.html#lookupNamespacePrefixAlgo
-         * @see https://dom.spec.whatwg.org/#dom-node-lookupprefix
-         * @see https://github.com/xmldom/xmldom/issues/322
-         * @prettierignore
-         */
-        lookupPrefix: function(namespaceURI) {
-          var el = this;
-          while (el) {
-            var map = el._nsMap;
-            if (map) {
-              for (var n in map) {
-                if (hasOwn(map, n) && map[n] === namespaceURI) {
-                  return n;
-                }
-              }
-            }
-            el = el.nodeType == ATTRIBUTE_NODE ? el.ownerDocument : el.parentNode;
-          }
-          return null;
-        },
-        /**
-         * This function is used to look up the namespace URI associated with the given prefix,
-         * starting from this node.
-         *
-         * **This behavior is different from the in the specs**:
-         * - no node type specific handling
-         * - uses the internal attribute _nsMap for resolving namespaces that is updated when changing attributes
-         *
-         * @param {string | null} prefix
-         * The prefix for which to find the associated namespace URI.
-         * @returns {string | null}
-         * The associated namespace URI, if found; otherwise, null.
-         * @since DOM Level 3
-         * @see https://dom.spec.whatwg.org/#dom-node-lookupnamespaceuri
-         * @see https://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-lookupNamespaceURI
-         * @prettierignore
-         */
-        lookupNamespaceURI: function(prefix) {
-          var el = this;
-          while (el) {
-            var map = el._nsMap;
-            if (map) {
-              if (hasOwn(map, prefix)) {
-                return map[prefix];
-              }
-            }
-            el = el.nodeType == ATTRIBUTE_NODE ? el.ownerDocument : el.parentNode;
-          }
-          return null;
-        },
-        /**
-         * Determines whether the given namespace URI is the default namespace.
-         *
-         * The function works by looking up the prefix associated with the given namespace URI. If no
-         * prefix is found (i.e., the namespace URI is not registered in the namespace map of this
-         * node or any of its ancestors), it returns `true`, implying the namespace URI is considered
-         * the default.
-         *
-         * **This behavior is different from the in the specs**:
-         * - no node type specific handling
-         * - uses the internal attribute _nsMap for resolving namespaces that is updated when changing attributes
-         *
-         * @param {string | null} namespaceURI
-         * The namespace URI to be checked.
-         * @returns {boolean}
-         * Returns true if the given namespace URI is the default namespace, false otherwise.
-         * @since DOM Level 3
-         * @see https://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-isDefaultNamespace
-         * @see https://dom.spec.whatwg.org/#dom-node-isdefaultnamespace
-         * @prettierignore
-         */
-        isDefaultNamespace: function(namespaceURI) {
-          var prefix = this.lookupPrefix(namespaceURI);
-          return prefix == null;
-        },
-        /**
-         * Compares the reference node with a node with regard to their position in the document and
-         * according to the document order.
-         *
-         * @param {Node} other
-         * The node to compare the reference node to.
-         * @returns {number}
-         * Returns how the node is positioned relatively to the reference node according to the
-         * bitmask. 0 if reference node and given node are the same.
-         * @since DOM Level 3
-         * @see https://www.w3.org/TR/2004/REC-DOM-Level-3-Core-20040407/core.html#Node3-compare
-         * @see https://dom.spec.whatwg.org/#dom-node-comparedocumentposition
-         */
-        compareDocumentPosition: function(other) {
-          if (this === other) return 0;
-          var node1 = other;
-          var node2 = this;
-          var attr1 = null;
-          var attr2 = null;
-          if (node1 instanceof Attr) {
-            attr1 = node1;
-            node1 = attr1.ownerElement;
-          }
-          if (node2 instanceof Attr) {
-            attr2 = node2;
-            node2 = attr2.ownerElement;
-            if (attr1 && node1 && node2 === node1) {
-              for (var i = 0, attr; attr = node2.attributes[i]; i++) {
-                if (attr === attr1)
-                  return DocumentPosition.DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + DocumentPosition.DOCUMENT_POSITION_PRECEDING;
-                if (attr === attr2)
-                  return DocumentPosition.DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + DocumentPosition.DOCUMENT_POSITION_FOLLOWING;
-              }
-            }
-          }
-          if (!node1 || !node2 || node2.ownerDocument !== node1.ownerDocument) {
-            return DocumentPosition.DOCUMENT_POSITION_DISCONNECTED + DocumentPosition.DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC + (docGUID(node2.ownerDocument) > docGUID(node1.ownerDocument) ? DocumentPosition.DOCUMENT_POSITION_FOLLOWING : DocumentPosition.DOCUMENT_POSITION_PRECEDING);
-          }
-          if (attr2 && node1 === node2) {
-            return DocumentPosition.DOCUMENT_POSITION_CONTAINS + DocumentPosition.DOCUMENT_POSITION_PRECEDING;
-          }
-          if (attr1 && node1 === node2) {
-            return DocumentPosition.DOCUMENT_POSITION_CONTAINED_BY + DocumentPosition.DOCUMENT_POSITION_FOLLOWING;
-          }
-          var chain1 = [];
-          var ancestor1 = node1.parentNode;
-          while (ancestor1) {
-            if (!attr2 && ancestor1 === node2) {
-              return DocumentPosition.DOCUMENT_POSITION_CONTAINED_BY + DocumentPosition.DOCUMENT_POSITION_FOLLOWING;
-            }
-            chain1.push(ancestor1);
-            ancestor1 = ancestor1.parentNode;
-          }
-          chain1.reverse();
-          var chain2 = [];
-          var ancestor2 = node2.parentNode;
-          while (ancestor2) {
-            if (!attr1 && ancestor2 === node1) {
-              return DocumentPosition.DOCUMENT_POSITION_CONTAINS + DocumentPosition.DOCUMENT_POSITION_PRECEDING;
-            }
-            chain2.push(ancestor2);
-            ancestor2 = ancestor2.parentNode;
-          }
-          chain2.reverse();
-          var ca = commonAncestor(chain1, chain2);
-          for (var n in ca.childNodes) {
-            var child = ca.childNodes[n];
-            if (child === node2) return DocumentPosition.DOCUMENT_POSITION_FOLLOWING;
-            if (child === node1) return DocumentPosition.DOCUMENT_POSITION_PRECEDING;
-            if (chain2.indexOf(child) >= 0) return DocumentPosition.DOCUMENT_POSITION_FOLLOWING;
-            if (chain1.indexOf(child) >= 0) return DocumentPosition.DOCUMENT_POSITION_PRECEDING;
-          }
-          return 0;
-        }
-      };
-      function _xmlEncoder(c) {
-        return c == "<" && "&lt;" || c == ">" && "&gt;" || c == "&" && "&amp;" || c == '"' && "&quot;" || "&#" + c.charCodeAt() + ";";
-      }
-      copy(NodeType, Node);
-      copy(NodeType, Node.prototype);
-      copy(DocumentPosition, Node);
-      copy(DocumentPosition, Node.prototype);
-      function _visitNode(node, callback) {
-        walkDOM(node, null, {
-          enter: function(n) {
-            return callback(n) ? walkDOM.STOP : true;
-          }
-        });
-      }
-      function walkDOM(node, context, callbacks) {
-        var stack = [{ node, context, phase: walkDOM.ENTER }];
-        while (stack.length > 0) {
-          var frame = stack.pop();
-          if (frame.phase === walkDOM.ENTER) {
-            var childContext = callbacks.enter(frame.node, frame.context);
-            if (childContext === walkDOM.STOP) {
-              return walkDOM.STOP;
-            }
-            stack.push({ node: frame.node, context: childContext, phase: walkDOM.EXIT });
-            if (childContext === null || childContext === void 0) {
-              continue;
-            }
-            var child = frame.node.lastChild;
-            while (child) {
-              stack.push({ node: child, context: childContext, phase: walkDOM.ENTER });
-              child = child.previousSibling;
-            }
-          } else {
-            if (callbacks.exit) {
-              callbacks.exit(frame.node, frame.context);
-            }
-          }
-        }
-      }
-      walkDOM.STOP = /* @__PURE__ */ Symbol("walkDOM.STOP");
-      walkDOM.ENTER = 0;
-      walkDOM.EXIT = 1;
-      function Document(symbol, options) {
-        checkSymbol(symbol);
-        var opt = options || {};
-        this.ownerDocument = this;
-        this.contentType = opt.contentType || MIME_TYPE.XML_APPLICATION;
-        this.type = isHTMLMimeType(this.contentType) ? "html" : "xml";
-      }
-      function _onAddAttribute(doc, el, newAttr) {
-        doc && doc._inc++;
-        var ns = newAttr.namespaceURI;
-        if (ns === NAMESPACE.XMLNS) {
-          el._nsMap[newAttr.prefix ? newAttr.localName : ""] = newAttr.value;
-        }
-      }
-      function _onRemoveAttribute(doc, el, newAttr, remove) {
-        doc && doc._inc++;
-        var ns = newAttr.namespaceURI;
-        if (ns === NAMESPACE.XMLNS) {
-          delete el._nsMap[newAttr.prefix ? newAttr.localName : ""];
-        }
-      }
-      function _onUpdateChild(doc, parent, newChild) {
-        if (doc && doc._inc) {
-          doc._inc++;
-          var childNodes = parent.childNodes;
-          if (newChild && !newChild.nextSibling) {
-            childNodes[childNodes.length++] = newChild;
-          } else {
-            var child = parent.firstChild;
-            var i = 0;
-            while (child) {
-              childNodes[i++] = child;
-              child = child.nextSibling;
-            }
-            childNodes.length = i;
-            delete childNodes[childNodes.length];
-          }
-        }
-      }
-      function _removeChild(parentNode, child) {
-        if (parentNode !== child.parentNode) {
-          throw new DOMException(DOMException.NOT_FOUND_ERR, "child's parent is not parent");
-        }
-        var oldPreviousSibling = child.previousSibling;
-        var oldNextSibling = child.nextSibling;
-        if (oldPreviousSibling) {
-          oldPreviousSibling.nextSibling = oldNextSibling;
-        } else {
-          parentNode.firstChild = oldNextSibling;
-        }
-        if (oldNextSibling) {
-          oldNextSibling.previousSibling = oldPreviousSibling;
-        } else {
-          parentNode.lastChild = oldPreviousSibling;
-        }
-        _onUpdateChild(parentNode.ownerDocument, parentNode);
-        child.parentNode = null;
-        child.previousSibling = null;
-        child.nextSibling = null;
-        return child;
-      }
-      function hasValidParentNodeType(node) {
-        return node && (node.nodeType === Node.DOCUMENT_NODE || node.nodeType === Node.DOCUMENT_FRAGMENT_NODE || node.nodeType === Node.ELEMENT_NODE);
-      }
-      function hasInsertableNodeType(node) {
-        return node && (node.nodeType === Node.CDATA_SECTION_NODE || node.nodeType === Node.COMMENT_NODE || node.nodeType === Node.DOCUMENT_FRAGMENT_NODE || node.nodeType === Node.DOCUMENT_TYPE_NODE || node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.PROCESSING_INSTRUCTION_NODE || node.nodeType === Node.TEXT_NODE);
-      }
-      function isDocTypeNode(node) {
-        return node && node.nodeType === Node.DOCUMENT_TYPE_NODE;
-      }
-      function isElementNode(node) {
-        return node && node.nodeType === Node.ELEMENT_NODE;
-      }
-      function isTextNode(node) {
-        return node && node.nodeType === Node.TEXT_NODE;
-      }
-      function isElementInsertionPossible(doc, child) {
-        var parentChildNodes = doc.childNodes || [];
-        if (find(parentChildNodes, isElementNode) || isDocTypeNode(child)) {
-          return false;
-        }
-        var docTypeNode = find(parentChildNodes, isDocTypeNode);
-        return !(child && docTypeNode && parentChildNodes.indexOf(docTypeNode) > parentChildNodes.indexOf(child));
-      }
-      function isElementReplacementPossible(doc, child) {
-        var parentChildNodes = doc.childNodes || [];
-        function hasElementChildThatIsNotChild(node) {
-          return isElementNode(node) && node !== child;
-        }
-        if (find(parentChildNodes, hasElementChildThatIsNotChild)) {
-          return false;
-        }
-        var docTypeNode = find(parentChildNodes, isDocTypeNode);
-        return !(child && docTypeNode && parentChildNodes.indexOf(docTypeNode) > parentChildNodes.indexOf(child));
-      }
-      function assertPreInsertionValidity1to5(parent, node, child) {
-        if (!hasValidParentNodeType(parent)) {
-          throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Unexpected parent node type " + parent.nodeType);
-        }
-        if (child && child.parentNode !== parent) {
-          throw new DOMException(DOMException.NOT_FOUND_ERR, "child not in parent");
-        }
-        if (
-          // 4. If `node` is not a DocumentFragment, DocumentType, Element, or CharacterData node, then throw a "HierarchyRequestError" DOMException.
-          !hasInsertableNodeType(node) || // 5. If either `node` is a Text node and `parent` is a document,
-          // the sax parser currently adds top level text nodes, this will be fixed in 0.9.0
-          // || (node.nodeType === Node.TEXT_NODE && parent.nodeType === Node.DOCUMENT_NODE)
-          // or `node` is a doctype and `parent` is not a document, then throw a "HierarchyRequestError" DOMException.
-          isDocTypeNode(node) && parent.nodeType !== Node.DOCUMENT_NODE
-        ) {
-          throw new DOMException(
-            DOMException.HIERARCHY_REQUEST_ERR,
-            "Unexpected node type " + node.nodeType + " for parent node type " + parent.nodeType
-          );
-        }
-      }
-      function assertPreInsertionValidityInDocument(parent, node, child) {
-        var parentChildNodes = parent.childNodes || [];
-        var nodeChildNodes = node.childNodes || [];
-        if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
-          var nodeChildElements = nodeChildNodes.filter(isElementNode);
-          if (nodeChildElements.length > 1 || find(nodeChildNodes, isTextNode)) {
-            throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "More than one element or text in fragment");
-          }
-          if (nodeChildElements.length === 1 && !isElementInsertionPossible(parent, child)) {
-            throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Element in fragment can not be inserted before doctype");
-          }
-        }
-        if (isElementNode(node)) {
-          if (!isElementInsertionPossible(parent, child)) {
-            throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Only one element can be added and only after doctype");
-          }
-        }
-        if (isDocTypeNode(node)) {
-          if (find(parentChildNodes, isDocTypeNode)) {
-            throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Only one doctype is allowed");
-          }
-          var parentElementChild = find(parentChildNodes, isElementNode);
-          if (child && parentChildNodes.indexOf(parentElementChild) < parentChildNodes.indexOf(child)) {
-            throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Doctype can only be inserted before an element");
-          }
-          if (!child && parentElementChild) {
-            throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Doctype can not be appended since element is present");
-          }
-        }
-      }
-      function assertPreReplacementValidityInDocument(parent, node, child) {
-        var parentChildNodes = parent.childNodes || [];
-        var nodeChildNodes = node.childNodes || [];
-        if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
-          var nodeChildElements = nodeChildNodes.filter(isElementNode);
-          if (nodeChildElements.length > 1 || find(nodeChildNodes, isTextNode)) {
-            throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "More than one element or text in fragment");
-          }
-          if (nodeChildElements.length === 1 && !isElementReplacementPossible(parent, child)) {
-            throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Element in fragment can not be inserted before doctype");
-          }
-        }
-        if (isElementNode(node)) {
-          if (!isElementReplacementPossible(parent, child)) {
-            throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Only one element can be added and only after doctype");
-          }
-        }
-        if (isDocTypeNode(node)) {
-          let hasDoctypeChildThatIsNotChild = function(node2) {
-            return isDocTypeNode(node2) && node2 !== child;
-          };
-          if (find(parentChildNodes, hasDoctypeChildThatIsNotChild)) {
-            throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Only one doctype is allowed");
-          }
-          var parentElementChild = find(parentChildNodes, isElementNode);
-          if (child && parentChildNodes.indexOf(parentElementChild) < parentChildNodes.indexOf(child)) {
-            throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR, "Doctype can only be inserted before an element");
-          }
-        }
-      }
-      function _insertBefore(parent, node, child, _inDocumentAssertion) {
-        assertPreInsertionValidity1to5(parent, node, child);
-        if (parent.nodeType === Node.DOCUMENT_NODE) {
-          (_inDocumentAssertion || assertPreInsertionValidityInDocument)(parent, node, child);
-        }
-        var cp = node.parentNode;
-        if (cp) {
-          cp.removeChild(node);
-        }
-        if (node.nodeType === DOCUMENT_FRAGMENT_NODE) {
-          var newFirst = node.firstChild;
-          if (newFirst == null) {
-            return node;
-          }
-          var newLast = node.lastChild;
-        } else {
-          newFirst = newLast = node;
-        }
-        var pre = child ? child.previousSibling : parent.lastChild;
-        newFirst.previousSibling = pre;
-        newLast.nextSibling = child;
-        if (pre) {
-          pre.nextSibling = newFirst;
-        } else {
-          parent.firstChild = newFirst;
-        }
-        if (child == null) {
-          parent.lastChild = newLast;
-        } else {
-          child.previousSibling = newLast;
-        }
-        do {
-          newFirst.parentNode = parent;
-        } while (newFirst !== newLast && (newFirst = newFirst.nextSibling));
-        _onUpdateChild(parent.ownerDocument || parent, parent, node);
-        if (node.nodeType == DOCUMENT_FRAGMENT_NODE) {
-          node.firstChild = node.lastChild = null;
-        }
-        return node;
-      }
-      Document.prototype = {
-        /**
-         * The implementation that created this document.
-         *
-         * @type DOMImplementation
-         * @readonly
-         */
-        implementation: null,
-        nodeName: "#document",
-        nodeType: DOCUMENT_NODE,
-        /**
-         * The DocumentType node of the document.
-         *
-         * @type DocumentType
-         * @readonly
-         */
-        doctype: null,
-        documentElement: null,
-        _inc: 1,
-        insertBefore: function(newChild, refChild) {
-          if (newChild.nodeType === DOCUMENT_FRAGMENT_NODE) {
-            var child = newChild.firstChild;
-            while (child) {
-              var next = child.nextSibling;
-              this.insertBefore(child, refChild);
-              child = next;
-            }
-            return newChild;
-          }
-          _insertBefore(this, newChild, refChild);
-          newChild.ownerDocument = this;
-          if (this.documentElement === null && newChild.nodeType === ELEMENT_NODE) {
-            this.documentElement = newChild;
-          }
-          return newChild;
-        },
-        removeChild: function(oldChild) {
-          var removed = _removeChild(this, oldChild);
-          if (removed === this.documentElement) {
-            this.documentElement = null;
-          }
-          return removed;
-        },
-        replaceChild: function(newChild, oldChild) {
-          _insertBefore(this, newChild, oldChild, assertPreReplacementValidityInDocument);
-          newChild.ownerDocument = this;
-          if (oldChild) {
-            this.removeChild(oldChild);
-          }
-          if (isElementNode(newChild)) {
-            this.documentElement = newChild;
-          }
-        },
-        /**
-         * Imports a node from another document into this document, creating a new copy owned by this
-         * document. The source node and its subtree are not modified.
-         *
-         * @param {Node} importedNode
-         * The node to import.
-         * @param {boolean} deep
-         * If true, the contents of the node are recursively imported.
-         * If false, only the node itself (and its attributes, if it is an element) are imported.
-         * @returns {Node}
-         * Returns the newly created import of the node.
-         * @see {@link importNode}
-         * @see {@link https://dom.spec.whatwg.org/#dom-document-importnode}
-         */
-        importNode: function(importedNode, deep) {
-          return importNode(this, importedNode, deep);
-        },
-        // Introduced in DOM Level 2:
-        getElementById: function(id) {
-          var rtv = null;
-          _visitNode(this.documentElement, function(node) {
-            if (node.nodeType == ELEMENT_NODE) {
-              if (node.getAttribute("id") == id) {
-                rtv = node;
-                return true;
-              }
-            }
-          });
-          return rtv;
-        },
-        /**
-         * Creates a new `Element` that is owned by this `Document`.
-         * In HTML Documents `localName` is the lower cased `tagName`,
-         * otherwise no transformation is being applied.
-         * When `contentType` implies the HTML namespace, it will be set as `namespaceURI`.
-         *
-         * __This implementation differs from the specification:__ - The provided name is not checked
-         * against the `Name` production,
-         * so no related error will be thrown.
-         * - There is no interface `HTMLElement`, it is always an `Element`.
-         * - There is no support for a second argument to indicate using custom elements.
-         *
-         * @param {string} tagName
-         * @returns {Element}
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
-         * @see https://dom.spec.whatwg.org/#dom-document-createelement
-         * @see https://dom.spec.whatwg.org/#concept-create-element
-         */
-        createElement: function(tagName) {
-          var node = new Element(PDC);
-          node.ownerDocument = this;
-          if (this.type === "html") {
-            tagName = tagName.toLowerCase();
-          }
-          if (hasDefaultHTMLNamespace(this.contentType)) {
-            node.namespaceURI = NAMESPACE.HTML;
-          }
-          node.nodeName = tagName;
-          node.tagName = tagName;
-          node.localName = tagName;
-          node.childNodes = new NodeList();
-          var attrs = node.attributes = new NamedNodeMap();
-          attrs._ownerElement = node;
-          return node;
-        },
-        /**
-         * @returns {DocumentFragment}
-         */
-        createDocumentFragment: function() {
-          var node = new DocumentFragment(PDC);
-          node.ownerDocument = this;
-          node.childNodes = new NodeList();
-          return node;
-        },
-        /**
-         * @param {string} data
-         * @returns {Text}
-         */
-        createTextNode: function(data) {
-          var node = new Text(PDC);
-          node.ownerDocument = this;
-          node.childNodes = new NodeList();
-          node.appendData(data);
-          return node;
-        },
-        /**
-         * @param {string} data
-         * @returns {Comment}
-         * @see https://dom.spec.whatwg.org/#dom-document-createcomment
-         * @see https://www.w3.org/TR/xml/#NT-Comment XML 1.0 production [15]
-         * @see https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-xml §3.2.1.3
-         *
-         *      Note: no validation is performed at creation time. When the resulting document is
-         *      serialized with `requireWellFormed: true`, the serializer throws `InvalidStateError`
-         *      if the comment data contains `--` anywhere, ends with `-`, or contains characters
-         *      outside the XML Char production (W3C DOM Parsing §3.2.1.3). Without that option the
-         *      data is emitted verbatim.
-         */
-        createComment: function(data) {
-          var node = new Comment(PDC);
-          node.ownerDocument = this;
-          node.childNodes = new NodeList();
-          node.appendData(data);
-          return node;
-        },
-        /**
-         * Returns a new CDATASection node whose data is `data`.
-         *
-         * __This implementation differs from the specification:__ - calling this method on an HTML
-         * document does not throw `NotSupportedError`.
-         *
-         * @param {string} data
-         * @returns {CDATASection}
-         * @throws {DOMException}
-         * With code `INVALID_CHARACTER_ERR` if `data` contains `"]]>"`.
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/createCDATASection
-         * @see https://dom.spec.whatwg.org/#dom-document-createcdatasection
-         */
-        createCDATASection: function(data) {
-          if (data.indexOf("]]>") !== -1) {
-            throw new DOMException(DOMException.INVALID_CHARACTER_ERR, 'data contains "]]>"');
-          }
-          var node = new CDATASection(PDC);
-          node.ownerDocument = this;
-          node.childNodes = new NodeList();
-          node.appendData(data);
-          return node;
-        },
-        /**
-         * Returns a ProcessingInstruction node whose target is target and data is data.
-         *
-         * __This behavior is slightly different from the in the specs__:
-         * - it does not do any input validation on the arguments and doesn't throw
-         * "InvalidCharacterError".
-         *
-         * Note: When the resulting document is serialized with `requireWellFormed: true`, the
-         * serializer throws `InvalidStateError` if `.target` contains `:` or is an ASCII
-         * case-insensitive match for `"xml"`, or if `.data` contains `?>` or characters outside the
-         * XML Char production (W3C DOM Parsing §3.2.1.7). Without that option the data is emitted
-         * verbatim.
-         *
-         * @param {string} target
-         * @param {string} data
-         * @returns {ProcessingInstruction}
-         * @see https://developer.mozilla.org/docs/Web/API/Document/createProcessingInstruction
-         * @see https://dom.spec.whatwg.org/#dom-document-createprocessinginstruction
-         * @see https://www.w3.org/TR/DOM-Parsing/#dfn-concept-serialize-xml §3.2.1.7
-         */
-        createProcessingInstruction: function(target, data) {
-          var node = new ProcessingInstruction(PDC);
-          node.ownerDocument = this;
-          node.childNodes = new NodeList();
-          node.nodeName = node.target = target;
-          node.nodeValue = node.data = data;
-          return node;
-        },
-        /**
-         * Creates an `Attr` node that is owned by this document.
-         * In HTML Documents `localName` is the lower cased `name`,
-         * otherwise no transformation is being applied.
-         *
-         * __This implementation differs from the specification:__ - The provided name is not checked
-         * against the `Name` production,
-         * so no related error will be thrown.
-         *
-         * @param {string} name
-         * @returns {Attr}
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/createAttribute
-         * @see https://dom.spec.whatwg.org/#dom-document-createattribute
-         */
-        createAttribute: function(name) {
-          if (!g.QName_exact.test(name)) {
-            throw new DOMException(DOMException.INVALID_CHARACTER_ERR, 'invalid character in name "' + name + '"');
-          }
-          if (this.type === "html") {
-            name = name.toLowerCase();
-          }
-          return this._createAttribute(name);
-        },
-        _createAttribute: function(name) {
-          var node = new Attr(PDC);
-          node.ownerDocument = this;
-          node.childNodes = new NodeList();
-          node.name = name;
-          node.nodeName = name;
-          node.localName = name;
-          node.specified = true;
-          return node;
-        },
-        /**
-         * Creates an EntityReference object.
-         * The current implementation does not fill the `childNodes` with those of the corresponding
-         * `Entity`
-         *
-         * @deprecated
-         * In DOM Level 4.
-         * @param {string} name
-         * The name of the entity to reference. No namespace well-formedness checks are performed.
-         * @returns {EntityReference}
-         * @throws {DOMException}
-         * With code `INVALID_CHARACTER_ERR` when `name` is not valid.
-         * @throws {DOMException}
-         * with code `NOT_SUPPORTED_ERR` when the document is of type `html`
-         * @see https://www.w3.org/TR/DOM-Level-3-Core/core.html#ID-392B75AE
-         */
-        createEntityReference: function(name) {
-          if (!g.Name.test(name)) {
-            throw new DOMException(DOMException.INVALID_CHARACTER_ERR, 'not a valid xml name "' + name + '"');
-          }
-          if (this.type === "html") {
-            throw new DOMException("document is an html document", DOMExceptionName.NotSupportedError);
-          }
-          var node = new EntityReference(PDC);
-          node.ownerDocument = this;
-          node.childNodes = new NodeList();
-          node.nodeName = name;
-          return node;
-        },
-        // Introduced in DOM Level 2:
-        /**
-         * @param {string} namespaceURI
-         * @param {string} qualifiedName
-         * @returns {Element}
-         */
-        createElementNS: function(namespaceURI, qualifiedName) {
-          var validated = validateAndExtract(namespaceURI, qualifiedName);
-          var node = new Element(PDC);
-          var attrs = node.attributes = new NamedNodeMap();
-          node.childNodes = new NodeList();
-          node.ownerDocument = this;
-          node.nodeName = qualifiedName;
-          node.tagName = qualifiedName;
-          node.namespaceURI = validated[0];
-          node.prefix = validated[1];
-          node.localName = validated[2];
-          attrs._ownerElement = node;
-          return node;
-        },
-        // Introduced in DOM Level 2:
-        /**
-         * @param {string} namespaceURI
-         * @param {string} qualifiedName
-         * @returns {Attr}
-         */
-        createAttributeNS: function(namespaceURI, qualifiedName) {
-          var validated = validateAndExtract(namespaceURI, qualifiedName);
-          var node = new Attr(PDC);
-          node.ownerDocument = this;
-          node.childNodes = new NodeList();
-          node.nodeName = qualifiedName;
-          node.name = qualifiedName;
-          node.specified = true;
-          node.namespaceURI = validated[0];
-          node.prefix = validated[1];
-          node.localName = validated[2];
-          return node;
-        }
-      };
-      _extends(Document, Node);
-      function Element(symbol) {
-        checkSymbol(symbol);
-        this._nsMap = /* @__PURE__ */ Object.create(null);
-      }
-      Element.prototype = {
-        nodeType: ELEMENT_NODE,
-        /**
-         * The attributes of this element.
-         *
-         * @type {NamedNodeMap | null}
-         */
-        attributes: null,
-        getQualifiedName: function() {
-          return this.prefix ? this.prefix + ":" + this.localName : this.localName;
-        },
-        _isInHTMLDocumentAndNamespace: function() {
-          return this.ownerDocument.type === "html" && this.namespaceURI === NAMESPACE.HTML;
-        },
-        /**
-         * Implementaton of Level2 Core function hasAttributes.
-         *
-         * @returns {boolean}
-         * True if attribute list is not empty.
-         * @see https://www.w3.org/TR/DOM-Level-2-Core/#core-ID-NodeHasAttrs
-         */
-        hasAttributes: function() {
-          return !!(this.attributes && this.attributes.length);
-        },
-        hasAttribute: function(name) {
-          return !!this.getAttributeNode(name);
-        },
-        /**
-         * Returns element’s first attribute whose qualified name is `name`, and `null`
-         * if there is no such attribute.
-         *
-         * @param {string} name
-         * @returns {string | null}
-         */
-        getAttribute: function(name) {
-          var attr = this.getAttributeNode(name);
-          return attr ? attr.value : null;
-        },
-        getAttributeNode: function(name) {
-          if (this._isInHTMLDocumentAndNamespace()) {
-            name = name.toLowerCase();
-          }
-          return this.attributes.getNamedItem(name);
-        },
-        /**
-         * Sets the value of element’s first attribute whose qualified name is qualifiedName to value.
-         *
-         * @param {string} name
-         * @param {string} value
-         */
-        setAttribute: function(name, value) {
-          if (this._isInHTMLDocumentAndNamespace()) {
-            name = name.toLowerCase();
-          }
-          var attr = this.getAttributeNode(name);
-          if (attr) {
-            attr.value = attr.nodeValue = "" + value;
-          } else {
-            attr = this.ownerDocument._createAttribute(name);
-            attr.value = attr.nodeValue = "" + value;
-            this.setAttributeNode(attr);
-          }
-        },
-        removeAttribute: function(name) {
-          var attr = this.getAttributeNode(name);
-          attr && this.removeAttributeNode(attr);
-        },
-        setAttributeNode: function(newAttr) {
-          return this.attributes.setNamedItem(newAttr);
-        },
-        setAttributeNodeNS: function(newAttr) {
-          return this.attributes.setNamedItemNS(newAttr);
-        },
-        removeAttributeNode: function(oldAttr) {
-          return this.attributes.removeNamedItem(oldAttr.nodeName);
-        },
-        //get real attribute name,and remove it by removeAttributeNode
-        removeAttributeNS: function(namespaceURI, localName) {
-          var old = this.getAttributeNodeNS(namespaceURI, localName);
-          old && this.removeAttributeNode(old);
-        },
-        hasAttributeNS: function(namespaceURI, localName) {
-          return this.getAttributeNodeNS(namespaceURI, localName) != null;
-        },
-        /**
-         * Returns element’s attribute whose namespace is `namespaceURI` and local name is
-         * `localName`,
-         * or `null` if there is no such attribute.
-         *
-         * @param {string} namespaceURI
-         * @param {string} localName
-         * @returns {string | null}
-         */
-        getAttributeNS: function(namespaceURI, localName) {
-          var attr = this.getAttributeNodeNS(namespaceURI, localName);
-          return attr ? attr.value : null;
-        },
-        /**
-         * Sets the value of element’s attribute whose namespace is `namespaceURI` and local name is
-         * `localName` to value.
-         *
-         * @param {string} namespaceURI
-         * @param {string} qualifiedName
-         * @param {string} value
-         * @see https://dom.spec.whatwg.org/#dom-element-setattributens
-         */
-        setAttributeNS: function(namespaceURI, qualifiedName, value) {
-          var validated = validateAndExtract(namespaceURI, qualifiedName);
-          var localName = validated[2];
-          var attr = this.getAttributeNodeNS(namespaceURI, localName);
-          if (attr) {
-            attr.value = attr.nodeValue = "" + value;
-          } else {
-            attr = this.ownerDocument.createAttributeNS(namespaceURI, qualifiedName);
-            attr.value = attr.nodeValue = "" + value;
-            this.setAttributeNode(attr);
-          }
-        },
-        getAttributeNodeNS: function(namespaceURI, localName) {
-          return this.attributes.getNamedItemNS(namespaceURI, localName);
-        },
-        /**
-         * Returns a LiveNodeList of all child elements which have **all** of the given class name(s).
-         *
-         * Returns an empty list if `classNames` is an empty string or only contains HTML white space
-         * characters.
-         *
-         * Warning: This returns a live LiveNodeList.
-         * Changes in the DOM will reflect in the array as the changes occur.
-         * If an element selected by this array no longer qualifies for the selector,
-         * it will automatically be removed. Be aware of this for iteration purposes.
-         *
-         * @param {string} classNames
-         * Is a string representing the class name(s) to match; multiple class names are separated by
-         * (ASCII-)whitespace.
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByClassName
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByClassName
-         * @see https://dom.spec.whatwg.org/#concept-getelementsbyclassname
-         */
-        getElementsByClassName: function(classNames) {
-          var classNamesSet = toOrderedSet(classNames);
-          return new LiveNodeList(this, function(base) {
-            var ls = [];
-            if (classNamesSet.length > 0) {
-              _visitNode(base, function(node) {
-                if (node !== base && node.nodeType === ELEMENT_NODE) {
-                  var nodeClassNames = node.getAttribute("class");
-                  if (nodeClassNames) {
-                    var matches = classNames === nodeClassNames;
-                    if (!matches) {
-                      var nodeClassNamesSet = toOrderedSet(nodeClassNames);
-                      matches = classNamesSet.every(arrayIncludes(nodeClassNamesSet));
-                    }
-                    if (matches) {
-                      ls.push(node);
-                    }
-                  }
-                }
-              });
-            }
-            return ls;
-          });
-        },
-        /**
-         * Returns a LiveNodeList of elements with the given qualifiedName.
-         * Searching for all descendants can be done by passing `*` as `qualifiedName`.
-         *
-         * All descendants of the specified element are searched, but not the element itself.
-         * The returned list is live, which means it updates itself with the DOM tree automatically.
-         * Therefore, there is no need to call `Element.getElementsByTagName()`
-         * with the same element and arguments repeatedly if the DOM changes in between calls.
-         *
-         * When called on an HTML element in an HTML document,
-         * `getElementsByTagName` lower-cases the argument before searching for it.
-         * This is undesirable when trying to match camel-cased SVG elements (such as
-         * `<linearGradient>`) in an HTML document.
-         * Instead, use `Element.getElementsByTagNameNS()`,
-         * which preserves the capitalization of the tag name.
-         *
-         * `Element.getElementsByTagName` is similar to `Document.getElementsByTagName()`,
-         * except that it only searches for elements that are descendants of the specified element.
-         *
-         * @param {string} qualifiedName
-         * @returns {LiveNodeList}
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
-         * @see https://dom.spec.whatwg.org/#concept-getelementsbytagname
-         */
-        getElementsByTagName: function(qualifiedName) {
-          var isHTMLDocument = (this.nodeType === DOCUMENT_NODE ? this : this.ownerDocument).type === "html";
-          var lowerQualifiedName = qualifiedName.toLowerCase();
-          return new LiveNodeList(this, function(base) {
-            var ls = [];
-            _visitNode(base, function(node) {
-              if (node === base || node.nodeType !== ELEMENT_NODE) {
-                return;
-              }
-              if (qualifiedName === "*") {
-                ls.push(node);
-              } else {
-                var nodeQualifiedName = node.getQualifiedName();
-                var matchingQName = isHTMLDocument && node.namespaceURI === NAMESPACE.HTML ? lowerQualifiedName : qualifiedName;
-                if (nodeQualifiedName === matchingQName) {
-                  ls.push(node);
-                }
-              }
-            });
-            return ls;
-          });
-        },
-        getElementsByTagNameNS: function(namespaceURI, localName) {
-          return new LiveNodeList(this, function(base) {
-            var ls = [];
-            _visitNode(base, function(node) {
-              if (node !== base && node.nodeType === ELEMENT_NODE && (namespaceURI === "*" || node.namespaceURI === namespaceURI) && (localName === "*" || node.localName == localName)) {
-                ls.push(node);
-              }
-            });
-            return ls;
-          });
-        }
-      };
-      Document.prototype.getElementsByClassName = Element.prototype.getElementsByClassName;
-      Document.prototype.getElementsByTagName = Element.prototype.getElementsByTagName;
-      Document.prototype.getElementsByTagNameNS = Element.prototype.getElementsByTagNameNS;
-      _extends(Element, Node);
-      function Attr(symbol) {
-        checkSymbol(symbol);
-        this.namespaceURI = null;
-        this.prefix = null;
-        this.ownerElement = null;
-      }
-      Attr.prototype.nodeType = ATTRIBUTE_NODE;
-      _extends(Attr, Node);
-      function CharacterData(symbol) {
-        checkSymbol(symbol);
-      }
-      CharacterData.prototype = {
-        data: "",
-        substringData: function(offset, count) {
-          return this.data.substring(offset, offset + count);
-        },
-        appendData: function(text) {
-          text = this.data + text;
-          this.nodeValue = this.data = text;
-          this.length = text.length;
-        },
-        insertData: function(offset, text) {
-          this.replaceData(offset, 0, text);
-        },
-        deleteData: function(offset, count) {
-          this.replaceData(offset, count, "");
-        },
-        replaceData: function(offset, count, text) {
-          var start = this.data.substring(0, offset);
-          var end = this.data.substring(offset + count);
-          text = start + text + end;
-          this.nodeValue = this.data = text;
-          this.length = text.length;
-        }
-      };
-      _extends(CharacterData, Node);
-      function Text(symbol) {
-        checkSymbol(symbol);
-      }
-      Text.prototype = {
-        nodeName: "#text",
-        nodeType: TEXT_NODE,
-        splitText: function(offset) {
-          var text = this.data;
-          var newText = text.substring(offset);
-          text = text.substring(0, offset);
-          this.data = this.nodeValue = text;
-          this.length = text.length;
-          var newNode = this.ownerDocument.createTextNode(newText);
-          if (this.parentNode) {
-            this.parentNode.insertBefore(newNode, this.nextSibling);
-          }
-          return newNode;
-        }
-      };
-      _extends(Text, CharacterData);
-      function Comment(symbol) {
-        checkSymbol(symbol);
-      }
-      Comment.prototype = {
-        nodeName: "#comment",
-        nodeType: COMMENT_NODE
-      };
-      _extends(Comment, CharacterData);
-      function CDATASection(symbol) {
-        checkSymbol(symbol);
-      }
-      CDATASection.prototype = {
-        nodeName: "#cdata-section",
-        nodeType: CDATA_SECTION_NODE
-      };
-      _extends(CDATASection, Text);
-      function DocumentType(symbol) {
-        checkSymbol(symbol);
-      }
-      DocumentType.prototype.nodeType = DOCUMENT_TYPE_NODE;
-      _extends(DocumentType, Node);
-      function Notation(symbol) {
-        checkSymbol(symbol);
-      }
-      Notation.prototype.nodeType = NOTATION_NODE;
-      _extends(Notation, Node);
-      function Entity(symbol) {
-        checkSymbol(symbol);
-      }
-      Entity.prototype.nodeType = ENTITY_NODE;
-      _extends(Entity, Node);
-      function EntityReference(symbol) {
-        checkSymbol(symbol);
-      }
-      EntityReference.prototype.nodeType = ENTITY_REFERENCE_NODE;
-      _extends(EntityReference, Node);
-      function DocumentFragment(symbol) {
-        checkSymbol(symbol);
-      }
-      DocumentFragment.prototype.nodeName = "#document-fragment";
-      DocumentFragment.prototype.nodeType = DOCUMENT_FRAGMENT_NODE;
-      _extends(DocumentFragment, Node);
-      function ProcessingInstruction(symbol) {
-        checkSymbol(symbol);
-      }
-      ProcessingInstruction.prototype.nodeType = PROCESSING_INSTRUCTION_NODE;
-      _extends(ProcessingInstruction, CharacterData);
-      function XMLSerializer() {
-      }
-      XMLSerializer.prototype.serializeToString = function(node, options) {
-        return nodeSerializeToString.call(node, options);
-      };
-      Node.prototype.toString = nodeSerializeToString;
-      function nodeSerializeToString(options) {
-        var opts;
-        if (typeof options === "function") {
-          opts = { requireWellFormed: false, splitCDATASections: true, nodeFilter: options };
-        } else if (options != null) {
-          opts = {
-            requireWellFormed: !!options.requireWellFormed,
-            splitCDATASections: options.splitCDATASections !== false,
-            nodeFilter: options.nodeFilter || null
-          };
-        } else {
-          opts = { requireWellFormed: false, splitCDATASections: true, nodeFilter: null };
-        }
-        var buf = [];
-        var refNode = this.nodeType === DOCUMENT_NODE && this.documentElement || this;
-        var prefix = refNode.prefix;
-        var uri = refNode.namespaceURI;
-        if (uri && prefix == null) {
-          var prefix = refNode.lookupPrefix(uri);
-          if (prefix == null) {
-            var visibleNamespaces = [
-              { namespace: uri, prefix: null }
-              //{namespace:uri,prefix:''}
-            ];
-          }
-        }
-        serializeToString(this, buf, visibleNamespaces, opts);
-        return buf.join("");
-      }
-      function needNamespaceDefine(node, isHTML, visibleNamespaces) {
-        var prefix = node.prefix || "";
-        var uri = node.namespaceURI;
-        if (!uri) {
-          return false;
-        }
-        if (prefix === "xml" && uri === NAMESPACE.XML || uri === NAMESPACE.XMLNS) {
-          return false;
-        }
-        var i = visibleNamespaces.length;
-        while (i--) {
-          var ns = visibleNamespaces[i];
-          if (ns.prefix === prefix) {
-            return ns.namespace !== uri;
-          }
-        }
+      GIF_SIGNATURE_SIZE = 6;
+      GIF_SIGNATURES = ["GIF87a", "GIF89a"];
+      GIF_HEADER_SIZE = 13;
+    }
+  });
+
+  // node_modules/exifreader/src/xml.js
+  function isXMLFile(dataView) {
+    return !!dataView && getStringFromDataView(dataView, XML_MARKER_OFFSET, XML_MARKER.length) === XML_MARKER;
+  }
+  function findOffsets4(dataView, metadataBlocks) {
+    const xmpChunks = [];
+    xmpChunks.push({ dataOffset: XML_MARKER_OFFSET, length: dataView.byteLength });
+    pushMetadataBlock(metadataBlocks, "xmp", 0, dataView.byteLength);
+    if (metadataBlocks) {
+      metadataBlocks.truncated = !hasXmpClosingMarker(dataView);
+    }
+    return {
+      xmpChunks
+    };
+  }
+  function hasXmpClosingMarker(dataView) {
+    for (let i = 0; i < XMP_END_PATTERNS.length; i++) {
+      if (containsAsciiString(dataView, XMP_END_PATTERNS[i])) {
         return true;
       }
-      function addSerializedAttribute(buf, qualifiedName, value) {
-        buf.push(" ", qualifiedName, '="', value.replace(/[<>&"\t\n\r]/g, _xmlEncoder), '"');
+    }
+    return false;
+  }
+  function containsAsciiString(dataView, string) {
+    for (let offset = 0; offset + string.length <= dataView.byteLength; offset++) {
+      if (hasAsciiStringAt(dataView, offset, string)) {
+        return true;
       }
-      function serializeToString(node, buf, visibleNamespaces, opts) {
-        if (!visibleNamespaces) {
-          visibleNamespaces = [];
+    }
+    return false;
+  }
+  function hasAsciiStringAt(dataView, offset, string) {
+    for (let i = 0; i < string.length; i++) {
+      if (dataView.getUint8(offset + i) !== string.charCodeAt(i)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  var xml_default, XML_MARKER_OFFSET, XML_MARKER, XMP_END_PATTERNS;
+  var init_xml = __esm({
+    "node_modules/exifreader/src/xml.js"() {
+      init_esbuild_shims();
+      init_utils();
+      xml_default = {
+        isXMLFile,
+        findOffsets: findOffsets4
+      };
+      XML_MARKER_OFFSET = 0;
+      XML_MARKER = "<?xpacket begin";
+      XMP_END_PATTERNS = [
+        "<?xpacket end=",
+        "</x:xmpmeta>"
+      ];
+    }
+  });
+
+  // node_modules/exifreader/src/image-header.js
+  function parseAppMarkers(dataView, async, includeMetadataBlocks) {
+    const metadataBlocks = includeMetadataBlocks ? [] : void 0;
+    if (constants_default.USE_TIFF && image_header_tiff_default.isTiffFile(dataView)) {
+      return finalize(image_header_tiff_default.findTiffOffsets(), "tiff", "TIFF", metadataBlocks);
+    }
+    if (constants_default.USE_JPEG && image_header_jpeg_default.isJpegFile(dataView)) {
+      return finalize(image_header_jpeg_default.findJpegOffsets(dataView, metadataBlocks), "jpeg", "JPEG", metadataBlocks);
+    }
+    if (constants_default.USE_PNG && image_header_png_default.isPngFile(dataView)) {
+      return finalize(image_header_png_default.findPngOffsets(dataView, async, metadataBlocks), "png", "PNG", metadataBlocks);
+    }
+    if (constants_default.USE_HEIC && image_header_heic_default.isHeicFile(dataView)) {
+      return finalize(image_header_heic_default.findHeicOffsets(dataView, metadataBlocks), "heic", "HEIC", metadataBlocks);
+    }
+    if (constants_default.USE_AVIF && image_header_avif_default.isAvifFile(dataView)) {
+      return finalize(image_header_avif_default.findAvifOffsets(dataView, metadataBlocks), "avif", "AVIF", metadataBlocks);
+    }
+    if (constants_default.USE_JXL && image_header_jxl_default.isJxlFile(dataView)) {
+      return finalize(image_header_jxl_default.findJxlOffsets(dataView, metadataBlocks), "jxl", "JPEG XL", metadataBlocks);
+    }
+    if (constants_default.USE_WEBP && image_header_webp_default.isWebpFile(dataView)) {
+      return finalize(image_header_webp_default.findOffsets(dataView, metadataBlocks), "webp", "WebP", metadataBlocks);
+    }
+    if (constants_default.USE_GIF && image_header_gif_default.isGifFile(dataView)) {
+      return finalize(image_header_gif_default.findOffsets(dataView, metadataBlocks), "gif", "GIF", metadataBlocks);
+    }
+    if (constants_default.USE_XMP && xml_default.isXMLFile(dataView)) {
+      return finalize(xml_default.findOffsets(dataView, metadataBlocks), "xml", "XML", metadataBlocks);
+    }
+    throw new Error("Invalid image format");
+  }
+  function finalize(offsets, fileType2, fileTypeDescription, metadataBlocks) {
+    const result2 = objectAssign({}, offsets, { fileType: { value: fileType2, description: fileTypeDescription } });
+    if (metadataBlocks !== void 0) {
+      result2.metadataBlocks = metadataBlocks;
+      result2.metadataTruncated = !!metadataBlocks.truncated;
+    }
+    return result2;
+  }
+  var image_header_default;
+  var init_image_header = __esm({
+    "node_modules/exifreader/src/image-header.js"() {
+      init_esbuild_shims();
+      init_constants();
+      init_image_header_tiff();
+      init_image_header_jpeg();
+      init_image_header_png();
+      init_image_header_heic();
+      init_image_header_avif();
+      init_image_header_jxl();
+      init_image_header_webp();
+      init_image_header_gif();
+      init_xml();
+      init_utils();
+      image_header_default = {
+        parseAppMarkers
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/ifd-types.js
+  var IFD_TYPE_0TH, IFD_TYPE_1ST, IFD_TYPE_EXIF, IFD_TYPE_GPS, IFD_TYPE_INTEROPERABILITY, IFD_TYPE_MPF, IFD_TYPE_CANON, IFD_TYPE_PENTAX;
+  var init_ifd_types = __esm({
+    "node_modules/exifreader/src/ifd-types.js"() {
+      init_esbuild_shims();
+      IFD_TYPE_0TH = "0th";
+      IFD_TYPE_1ST = "1st";
+      IFD_TYPE_EXIF = "exif";
+      IFD_TYPE_GPS = "gps";
+      IFD_TYPE_INTEROPERABILITY = "interoperability";
+      IFD_TYPE_MPF = "mpf";
+      IFD_TYPE_CANON = "canon";
+      IFD_TYPE_PENTAX = "pentax";
+    }
+  });
+
+  // node_modules/exifreader/src/types.js
+  function getByteAt(dataView, offset) {
+    return dataView.getUint8(offset);
+  }
+  function getAsciiAt(dataView, offset) {
+    return dataView.getUint8(offset);
+  }
+  function getShortAt(dataView, offset, byteOrder) {
+    return dataView.getUint16(offset, byteOrder === byte_order_default.LITTLE_ENDIAN);
+  }
+  function getLongAt(dataView, offset, byteOrder) {
+    return dataView.getUint32(offset, byteOrder === byte_order_default.LITTLE_ENDIAN);
+  }
+  function getRationalAt(dataView, offset, byteOrder) {
+    return [getLongAt(dataView, offset, byteOrder), getLongAt(dataView, offset + 4, byteOrder)];
+  }
+  function getUndefinedAt(dataView, offset) {
+    return getByteAt(dataView, offset);
+  }
+  function getSlongAt(dataView, offset, byteOrder) {
+    return dataView.getInt32(offset, byteOrder === byte_order_default.LITTLE_ENDIAN);
+  }
+  function getSrationalAt(dataView, offset, byteOrder) {
+    return [getSlongAt(dataView, offset, byteOrder), getSlongAt(dataView, offset + 4, byteOrder)];
+  }
+  function getIfdPointerAt(dataView, offset, byteOrder) {
+    return getLongAt(dataView, offset, byteOrder);
+  }
+  function getTypeSize(typeName) {
+    if (tagTypes[typeName] === void 0) {
+      throw new Error("No such type found.");
+    }
+    return typeSizes[tagTypes[typeName]];
+  }
+  var typeSizes, tagTypes, types_default;
+  var init_types = __esm({
+    "node_modules/exifreader/src/types.js"() {
+      init_esbuild_shims();
+      init_byte_order();
+      typeSizes = {
+        1: 1,
+        // BYTE
+        2: 1,
+        // ASCII
+        3: 2,
+        // SHORT
+        4: 4,
+        // LONG
+        5: 8,
+        // RATIONAL
+        7: 1,
+        // UNDEFINED
+        9: 4,
+        // SLONG
+        10: 8,
+        // SRATIONAL
+        13: 4
+        // IFD
+      };
+      tagTypes = {
+        "BYTE": 1,
+        "ASCII": 2,
+        "SHORT": 3,
+        "LONG": 4,
+        "RATIONAL": 5,
+        "UNDEFINED": 7,
+        "SLONG": 9,
+        "SRATIONAL": 10,
+        "IFD": 13
+      };
+      types_default = {
+        getByteAt,
+        getAsciiAt,
+        getShortAt,
+        getLongAt,
+        getRationalAt,
+        getUndefinedAt,
+        getSlongAt,
+        getSrationalAt,
+        getIfdPointerAt,
+        typeSizes,
+        tagTypes,
+        getTypeSize
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/tag-filter-config.js
+  function getIdLookup(idRanges) {
+    const lookup = /* @__PURE__ */ Object.create(null);
+    for (let i = 0; i < idRanges.length; i++) {
+      for (let id = idRanges[i][0]; id <= idRanges[i][1]; id++) {
+        lookup[id] = true;
+      }
+    }
+    return lookup;
+  }
+  function getExifTagDependenciesForInclude(includeTags) {
+    const requiredTags = /* @__PURE__ */ Object.create(null);
+    if (!includeTags) {
+      return requiredTags;
+    }
+    if (Array.isArray(includeTags.exif) && includeTags.exif.length > 0) {
+      requiredTags[EXIF_POINTER_TAGS.exifIfdPointer] = true;
+      addPointerDependenciesFromExifTagSelectors(requiredTags, includeTags.exif);
+    }
+    for (const groupKey in EXIF_DEPENDENCY_TAGS) {
+      if (isRequestedIncludeValue(includeTags[groupKey])) {
+        const dependencyTags = EXIF_DEPENDENCY_TAGS[groupKey];
+        for (let i = 0; i < dependencyTags.length; i++) {
+          requiredTags[dependencyTags[i]] = true;
         }
-        var nodeFilter = opts.nodeFilter;
-        var requireWellFormed = opts.requireWellFormed;
-        var splitCDATASections = opts.splitCDATASections;
-        var doc = node.nodeType === DOCUMENT_NODE ? node : node.ownerDocument;
-        var isHTML = doc.type === "html";
-        walkDOM(
-          node,
-          { ns: visibleNamespaces },
-          {
-            enter: function(n, ctx) {
-              var namespaces = ctx.ns;
-              if (nodeFilter) {
-                n = nodeFilter(n);
-                if (n) {
-                  if (typeof n == "string") {
-                    buf.push(n);
-                    return null;
-                  }
-                } else {
-                  return null;
-                }
-              }
-              switch (n.nodeType) {
-                case ELEMENT_NODE:
-                  var attrs = n.attributes;
-                  var len2 = attrs.length;
-                  var nodeName = n.tagName;
-                  var prefixedNodeName = nodeName;
-                  if (!isHTML && !n.prefix && n.namespaceURI) {
-                    var defaultNS;
-                    for (var ai = 0; ai < attrs.length; ai++) {
-                      if (attrs.item(ai).name === "xmlns") {
-                        defaultNS = attrs.item(ai).value;
-                        break;
-                      }
-                    }
-                    if (!defaultNS) {
-                      for (var nsi = namespaces.length - 1; nsi >= 0; nsi--) {
-                        var nsEntry = namespaces[nsi];
-                        if (nsEntry.prefix === "" && nsEntry.namespace === n.namespaceURI) {
-                          defaultNS = nsEntry.namespace;
-                          break;
-                        }
-                      }
-                    }
-                    if (defaultNS !== n.namespaceURI) {
-                      for (var nsi = namespaces.length - 1; nsi >= 0; nsi--) {
-                        var nsEntry = namespaces[nsi];
-                        if (nsEntry.namespace === n.namespaceURI) {
-                          if (nsEntry.prefix) {
-                            prefixedNodeName = nsEntry.prefix + ":" + nodeName;
-                          }
-                          break;
-                        }
-                      }
-                    }
-                  }
-                  buf.push("<", prefixedNodeName);
-                  var childNamespaces = namespaces.slice();
-                  for (var i = 0; i < len2; i++) {
-                    var attr = attrs.item(i);
-                    if (attr.prefix == "xmlns") {
-                      childNamespaces.push({
-                        prefix: attr.localName,
-                        namespace: attr.value
-                      });
-                    } else if (attr.nodeName == "xmlns") {
-                      childNamespaces.push({ prefix: "", namespace: attr.value });
-                    }
-                  }
-                  for (var i = 0; i < len2; i++) {
-                    var attr = attrs.item(i);
-                    if (needNamespaceDefine(attr, isHTML, childNamespaces)) {
-                      var attrPrefix = attr.prefix || "";
-                      var uri = attr.namespaceURI;
-                      addSerializedAttribute(buf, attrPrefix ? "xmlns:" + attrPrefix : "xmlns", uri);
-                      childNamespaces.push({ prefix: attrPrefix, namespace: uri });
-                    }
-                    var filteredAttr = nodeFilter ? nodeFilter(attr) : attr;
-                    if (filteredAttr) {
-                      if (typeof filteredAttr === "string") {
-                        buf.push(filteredAttr);
-                      } else {
-                        addSerializedAttribute(buf, filteredAttr.name, filteredAttr.value);
-                      }
-                    }
-                  }
-                  if (nodeName === prefixedNodeName && needNamespaceDefine(n, isHTML, childNamespaces)) {
-                    var nodePrefix = n.prefix || "";
-                    var uri = n.namespaceURI;
-                    addSerializedAttribute(buf, nodePrefix ? "xmlns:" + nodePrefix : "xmlns", uri);
-                    childNamespaces.push({ prefix: nodePrefix, namespace: uri });
-                  }
-                  var canCloseTag = !n.firstChild;
-                  if (canCloseTag && (isHTML || n.namespaceURI === NAMESPACE.HTML)) {
-                    canCloseTag = isHTMLVoidElement(nodeName);
-                  }
-                  if (canCloseTag) {
-                    buf.push("/>");
-                    return null;
-                  }
-                  buf.push(">");
-                  if (isHTML && isHTMLRawTextElement(nodeName)) {
-                    var child = n.firstChild;
-                    while (child) {
-                      if (child.data) {
-                        buf.push(child.data);
-                      } else {
-                        serializeToString(child, buf, childNamespaces.slice(), opts);
-                      }
-                      child = child.nextSibling;
-                    }
-                    buf.push("</", prefixedNodeName, ">");
-                    return null;
-                  }
-                  return { ns: childNamespaces, tag: prefixedNodeName };
-                case DOCUMENT_NODE:
-                case DOCUMENT_FRAGMENT_NODE:
-                  if (requireWellFormed && n.nodeType === DOCUMENT_NODE && n.documentElement == null) {
-                    throw new DOMException("The Document has no documentElement", DOMExceptionName.InvalidStateError);
-                  }
-                  return { ns: namespaces };
-                case ATTRIBUTE_NODE:
-                  addSerializedAttribute(buf, n.name, n.value);
-                  return null;
-                case TEXT_NODE:
-                  if (requireWellFormed && g.InvalidChar.test(n.data)) {
-                    throw new DOMException(
-                      "The Text node data contains characters outside the XML Char production",
-                      DOMExceptionName.InvalidStateError
-                    );
-                  }
-                  buf.push(n.data.replace(/[<&>]/g, _xmlEncoder));
-                  return null;
-                case CDATA_SECTION_NODE:
-                  if (requireWellFormed && n.data.indexOf("]]>") !== -1) {
-                    throw new DOMException('The CDATASection data contains "]]>"', DOMExceptionName.InvalidStateError);
-                  }
-                  if (splitCDATASections) {
-                    buf.push(g.CDATA_START, n.data.replace(/]]>/g, "]]]]><![CDATA[>"), g.CDATA_END);
-                  } else {
-                    buf.push(g.CDATA_START, n.data, g.CDATA_END);
-                  }
-                  return null;
-                case COMMENT_NODE:
-                  if (requireWellFormed) {
-                    if (g.InvalidChar.test(n.data)) {
-                      throw new DOMException(
-                        "The comment node data contains characters outside the XML Char production",
-                        DOMExceptionName.InvalidStateError
-                      );
-                    }
-                    if (n.data.indexOf("--") !== -1 || n.data[n.data.length - 1] === "-") {
-                      throw new DOMException(
-                        'The comment node data contains "--" or ends with "-"',
-                        DOMExceptionName.InvalidStateError
-                      );
-                    }
-                  }
-                  buf.push(g.COMMENT_START, n.data, g.COMMENT_END);
-                  return null;
-                case DOCUMENT_TYPE_NODE:
-                  var pubid = n.publicId;
-                  var sysid = n.systemId;
-                  if (requireWellFormed) {
-                    if (pubid && !g.PubidLiteral_match.test(pubid)) {
-                      throw new DOMException("DocumentType publicId is not a valid PubidLiteral", DOMExceptionName.InvalidStateError);
-                    }
-                    if (sysid && sysid !== "." && !g.SystemLiteral_match.test(sysid)) {
-                      throw new DOMException("DocumentType systemId is not a valid SystemLiteral", DOMExceptionName.InvalidStateError);
-                    }
-                    if (n.internalSubset && n.internalSubset.indexOf("]>") !== -1) {
-                      throw new DOMException('DocumentType internalSubset contains "]>"', DOMExceptionName.InvalidStateError);
-                    }
-                  }
-                  buf.push(g.DOCTYPE_DECL_START, " ", n.name);
-                  if (pubid) {
-                    buf.push(" ", g.PUBLIC, " ", pubid);
-                    if (sysid && sysid !== ".") {
-                      buf.push(" ", sysid);
-                    }
-                  } else if (sysid && sysid !== ".") {
-                    buf.push(" ", g.SYSTEM, " ", sysid);
-                  }
-                  if (n.internalSubset) {
-                    buf.push(" [", n.internalSubset, "]");
-                  }
-                  buf.push(">");
-                  return null;
-                case PROCESSING_INSTRUCTION_NODE:
-                  if (requireWellFormed) {
-                    if (n.target.indexOf(":") !== -1 || n.target.toLowerCase() === "xml") {
-                      throw new DOMException("The ProcessingInstruction target is not well-formed", DOMExceptionName.InvalidStateError);
-                    }
-                    if (g.InvalidChar.test(n.data)) {
-                      throw new DOMException(
-                        "The ProcessingInstruction data contains characters outside the XML Char production",
-                        DOMExceptionName.InvalidStateError
-                      );
-                    }
-                    if (n.data.indexOf("?>") !== -1) {
-                      throw new DOMException('The ProcessingInstruction data contains "?>"', DOMExceptionName.InvalidStateError);
-                    }
-                  }
-                  buf.push("<?", n.target, " ", n.data, "?>");
-                  return null;
-                case ENTITY_REFERENCE_NODE:
-                  buf.push("&", n.nodeName, ";");
-                  return null;
-                //case ENTITY_NODE:
-                //case NOTATION_NODE:
-                default:
-                  buf.push("??", n.nodeName);
-                  return null;
-              }
-            },
-            exit: function(n, childCtx) {
-              if (childCtx && childCtx.tag) {
-                buf.push("</", childCtx.tag, ">");
-              }
-            }
+        requiredTags[EXIF_POINTER_TAGS.exifIfdPointer] = true;
+      }
+    }
+    if (isRequestedIncludeValue(includeTags.gps)) {
+      requiredTags[EXIF_POINTER_TAGS.gpsInfoIfdPointer] = true;
+      requiredTags[EXIF_POINTER_TAGS.exifIfdPointer] = true;
+    }
+    return requiredTags;
+    function addPointerDependenciesFromExifTagSelectors(pointerSet, selectors) {
+      for (let i = 0; i < selectors.length; i++) {
+        const selector = selectors[i];
+        if (typeof selector === "number") {
+          if (GPS_IFD_TAG_IDS[selector]) {
+            pointerSet[EXIF_POINTER_TAGS.gpsInfoIfdPointer] = true;
           }
+          if (INTEROPERABILITY_IFD_TAG_IDS[selector]) {
+            pointerSet[EXIF_POINTER_TAGS.interoperabilityIfdPointer] = true;
+          }
+        }
+        if (typeof selector !== "string") {
+          continue;
+        }
+        const selectorLower = selector.toLowerCase();
+        if (selectorLower.indexOf("gps") === 0) {
+          pointerSet[EXIF_POINTER_TAGS.gpsInfoIfdPointer] = true;
+        }
+        if (selectorLower.indexOf("interoperability") === 0 || selectorLower.indexOf("relatedimage") === 0) {
+          pointerSet[EXIF_POINTER_TAGS.interoperabilityIfdPointer] = true;
+        }
+      }
+    }
+  }
+  function isRequestedIncludeValue(includeValue) {
+    if (includeValue === true) {
+      return true;
+    }
+    return Array.isArray(includeValue) && includeValue.length > 0;
+  }
+  var ID_CAPABLE_GROUPS, FILTER_GROUPS, EXIF_POINTER_TAGS, GPS_IFD_TAG_IDS, INTEROPERABILITY_IFD_TAG_IDS, EXIF_DEPENDENCY_TAGS, COMPOSITE_DEPENDENCY_TAGS;
+  var init_tag_filter_config = __esm({
+    "node_modules/exifreader/src/tag-filter-config.js"() {
+      init_esbuild_shims();
+      ID_CAPABLE_GROUPS = {
+        exif: true,
+        iptc: true,
+        photoshop: true,
+        mpf: true,
+        makerNotes: true
+      };
+      FILTER_GROUPS = {
+        exif: true,
+        iptc: true,
+        xmp: true,
+        icc: true,
+        photoshop: true,
+        makerNotes: true,
+        mpf: true,
+        file: true,
+        jfif: true,
+        png: true,
+        riff: true,
+        gif: true,
+        gps: true,
+        composite: true,
+        thumbnail: true
+      };
+      EXIF_POINTER_TAGS = {
+        exifIfdPointer: "Exif IFD Pointer",
+        gpsInfoIfdPointer: "GPS Info IFD Pointer",
+        interoperabilityIfdPointer: "Interoperability IFD Pointer"
+      };
+      GPS_IFD_TAG_IDS = getIdLookup([[0, 31]]);
+      INTEROPERABILITY_IFD_TAG_IDS = getIdLookup([[1, 2], [4096, 4098]]);
+      EXIF_DEPENDENCY_TAGS = {
+        thumbnail: [
+          "JPEGInterchangeFormat",
+          "JPEGInterchangeFormatLength"
+        ],
+        iptc: ["IPTC-NAA"],
+        xmp: ["ApplicationNotes"],
+        icc: ["ICC_Profile"],
+        photoshop: ["ImageSourceData", "PhotoshopSettings"],
+        makerNotes: ["MakerNote", "Make"],
+        gps: [
+          "GPSLatitude",
+          "GPSLatitudeRef",
+          "GPSLongitude",
+          "GPSLongitudeRef",
+          "GPSAltitude",
+          "GPSAltitudeRef"
+        ]
+      };
+      COMPOSITE_DEPENDENCY_TAGS = {
+        file: ["Image Width", "Image Height"],
+        exif: [
+          "FocalLength",
+          "FocalPlaneXResolution",
+          "FocalPlaneYResolution",
+          "FocalPlaneResolutionUnit",
+          "FocalLengthIn35mmFilm",
+          "PixelXDimension",
+          "PixelYDimension"
+        ]
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/tag-filter.js
+  function createTagFilter({ includeTags, excludeTags } = {}) {
+    const hasIncludeTags = Boolean(includeTags);
+    const hasExcludeTags = Boolean(excludeTags);
+    const isActive = hasIncludeTags || hasExcludeTags;
+    const shouldReturn = /* @__PURE__ */ Object.create(null);
+    const returnSelections = /* @__PURE__ */ Object.create(null);
+    const parseSelections = /* @__PURE__ */ Object.create(null);
+    if (!isActive) {
+      return createNoopFilter();
+    }
+    const shouldParseExif = hasIncludeTags && (isGroupRequested(includeTags, "iptc") || isGroupRequested(includeTags, "xmp") || isGroupRequested(includeTags, "icc") || isGroupRequested(includeTags, "photoshop") || isGroupRequested(includeTags, "makerNotes") || isGroupRequested(includeTags, "thumbnail") || isGroupRequested(includeTags, "gps") || isGroupRequested(includeTags, "composite"));
+    const shouldParseFile = hasIncludeTags && isGroupRequested(includeTags, "composite");
+    let exifIncludeDependencies = /* @__PURE__ */ Object.create(null);
+    if (hasIncludeTags) {
+      exifIncludeDependencies = getExifIncludeDependencies(includeTags);
+    }
+    let fileIncludeDependencies = /* @__PURE__ */ Object.create(null);
+    if (hasIncludeTags && shouldParseFile) {
+      fileIncludeDependencies = buildLowercasedNameMap(
+        COMPOSITE_DEPENDENCY_TAGS.file
+      );
+    }
+    for (const groupKey in FILTER_GROUPS) {
+      const hasIncludeEntry = hasIncludeTags && Object.prototype.hasOwnProperty.call(includeTags, groupKey);
+      const hasExcludeEntry = hasExcludeTags && Object.prototype.hasOwnProperty.call(excludeTags, groupKey);
+      let excludeValue = void 0;
+      if (hasExcludeEntry && !hasIncludeEntry) {
+        excludeValue = excludeTags[groupKey];
+      }
+      const returnSelection = buildSelection({
+        groupKey,
+        includeValue: hasIncludeEntry ? includeTags[groupKey] : void 0,
+        excludeValue,
+        extraIncludeNames: /* @__PURE__ */ Object.create(null)
+      });
+      shouldReturn[groupKey] = hasIncludeTags ? hasIncludeEntry : true;
+      if (hasIncludeEntry && isEmptyArray(includeTags[groupKey])) {
+        shouldReturn[groupKey] = false;
+      }
+      if (returnSelection.excludeAll) {
+        shouldReturn[groupKey] = false;
+      }
+      returnSelections[groupKey] = returnSelection;
+      const parseSelection = buildSelection({
+        groupKey,
+        includeValue: getParseIncludeValue({
+          groupKey,
+          hasIncludeTags,
+          hasIncludeEntry,
+          includeTags,
+          shouldParseExif,
+          shouldParseFile
+        }),
+        excludeValue,
+        extraIncludeNames: getExtraParseIncludeNames({
+          groupKey,
+          hasIncludeTags,
+          hasIncludeEntry,
+          shouldParseExif,
+          shouldParseFile,
+          exifIncludeDependencies,
+          fileIncludeDependencies
+        })
+      });
+      parseSelections[groupKey] = parseSelection;
+    }
+    return {
+      isActive,
+      shouldReturnGroup,
+      shouldParseGroup,
+      shouldReturnTag,
+      shouldParseTag
+    };
+    function shouldReturnGroup(groupKey) {
+      if (!FILTER_GROUPS[groupKey]) {
+        return true;
+      }
+      return !!shouldReturn[groupKey];
+    }
+    function shouldParseGroup(groupKey) {
+      if (!FILTER_GROUPS[groupKey]) {
+        return true;
+      }
+      if (shouldReturnGroup(groupKey)) {
+        return true;
+      }
+      if (groupKey === "exif") {
+        return shouldParseExif;
+      }
+      if (groupKey === "file") {
+        return shouldParseFile;
+      }
+      return false;
+    }
+    function shouldReturnTag(groupKey, tagName, tagId) {
+      if (!FILTER_GROUPS[groupKey]) {
+        return true;
+      }
+      if (!shouldReturnGroup(groupKey)) {
+        return false;
+      }
+      return matchesSelection(returnSelections[groupKey], tagName, tagId);
+    }
+    function shouldParseTag(groupKey, tagName, tagId) {
+      if (!FILTER_GROUPS[groupKey]) {
+        return true;
+      }
+      if (!shouldParseGroup(groupKey)) {
+        return false;
+      }
+      return matchesSelection(parseSelections[groupKey], tagName, tagId);
+    }
+  }
+  function createNoopFilter() {
+    return {
+      isActive: false,
+      shouldReturnGroup: alwaysTrue,
+      shouldParseGroup: alwaysTrue,
+      shouldReturnTag: alwaysTrue,
+      shouldParseTag: alwaysTrue
+    };
+    function alwaysTrue() {
+      return true;
+    }
+  }
+  function getExifIncludeDependencies(includeTags) {
+    const requiredTags = getExifTagDependenciesForInclude(includeTags);
+    if (isGroupRequested(includeTags, "composite")) {
+      addRequiredTags(requiredTags, COMPOSITE_DEPENDENCY_TAGS.exif);
+      requiredTags[EXIF_POINTER_TAGS.exifIfdPointer] = true;
+    }
+    return requiredTags;
+  }
+  function getParseIncludeValue({
+    groupKey,
+    hasIncludeTags,
+    hasIncludeEntry,
+    includeTags,
+    shouldParseExif,
+    shouldParseFile
+  }) {
+    if (!hasIncludeTags) {
+      return true;
+    }
+    if (hasIncludeEntry) {
+      if (groupKey === "thumbnail" && Array.isArray(includeTags[groupKey])) {
+        return true;
+      }
+      return includeTags[groupKey];
+    }
+    if (groupKey === "exif" && shouldParseExif) {
+      return [];
+    }
+    if (groupKey === "file" && shouldParseFile) {
+      return [];
+    }
+    return void 0;
+  }
+  function getExtraParseIncludeNames({
+    groupKey,
+    hasIncludeTags,
+    hasIncludeEntry,
+    shouldParseExif,
+    shouldParseFile,
+    exifIncludeDependencies,
+    fileIncludeDependencies
+  }) {
+    if (!hasIncludeTags) {
+      return /* @__PURE__ */ Object.create(null);
+    }
+    if (groupKey === "exif") {
+      if (shouldParseExif || hasIncludeEntry && Object.keys(exifIncludeDependencies).length > 0) {
+        return exifIncludeDependencies;
+      }
+    }
+    if (groupKey === "file" && shouldParseFile) {
+      return fileIncludeDependencies;
+    }
+    return /* @__PURE__ */ Object.create(null);
+  }
+  function isGroupRequested(includeTags, groupKey) {
+    if (!includeTags || !Object.prototype.hasOwnProperty.call(includeTags, groupKey)) {
+      return false;
+    }
+    const includeValue = includeTags[groupKey];
+    if (includeValue === true) {
+      return true;
+    }
+    return Array.isArray(includeValue) && includeValue.length > 0;
+  }
+  function isEmptyArray(value) {
+    return Array.isArray(value) && value.length === 0;
+  }
+  function buildSelection({ groupKey, includeValue, excludeValue, extraIncludeNames }) {
+    const isIdCapable = !!ID_CAPABLE_GROUPS[groupKey];
+    const selection = {
+      includeAll: false,
+      includeNames: void 0,
+      includeIds: void 0,
+      excludeAll: false,
+      excludeNames: void 0,
+      excludeIds: void 0
+    };
+    if (includeValue === true) {
+      selection.includeAll = true;
+    } else if (Array.isArray(includeValue)) {
+      selection.includeNames = /* @__PURE__ */ Object.create(null);
+      if (isIdCapable) {
+        selection.includeIds = /* @__PURE__ */ Object.create(null);
+      }
+      for (let i = 0; i < includeValue.length; i++) {
+        addSelector(selection, includeValue[i]);
+      }
+      for (const extraName in extraIncludeNames) {
+        selection.includeNames[extraName.toLowerCase()] = true;
+      }
+    } else if (extraIncludeNames && Object.keys(extraIncludeNames).length > 0) {
+      selection.includeNames = /* @__PURE__ */ Object.create(null);
+      for (const extraName in extraIncludeNames) {
+        selection.includeNames[extraName.toLowerCase()] = true;
+      }
+    }
+    if (excludeValue === true) {
+      selection.excludeAll = true;
+      return selection;
+    }
+    if (Array.isArray(excludeValue)) {
+      selection.excludeNames = /* @__PURE__ */ Object.create(null);
+      if (isIdCapable) {
+        selection.excludeIds = /* @__PURE__ */ Object.create(null);
+      }
+      for (let i = 0; i < excludeValue.length; i++) {
+        addExcludeSelector(selection, excludeValue[i]);
+      }
+    }
+    return selection;
+    function addSelector(targetSelection, selector) {
+      if (typeof selector === "number" && targetSelection.includeIds) {
+        targetSelection.includeIds[String(selector)] = true;
+        return;
+      }
+      if (typeof selector === "string") {
+        targetSelection.includeNames[selector.toLowerCase()] = true;
+      }
+    }
+    function addExcludeSelector(targetSelection, selector) {
+      if (typeof selector === "number" && targetSelection.excludeIds) {
+        targetSelection.excludeIds[String(selector)] = true;
+        return;
+      }
+      if (typeof selector === "string") {
+        targetSelection.excludeNames[selector.toLowerCase()] = true;
+      }
+    }
+  }
+  function matchesSelection(selection, tagName, tagId) {
+    if (selection.excludeAll) {
+      return false;
+    }
+    if (selection.includeAll) {
+      return !isExcluded(selection, tagName, tagId);
+    }
+    if (!selection.includeNames && !selection.includeIds) {
+      return !isExcluded(selection, tagName, tagId);
+    }
+    if (isIncluded(selection, tagName, tagId)) {
+      return !isExcluded(selection, tagName, tagId);
+    }
+    return false;
+  }
+  function isIncluded(selection, tagName, tagId) {
+    if (tagId !== void 0 && selection.includeIds) {
+      if (selection.includeIds[String(tagId)]) {
+        return true;
+      }
+    }
+    if (tagName && selection.includeNames) {
+      if (selection.includeNames[String(tagName).toLowerCase()]) {
+        return true;
+      }
+    }
+    return false;
+  }
+  function isExcluded(selection, tagName, tagId) {
+    if (tagId !== void 0 && selection.excludeIds) {
+      if (selection.excludeIds[String(tagId)]) {
+        return true;
+      }
+    }
+    if (tagName && selection.excludeNames) {
+      if (selection.excludeNames[String(tagName).toLowerCase()]) {
+        return true;
+      }
+    }
+    return false;
+  }
+  function buildLowercasedNameMap(names) {
+    const map = /* @__PURE__ */ Object.create(null);
+    for (let i = 0; i < names.length; i++) {
+      map[names[i].toLowerCase()] = true;
+    }
+    return map;
+  }
+  function addRequiredTags(requiredTags, tags) {
+    for (let i = 0; i < tags.length; i++) {
+      requiredTags[tags[i]] = true;
+    }
+  }
+  var NOOP_TAG_FILTER;
+  var init_tag_filter = __esm({
+    "node_modules/exifreader/src/tag-filter.js"() {
+      init_esbuild_shims();
+      init_tag_filter_config();
+      NOOP_TAG_FILTER = createNoopFilter();
+    }
+  });
+
+  // node_modules/exifreader/src/tags-helpers.js
+  function get0thIfdOffset(dataView, tiffHeaderOffset, byteOrder) {
+    const offset = tiffHeaderOffset + TIFF_IFD_OFFSET_OFFSET;
+    if (offset + types_default.getTypeSize("LONG") > dataView.byteLength) {
+      return void 0;
+    }
+    const ifdOffset = types_default.getLongAt(dataView, offset, byteOrder);
+    if (ifdOffset < TIFF_HEADER_LENGTH) {
+      return void 0;
+    }
+    return tiffHeaderOffset + ifdOffset;
+  }
+  function readIfd(dataView, ifdType, offsetOrigin, offset, byteOrder, includeUnknown, computed = false, tagFilter = NOOP_TAG_FILTER, groupKey = "exif", valueBudget = getValueBudget(dataView), tagNames, readThumbnailIfd = tagNames[IFD_TYPE_1ST] !== void 0 && tagFilter.shouldParseGroup("thumbnail")) {
+    const FIELD_COUNT_SIZE = types_default.getTypeSize("SHORT");
+    const FIELD_SIZE = IFD_ENTRY_LENGTH;
+    const tags = {};
+    const numberOfFields = getNumberOfFields(dataView, offset, byteOrder);
+    let ranOutOfIfdEntries = false;
+    offset += FIELD_COUNT_SIZE;
+    for (let fieldIndex = 0; fieldIndex < numberOfFields; fieldIndex++) {
+      if (offset + FIELD_SIZE > dataView.byteLength) {
+        ranOutOfIfdEntries = true;
+        break;
+      }
+      if (!takeIfdEntry(valueBudget)) {
+        ranOutOfIfdEntries = true;
+        break;
+      }
+      const tag = readTag(
+        dataView,
+        ifdType,
+        offsetOrigin,
+        offset,
+        byteOrder,
+        includeUnknown,
+        tagFilter,
+        groupKey,
+        valueBudget,
+        tagNames
+      );
+      if (tag !== void 0) {
+        tags[tag.name] = {
+          "id": tag.id,
+          "value": tag.value,
+          "description": tag.description
+        };
+        if (computed) {
+          tags[tag.name].computed = getComputedTagValue(tag.tagType, tag.value);
+        }
+        if (tag.name === "MakerNote" || ifdType === IFD_TYPE_PENTAX && tag.name === "LevelInfo") {
+          tags[tag.name].__offset = tag.__offset;
+        }
+      }
+      offset += FIELD_SIZE;
+    }
+    if (readThumbnailIfd && !ranOutOfIfdEntries && offset + types_default.getTypeSize("LONG") <= dataView.byteLength) {
+      const nextIfdOffset = types_default.getLongAt(dataView, offset, byteOrder);
+      if (nextIfdOffset >= TIFF_HEADER_LENGTH && ifdType === IFD_TYPE_0TH) {
+        tags["Thumbnail"] = readIfd(
+          dataView,
+          IFD_TYPE_1ST,
+          offsetOrigin,
+          offsetOrigin + nextIfdOffset,
+          byteOrder,
+          includeUnknown,
+          computed,
+          tagFilter,
+          "thumbnail",
+          valueBudget,
+          tagNames
         );
       }
-      function importNode(doc, node, deep) {
-        var destRoot;
-        walkDOM(node, null, {
-          enter: function(srcNode, destParent) {
-            var destNode = srcNode.cloneNode(false);
-            destNode.ownerDocument = doc;
-            destNode.parentNode = null;
-            if (destParent === null) {
-              destRoot = destNode;
-            } else {
-              destParent.appendChild(destNode);
-            }
-            var shouldDeep = srcNode.nodeType === ATTRIBUTE_NODE || deep;
-            return shouldDeep ? destNode : null;
-          }
-        });
-        return destRoot;
-      }
-      function cloneNode(doc, node, deep) {
-        var destRoot;
-        walkDOM(node, null, {
-          enter: function(srcNode, destParent) {
-            var destNode = new srcNode.constructor(PDC);
-            for (var n in srcNode) {
-              if (hasOwn(srcNode, n)) {
-                var v = srcNode[n];
-                if (typeof v != "object") {
-                  if (v != destNode[n]) {
-                    destNode[n] = v;
-                  }
-                }
-              }
-            }
-            if (srcNode.childNodes) {
-              destNode.childNodes = new NodeList();
-            }
-            destNode.ownerDocument = doc;
-            var shouldDeep = deep;
-            switch (destNode.nodeType) {
-              case ELEMENT_NODE:
-                var attrs = srcNode.attributes;
-                var attrs2 = destNode.attributes = new NamedNodeMap();
-                var len2 = attrs.length;
-                attrs2._ownerElement = destNode;
-                for (var i = 0; i < len2; i++) {
-                  destNode.setAttributeNode(cloneNode(doc, attrs.item(i), true));
-                }
-                break;
-              case ATTRIBUTE_NODE:
-                shouldDeep = true;
-            }
-            if (destParent !== null) {
-              destParent.appendChild(destNode);
-            } else {
-              destRoot = destNode;
-            }
-            return shouldDeep ? destNode : null;
-          }
-        });
-        return destRoot;
-      }
-      function __set__(object, key, value) {
-        object[key] = value;
-      }
-      function childrenRefresh(node) {
-        var ls = [];
-        var child = node.firstChild;
-        while (child) {
-          if (child.nodeType === ELEMENT_NODE) {
-            ls.push(child);
-          }
-          child = child.nextSibling;
-        }
-        return ls;
-      }
-      try {
-        if (Object.defineProperty) {
-          Object.defineProperty(LiveNodeList.prototype, "length", {
-            get: function() {
-              _updateLiveList(this);
-              return this.$$length;
-            }
-          });
-          Object.defineProperty(Node.prototype, "textContent", {
-            get: function() {
-              if (this.nodeType === ELEMENT_NODE || this.nodeType === DOCUMENT_FRAGMENT_NODE) {
-                var buf = [];
-                walkDOM(this, null, {
-                  enter: function(n) {
-                    if (n.nodeType === ELEMENT_NODE || n.nodeType === DOCUMENT_FRAGMENT_NODE) {
-                      return true;
-                    }
-                    if (n.nodeType === PROCESSING_INSTRUCTION_NODE || n.nodeType === COMMENT_NODE) {
-                      return null;
-                    }
-                    buf.push(n.nodeValue);
-                  }
-                });
-                return buf.join("");
-              }
-              return this.nodeValue;
-            },
-            set: function(data) {
-              switch (this.nodeType) {
-                case ELEMENT_NODE:
-                case DOCUMENT_FRAGMENT_NODE:
-                  while (this.firstChild) {
-                    this.removeChild(this.firstChild);
-                  }
-                  if (data || String(data)) {
-                    this.appendChild(this.ownerDocument.createTextNode(data));
-                  }
-                  break;
-                default:
-                  this.data = data;
-                  this.value = data;
-                  this.nodeValue = data;
-              }
-            }
-          });
-          Object.defineProperty(Element.prototype, "children", {
-            get: function() {
-              return new LiveNodeList(this, childrenRefresh);
-            }
-          });
-          Object.defineProperty(Document.prototype, "children", {
-            get: function() {
-              return new LiveNodeList(this, childrenRefresh);
-            }
-          });
-          Object.defineProperty(DocumentFragment.prototype, "children", {
-            get: function() {
-              return new LiveNodeList(this, childrenRefresh);
-            }
-          });
-          __set__ = function(object, key, value) {
-            object["$$" + key] = value;
-          };
-        }
-      } catch (e) {
-      }
-      exports2._updateLiveList = _updateLiveList;
-      exports2.Attr = Attr;
-      exports2.CDATASection = CDATASection;
-      exports2.CharacterData = CharacterData;
-      exports2.Comment = Comment;
-      exports2.Document = Document;
-      exports2.DocumentFragment = DocumentFragment;
-      exports2.DocumentType = DocumentType;
-      exports2.DOMImplementation = DOMImplementation;
-      exports2.Element = Element;
-      exports2.Entity = Entity;
-      exports2.EntityReference = EntityReference;
-      exports2.LiveNodeList = LiveNodeList;
-      exports2.NamedNodeMap = NamedNodeMap;
-      exports2.Node = Node;
-      exports2.NodeList = NodeList;
-      exports2.Notation = Notation;
-      exports2.Text = Text;
-      exports2.ProcessingInstruction = ProcessingInstruction;
-      exports2.walkDOM = walkDOM;
-      exports2.XMLSerializer = XMLSerializer;
     }
-  });
-
-  // node_modules/@xmldom/xmldom/lib/entities.js
-  var require_entities = __commonJS({
-    "node_modules/@xmldom/xmldom/lib/entities.js"(exports2) {
-      "use strict";
-      init_esbuild_shims();
-      var freeze = require_conventions().freeze;
-      exports2.XML_ENTITIES = freeze({
-        amp: "&",
-        apos: "'",
-        gt: ">",
-        lt: "<",
-        quot: '"'
-      });
-      exports2.HTML_ENTITIES = freeze({
-        Aacute: "\xC1",
-        aacute: "\xE1",
-        Abreve: "\u0102",
-        abreve: "\u0103",
-        ac: "\u223E",
-        acd: "\u223F",
-        acE: "\u223E\u0333",
-        Acirc: "\xC2",
-        acirc: "\xE2",
-        acute: "\xB4",
-        Acy: "\u0410",
-        acy: "\u0430",
-        AElig: "\xC6",
-        aelig: "\xE6",
-        af: "\u2061",
-        Afr: "\u{1D504}",
-        afr: "\u{1D51E}",
-        Agrave: "\xC0",
-        agrave: "\xE0",
-        alefsym: "\u2135",
-        aleph: "\u2135",
-        Alpha: "\u0391",
-        alpha: "\u03B1",
-        Amacr: "\u0100",
-        amacr: "\u0101",
-        amalg: "\u2A3F",
-        AMP: "&",
-        amp: "&",
-        And: "\u2A53",
-        and: "\u2227",
-        andand: "\u2A55",
-        andd: "\u2A5C",
-        andslope: "\u2A58",
-        andv: "\u2A5A",
-        ang: "\u2220",
-        ange: "\u29A4",
-        angle: "\u2220",
-        angmsd: "\u2221",
-        angmsdaa: "\u29A8",
-        angmsdab: "\u29A9",
-        angmsdac: "\u29AA",
-        angmsdad: "\u29AB",
-        angmsdae: "\u29AC",
-        angmsdaf: "\u29AD",
-        angmsdag: "\u29AE",
-        angmsdah: "\u29AF",
-        angrt: "\u221F",
-        angrtvb: "\u22BE",
-        angrtvbd: "\u299D",
-        angsph: "\u2222",
-        angst: "\xC5",
-        angzarr: "\u237C",
-        Aogon: "\u0104",
-        aogon: "\u0105",
-        Aopf: "\u{1D538}",
-        aopf: "\u{1D552}",
-        ap: "\u2248",
-        apacir: "\u2A6F",
-        apE: "\u2A70",
-        ape: "\u224A",
-        apid: "\u224B",
-        apos: "'",
-        ApplyFunction: "\u2061",
-        approx: "\u2248",
-        approxeq: "\u224A",
-        Aring: "\xC5",
-        aring: "\xE5",
-        Ascr: "\u{1D49C}",
-        ascr: "\u{1D4B6}",
-        Assign: "\u2254",
-        ast: "*",
-        asymp: "\u2248",
-        asympeq: "\u224D",
-        Atilde: "\xC3",
-        atilde: "\xE3",
-        Auml: "\xC4",
-        auml: "\xE4",
-        awconint: "\u2233",
-        awint: "\u2A11",
-        backcong: "\u224C",
-        backepsilon: "\u03F6",
-        backprime: "\u2035",
-        backsim: "\u223D",
-        backsimeq: "\u22CD",
-        Backslash: "\u2216",
-        Barv: "\u2AE7",
-        barvee: "\u22BD",
-        Barwed: "\u2306",
-        barwed: "\u2305",
-        barwedge: "\u2305",
-        bbrk: "\u23B5",
-        bbrktbrk: "\u23B6",
-        bcong: "\u224C",
-        Bcy: "\u0411",
-        bcy: "\u0431",
-        bdquo: "\u201E",
-        becaus: "\u2235",
-        Because: "\u2235",
-        because: "\u2235",
-        bemptyv: "\u29B0",
-        bepsi: "\u03F6",
-        bernou: "\u212C",
-        Bernoullis: "\u212C",
-        Beta: "\u0392",
-        beta: "\u03B2",
-        beth: "\u2136",
-        between: "\u226C",
-        Bfr: "\u{1D505}",
-        bfr: "\u{1D51F}",
-        bigcap: "\u22C2",
-        bigcirc: "\u25EF",
-        bigcup: "\u22C3",
-        bigodot: "\u2A00",
-        bigoplus: "\u2A01",
-        bigotimes: "\u2A02",
-        bigsqcup: "\u2A06",
-        bigstar: "\u2605",
-        bigtriangledown: "\u25BD",
-        bigtriangleup: "\u25B3",
-        biguplus: "\u2A04",
-        bigvee: "\u22C1",
-        bigwedge: "\u22C0",
-        bkarow: "\u290D",
-        blacklozenge: "\u29EB",
-        blacksquare: "\u25AA",
-        blacktriangle: "\u25B4",
-        blacktriangledown: "\u25BE",
-        blacktriangleleft: "\u25C2",
-        blacktriangleright: "\u25B8",
-        blank: "\u2423",
-        blk12: "\u2592",
-        blk14: "\u2591",
-        blk34: "\u2593",
-        block: "\u2588",
-        bne: "=\u20E5",
-        bnequiv: "\u2261\u20E5",
-        bNot: "\u2AED",
-        bnot: "\u2310",
-        Bopf: "\u{1D539}",
-        bopf: "\u{1D553}",
-        bot: "\u22A5",
-        bottom: "\u22A5",
-        bowtie: "\u22C8",
-        boxbox: "\u29C9",
-        boxDL: "\u2557",
-        boxDl: "\u2556",
-        boxdL: "\u2555",
-        boxdl: "\u2510",
-        boxDR: "\u2554",
-        boxDr: "\u2553",
-        boxdR: "\u2552",
-        boxdr: "\u250C",
-        boxH: "\u2550",
-        boxh: "\u2500",
-        boxHD: "\u2566",
-        boxHd: "\u2564",
-        boxhD: "\u2565",
-        boxhd: "\u252C",
-        boxHU: "\u2569",
-        boxHu: "\u2567",
-        boxhU: "\u2568",
-        boxhu: "\u2534",
-        boxminus: "\u229F",
-        boxplus: "\u229E",
-        boxtimes: "\u22A0",
-        boxUL: "\u255D",
-        boxUl: "\u255C",
-        boxuL: "\u255B",
-        boxul: "\u2518",
-        boxUR: "\u255A",
-        boxUr: "\u2559",
-        boxuR: "\u2558",
-        boxur: "\u2514",
-        boxV: "\u2551",
-        boxv: "\u2502",
-        boxVH: "\u256C",
-        boxVh: "\u256B",
-        boxvH: "\u256A",
-        boxvh: "\u253C",
-        boxVL: "\u2563",
-        boxVl: "\u2562",
-        boxvL: "\u2561",
-        boxvl: "\u2524",
-        boxVR: "\u2560",
-        boxVr: "\u255F",
-        boxvR: "\u255E",
-        boxvr: "\u251C",
-        bprime: "\u2035",
-        Breve: "\u02D8",
-        breve: "\u02D8",
-        brvbar: "\xA6",
-        Bscr: "\u212C",
-        bscr: "\u{1D4B7}",
-        bsemi: "\u204F",
-        bsim: "\u223D",
-        bsime: "\u22CD",
-        bsol: "\\",
-        bsolb: "\u29C5",
-        bsolhsub: "\u27C8",
-        bull: "\u2022",
-        bullet: "\u2022",
-        bump: "\u224E",
-        bumpE: "\u2AAE",
-        bumpe: "\u224F",
-        Bumpeq: "\u224E",
-        bumpeq: "\u224F",
-        Cacute: "\u0106",
-        cacute: "\u0107",
-        Cap: "\u22D2",
-        cap: "\u2229",
-        capand: "\u2A44",
-        capbrcup: "\u2A49",
-        capcap: "\u2A4B",
-        capcup: "\u2A47",
-        capdot: "\u2A40",
-        CapitalDifferentialD: "\u2145",
-        caps: "\u2229\uFE00",
-        caret: "\u2041",
-        caron: "\u02C7",
-        Cayleys: "\u212D",
-        ccaps: "\u2A4D",
-        Ccaron: "\u010C",
-        ccaron: "\u010D",
-        Ccedil: "\xC7",
-        ccedil: "\xE7",
-        Ccirc: "\u0108",
-        ccirc: "\u0109",
-        Cconint: "\u2230",
-        ccups: "\u2A4C",
-        ccupssm: "\u2A50",
-        Cdot: "\u010A",
-        cdot: "\u010B",
-        cedil: "\xB8",
-        Cedilla: "\xB8",
-        cemptyv: "\u29B2",
-        cent: "\xA2",
-        CenterDot: "\xB7",
-        centerdot: "\xB7",
-        Cfr: "\u212D",
-        cfr: "\u{1D520}",
-        CHcy: "\u0427",
-        chcy: "\u0447",
-        check: "\u2713",
-        checkmark: "\u2713",
-        Chi: "\u03A7",
-        chi: "\u03C7",
-        cir: "\u25CB",
-        circ: "\u02C6",
-        circeq: "\u2257",
-        circlearrowleft: "\u21BA",
-        circlearrowright: "\u21BB",
-        circledast: "\u229B",
-        circledcirc: "\u229A",
-        circleddash: "\u229D",
-        CircleDot: "\u2299",
-        circledR: "\xAE",
-        circledS: "\u24C8",
-        CircleMinus: "\u2296",
-        CirclePlus: "\u2295",
-        CircleTimes: "\u2297",
-        cirE: "\u29C3",
-        cire: "\u2257",
-        cirfnint: "\u2A10",
-        cirmid: "\u2AEF",
-        cirscir: "\u29C2",
-        ClockwiseContourIntegral: "\u2232",
-        CloseCurlyDoubleQuote: "\u201D",
-        CloseCurlyQuote: "\u2019",
-        clubs: "\u2663",
-        clubsuit: "\u2663",
-        Colon: "\u2237",
-        colon: ":",
-        Colone: "\u2A74",
-        colone: "\u2254",
-        coloneq: "\u2254",
-        comma: ",",
-        commat: "@",
-        comp: "\u2201",
-        compfn: "\u2218",
-        complement: "\u2201",
-        complexes: "\u2102",
-        cong: "\u2245",
-        congdot: "\u2A6D",
-        Congruent: "\u2261",
-        Conint: "\u222F",
-        conint: "\u222E",
-        ContourIntegral: "\u222E",
-        Copf: "\u2102",
-        copf: "\u{1D554}",
-        coprod: "\u2210",
-        Coproduct: "\u2210",
-        COPY: "\xA9",
-        copy: "\xA9",
-        copysr: "\u2117",
-        CounterClockwiseContourIntegral: "\u2233",
-        crarr: "\u21B5",
-        Cross: "\u2A2F",
-        cross: "\u2717",
-        Cscr: "\u{1D49E}",
-        cscr: "\u{1D4B8}",
-        csub: "\u2ACF",
-        csube: "\u2AD1",
-        csup: "\u2AD0",
-        csupe: "\u2AD2",
-        ctdot: "\u22EF",
-        cudarrl: "\u2938",
-        cudarrr: "\u2935",
-        cuepr: "\u22DE",
-        cuesc: "\u22DF",
-        cularr: "\u21B6",
-        cularrp: "\u293D",
-        Cup: "\u22D3",
-        cup: "\u222A",
-        cupbrcap: "\u2A48",
-        CupCap: "\u224D",
-        cupcap: "\u2A46",
-        cupcup: "\u2A4A",
-        cupdot: "\u228D",
-        cupor: "\u2A45",
-        cups: "\u222A\uFE00",
-        curarr: "\u21B7",
-        curarrm: "\u293C",
-        curlyeqprec: "\u22DE",
-        curlyeqsucc: "\u22DF",
-        curlyvee: "\u22CE",
-        curlywedge: "\u22CF",
-        curren: "\xA4",
-        curvearrowleft: "\u21B6",
-        curvearrowright: "\u21B7",
-        cuvee: "\u22CE",
-        cuwed: "\u22CF",
-        cwconint: "\u2232",
-        cwint: "\u2231",
-        cylcty: "\u232D",
-        Dagger: "\u2021",
-        dagger: "\u2020",
-        daleth: "\u2138",
-        Darr: "\u21A1",
-        dArr: "\u21D3",
-        darr: "\u2193",
-        dash: "\u2010",
-        Dashv: "\u2AE4",
-        dashv: "\u22A3",
-        dbkarow: "\u290F",
-        dblac: "\u02DD",
-        Dcaron: "\u010E",
-        dcaron: "\u010F",
-        Dcy: "\u0414",
-        dcy: "\u0434",
-        DD: "\u2145",
-        dd: "\u2146",
-        ddagger: "\u2021",
-        ddarr: "\u21CA",
-        DDotrahd: "\u2911",
-        ddotseq: "\u2A77",
-        deg: "\xB0",
-        Del: "\u2207",
-        Delta: "\u0394",
-        delta: "\u03B4",
-        demptyv: "\u29B1",
-        dfisht: "\u297F",
-        Dfr: "\u{1D507}",
-        dfr: "\u{1D521}",
-        dHar: "\u2965",
-        dharl: "\u21C3",
-        dharr: "\u21C2",
-        DiacriticalAcute: "\xB4",
-        DiacriticalDot: "\u02D9",
-        DiacriticalDoubleAcute: "\u02DD",
-        DiacriticalGrave: "`",
-        DiacriticalTilde: "\u02DC",
-        diam: "\u22C4",
-        Diamond: "\u22C4",
-        diamond: "\u22C4",
-        diamondsuit: "\u2666",
-        diams: "\u2666",
-        die: "\xA8",
-        DifferentialD: "\u2146",
-        digamma: "\u03DD",
-        disin: "\u22F2",
-        div: "\xF7",
-        divide: "\xF7",
-        divideontimes: "\u22C7",
-        divonx: "\u22C7",
-        DJcy: "\u0402",
-        djcy: "\u0452",
-        dlcorn: "\u231E",
-        dlcrop: "\u230D",
-        dollar: "$",
-        Dopf: "\u{1D53B}",
-        dopf: "\u{1D555}",
-        Dot: "\xA8",
-        dot: "\u02D9",
-        DotDot: "\u20DC",
-        doteq: "\u2250",
-        doteqdot: "\u2251",
-        DotEqual: "\u2250",
-        dotminus: "\u2238",
-        dotplus: "\u2214",
-        dotsquare: "\u22A1",
-        doublebarwedge: "\u2306",
-        DoubleContourIntegral: "\u222F",
-        DoubleDot: "\xA8",
-        DoubleDownArrow: "\u21D3",
-        DoubleLeftArrow: "\u21D0",
-        DoubleLeftRightArrow: "\u21D4",
-        DoubleLeftTee: "\u2AE4",
-        DoubleLongLeftArrow: "\u27F8",
-        DoubleLongLeftRightArrow: "\u27FA",
-        DoubleLongRightArrow: "\u27F9",
-        DoubleRightArrow: "\u21D2",
-        DoubleRightTee: "\u22A8",
-        DoubleUpArrow: "\u21D1",
-        DoubleUpDownArrow: "\u21D5",
-        DoubleVerticalBar: "\u2225",
-        DownArrow: "\u2193",
-        Downarrow: "\u21D3",
-        downarrow: "\u2193",
-        DownArrowBar: "\u2913",
-        DownArrowUpArrow: "\u21F5",
-        DownBreve: "\u0311",
-        downdownarrows: "\u21CA",
-        downharpoonleft: "\u21C3",
-        downharpoonright: "\u21C2",
-        DownLeftRightVector: "\u2950",
-        DownLeftTeeVector: "\u295E",
-        DownLeftVector: "\u21BD",
-        DownLeftVectorBar: "\u2956",
-        DownRightTeeVector: "\u295F",
-        DownRightVector: "\u21C1",
-        DownRightVectorBar: "\u2957",
-        DownTee: "\u22A4",
-        DownTeeArrow: "\u21A7",
-        drbkarow: "\u2910",
-        drcorn: "\u231F",
-        drcrop: "\u230C",
-        Dscr: "\u{1D49F}",
-        dscr: "\u{1D4B9}",
-        DScy: "\u0405",
-        dscy: "\u0455",
-        dsol: "\u29F6",
-        Dstrok: "\u0110",
-        dstrok: "\u0111",
-        dtdot: "\u22F1",
-        dtri: "\u25BF",
-        dtrif: "\u25BE",
-        duarr: "\u21F5",
-        duhar: "\u296F",
-        dwangle: "\u29A6",
-        DZcy: "\u040F",
-        dzcy: "\u045F",
-        dzigrarr: "\u27FF",
-        Eacute: "\xC9",
-        eacute: "\xE9",
-        easter: "\u2A6E",
-        Ecaron: "\u011A",
-        ecaron: "\u011B",
-        ecir: "\u2256",
-        Ecirc: "\xCA",
-        ecirc: "\xEA",
-        ecolon: "\u2255",
-        Ecy: "\u042D",
-        ecy: "\u044D",
-        eDDot: "\u2A77",
-        Edot: "\u0116",
-        eDot: "\u2251",
-        edot: "\u0117",
-        ee: "\u2147",
-        efDot: "\u2252",
-        Efr: "\u{1D508}",
-        efr: "\u{1D522}",
-        eg: "\u2A9A",
-        Egrave: "\xC8",
-        egrave: "\xE8",
-        egs: "\u2A96",
-        egsdot: "\u2A98",
-        el: "\u2A99",
-        Element: "\u2208",
-        elinters: "\u23E7",
-        ell: "\u2113",
-        els: "\u2A95",
-        elsdot: "\u2A97",
-        Emacr: "\u0112",
-        emacr: "\u0113",
-        empty: "\u2205",
-        emptyset: "\u2205",
-        EmptySmallSquare: "\u25FB",
-        emptyv: "\u2205",
-        EmptyVerySmallSquare: "\u25AB",
-        emsp: "\u2003",
-        emsp13: "\u2004",
-        emsp14: "\u2005",
-        ENG: "\u014A",
-        eng: "\u014B",
-        ensp: "\u2002",
-        Eogon: "\u0118",
-        eogon: "\u0119",
-        Eopf: "\u{1D53C}",
-        eopf: "\u{1D556}",
-        epar: "\u22D5",
-        eparsl: "\u29E3",
-        eplus: "\u2A71",
-        epsi: "\u03B5",
-        Epsilon: "\u0395",
-        epsilon: "\u03B5",
-        epsiv: "\u03F5",
-        eqcirc: "\u2256",
-        eqcolon: "\u2255",
-        eqsim: "\u2242",
-        eqslantgtr: "\u2A96",
-        eqslantless: "\u2A95",
-        Equal: "\u2A75",
-        equals: "=",
-        EqualTilde: "\u2242",
-        equest: "\u225F",
-        Equilibrium: "\u21CC",
-        equiv: "\u2261",
-        equivDD: "\u2A78",
-        eqvparsl: "\u29E5",
-        erarr: "\u2971",
-        erDot: "\u2253",
-        Escr: "\u2130",
-        escr: "\u212F",
-        esdot: "\u2250",
-        Esim: "\u2A73",
-        esim: "\u2242",
-        Eta: "\u0397",
-        eta: "\u03B7",
-        ETH: "\xD0",
-        eth: "\xF0",
-        Euml: "\xCB",
-        euml: "\xEB",
-        euro: "\u20AC",
-        excl: "!",
-        exist: "\u2203",
-        Exists: "\u2203",
-        expectation: "\u2130",
-        ExponentialE: "\u2147",
-        exponentiale: "\u2147",
-        fallingdotseq: "\u2252",
-        Fcy: "\u0424",
-        fcy: "\u0444",
-        female: "\u2640",
-        ffilig: "\uFB03",
-        fflig: "\uFB00",
-        ffllig: "\uFB04",
-        Ffr: "\u{1D509}",
-        ffr: "\u{1D523}",
-        filig: "\uFB01",
-        FilledSmallSquare: "\u25FC",
-        FilledVerySmallSquare: "\u25AA",
-        fjlig: "fj",
-        flat: "\u266D",
-        fllig: "\uFB02",
-        fltns: "\u25B1",
-        fnof: "\u0192",
-        Fopf: "\u{1D53D}",
-        fopf: "\u{1D557}",
-        ForAll: "\u2200",
-        forall: "\u2200",
-        fork: "\u22D4",
-        forkv: "\u2AD9",
-        Fouriertrf: "\u2131",
-        fpartint: "\u2A0D",
-        frac12: "\xBD",
-        frac13: "\u2153",
-        frac14: "\xBC",
-        frac15: "\u2155",
-        frac16: "\u2159",
-        frac18: "\u215B",
-        frac23: "\u2154",
-        frac25: "\u2156",
-        frac34: "\xBE",
-        frac35: "\u2157",
-        frac38: "\u215C",
-        frac45: "\u2158",
-        frac56: "\u215A",
-        frac58: "\u215D",
-        frac78: "\u215E",
-        frasl: "\u2044",
-        frown: "\u2322",
-        Fscr: "\u2131",
-        fscr: "\u{1D4BB}",
-        gacute: "\u01F5",
-        Gamma: "\u0393",
-        gamma: "\u03B3",
-        Gammad: "\u03DC",
-        gammad: "\u03DD",
-        gap: "\u2A86",
-        Gbreve: "\u011E",
-        gbreve: "\u011F",
-        Gcedil: "\u0122",
-        Gcirc: "\u011C",
-        gcirc: "\u011D",
-        Gcy: "\u0413",
-        gcy: "\u0433",
-        Gdot: "\u0120",
-        gdot: "\u0121",
-        gE: "\u2267",
-        ge: "\u2265",
-        gEl: "\u2A8C",
-        gel: "\u22DB",
-        geq: "\u2265",
-        geqq: "\u2267",
-        geqslant: "\u2A7E",
-        ges: "\u2A7E",
-        gescc: "\u2AA9",
-        gesdot: "\u2A80",
-        gesdoto: "\u2A82",
-        gesdotol: "\u2A84",
-        gesl: "\u22DB\uFE00",
-        gesles: "\u2A94",
-        Gfr: "\u{1D50A}",
-        gfr: "\u{1D524}",
-        Gg: "\u22D9",
-        gg: "\u226B",
-        ggg: "\u22D9",
-        gimel: "\u2137",
-        GJcy: "\u0403",
-        gjcy: "\u0453",
-        gl: "\u2277",
-        gla: "\u2AA5",
-        glE: "\u2A92",
-        glj: "\u2AA4",
-        gnap: "\u2A8A",
-        gnapprox: "\u2A8A",
-        gnE: "\u2269",
-        gne: "\u2A88",
-        gneq: "\u2A88",
-        gneqq: "\u2269",
-        gnsim: "\u22E7",
-        Gopf: "\u{1D53E}",
-        gopf: "\u{1D558}",
-        grave: "`",
-        GreaterEqual: "\u2265",
-        GreaterEqualLess: "\u22DB",
-        GreaterFullEqual: "\u2267",
-        GreaterGreater: "\u2AA2",
-        GreaterLess: "\u2277",
-        GreaterSlantEqual: "\u2A7E",
-        GreaterTilde: "\u2273",
-        Gscr: "\u{1D4A2}",
-        gscr: "\u210A",
-        gsim: "\u2273",
-        gsime: "\u2A8E",
-        gsiml: "\u2A90",
-        Gt: "\u226B",
-        GT: ">",
-        gt: ">",
-        gtcc: "\u2AA7",
-        gtcir: "\u2A7A",
-        gtdot: "\u22D7",
-        gtlPar: "\u2995",
-        gtquest: "\u2A7C",
-        gtrapprox: "\u2A86",
-        gtrarr: "\u2978",
-        gtrdot: "\u22D7",
-        gtreqless: "\u22DB",
-        gtreqqless: "\u2A8C",
-        gtrless: "\u2277",
-        gtrsim: "\u2273",
-        gvertneqq: "\u2269\uFE00",
-        gvnE: "\u2269\uFE00",
-        Hacek: "\u02C7",
-        hairsp: "\u200A",
-        half: "\xBD",
-        hamilt: "\u210B",
-        HARDcy: "\u042A",
-        hardcy: "\u044A",
-        hArr: "\u21D4",
-        harr: "\u2194",
-        harrcir: "\u2948",
-        harrw: "\u21AD",
-        Hat: "^",
-        hbar: "\u210F",
-        Hcirc: "\u0124",
-        hcirc: "\u0125",
-        hearts: "\u2665",
-        heartsuit: "\u2665",
-        hellip: "\u2026",
-        hercon: "\u22B9",
-        Hfr: "\u210C",
-        hfr: "\u{1D525}",
-        HilbertSpace: "\u210B",
-        hksearow: "\u2925",
-        hkswarow: "\u2926",
-        hoarr: "\u21FF",
-        homtht: "\u223B",
-        hookleftarrow: "\u21A9",
-        hookrightarrow: "\u21AA",
-        Hopf: "\u210D",
-        hopf: "\u{1D559}",
-        horbar: "\u2015",
-        HorizontalLine: "\u2500",
-        Hscr: "\u210B",
-        hscr: "\u{1D4BD}",
-        hslash: "\u210F",
-        Hstrok: "\u0126",
-        hstrok: "\u0127",
-        HumpDownHump: "\u224E",
-        HumpEqual: "\u224F",
-        hybull: "\u2043",
-        hyphen: "\u2010",
-        Iacute: "\xCD",
-        iacute: "\xED",
-        ic: "\u2063",
-        Icirc: "\xCE",
-        icirc: "\xEE",
-        Icy: "\u0418",
-        icy: "\u0438",
-        Idot: "\u0130",
-        IEcy: "\u0415",
-        iecy: "\u0435",
-        iexcl: "\xA1",
-        iff: "\u21D4",
-        Ifr: "\u2111",
-        ifr: "\u{1D526}",
-        Igrave: "\xCC",
-        igrave: "\xEC",
-        ii: "\u2148",
-        iiiint: "\u2A0C",
-        iiint: "\u222D",
-        iinfin: "\u29DC",
-        iiota: "\u2129",
-        IJlig: "\u0132",
-        ijlig: "\u0133",
-        Im: "\u2111",
-        Imacr: "\u012A",
-        imacr: "\u012B",
-        image: "\u2111",
-        ImaginaryI: "\u2148",
-        imagline: "\u2110",
-        imagpart: "\u2111",
-        imath: "\u0131",
-        imof: "\u22B7",
-        imped: "\u01B5",
-        Implies: "\u21D2",
-        in: "\u2208",
-        incare: "\u2105",
-        infin: "\u221E",
-        infintie: "\u29DD",
-        inodot: "\u0131",
-        Int: "\u222C",
-        int: "\u222B",
-        intcal: "\u22BA",
-        integers: "\u2124",
-        Integral: "\u222B",
-        intercal: "\u22BA",
-        Intersection: "\u22C2",
-        intlarhk: "\u2A17",
-        intprod: "\u2A3C",
-        InvisibleComma: "\u2063",
-        InvisibleTimes: "\u2062",
-        IOcy: "\u0401",
-        iocy: "\u0451",
-        Iogon: "\u012E",
-        iogon: "\u012F",
-        Iopf: "\u{1D540}",
-        iopf: "\u{1D55A}",
-        Iota: "\u0399",
-        iota: "\u03B9",
-        iprod: "\u2A3C",
-        iquest: "\xBF",
-        Iscr: "\u2110",
-        iscr: "\u{1D4BE}",
-        isin: "\u2208",
-        isindot: "\u22F5",
-        isinE: "\u22F9",
-        isins: "\u22F4",
-        isinsv: "\u22F3",
-        isinv: "\u2208",
-        it: "\u2062",
-        Itilde: "\u0128",
-        itilde: "\u0129",
-        Iukcy: "\u0406",
-        iukcy: "\u0456",
-        Iuml: "\xCF",
-        iuml: "\xEF",
-        Jcirc: "\u0134",
-        jcirc: "\u0135",
-        Jcy: "\u0419",
-        jcy: "\u0439",
-        Jfr: "\u{1D50D}",
-        jfr: "\u{1D527}",
-        jmath: "\u0237",
-        Jopf: "\u{1D541}",
-        jopf: "\u{1D55B}",
-        Jscr: "\u{1D4A5}",
-        jscr: "\u{1D4BF}",
-        Jsercy: "\u0408",
-        jsercy: "\u0458",
-        Jukcy: "\u0404",
-        jukcy: "\u0454",
-        Kappa: "\u039A",
-        kappa: "\u03BA",
-        kappav: "\u03F0",
-        Kcedil: "\u0136",
-        kcedil: "\u0137",
-        Kcy: "\u041A",
-        kcy: "\u043A",
-        Kfr: "\u{1D50E}",
-        kfr: "\u{1D528}",
-        kgreen: "\u0138",
-        KHcy: "\u0425",
-        khcy: "\u0445",
-        KJcy: "\u040C",
-        kjcy: "\u045C",
-        Kopf: "\u{1D542}",
-        kopf: "\u{1D55C}",
-        Kscr: "\u{1D4A6}",
-        kscr: "\u{1D4C0}",
-        lAarr: "\u21DA",
-        Lacute: "\u0139",
-        lacute: "\u013A",
-        laemptyv: "\u29B4",
-        lagran: "\u2112",
-        Lambda: "\u039B",
-        lambda: "\u03BB",
-        Lang: "\u27EA",
-        lang: "\u27E8",
-        langd: "\u2991",
-        langle: "\u27E8",
-        lap: "\u2A85",
-        Laplacetrf: "\u2112",
-        laquo: "\xAB",
-        Larr: "\u219E",
-        lArr: "\u21D0",
-        larr: "\u2190",
-        larrb: "\u21E4",
-        larrbfs: "\u291F",
-        larrfs: "\u291D",
-        larrhk: "\u21A9",
-        larrlp: "\u21AB",
-        larrpl: "\u2939",
-        larrsim: "\u2973",
-        larrtl: "\u21A2",
-        lat: "\u2AAB",
-        lAtail: "\u291B",
-        latail: "\u2919",
-        late: "\u2AAD",
-        lates: "\u2AAD\uFE00",
-        lBarr: "\u290E",
-        lbarr: "\u290C",
-        lbbrk: "\u2772",
-        lbrace: "{",
-        lbrack: "[",
-        lbrke: "\u298B",
-        lbrksld: "\u298F",
-        lbrkslu: "\u298D",
-        Lcaron: "\u013D",
-        lcaron: "\u013E",
-        Lcedil: "\u013B",
-        lcedil: "\u013C",
-        lceil: "\u2308",
-        lcub: "{",
-        Lcy: "\u041B",
-        lcy: "\u043B",
-        ldca: "\u2936",
-        ldquo: "\u201C",
-        ldquor: "\u201E",
-        ldrdhar: "\u2967",
-        ldrushar: "\u294B",
-        ldsh: "\u21B2",
-        lE: "\u2266",
-        le: "\u2264",
-        LeftAngleBracket: "\u27E8",
-        LeftArrow: "\u2190",
-        Leftarrow: "\u21D0",
-        leftarrow: "\u2190",
-        LeftArrowBar: "\u21E4",
-        LeftArrowRightArrow: "\u21C6",
-        leftarrowtail: "\u21A2",
-        LeftCeiling: "\u2308",
-        LeftDoubleBracket: "\u27E6",
-        LeftDownTeeVector: "\u2961",
-        LeftDownVector: "\u21C3",
-        LeftDownVectorBar: "\u2959",
-        LeftFloor: "\u230A",
-        leftharpoondown: "\u21BD",
-        leftharpoonup: "\u21BC",
-        leftleftarrows: "\u21C7",
-        LeftRightArrow: "\u2194",
-        Leftrightarrow: "\u21D4",
-        leftrightarrow: "\u2194",
-        leftrightarrows: "\u21C6",
-        leftrightharpoons: "\u21CB",
-        leftrightsquigarrow: "\u21AD",
-        LeftRightVector: "\u294E",
-        LeftTee: "\u22A3",
-        LeftTeeArrow: "\u21A4",
-        LeftTeeVector: "\u295A",
-        leftthreetimes: "\u22CB",
-        LeftTriangle: "\u22B2",
-        LeftTriangleBar: "\u29CF",
-        LeftTriangleEqual: "\u22B4",
-        LeftUpDownVector: "\u2951",
-        LeftUpTeeVector: "\u2960",
-        LeftUpVector: "\u21BF",
-        LeftUpVectorBar: "\u2958",
-        LeftVector: "\u21BC",
-        LeftVectorBar: "\u2952",
-        lEg: "\u2A8B",
-        leg: "\u22DA",
-        leq: "\u2264",
-        leqq: "\u2266",
-        leqslant: "\u2A7D",
-        les: "\u2A7D",
-        lescc: "\u2AA8",
-        lesdot: "\u2A7F",
-        lesdoto: "\u2A81",
-        lesdotor: "\u2A83",
-        lesg: "\u22DA\uFE00",
-        lesges: "\u2A93",
-        lessapprox: "\u2A85",
-        lessdot: "\u22D6",
-        lesseqgtr: "\u22DA",
-        lesseqqgtr: "\u2A8B",
-        LessEqualGreater: "\u22DA",
-        LessFullEqual: "\u2266",
-        LessGreater: "\u2276",
-        lessgtr: "\u2276",
-        LessLess: "\u2AA1",
-        lesssim: "\u2272",
-        LessSlantEqual: "\u2A7D",
-        LessTilde: "\u2272",
-        lfisht: "\u297C",
-        lfloor: "\u230A",
-        Lfr: "\u{1D50F}",
-        lfr: "\u{1D529}",
-        lg: "\u2276",
-        lgE: "\u2A91",
-        lHar: "\u2962",
-        lhard: "\u21BD",
-        lharu: "\u21BC",
-        lharul: "\u296A",
-        lhblk: "\u2584",
-        LJcy: "\u0409",
-        ljcy: "\u0459",
-        Ll: "\u22D8",
-        ll: "\u226A",
-        llarr: "\u21C7",
-        llcorner: "\u231E",
-        Lleftarrow: "\u21DA",
-        llhard: "\u296B",
-        lltri: "\u25FA",
-        Lmidot: "\u013F",
-        lmidot: "\u0140",
-        lmoust: "\u23B0",
-        lmoustache: "\u23B0",
-        lnap: "\u2A89",
-        lnapprox: "\u2A89",
-        lnE: "\u2268",
-        lne: "\u2A87",
-        lneq: "\u2A87",
-        lneqq: "\u2268",
-        lnsim: "\u22E6",
-        loang: "\u27EC",
-        loarr: "\u21FD",
-        lobrk: "\u27E6",
-        LongLeftArrow: "\u27F5",
-        Longleftarrow: "\u27F8",
-        longleftarrow: "\u27F5",
-        LongLeftRightArrow: "\u27F7",
-        Longleftrightarrow: "\u27FA",
-        longleftrightarrow: "\u27F7",
-        longmapsto: "\u27FC",
-        LongRightArrow: "\u27F6",
-        Longrightarrow: "\u27F9",
-        longrightarrow: "\u27F6",
-        looparrowleft: "\u21AB",
-        looparrowright: "\u21AC",
-        lopar: "\u2985",
-        Lopf: "\u{1D543}",
-        lopf: "\u{1D55D}",
-        loplus: "\u2A2D",
-        lotimes: "\u2A34",
-        lowast: "\u2217",
-        lowbar: "_",
-        LowerLeftArrow: "\u2199",
-        LowerRightArrow: "\u2198",
-        loz: "\u25CA",
-        lozenge: "\u25CA",
-        lozf: "\u29EB",
-        lpar: "(",
-        lparlt: "\u2993",
-        lrarr: "\u21C6",
-        lrcorner: "\u231F",
-        lrhar: "\u21CB",
-        lrhard: "\u296D",
-        lrm: "\u200E",
-        lrtri: "\u22BF",
-        lsaquo: "\u2039",
-        Lscr: "\u2112",
-        lscr: "\u{1D4C1}",
-        Lsh: "\u21B0",
-        lsh: "\u21B0",
-        lsim: "\u2272",
-        lsime: "\u2A8D",
-        lsimg: "\u2A8F",
-        lsqb: "[",
-        lsquo: "\u2018",
-        lsquor: "\u201A",
-        Lstrok: "\u0141",
-        lstrok: "\u0142",
-        Lt: "\u226A",
-        LT: "<",
-        lt: "<",
-        ltcc: "\u2AA6",
-        ltcir: "\u2A79",
-        ltdot: "\u22D6",
-        lthree: "\u22CB",
-        ltimes: "\u22C9",
-        ltlarr: "\u2976",
-        ltquest: "\u2A7B",
-        ltri: "\u25C3",
-        ltrie: "\u22B4",
-        ltrif: "\u25C2",
-        ltrPar: "\u2996",
-        lurdshar: "\u294A",
-        luruhar: "\u2966",
-        lvertneqq: "\u2268\uFE00",
-        lvnE: "\u2268\uFE00",
-        macr: "\xAF",
-        male: "\u2642",
-        malt: "\u2720",
-        maltese: "\u2720",
-        Map: "\u2905",
-        map: "\u21A6",
-        mapsto: "\u21A6",
-        mapstodown: "\u21A7",
-        mapstoleft: "\u21A4",
-        mapstoup: "\u21A5",
-        marker: "\u25AE",
-        mcomma: "\u2A29",
-        Mcy: "\u041C",
-        mcy: "\u043C",
-        mdash: "\u2014",
-        mDDot: "\u223A",
-        measuredangle: "\u2221",
-        MediumSpace: "\u205F",
-        Mellintrf: "\u2133",
-        Mfr: "\u{1D510}",
-        mfr: "\u{1D52A}",
-        mho: "\u2127",
-        micro: "\xB5",
-        mid: "\u2223",
-        midast: "*",
-        midcir: "\u2AF0",
-        middot: "\xB7",
-        minus: "\u2212",
-        minusb: "\u229F",
-        minusd: "\u2238",
-        minusdu: "\u2A2A",
-        MinusPlus: "\u2213",
-        mlcp: "\u2ADB",
-        mldr: "\u2026",
-        mnplus: "\u2213",
-        models: "\u22A7",
-        Mopf: "\u{1D544}",
-        mopf: "\u{1D55E}",
-        mp: "\u2213",
-        Mscr: "\u2133",
-        mscr: "\u{1D4C2}",
-        mstpos: "\u223E",
-        Mu: "\u039C",
-        mu: "\u03BC",
-        multimap: "\u22B8",
-        mumap: "\u22B8",
-        nabla: "\u2207",
-        Nacute: "\u0143",
-        nacute: "\u0144",
-        nang: "\u2220\u20D2",
-        nap: "\u2249",
-        napE: "\u2A70\u0338",
-        napid: "\u224B\u0338",
-        napos: "\u0149",
-        napprox: "\u2249",
-        natur: "\u266E",
-        natural: "\u266E",
-        naturals: "\u2115",
-        nbsp: "\xA0",
-        nbump: "\u224E\u0338",
-        nbumpe: "\u224F\u0338",
-        ncap: "\u2A43",
-        Ncaron: "\u0147",
-        ncaron: "\u0148",
-        Ncedil: "\u0145",
-        ncedil: "\u0146",
-        ncong: "\u2247",
-        ncongdot: "\u2A6D\u0338",
-        ncup: "\u2A42",
-        Ncy: "\u041D",
-        ncy: "\u043D",
-        ndash: "\u2013",
-        ne: "\u2260",
-        nearhk: "\u2924",
-        neArr: "\u21D7",
-        nearr: "\u2197",
-        nearrow: "\u2197",
-        nedot: "\u2250\u0338",
-        NegativeMediumSpace: "\u200B",
-        NegativeThickSpace: "\u200B",
-        NegativeThinSpace: "\u200B",
-        NegativeVeryThinSpace: "\u200B",
-        nequiv: "\u2262",
-        nesear: "\u2928",
-        nesim: "\u2242\u0338",
-        NestedGreaterGreater: "\u226B",
-        NestedLessLess: "\u226A",
-        NewLine: "\n",
-        nexist: "\u2204",
-        nexists: "\u2204",
-        Nfr: "\u{1D511}",
-        nfr: "\u{1D52B}",
-        ngE: "\u2267\u0338",
-        nge: "\u2271",
-        ngeq: "\u2271",
-        ngeqq: "\u2267\u0338",
-        ngeqslant: "\u2A7E\u0338",
-        nges: "\u2A7E\u0338",
-        nGg: "\u22D9\u0338",
-        ngsim: "\u2275",
-        nGt: "\u226B\u20D2",
-        ngt: "\u226F",
-        ngtr: "\u226F",
-        nGtv: "\u226B\u0338",
-        nhArr: "\u21CE",
-        nharr: "\u21AE",
-        nhpar: "\u2AF2",
-        ni: "\u220B",
-        nis: "\u22FC",
-        nisd: "\u22FA",
-        niv: "\u220B",
-        NJcy: "\u040A",
-        njcy: "\u045A",
-        nlArr: "\u21CD",
-        nlarr: "\u219A",
-        nldr: "\u2025",
-        nlE: "\u2266\u0338",
-        nle: "\u2270",
-        nLeftarrow: "\u21CD",
-        nleftarrow: "\u219A",
-        nLeftrightarrow: "\u21CE",
-        nleftrightarrow: "\u21AE",
-        nleq: "\u2270",
-        nleqq: "\u2266\u0338",
-        nleqslant: "\u2A7D\u0338",
-        nles: "\u2A7D\u0338",
-        nless: "\u226E",
-        nLl: "\u22D8\u0338",
-        nlsim: "\u2274",
-        nLt: "\u226A\u20D2",
-        nlt: "\u226E",
-        nltri: "\u22EA",
-        nltrie: "\u22EC",
-        nLtv: "\u226A\u0338",
-        nmid: "\u2224",
-        NoBreak: "\u2060",
-        NonBreakingSpace: "\xA0",
-        Nopf: "\u2115",
-        nopf: "\u{1D55F}",
-        Not: "\u2AEC",
-        not: "\xAC",
-        NotCongruent: "\u2262",
-        NotCupCap: "\u226D",
-        NotDoubleVerticalBar: "\u2226",
-        NotElement: "\u2209",
-        NotEqual: "\u2260",
-        NotEqualTilde: "\u2242\u0338",
-        NotExists: "\u2204",
-        NotGreater: "\u226F",
-        NotGreaterEqual: "\u2271",
-        NotGreaterFullEqual: "\u2267\u0338",
-        NotGreaterGreater: "\u226B\u0338",
-        NotGreaterLess: "\u2279",
-        NotGreaterSlantEqual: "\u2A7E\u0338",
-        NotGreaterTilde: "\u2275",
-        NotHumpDownHump: "\u224E\u0338",
-        NotHumpEqual: "\u224F\u0338",
-        notin: "\u2209",
-        notindot: "\u22F5\u0338",
-        notinE: "\u22F9\u0338",
-        notinva: "\u2209",
-        notinvb: "\u22F7",
-        notinvc: "\u22F6",
-        NotLeftTriangle: "\u22EA",
-        NotLeftTriangleBar: "\u29CF\u0338",
-        NotLeftTriangleEqual: "\u22EC",
-        NotLess: "\u226E",
-        NotLessEqual: "\u2270",
-        NotLessGreater: "\u2278",
-        NotLessLess: "\u226A\u0338",
-        NotLessSlantEqual: "\u2A7D\u0338",
-        NotLessTilde: "\u2274",
-        NotNestedGreaterGreater: "\u2AA2\u0338",
-        NotNestedLessLess: "\u2AA1\u0338",
-        notni: "\u220C",
-        notniva: "\u220C",
-        notnivb: "\u22FE",
-        notnivc: "\u22FD",
-        NotPrecedes: "\u2280",
-        NotPrecedesEqual: "\u2AAF\u0338",
-        NotPrecedesSlantEqual: "\u22E0",
-        NotReverseElement: "\u220C",
-        NotRightTriangle: "\u22EB",
-        NotRightTriangleBar: "\u29D0\u0338",
-        NotRightTriangleEqual: "\u22ED",
-        NotSquareSubset: "\u228F\u0338",
-        NotSquareSubsetEqual: "\u22E2",
-        NotSquareSuperset: "\u2290\u0338",
-        NotSquareSupersetEqual: "\u22E3",
-        NotSubset: "\u2282\u20D2",
-        NotSubsetEqual: "\u2288",
-        NotSucceeds: "\u2281",
-        NotSucceedsEqual: "\u2AB0\u0338",
-        NotSucceedsSlantEqual: "\u22E1",
-        NotSucceedsTilde: "\u227F\u0338",
-        NotSuperset: "\u2283\u20D2",
-        NotSupersetEqual: "\u2289",
-        NotTilde: "\u2241",
-        NotTildeEqual: "\u2244",
-        NotTildeFullEqual: "\u2247",
-        NotTildeTilde: "\u2249",
-        NotVerticalBar: "\u2224",
-        npar: "\u2226",
-        nparallel: "\u2226",
-        nparsl: "\u2AFD\u20E5",
-        npart: "\u2202\u0338",
-        npolint: "\u2A14",
-        npr: "\u2280",
-        nprcue: "\u22E0",
-        npre: "\u2AAF\u0338",
-        nprec: "\u2280",
-        npreceq: "\u2AAF\u0338",
-        nrArr: "\u21CF",
-        nrarr: "\u219B",
-        nrarrc: "\u2933\u0338",
-        nrarrw: "\u219D\u0338",
-        nRightarrow: "\u21CF",
-        nrightarrow: "\u219B",
-        nrtri: "\u22EB",
-        nrtrie: "\u22ED",
-        nsc: "\u2281",
-        nsccue: "\u22E1",
-        nsce: "\u2AB0\u0338",
-        Nscr: "\u{1D4A9}",
-        nscr: "\u{1D4C3}",
-        nshortmid: "\u2224",
-        nshortparallel: "\u2226",
-        nsim: "\u2241",
-        nsime: "\u2244",
-        nsimeq: "\u2244",
-        nsmid: "\u2224",
-        nspar: "\u2226",
-        nsqsube: "\u22E2",
-        nsqsupe: "\u22E3",
-        nsub: "\u2284",
-        nsubE: "\u2AC5\u0338",
-        nsube: "\u2288",
-        nsubset: "\u2282\u20D2",
-        nsubseteq: "\u2288",
-        nsubseteqq: "\u2AC5\u0338",
-        nsucc: "\u2281",
-        nsucceq: "\u2AB0\u0338",
-        nsup: "\u2285",
-        nsupE: "\u2AC6\u0338",
-        nsupe: "\u2289",
-        nsupset: "\u2283\u20D2",
-        nsupseteq: "\u2289",
-        nsupseteqq: "\u2AC6\u0338",
-        ntgl: "\u2279",
-        Ntilde: "\xD1",
-        ntilde: "\xF1",
-        ntlg: "\u2278",
-        ntriangleleft: "\u22EA",
-        ntrianglelefteq: "\u22EC",
-        ntriangleright: "\u22EB",
-        ntrianglerighteq: "\u22ED",
-        Nu: "\u039D",
-        nu: "\u03BD",
-        num: "#",
-        numero: "\u2116",
-        numsp: "\u2007",
-        nvap: "\u224D\u20D2",
-        nVDash: "\u22AF",
-        nVdash: "\u22AE",
-        nvDash: "\u22AD",
-        nvdash: "\u22AC",
-        nvge: "\u2265\u20D2",
-        nvgt: ">\u20D2",
-        nvHarr: "\u2904",
-        nvinfin: "\u29DE",
-        nvlArr: "\u2902",
-        nvle: "\u2264\u20D2",
-        nvlt: "<\u20D2",
-        nvltrie: "\u22B4\u20D2",
-        nvrArr: "\u2903",
-        nvrtrie: "\u22B5\u20D2",
-        nvsim: "\u223C\u20D2",
-        nwarhk: "\u2923",
-        nwArr: "\u21D6",
-        nwarr: "\u2196",
-        nwarrow: "\u2196",
-        nwnear: "\u2927",
-        Oacute: "\xD3",
-        oacute: "\xF3",
-        oast: "\u229B",
-        ocir: "\u229A",
-        Ocirc: "\xD4",
-        ocirc: "\xF4",
-        Ocy: "\u041E",
-        ocy: "\u043E",
-        odash: "\u229D",
-        Odblac: "\u0150",
-        odblac: "\u0151",
-        odiv: "\u2A38",
-        odot: "\u2299",
-        odsold: "\u29BC",
-        OElig: "\u0152",
-        oelig: "\u0153",
-        ofcir: "\u29BF",
-        Ofr: "\u{1D512}",
-        ofr: "\u{1D52C}",
-        ogon: "\u02DB",
-        Ograve: "\xD2",
-        ograve: "\xF2",
-        ogt: "\u29C1",
-        ohbar: "\u29B5",
-        ohm: "\u03A9",
-        oint: "\u222E",
-        olarr: "\u21BA",
-        olcir: "\u29BE",
-        olcross: "\u29BB",
-        oline: "\u203E",
-        olt: "\u29C0",
-        Omacr: "\u014C",
-        omacr: "\u014D",
-        Omega: "\u03A9",
-        omega: "\u03C9",
-        Omicron: "\u039F",
-        omicron: "\u03BF",
-        omid: "\u29B6",
-        ominus: "\u2296",
-        Oopf: "\u{1D546}",
-        oopf: "\u{1D560}",
-        opar: "\u29B7",
-        OpenCurlyDoubleQuote: "\u201C",
-        OpenCurlyQuote: "\u2018",
-        operp: "\u29B9",
-        oplus: "\u2295",
-        Or: "\u2A54",
-        or: "\u2228",
-        orarr: "\u21BB",
-        ord: "\u2A5D",
-        order: "\u2134",
-        orderof: "\u2134",
-        ordf: "\xAA",
-        ordm: "\xBA",
-        origof: "\u22B6",
-        oror: "\u2A56",
-        orslope: "\u2A57",
-        orv: "\u2A5B",
-        oS: "\u24C8",
-        Oscr: "\u{1D4AA}",
-        oscr: "\u2134",
-        Oslash: "\xD8",
-        oslash: "\xF8",
-        osol: "\u2298",
-        Otilde: "\xD5",
-        otilde: "\xF5",
-        Otimes: "\u2A37",
-        otimes: "\u2297",
-        otimesas: "\u2A36",
-        Ouml: "\xD6",
-        ouml: "\xF6",
-        ovbar: "\u233D",
-        OverBar: "\u203E",
-        OverBrace: "\u23DE",
-        OverBracket: "\u23B4",
-        OverParenthesis: "\u23DC",
-        par: "\u2225",
-        para: "\xB6",
-        parallel: "\u2225",
-        parsim: "\u2AF3",
-        parsl: "\u2AFD",
-        part: "\u2202",
-        PartialD: "\u2202",
-        Pcy: "\u041F",
-        pcy: "\u043F",
-        percnt: "%",
-        period: ".",
-        permil: "\u2030",
-        perp: "\u22A5",
-        pertenk: "\u2031",
-        Pfr: "\u{1D513}",
-        pfr: "\u{1D52D}",
-        Phi: "\u03A6",
-        phi: "\u03C6",
-        phiv: "\u03D5",
-        phmmat: "\u2133",
-        phone: "\u260E",
-        Pi: "\u03A0",
-        pi: "\u03C0",
-        pitchfork: "\u22D4",
-        piv: "\u03D6",
-        planck: "\u210F",
-        planckh: "\u210E",
-        plankv: "\u210F",
-        plus: "+",
-        plusacir: "\u2A23",
-        plusb: "\u229E",
-        pluscir: "\u2A22",
-        plusdo: "\u2214",
-        plusdu: "\u2A25",
-        pluse: "\u2A72",
-        PlusMinus: "\xB1",
-        plusmn: "\xB1",
-        plussim: "\u2A26",
-        plustwo: "\u2A27",
-        pm: "\xB1",
-        Poincareplane: "\u210C",
-        pointint: "\u2A15",
-        Popf: "\u2119",
-        popf: "\u{1D561}",
-        pound: "\xA3",
-        Pr: "\u2ABB",
-        pr: "\u227A",
-        prap: "\u2AB7",
-        prcue: "\u227C",
-        prE: "\u2AB3",
-        pre: "\u2AAF",
-        prec: "\u227A",
-        precapprox: "\u2AB7",
-        preccurlyeq: "\u227C",
-        Precedes: "\u227A",
-        PrecedesEqual: "\u2AAF",
-        PrecedesSlantEqual: "\u227C",
-        PrecedesTilde: "\u227E",
-        preceq: "\u2AAF",
-        precnapprox: "\u2AB9",
-        precneqq: "\u2AB5",
-        precnsim: "\u22E8",
-        precsim: "\u227E",
-        Prime: "\u2033",
-        prime: "\u2032",
-        primes: "\u2119",
-        prnap: "\u2AB9",
-        prnE: "\u2AB5",
-        prnsim: "\u22E8",
-        prod: "\u220F",
-        Product: "\u220F",
-        profalar: "\u232E",
-        profline: "\u2312",
-        profsurf: "\u2313",
-        prop: "\u221D",
-        Proportion: "\u2237",
-        Proportional: "\u221D",
-        propto: "\u221D",
-        prsim: "\u227E",
-        prurel: "\u22B0",
-        Pscr: "\u{1D4AB}",
-        pscr: "\u{1D4C5}",
-        Psi: "\u03A8",
-        psi: "\u03C8",
-        puncsp: "\u2008",
-        Qfr: "\u{1D514}",
-        qfr: "\u{1D52E}",
-        qint: "\u2A0C",
-        Qopf: "\u211A",
-        qopf: "\u{1D562}",
-        qprime: "\u2057",
-        Qscr: "\u{1D4AC}",
-        qscr: "\u{1D4C6}",
-        quaternions: "\u210D",
-        quatint: "\u2A16",
-        quest: "?",
-        questeq: "\u225F",
-        QUOT: '"',
-        quot: '"',
-        rAarr: "\u21DB",
-        race: "\u223D\u0331",
-        Racute: "\u0154",
-        racute: "\u0155",
-        radic: "\u221A",
-        raemptyv: "\u29B3",
-        Rang: "\u27EB",
-        rang: "\u27E9",
-        rangd: "\u2992",
-        range: "\u29A5",
-        rangle: "\u27E9",
-        raquo: "\xBB",
-        Rarr: "\u21A0",
-        rArr: "\u21D2",
-        rarr: "\u2192",
-        rarrap: "\u2975",
-        rarrb: "\u21E5",
-        rarrbfs: "\u2920",
-        rarrc: "\u2933",
-        rarrfs: "\u291E",
-        rarrhk: "\u21AA",
-        rarrlp: "\u21AC",
-        rarrpl: "\u2945",
-        rarrsim: "\u2974",
-        Rarrtl: "\u2916",
-        rarrtl: "\u21A3",
-        rarrw: "\u219D",
-        rAtail: "\u291C",
-        ratail: "\u291A",
-        ratio: "\u2236",
-        rationals: "\u211A",
-        RBarr: "\u2910",
-        rBarr: "\u290F",
-        rbarr: "\u290D",
-        rbbrk: "\u2773",
-        rbrace: "}",
-        rbrack: "]",
-        rbrke: "\u298C",
-        rbrksld: "\u298E",
-        rbrkslu: "\u2990",
-        Rcaron: "\u0158",
-        rcaron: "\u0159",
-        Rcedil: "\u0156",
-        rcedil: "\u0157",
-        rceil: "\u2309",
-        rcub: "}",
-        Rcy: "\u0420",
-        rcy: "\u0440",
-        rdca: "\u2937",
-        rdldhar: "\u2969",
-        rdquo: "\u201D",
-        rdquor: "\u201D",
-        rdsh: "\u21B3",
-        Re: "\u211C",
-        real: "\u211C",
-        realine: "\u211B",
-        realpart: "\u211C",
-        reals: "\u211D",
-        rect: "\u25AD",
-        REG: "\xAE",
-        reg: "\xAE",
-        ReverseElement: "\u220B",
-        ReverseEquilibrium: "\u21CB",
-        ReverseUpEquilibrium: "\u296F",
-        rfisht: "\u297D",
-        rfloor: "\u230B",
-        Rfr: "\u211C",
-        rfr: "\u{1D52F}",
-        rHar: "\u2964",
-        rhard: "\u21C1",
-        rharu: "\u21C0",
-        rharul: "\u296C",
-        Rho: "\u03A1",
-        rho: "\u03C1",
-        rhov: "\u03F1",
-        RightAngleBracket: "\u27E9",
-        RightArrow: "\u2192",
-        Rightarrow: "\u21D2",
-        rightarrow: "\u2192",
-        RightArrowBar: "\u21E5",
-        RightArrowLeftArrow: "\u21C4",
-        rightarrowtail: "\u21A3",
-        RightCeiling: "\u2309",
-        RightDoubleBracket: "\u27E7",
-        RightDownTeeVector: "\u295D",
-        RightDownVector: "\u21C2",
-        RightDownVectorBar: "\u2955",
-        RightFloor: "\u230B",
-        rightharpoondown: "\u21C1",
-        rightharpoonup: "\u21C0",
-        rightleftarrows: "\u21C4",
-        rightleftharpoons: "\u21CC",
-        rightrightarrows: "\u21C9",
-        rightsquigarrow: "\u219D",
-        RightTee: "\u22A2",
-        RightTeeArrow: "\u21A6",
-        RightTeeVector: "\u295B",
-        rightthreetimes: "\u22CC",
-        RightTriangle: "\u22B3",
-        RightTriangleBar: "\u29D0",
-        RightTriangleEqual: "\u22B5",
-        RightUpDownVector: "\u294F",
-        RightUpTeeVector: "\u295C",
-        RightUpVector: "\u21BE",
-        RightUpVectorBar: "\u2954",
-        RightVector: "\u21C0",
-        RightVectorBar: "\u2953",
-        ring: "\u02DA",
-        risingdotseq: "\u2253",
-        rlarr: "\u21C4",
-        rlhar: "\u21CC",
-        rlm: "\u200F",
-        rmoust: "\u23B1",
-        rmoustache: "\u23B1",
-        rnmid: "\u2AEE",
-        roang: "\u27ED",
-        roarr: "\u21FE",
-        robrk: "\u27E7",
-        ropar: "\u2986",
-        Ropf: "\u211D",
-        ropf: "\u{1D563}",
-        roplus: "\u2A2E",
-        rotimes: "\u2A35",
-        RoundImplies: "\u2970",
-        rpar: ")",
-        rpargt: "\u2994",
-        rppolint: "\u2A12",
-        rrarr: "\u21C9",
-        Rrightarrow: "\u21DB",
-        rsaquo: "\u203A",
-        Rscr: "\u211B",
-        rscr: "\u{1D4C7}",
-        Rsh: "\u21B1",
-        rsh: "\u21B1",
-        rsqb: "]",
-        rsquo: "\u2019",
-        rsquor: "\u2019",
-        rthree: "\u22CC",
-        rtimes: "\u22CA",
-        rtri: "\u25B9",
-        rtrie: "\u22B5",
-        rtrif: "\u25B8",
-        rtriltri: "\u29CE",
-        RuleDelayed: "\u29F4",
-        ruluhar: "\u2968",
-        rx: "\u211E",
-        Sacute: "\u015A",
-        sacute: "\u015B",
-        sbquo: "\u201A",
-        Sc: "\u2ABC",
-        sc: "\u227B",
-        scap: "\u2AB8",
-        Scaron: "\u0160",
-        scaron: "\u0161",
-        sccue: "\u227D",
-        scE: "\u2AB4",
-        sce: "\u2AB0",
-        Scedil: "\u015E",
-        scedil: "\u015F",
-        Scirc: "\u015C",
-        scirc: "\u015D",
-        scnap: "\u2ABA",
-        scnE: "\u2AB6",
-        scnsim: "\u22E9",
-        scpolint: "\u2A13",
-        scsim: "\u227F",
-        Scy: "\u0421",
-        scy: "\u0441",
-        sdot: "\u22C5",
-        sdotb: "\u22A1",
-        sdote: "\u2A66",
-        searhk: "\u2925",
-        seArr: "\u21D8",
-        searr: "\u2198",
-        searrow: "\u2198",
-        sect: "\xA7",
-        semi: ";",
-        seswar: "\u2929",
-        setminus: "\u2216",
-        setmn: "\u2216",
-        sext: "\u2736",
-        Sfr: "\u{1D516}",
-        sfr: "\u{1D530}",
-        sfrown: "\u2322",
-        sharp: "\u266F",
-        SHCHcy: "\u0429",
-        shchcy: "\u0449",
-        SHcy: "\u0428",
-        shcy: "\u0448",
-        ShortDownArrow: "\u2193",
-        ShortLeftArrow: "\u2190",
-        shortmid: "\u2223",
-        shortparallel: "\u2225",
-        ShortRightArrow: "\u2192",
-        ShortUpArrow: "\u2191",
-        shy: "\xAD",
-        Sigma: "\u03A3",
-        sigma: "\u03C3",
-        sigmaf: "\u03C2",
-        sigmav: "\u03C2",
-        sim: "\u223C",
-        simdot: "\u2A6A",
-        sime: "\u2243",
-        simeq: "\u2243",
-        simg: "\u2A9E",
-        simgE: "\u2AA0",
-        siml: "\u2A9D",
-        simlE: "\u2A9F",
-        simne: "\u2246",
-        simplus: "\u2A24",
-        simrarr: "\u2972",
-        slarr: "\u2190",
-        SmallCircle: "\u2218",
-        smallsetminus: "\u2216",
-        smashp: "\u2A33",
-        smeparsl: "\u29E4",
-        smid: "\u2223",
-        smile: "\u2323",
-        smt: "\u2AAA",
-        smte: "\u2AAC",
-        smtes: "\u2AAC\uFE00",
-        SOFTcy: "\u042C",
-        softcy: "\u044C",
-        sol: "/",
-        solb: "\u29C4",
-        solbar: "\u233F",
-        Sopf: "\u{1D54A}",
-        sopf: "\u{1D564}",
-        spades: "\u2660",
-        spadesuit: "\u2660",
-        spar: "\u2225",
-        sqcap: "\u2293",
-        sqcaps: "\u2293\uFE00",
-        sqcup: "\u2294",
-        sqcups: "\u2294\uFE00",
-        Sqrt: "\u221A",
-        sqsub: "\u228F",
-        sqsube: "\u2291",
-        sqsubset: "\u228F",
-        sqsubseteq: "\u2291",
-        sqsup: "\u2290",
-        sqsupe: "\u2292",
-        sqsupset: "\u2290",
-        sqsupseteq: "\u2292",
-        squ: "\u25A1",
-        Square: "\u25A1",
-        square: "\u25A1",
-        SquareIntersection: "\u2293",
-        SquareSubset: "\u228F",
-        SquareSubsetEqual: "\u2291",
-        SquareSuperset: "\u2290",
-        SquareSupersetEqual: "\u2292",
-        SquareUnion: "\u2294",
-        squarf: "\u25AA",
-        squf: "\u25AA",
-        srarr: "\u2192",
-        Sscr: "\u{1D4AE}",
-        sscr: "\u{1D4C8}",
-        ssetmn: "\u2216",
-        ssmile: "\u2323",
-        sstarf: "\u22C6",
-        Star: "\u22C6",
-        star: "\u2606",
-        starf: "\u2605",
-        straightepsilon: "\u03F5",
-        straightphi: "\u03D5",
-        strns: "\xAF",
-        Sub: "\u22D0",
-        sub: "\u2282",
-        subdot: "\u2ABD",
-        subE: "\u2AC5",
-        sube: "\u2286",
-        subedot: "\u2AC3",
-        submult: "\u2AC1",
-        subnE: "\u2ACB",
-        subne: "\u228A",
-        subplus: "\u2ABF",
-        subrarr: "\u2979",
-        Subset: "\u22D0",
-        subset: "\u2282",
-        subseteq: "\u2286",
-        subseteqq: "\u2AC5",
-        SubsetEqual: "\u2286",
-        subsetneq: "\u228A",
-        subsetneqq: "\u2ACB",
-        subsim: "\u2AC7",
-        subsub: "\u2AD5",
-        subsup: "\u2AD3",
-        succ: "\u227B",
-        succapprox: "\u2AB8",
-        succcurlyeq: "\u227D",
-        Succeeds: "\u227B",
-        SucceedsEqual: "\u2AB0",
-        SucceedsSlantEqual: "\u227D",
-        SucceedsTilde: "\u227F",
-        succeq: "\u2AB0",
-        succnapprox: "\u2ABA",
-        succneqq: "\u2AB6",
-        succnsim: "\u22E9",
-        succsim: "\u227F",
-        SuchThat: "\u220B",
-        Sum: "\u2211",
-        sum: "\u2211",
-        sung: "\u266A",
-        Sup: "\u22D1",
-        sup: "\u2283",
-        sup1: "\xB9",
-        sup2: "\xB2",
-        sup3: "\xB3",
-        supdot: "\u2ABE",
-        supdsub: "\u2AD8",
-        supE: "\u2AC6",
-        supe: "\u2287",
-        supedot: "\u2AC4",
-        Superset: "\u2283",
-        SupersetEqual: "\u2287",
-        suphsol: "\u27C9",
-        suphsub: "\u2AD7",
-        suplarr: "\u297B",
-        supmult: "\u2AC2",
-        supnE: "\u2ACC",
-        supne: "\u228B",
-        supplus: "\u2AC0",
-        Supset: "\u22D1",
-        supset: "\u2283",
-        supseteq: "\u2287",
-        supseteqq: "\u2AC6",
-        supsetneq: "\u228B",
-        supsetneqq: "\u2ACC",
-        supsim: "\u2AC8",
-        supsub: "\u2AD4",
-        supsup: "\u2AD6",
-        swarhk: "\u2926",
-        swArr: "\u21D9",
-        swarr: "\u2199",
-        swarrow: "\u2199",
-        swnwar: "\u292A",
-        szlig: "\xDF",
-        Tab: "	",
-        target: "\u2316",
-        Tau: "\u03A4",
-        tau: "\u03C4",
-        tbrk: "\u23B4",
-        Tcaron: "\u0164",
-        tcaron: "\u0165",
-        Tcedil: "\u0162",
-        tcedil: "\u0163",
-        Tcy: "\u0422",
-        tcy: "\u0442",
-        tdot: "\u20DB",
-        telrec: "\u2315",
-        Tfr: "\u{1D517}",
-        tfr: "\u{1D531}",
-        there4: "\u2234",
-        Therefore: "\u2234",
-        therefore: "\u2234",
-        Theta: "\u0398",
-        theta: "\u03B8",
-        thetasym: "\u03D1",
-        thetav: "\u03D1",
-        thickapprox: "\u2248",
-        thicksim: "\u223C",
-        ThickSpace: "\u205F\u200A",
-        thinsp: "\u2009",
-        ThinSpace: "\u2009",
-        thkap: "\u2248",
-        thksim: "\u223C",
-        THORN: "\xDE",
-        thorn: "\xFE",
-        Tilde: "\u223C",
-        tilde: "\u02DC",
-        TildeEqual: "\u2243",
-        TildeFullEqual: "\u2245",
-        TildeTilde: "\u2248",
-        times: "\xD7",
-        timesb: "\u22A0",
-        timesbar: "\u2A31",
-        timesd: "\u2A30",
-        tint: "\u222D",
-        toea: "\u2928",
-        top: "\u22A4",
-        topbot: "\u2336",
-        topcir: "\u2AF1",
-        Topf: "\u{1D54B}",
-        topf: "\u{1D565}",
-        topfork: "\u2ADA",
-        tosa: "\u2929",
-        tprime: "\u2034",
-        TRADE: "\u2122",
-        trade: "\u2122",
-        triangle: "\u25B5",
-        triangledown: "\u25BF",
-        triangleleft: "\u25C3",
-        trianglelefteq: "\u22B4",
-        triangleq: "\u225C",
-        triangleright: "\u25B9",
-        trianglerighteq: "\u22B5",
-        tridot: "\u25EC",
-        trie: "\u225C",
-        triminus: "\u2A3A",
-        TripleDot: "\u20DB",
-        triplus: "\u2A39",
-        trisb: "\u29CD",
-        tritime: "\u2A3B",
-        trpezium: "\u23E2",
-        Tscr: "\u{1D4AF}",
-        tscr: "\u{1D4C9}",
-        TScy: "\u0426",
-        tscy: "\u0446",
-        TSHcy: "\u040B",
-        tshcy: "\u045B",
-        Tstrok: "\u0166",
-        tstrok: "\u0167",
-        twixt: "\u226C",
-        twoheadleftarrow: "\u219E",
-        twoheadrightarrow: "\u21A0",
-        Uacute: "\xDA",
-        uacute: "\xFA",
-        Uarr: "\u219F",
-        uArr: "\u21D1",
-        uarr: "\u2191",
-        Uarrocir: "\u2949",
-        Ubrcy: "\u040E",
-        ubrcy: "\u045E",
-        Ubreve: "\u016C",
-        ubreve: "\u016D",
-        Ucirc: "\xDB",
-        ucirc: "\xFB",
-        Ucy: "\u0423",
-        ucy: "\u0443",
-        udarr: "\u21C5",
-        Udblac: "\u0170",
-        udblac: "\u0171",
-        udhar: "\u296E",
-        ufisht: "\u297E",
-        Ufr: "\u{1D518}",
-        ufr: "\u{1D532}",
-        Ugrave: "\xD9",
-        ugrave: "\xF9",
-        uHar: "\u2963",
-        uharl: "\u21BF",
-        uharr: "\u21BE",
-        uhblk: "\u2580",
-        ulcorn: "\u231C",
-        ulcorner: "\u231C",
-        ulcrop: "\u230F",
-        ultri: "\u25F8",
-        Umacr: "\u016A",
-        umacr: "\u016B",
-        uml: "\xA8",
-        UnderBar: "_",
-        UnderBrace: "\u23DF",
-        UnderBracket: "\u23B5",
-        UnderParenthesis: "\u23DD",
-        Union: "\u22C3",
-        UnionPlus: "\u228E",
-        Uogon: "\u0172",
-        uogon: "\u0173",
-        Uopf: "\u{1D54C}",
-        uopf: "\u{1D566}",
-        UpArrow: "\u2191",
-        Uparrow: "\u21D1",
-        uparrow: "\u2191",
-        UpArrowBar: "\u2912",
-        UpArrowDownArrow: "\u21C5",
-        UpDownArrow: "\u2195",
-        Updownarrow: "\u21D5",
-        updownarrow: "\u2195",
-        UpEquilibrium: "\u296E",
-        upharpoonleft: "\u21BF",
-        upharpoonright: "\u21BE",
-        uplus: "\u228E",
-        UpperLeftArrow: "\u2196",
-        UpperRightArrow: "\u2197",
-        Upsi: "\u03D2",
-        upsi: "\u03C5",
-        upsih: "\u03D2",
-        Upsilon: "\u03A5",
-        upsilon: "\u03C5",
-        UpTee: "\u22A5",
-        UpTeeArrow: "\u21A5",
-        upuparrows: "\u21C8",
-        urcorn: "\u231D",
-        urcorner: "\u231D",
-        urcrop: "\u230E",
-        Uring: "\u016E",
-        uring: "\u016F",
-        urtri: "\u25F9",
-        Uscr: "\u{1D4B0}",
-        uscr: "\u{1D4CA}",
-        utdot: "\u22F0",
-        Utilde: "\u0168",
-        utilde: "\u0169",
-        utri: "\u25B5",
-        utrif: "\u25B4",
-        uuarr: "\u21C8",
-        Uuml: "\xDC",
-        uuml: "\xFC",
-        uwangle: "\u29A7",
-        vangrt: "\u299C",
-        varepsilon: "\u03F5",
-        varkappa: "\u03F0",
-        varnothing: "\u2205",
-        varphi: "\u03D5",
-        varpi: "\u03D6",
-        varpropto: "\u221D",
-        vArr: "\u21D5",
-        varr: "\u2195",
-        varrho: "\u03F1",
-        varsigma: "\u03C2",
-        varsubsetneq: "\u228A\uFE00",
-        varsubsetneqq: "\u2ACB\uFE00",
-        varsupsetneq: "\u228B\uFE00",
-        varsupsetneqq: "\u2ACC\uFE00",
-        vartheta: "\u03D1",
-        vartriangleleft: "\u22B2",
-        vartriangleright: "\u22B3",
-        Vbar: "\u2AEB",
-        vBar: "\u2AE8",
-        vBarv: "\u2AE9",
-        Vcy: "\u0412",
-        vcy: "\u0432",
-        VDash: "\u22AB",
-        Vdash: "\u22A9",
-        vDash: "\u22A8",
-        vdash: "\u22A2",
-        Vdashl: "\u2AE6",
-        Vee: "\u22C1",
-        vee: "\u2228",
-        veebar: "\u22BB",
-        veeeq: "\u225A",
-        vellip: "\u22EE",
-        Verbar: "\u2016",
-        verbar: "|",
-        Vert: "\u2016",
-        vert: "|",
-        VerticalBar: "\u2223",
-        VerticalLine: "|",
-        VerticalSeparator: "\u2758",
-        VerticalTilde: "\u2240",
-        VeryThinSpace: "\u200A",
-        Vfr: "\u{1D519}",
-        vfr: "\u{1D533}",
-        vltri: "\u22B2",
-        vnsub: "\u2282\u20D2",
-        vnsup: "\u2283\u20D2",
-        Vopf: "\u{1D54D}",
-        vopf: "\u{1D567}",
-        vprop: "\u221D",
-        vrtri: "\u22B3",
-        Vscr: "\u{1D4B1}",
-        vscr: "\u{1D4CB}",
-        vsubnE: "\u2ACB\uFE00",
-        vsubne: "\u228A\uFE00",
-        vsupnE: "\u2ACC\uFE00",
-        vsupne: "\u228B\uFE00",
-        Vvdash: "\u22AA",
-        vzigzag: "\u299A",
-        Wcirc: "\u0174",
-        wcirc: "\u0175",
-        wedbar: "\u2A5F",
-        Wedge: "\u22C0",
-        wedge: "\u2227",
-        wedgeq: "\u2259",
-        weierp: "\u2118",
-        Wfr: "\u{1D51A}",
-        wfr: "\u{1D534}",
-        Wopf: "\u{1D54E}",
-        wopf: "\u{1D568}",
-        wp: "\u2118",
-        wr: "\u2240",
-        wreath: "\u2240",
-        Wscr: "\u{1D4B2}",
-        wscr: "\u{1D4CC}",
-        xcap: "\u22C2",
-        xcirc: "\u25EF",
-        xcup: "\u22C3",
-        xdtri: "\u25BD",
-        Xfr: "\u{1D51B}",
-        xfr: "\u{1D535}",
-        xhArr: "\u27FA",
-        xharr: "\u27F7",
-        Xi: "\u039E",
-        xi: "\u03BE",
-        xlArr: "\u27F8",
-        xlarr: "\u27F5",
-        xmap: "\u27FC",
-        xnis: "\u22FB",
-        xodot: "\u2A00",
-        Xopf: "\u{1D54F}",
-        xopf: "\u{1D569}",
-        xoplus: "\u2A01",
-        xotime: "\u2A02",
-        xrArr: "\u27F9",
-        xrarr: "\u27F6",
-        Xscr: "\u{1D4B3}",
-        xscr: "\u{1D4CD}",
-        xsqcup: "\u2A06",
-        xuplus: "\u2A04",
-        xutri: "\u25B3",
-        xvee: "\u22C1",
-        xwedge: "\u22C0",
-        Yacute: "\xDD",
-        yacute: "\xFD",
-        YAcy: "\u042F",
-        yacy: "\u044F",
-        Ycirc: "\u0176",
-        ycirc: "\u0177",
-        Ycy: "\u042B",
-        ycy: "\u044B",
-        yen: "\xA5",
-        Yfr: "\u{1D51C}",
-        yfr: "\u{1D536}",
-        YIcy: "\u0407",
-        yicy: "\u0457",
-        Yopf: "\u{1D550}",
-        yopf: "\u{1D56A}",
-        Yscr: "\u{1D4B4}",
-        yscr: "\u{1D4CE}",
-        YUcy: "\u042E",
-        yucy: "\u044E",
-        Yuml: "\u0178",
-        yuml: "\xFF",
-        Zacute: "\u0179",
-        zacute: "\u017A",
-        Zcaron: "\u017D",
-        zcaron: "\u017E",
-        Zcy: "\u0417",
-        zcy: "\u0437",
-        Zdot: "\u017B",
-        zdot: "\u017C",
-        zeetrf: "\u2128",
-        ZeroWidthSpace: "\u200B",
-        Zeta: "\u0396",
-        zeta: "\u03B6",
-        Zfr: "\u2128",
-        zfr: "\u{1D537}",
-        ZHcy: "\u0416",
-        zhcy: "\u0436",
-        zigrarr: "\u21DD",
-        Zopf: "\u2124",
-        zopf: "\u{1D56B}",
-        Zscr: "\u{1D4B5}",
-        zscr: "\u{1D4CF}",
-        zwj: "\u200D",
-        zwnj: "\u200C"
-      });
-      exports2.entityMap = exports2.HTML_ENTITIES;
+    return tags;
+  }
+  function takeIfdEntry(valueBudget) {
+    if (valueBudget.ifdEntriesRemaining > 0) {
+      valueBudget.ifdEntriesRemaining--;
+      return true;
     }
-  });
-
-  // node_modules/@xmldom/xmldom/lib/sax.js
-  var require_sax = __commonJS({
-    "node_modules/@xmldom/xmldom/lib/sax.js"(exports2) {
-      "use strict";
-      init_esbuild_shims();
-      var conventions = require_conventions();
-      var g = require_grammar();
-      var errors = require_errors();
-      var isHTMLEscapableRawTextElement = conventions.isHTMLEscapableRawTextElement;
-      var isHTMLMimeType = conventions.isHTMLMimeType;
-      var isHTMLRawTextElement = conventions.isHTMLRawTextElement;
-      var hasOwn = conventions.hasOwn;
-      var NAMESPACE = conventions.NAMESPACE;
-      var ParseError = errors.ParseError;
-      var DOMException = errors.DOMException;
-      var S_TAG = 0;
-      var S_ATTR = 1;
-      var S_ATTR_SPACE = 2;
-      var S_EQ = 3;
-      var S_ATTR_NOQUOT_VALUE = 4;
-      var S_ATTR_END = 5;
-      var S_TAG_SPACE = 6;
-      var S_TAG_CLOSE = 7;
-      function XMLReader() {
+    return false;
+  }
+  function getValueBudget(dataView) {
+    return {
+      remaining: dataView.byteLength * MAX_VALUE_SIZE_PER_BUFFER_SIZE,
+      ifdEntriesRemaining: Math.floor(dataView.byteLength / IFD_ENTRY_LENGTH) * MAX_IFD_ENTRY_READS_PER_BUFFER_ENTRY,
+      decompressedAllowanceRemaining: MAX_DECOMPRESSED_VALUE_ALLOWANCE,
+      iptcDatasetsRemaining: MIN_IPTC_DATASET_UNITS + Math.floor(dataView.byteLength / BYTES_PER_IPTC_DATASET),
+      decompressedIptcAllowanceRemaining: MAX_DECOMPRESSED_IPTC_ALLOWANCE
+    };
+  }
+  function addDecompressedValueAllowance(valueBudget, decompressedByteLength) {
+    if (valueBudget === void 0) {
+      return;
+    }
+    const allowance = Math.min(
+      decompressedByteLength * MAX_VALUE_SIZE_PER_BUFFER_SIZE,
+      valueBudget.decompressedAllowanceRemaining
+    );
+    valueBudget.remaining += allowance;
+    valueBudget.decompressedAllowanceRemaining -= allowance;
+  }
+  function addDecompressedIptcAllowance(valueBudget, decompressedByteLength) {
+    if (valueBudget === void 0) {
+      return;
+    }
+    const allowance = Math.min(
+      Math.floor(decompressedByteLength / IPTC_DATASET_HEADER_SIZE),
+      valueBudget.decompressedIptcAllowanceRemaining
+    );
+    valueBudget.iptcDatasetsRemaining += allowance;
+    valueBudget.decompressedIptcAllowanceRemaining -= allowance;
+  }
+  function getNumberOfFields(dataView, offset, byteOrder) {
+    if (offset + types_default.getTypeSize("SHORT") <= dataView.byteLength) {
+      return types_default.getShortAt(dataView, offset, byteOrder);
+    }
+    return 0;
+  }
+  function readTag(dataView, ifdType, offsetOrigin, offset, byteOrder, includeUnknown = false, tagFilter = NOOP_TAG_FILTER, groupKey = "exif", valueBudget, tagNames) {
+    const TAG_CODE_IPTC_NAA = 33723;
+    const TAG_TYPE_OFFSET = types_default.getTypeSize("SHORT");
+    const TAG_COUNT_OFFSET = TAG_TYPE_OFFSET + types_default.getTypeSize("SHORT");
+    const TAG_VALUE_OFFSET = TAG_COUNT_OFFSET + types_default.getTypeSize("LONG");
+    const tagCode = types_default.getShortAt(dataView, offset, byteOrder);
+    const tagType = types_default.getShortAt(dataView, offset + TAG_TYPE_OFFSET, byteOrder);
+    const tagCount = types_default.getLongAt(dataView, offset + TAG_COUNT_OFFSET, byteOrder);
+    let tagValue;
+    let tagValueOffset;
+    let stringBudget;
+    if (types_default.typeSizes[tagType] === void 0 || !includeUnknown && tagNames[ifdType][tagCode] === void 0) {
+      return void 0;
+    }
+    const tagName = getTagName(ifdType, tagCode, tagNames);
+    if (!tagFilter.shouldParseTag(groupKey, tagName, tagCode)) {
+      return void 0;
+    }
+    if (tagValueFitsInOffsetSlot(tagType, tagCount)) {
+      tagValueOffset = offset + TAG_VALUE_OFFSET - offsetOrigin;
+      tagValue = getTagValue(dataView, offsetOrigin + tagValueOffset, tagType, tagCount, byteOrder);
+    } else {
+      tagValueOffset = types_default.getLongAt(dataView, offset + TAG_VALUE_OFFSET, byteOrder);
+      if (tagValueFitsInDataView(dataView, offsetOrigin, tagValueOffset, tagType, tagCount)) {
+        const forceByteType = tagCode === TAG_CODE_IPTC_NAA;
+        const boundedTagCount = getBoundedTagCount(valueBudget.remaining, tagType, tagCount);
+        valueBudget.remaining -= boundedTagCount * types_default.typeSizes[tagType];
+        stringBudget = valueBudget;
+        tagValue = getTagValue(dataView, offsetOrigin + tagValueOffset, tagType, boundedTagCount, byteOrder, forceByteType);
+      } else {
+        tagValue = "<faulty value>";
       }
-      XMLReader.prototype = {
-        parse: function(source, defaultNSMap, entityMap) {
-          var domBuilder = this.domBuilder;
-          domBuilder.startDocument();
-          _copy(defaultNSMap, defaultNSMap = /* @__PURE__ */ Object.create(null));
-          parse(source, defaultNSMap, entityMap, domBuilder, this.errorHandler);
-          domBuilder.endDocument();
+    }
+    if (tagType === types_default.tagTypes["ASCII"]) {
+      tagValue = getAsciiTagValue(tagValue, stringBudget);
+    }
+    let tagDescription = tagValue;
+    if (tagNames[ifdType][tagCode] !== void 0) {
+      if (tagNames[ifdType][tagCode]["name"] !== void 0 && tagNames[ifdType][tagCode]["description"] !== void 0) {
+        try {
+          tagDescription = tagNames[ifdType][tagCode]["description"](tagValue);
+        } catch (error) {
+          tagDescription = getDescriptionFromTagValue(tagValue);
         }
+      } else if (tagType === types_default.tagTypes["RATIONAL"] || tagType === types_default.tagTypes["SRATIONAL"]) {
+        tagDescription = "" + tagValue[0] / tagValue[1];
+      } else {
+        tagDescription = getDescriptionFromTagValue(tagValue);
+      }
+    }
+    return {
+      id: tagCode,
+      name: tagName,
+      value: tagValue,
+      description: tagDescription,
+      tagType,
+      __offset: tagValueOffset
+    };
+  }
+  function getTagName(ifdType, tagCode, tagNames) {
+    if (tagNames[ifdType][tagCode] !== void 0) {
+      if (typeof tagNames[ifdType][tagCode] === "string") {
+        return tagNames[ifdType][tagCode];
+      }
+      if (tagNames[ifdType][tagCode].name) {
+        return tagNames[ifdType][tagCode].name;
+      }
+    }
+    return `undefined-${tagCode}`;
+  }
+  function tagValueFitsInOffsetSlot(tagType, tagCount) {
+    return types_default.typeSizes[tagType] * tagCount <= types_default.getTypeSize("LONG");
+  }
+  function getTagValue(dataView, offset, type, count, byteOrder, forceByteType = false) {
+    const value = [];
+    if (forceByteType) {
+      count = count * types_default.typeSizes[type];
+      type = types_default.tagTypes["BYTE"];
+    }
+    if (type === types_default.tagTypes["ASCII"]) {
+      return getAsciiBytes(dataView, offset, count);
+    }
+    for (let valueIndex = 0; valueIndex < count; valueIndex++) {
+      value.push(getTagValueAt[type](dataView, offset, byteOrder));
+      offset += types_default.typeSizes[type];
+    }
+    if (value.length === 1) {
+      return value[0];
+    }
+    return value;
+  }
+  function getAsciiBytes(dataView, offset, count) {
+    const bytes = new Uint8Array(count);
+    for (let i = 0; i < count; i++) {
+      bytes[i] = types_default.getAsciiAt(dataView, offset + i);
+    }
+    return bytes;
+  }
+  function tagValueFitsInDataView(dataView, offsetOrigin, tagValueOffset, tagType, tagCount) {
+    return offsetOrigin + tagValueOffset + types_default.typeSizes[tagType] * tagCount <= dataView.byteLength;
+  }
+  function getBoundedTagCount(remainingBudget, tagType, tagCount) {
+    const boundedCount = Math.min(tagCount, Math.floor(remainingBudget / types_default.typeSizes[tagType]));
+    if (boundedCount === 1 && tagCount > 1) {
+      return 0;
+    }
+    return boundedCount;
+  }
+  function getAsciiTagValue(tagValue, stringBudget) {
+    if (tagValue instanceof Uint8Array) {
+      return getNullSeparatedStrings(tagValue, stringBudget);
+    }
+    if (typeof tagValue === "string") {
+      return [tagValue];
+    }
+    return tagValue.length > 0 ? [decodeUtf8ByteString(tagValue.join(""))] : [];
+  }
+  function getNullSeparatedStrings(bytes, stringBudget) {
+    const strings = [];
+    const charCodes = [];
+    let hasString = false;
+    let stringIndex = 0;
+    let stringStart = 0;
+    for (let i = 0; i <= bytes.length; i++) {
+      if (i === bytes.length || bytes[i] === 0) {
+        if (i > stringStart) {
+          if (hasString && !drawExtraString(stringBudget)) {
+            break;
+          }
+          strings[stringIndex] = decodeUtf8ByteString(getByteString(bytes, stringStart, i, charCodes));
+          hasString = true;
+        }
+        stringIndex++;
+        stringStart = i + 1;
+      }
+    }
+    return strings;
+  }
+  function drawExtraString(stringBudget) {
+    if (stringBudget === void 0) {
+      return true;
+    }
+    if (stringBudget.remaining < BUDGET_BYTES_PER_EXTRA_ASCII_STRING) {
+      return false;
+    }
+    stringBudget.remaining -= BUDGET_BYTES_PER_EXTRA_ASCII_STRING;
+    return true;
+  }
+  function getDescriptionFromTagValue(tagValue) {
+    if (tagValue instanceof Array) {
+      return tagValue.join(", ");
+    }
+    return tagValue;
+  }
+  function getComputedTagValue(tagType, value) {
+    if (tagType === types_default.tagTypes["ASCII"]) {
+      if (Array.isArray(value) && value.length === 1) {
+        return value[0];
+      }
+      return value;
+    }
+    if (tagType === types_default.tagTypes["RATIONAL"] || tagType === types_default.tagTypes["SRATIONAL"]) {
+      if (isSingleRationalValue(value)) {
+        return getComputedRationalValue(value);
+      }
+      if (Array.isArray(value)) {
+        return value.map((rational) => getComputedRationalValue(rational));
+      }
+      return value;
+    }
+    return value;
+  }
+  function isSingleRationalValue(value) {
+    if (!Array.isArray(value) || value.length !== 2) {
+      return false;
+    }
+    return typeof value[0] === "number" && typeof value[1] === "number";
+  }
+  function getComputedRationalValue(rational) {
+    if (!Array.isArray(rational) || rational.length !== 2) {
+      return rational;
+    }
+    const numerator = rational[0];
+    const denominator = rational[1];
+    if (!Number.isFinite(numerator) || !Number.isFinite(denominator)) {
+      return rational;
+    }
+    if (denominator === 0) {
+      return null;
+    }
+    return numerator / denominator;
+  }
+  function takeEmbeddedExifThumbnail(readTags2, dataView, tiffHeaderOffset, readThumbnail) {
+    const thumbnailIfdTags = readTags2.Thumbnail;
+    if (!thumbnailIfdTags) {
+      return void 0;
+    }
+    delete readTags2.Thumbnail;
+    if (!readThumbnail) {
+      return void 0;
+    }
+    const thumbnail = readThumbnail(dataView, thumbnailIfdTags, tiffHeaderOffset);
+    return thumbnail.image ? thumbnail : void 0;
+  }
+  var MAX_VALUE_SIZE_PER_BUFFER_SIZE, MAX_DECOMPRESSED_VALUE_ALLOWANCE, MAX_IFD_ENTRY_READS_PER_BUFFER_ENTRY, BUDGET_BYTES_PER_EXTRA_ASCII_STRING, BYTES_PER_IPTC_DATASET, MIN_IPTC_DATASET_UNITS, IPTC_DATASET_HEADER_SIZE, MAX_DECOMPRESSED_IPTC_ALLOWANCE, getTagValueAt;
+  var init_tags_helpers = __esm({
+    "node_modules/exifreader/src/tags-helpers.js"() {
+      init_esbuild_shims();
+      init_types();
+      init_ifd_types();
+      init_tiff_constants();
+      init_tag_filter();
+      init_utils();
+      MAX_VALUE_SIZE_PER_BUFFER_SIZE = 4;
+      MAX_DECOMPRESSED_VALUE_ALLOWANCE = 1024 * 1024;
+      MAX_IFD_ENTRY_READS_PER_BUFFER_ENTRY = 4;
+      BUDGET_BYTES_PER_EXTRA_ASCII_STRING = 2;
+      BYTES_PER_IPTC_DATASET = 48;
+      MIN_IPTC_DATASET_UNITS = 1024;
+      IPTC_DATASET_HEADER_SIZE = 5;
+      MAX_DECOMPRESSED_IPTC_ALLOWANCE = 8192;
+      getTagValueAt = {
+        1: types_default.getByteAt,
+        3: types_default.getShortAt,
+        4: types_default.getLongAt,
+        5: types_default.getRationalAt,
+        7: types_default.getUndefinedAt,
+        9: types_default.getSlongAt,
+        10: types_default.getSrationalAt,
+        13: types_default.getIfdPointerAt
       };
-      var ENTITY_REG = /&#?\w+;?/g;
-      function parse(source, defaultNSMapCopy, entityMap, domBuilder, errorHandler) {
-        var isHTML = isHTMLMimeType(domBuilder.mimeType);
-        if (source.indexOf(g.UNICODE_REPLACEMENT_CHARACTER) >= 0) {
-          errorHandler.warning("Unicode replacement character detected, source encoding issues?");
-        }
-        function fixedFromCharCode(code) {
-          if (code > 65535) {
-            code -= 65536;
-            var surrogate1 = 55296 + (code >> 10), surrogate2 = 56320 + (code & 1023);
-            return String.fromCharCode(surrogate1, surrogate2);
-          } else {
-            return String.fromCharCode(code);
-          }
-        }
-        function entityReplacer(a2) {
-          var complete = a2[a2.length - 1] === ";" ? a2 : a2 + ";";
-          if (!isHTML && complete !== a2) {
-            errorHandler.error("EntityRef: expecting ;");
-            return a2;
-          }
-          var match = g.Reference.exec(complete);
-          if (!match || match[0].length !== complete.length) {
-            errorHandler.error("entity not matching Reference production: " + a2);
-            return a2;
-          }
-          var k = complete.slice(1, -1);
-          if (hasOwn(entityMap, k)) {
-            return entityMap[k];
-          } else if (k.charAt(0) === "#") {
-            return fixedFromCharCode(parseInt(k.substring(1).replace("x", "0x")));
-          } else {
-            errorHandler.error("entity not found:" + a2);
-            return a2;
-          }
-        }
-        function appendText(end2) {
-          if (end2 > start) {
-            var xt = source.substring(start, end2).replace(ENTITY_REG, entityReplacer);
-            locator && position(start);
-            domBuilder.characters(xt, 0, end2 - start);
-            start = end2;
-          }
-        }
-        var lineStart = 0;
-        var lineEnd = 0;
-        var linePattern = /\r\n?|\n|$/g;
-        var locator = domBuilder.locator;
-        function position(p, m) {
-          while (p >= lineEnd && (m = linePattern.exec(source))) {
-            lineStart = lineEnd;
-            lineEnd = m.index + m[0].length;
-            locator.lineNumber++;
-          }
-          locator.columnNumber = p - lineStart + 1;
-        }
-        var parseStack = [{ currentNSMap: defaultNSMapCopy }];
-        var unclosedTags = [];
-        var start = 0;
-        while (true) {
-          try {
-            var tagStart = source.indexOf("<", start);
-            if (tagStart < 0) {
-              if (!isHTML && unclosedTags.length > 0) {
-                return errorHandler.fatalError("unclosed xml tag(s): " + unclosedTags.join(", "));
-              }
-              if (!source.substring(start).match(/^\s*$/)) {
-                var doc = domBuilder.doc;
-                var text = doc.createTextNode(source.substring(start));
-                if (doc.documentElement) {
-                  return errorHandler.error("Extra content at the end of the document");
-                }
-                doc.appendChild(text);
-                domBuilder.currentElement = text;
-              }
-              return;
-            }
-            if (tagStart > start) {
-              var fromSource = source.substring(start, tagStart);
-              if (!isHTML && unclosedTags.length === 0) {
-                fromSource = fromSource.replace(new RegExp(g.S_OPT.source, "g"), "");
-                fromSource && errorHandler.error("Unexpected content outside root element: '" + fromSource + "'");
-              }
-              appendText(tagStart);
-            }
-            switch (source.charAt(tagStart + 1)) {
-              case "/":
-                var end = source.indexOf(">", tagStart + 2);
-                var tagNameRaw = source.substring(tagStart + 2, end > 0 ? end : void 0);
-                if (!tagNameRaw) {
-                  return errorHandler.fatalError("end tag name missing");
-                }
-                var tagNameMatch = end > 0 && g.reg("^", g.QName_group, g.S_OPT, "$").exec(tagNameRaw);
-                if (!tagNameMatch) {
-                  return errorHandler.fatalError('end tag name contains invalid characters: "' + tagNameRaw + '"');
-                }
-                if (!domBuilder.currentElement && !domBuilder.doc.documentElement) {
-                  return;
-                }
-                var currentTagName = unclosedTags[unclosedTags.length - 1] || domBuilder.currentElement.tagName || domBuilder.doc.documentElement.tagName || "";
-                if (currentTagName !== tagNameMatch[1]) {
-                  var tagNameLower = tagNameMatch[1].toLowerCase();
-                  if (!isHTML || currentTagName.toLowerCase() !== tagNameLower) {
-                    return errorHandler.fatalError('Opening and ending tag mismatch: "' + currentTagName + '" != "' + tagNameRaw + '"');
-                  }
-                }
-                var config = parseStack.pop();
-                unclosedTags.pop();
-                var localNSMap = config.localNSMap;
-                domBuilder.endElement(config.uri, config.localName, currentTagName);
-                if (localNSMap) {
-                  for (var prefix in localNSMap) {
-                    if (hasOwn(localNSMap, prefix)) {
-                      domBuilder.endPrefixMapping(prefix);
-                    }
-                  }
-                }
-                end++;
-                break;
-              // end element
-              case "?":
-                locator && position(tagStart);
-                end = parseProcessingInstruction(source, tagStart, domBuilder, errorHandler);
-                break;
-              case "!":
-                locator && position(tagStart);
-                end = parseDoctypeCommentOrCData(source, tagStart, domBuilder, errorHandler, isHTML);
-                break;
-              default:
-                locator && position(tagStart);
-                var el = new ElementAttributes();
-                var currentNSMap = parseStack[parseStack.length - 1].currentNSMap;
-                var end = parseElementStartPart(source, tagStart, el, currentNSMap, entityReplacer, errorHandler, isHTML);
-                var len2 = el.length;
-                if (!el.closed) {
-                  if (isHTML && conventions.isHTMLVoidElement(el.tagName)) {
-                    el.closed = true;
-                  } else {
-                    unclosedTags.push(el.tagName);
-                  }
-                }
-                if (locator && len2) {
-                  var locator2 = copyLocator(locator, {});
-                  for (var i = 0; i < len2; i++) {
-                    var a = el[i];
-                    position(a.offset);
-                    a.locator = copyLocator(locator, {});
-                  }
-                  domBuilder.locator = locator2;
-                  if (appendElement(el, domBuilder, currentNSMap)) {
-                    parseStack.push(el);
-                  }
-                  domBuilder.locator = locator;
-                } else {
-                  if (appendElement(el, domBuilder, currentNSMap)) {
-                    parseStack.push(el);
-                  }
-                }
-                if (isHTML && !el.closed) {
-                  end = parseHtmlSpecialContent(source, end, el.tagName, entityReplacer, domBuilder);
-                } else {
-                  end++;
-                }
-            }
-          } catch (e) {
-            if (e instanceof ParseError) {
-              throw e;
-            } else if (e instanceof DOMException) {
-              throw new ParseError(e.name + ": " + e.message, domBuilder.locator, e);
-            }
-            errorHandler.error("element parse error: " + e);
-            end = -1;
-          }
-          if (end > start) {
-            start = end;
-          } else {
-            appendText(Math.max(tagStart, start) + 1);
-          }
-        }
-      }
-      function copyLocator(f, t) {
-        t.lineNumber = f.lineNumber;
-        t.columnNumber = f.columnNumber;
-        return t;
-      }
-      function parseElementStartPart(source, start, el, currentNSMap, entityReplacer, errorHandler, isHTML) {
-        function addAttribute(qname, value2, startIndex) {
-          if (hasOwn(el.attributeNames, qname)) {
-            return errorHandler.fatalError("Attribute " + qname + " redefined");
-          }
-          if (!isHTML && value2.indexOf("<") >= 0) {
-            return errorHandler.fatalError("Unescaped '<' not allowed in attributes values");
-          }
-          el.addValue(
-            qname,
-            // @see https://www.w3.org/TR/xml/#AVNormalize
-            // since the xmldom sax parser does not "interpret" DTD the following is not implemented:
-            // - recursive replacement of (DTD) entity references
-            // - trimming and collapsing multiple spaces into a single one for attributes that are not of type CDATA
-            value2.replace(/[\t\n\r]/g, " ").replace(ENTITY_REG, entityReplacer),
-            startIndex
-          );
-        }
-        var attrName;
-        var value;
-        var p = ++start;
-        var s = S_TAG;
-        while (true) {
-          var c = source.charAt(p);
-          switch (c) {
-            case "=":
-              if (s === S_ATTR) {
-                attrName = source.slice(start, p);
-                s = S_EQ;
-              } else if (s === S_ATTR_SPACE) {
-                s = S_EQ;
-              } else {
-                throw new Error("attribute equal must after attrName");
-              }
-              break;
-            case "'":
-            case '"':
-              if (s === S_EQ || s === S_ATTR) {
-                if (s === S_ATTR) {
-                  errorHandler.warning('attribute value must after "="');
-                  attrName = source.slice(start, p);
-                }
-                start = p + 1;
-                p = source.indexOf(c, start);
-                if (p > 0) {
-                  value = source.slice(start, p);
-                  addAttribute(attrName, value, start - 1);
-                  s = S_ATTR_END;
-                } else {
-                  throw new Error("attribute value no end '" + c + "' match");
-                }
-              } else if (s == S_ATTR_NOQUOT_VALUE) {
-                value = source.slice(start, p);
-                addAttribute(attrName, value, start);
-                errorHandler.warning('attribute "' + attrName + '" missed start quot(' + c + ")!!");
-                start = p + 1;
-                s = S_ATTR_END;
-              } else {
-                throw new Error('attribute value must after "="');
-              }
-              break;
-            case "/":
-              switch (s) {
-                case S_TAG:
-                  el.setTagName(source.slice(start, p));
-                case S_ATTR_END:
-                case S_TAG_SPACE:
-                case S_TAG_CLOSE:
-                  s = S_TAG_CLOSE;
-                  el.closed = true;
-                case S_ATTR_NOQUOT_VALUE:
-                case S_ATTR:
-                  break;
-                case S_ATTR_SPACE:
-                  el.closed = true;
-                  break;
-                //case S_EQ:
-                default:
-                  throw new Error("attribute invalid close char('/')");
-              }
-              break;
-            case "":
-              errorHandler.error("unexpected end of input");
-              if (s == S_TAG) {
-                el.setTagName(source.slice(start, p));
-              }
-              return p;
-            case ">":
-              switch (s) {
-                case S_TAG:
-                  el.setTagName(source.slice(start, p));
-                case S_ATTR_END:
-                case S_TAG_SPACE:
-                case S_TAG_CLOSE:
-                  break;
-                //normal
-                case S_ATTR_NOQUOT_VALUE:
-                //Compatible state
-                case S_ATTR:
-                  value = source.slice(start, p);
-                  if (value.slice(-1) === "/") {
-                    el.closed = true;
-                    value = value.slice(0, -1);
-                  }
-                case S_ATTR_SPACE:
-                  if (s === S_ATTR_SPACE) {
-                    value = attrName;
-                  }
-                  if (s == S_ATTR_NOQUOT_VALUE) {
-                    errorHandler.warning('attribute "' + value + '" missed quot(")!');
-                    addAttribute(attrName, value, start);
-                  } else {
-                    if (!isHTML) {
-                      errorHandler.warning('attribute "' + value + '" missed value!! "' + value + '" instead!!');
-                    }
-                    addAttribute(value, value, start);
-                  }
-                  break;
-                case S_EQ:
-                  if (!isHTML) {
-                    return errorHandler.fatalError(`AttValue: ' or " expected`);
-                  }
-              }
-              return p;
-            /*xml space '\x20' | #x9 | #xD | #xA; */
-            case "\x80":
-              c = " ";
-            default:
-              if (c <= " ") {
-                switch (s) {
-                  case S_TAG:
-                    el.setTagName(source.slice(start, p));
-                    s = S_TAG_SPACE;
-                    break;
-                  case S_ATTR:
-                    attrName = source.slice(start, p);
-                    s = S_ATTR_SPACE;
-                    break;
-                  case S_ATTR_NOQUOT_VALUE:
-                    var value = source.slice(start, p);
-                    errorHandler.warning('attribute "' + value + '" missed quot(")!!');
-                    addAttribute(attrName, value, start);
-                  case S_ATTR_END:
-                    s = S_TAG_SPACE;
-                    break;
-                }
-              } else {
-                switch (s) {
-                  //case S_TAG:void();break;
-                  //case S_ATTR:void();break;
-                  //case S_ATTR_NOQUOT_VALUE:void();break;
-                  case S_ATTR_SPACE:
-                    if (!isHTML) {
-                      errorHandler.warning('attribute "' + attrName + '" missed value!! "' + attrName + '" instead2!!');
-                    }
-                    addAttribute(attrName, attrName, start);
-                    start = p;
-                    s = S_ATTR;
-                    break;
-                  case S_ATTR_END:
-                    errorHandler.warning('attribute space is required"' + attrName + '"!!');
-                  case S_TAG_SPACE:
-                    s = S_ATTR;
-                    start = p;
-                    break;
-                  case S_EQ:
-                    s = S_ATTR_NOQUOT_VALUE;
-                    start = p;
-                    break;
-                  case S_TAG_CLOSE:
-                    throw new Error("elements closed character '/' and '>' must be connected to");
-                }
-              }
-          }
-          p++;
-        }
-      }
-      function appendElement(el, domBuilder, currentNSMap) {
-        var tagName = el.tagName;
-        var localNSMap = null;
-        var i = el.length;
-        while (i--) {
-          var a = el[i];
-          var qName = a.qName;
-          var value = a.value;
-          var nsp = qName.indexOf(":");
-          if (nsp > 0) {
-            var prefix = a.prefix = qName.slice(0, nsp);
-            var localName = qName.slice(nsp + 1);
-            var nsPrefix = prefix === "xmlns" && localName;
-          } else {
-            localName = qName;
-            prefix = null;
-            nsPrefix = qName === "xmlns" && "";
-          }
-          a.localName = localName;
-          if (nsPrefix !== false) {
-            if (localNSMap == null) {
-              localNSMap = /* @__PURE__ */ Object.create(null);
-              _copy(currentNSMap, currentNSMap = /* @__PURE__ */ Object.create(null));
-            }
-            currentNSMap[nsPrefix] = localNSMap[nsPrefix] = value;
-            a.uri = NAMESPACE.XMLNS;
-            domBuilder.startPrefixMapping(nsPrefix, value);
-          }
-        }
-        var i = el.length;
-        while (i--) {
-          a = el[i];
-          if (a.prefix) {
-            if (a.prefix === "xml") {
-              a.uri = NAMESPACE.XML;
-            }
-            if (a.prefix !== "xmlns") {
-              a.uri = currentNSMap[a.prefix];
-            }
-          }
-        }
-        var nsp = tagName.indexOf(":");
-        if (nsp > 0) {
-          prefix = el.prefix = tagName.slice(0, nsp);
-          localName = el.localName = tagName.slice(nsp + 1);
-        } else {
-          prefix = null;
-          localName = el.localName = tagName;
-        }
-        var ns = el.uri = currentNSMap[prefix || ""];
-        domBuilder.startElement(ns, localName, tagName, el);
-        if (el.closed) {
-          domBuilder.endElement(ns, localName, tagName);
-          if (localNSMap) {
-            for (prefix in localNSMap) {
-              if (hasOwn(localNSMap, prefix)) {
-                domBuilder.endPrefixMapping(prefix);
-              }
-            }
-          }
-        } else {
-          el.currentNSMap = currentNSMap;
-          el.localNSMap = localNSMap;
-          return true;
-        }
-      }
-      function parseHtmlSpecialContent(source, elStartEnd, tagName, entityReplacer, domBuilder) {
-        var isEscapableRaw = isHTMLEscapableRawTextElement(tagName);
-        if (isEscapableRaw || isHTMLRawTextElement(tagName)) {
-          var elEndStart = source.indexOf("</" + tagName + ">", elStartEnd);
-          var text = source.substring(elStartEnd + 1, elEndStart);
-          if (isEscapableRaw) {
-            text = text.replace(ENTITY_REG, entityReplacer);
-          }
-          domBuilder.characters(text, 0, text.length);
-          return elEndStart;
-        }
-        return elStartEnd + 1;
-      }
-      function _copy(source, target) {
-        for (var n in source) {
-          if (hasOwn(source, n)) {
-            target[n] = source[n];
-          }
-        }
-      }
-      function parseUtils(source, start) {
-        var index = start;
-        function char(n) {
-          n = n || 0;
-          return source.charAt(index + n);
-        }
-        function skip(n) {
-          n = n || 1;
-          index += n;
-        }
-        function skipBlanks() {
-          var blanks = 0;
-          while (index < source.length) {
-            var c = char();
-            if (c !== " " && c !== "\n" && c !== "	" && c !== "\r") {
-              return blanks;
-            }
-            blanks++;
-            skip();
-          }
-          return -1;
-        }
-        function substringFromIndex() {
-          return source.substring(index);
-        }
-        function substringStartsWith(text) {
-          return source.substring(index, index + text.length) === text;
-        }
-        function substringStartsWithCaseInsensitive(text) {
-          return source.substring(index, index + text.length).toUpperCase() === text.toUpperCase();
-        }
-        function getMatch(args) {
-          var expr = g.reg("^", args);
-          var match = expr.exec(substringFromIndex());
-          if (match) {
-            skip(match[0].length);
-            return match[0];
-          }
-          return null;
-        }
-        return {
-          char,
-          getIndex: function() {
-            return index;
-          },
-          getMatch,
-          getSource: function() {
-            return source;
-          },
-          skip,
-          skipBlanks,
-          substringFromIndex,
-          substringStartsWith,
-          substringStartsWithCaseInsensitive
-        };
-      }
-      function parseDoctypeInternalSubset(p, errorHandler) {
-        function parsePI(p2, errorHandler2) {
-          var match = g.PI.exec(p2.substringFromIndex());
-          if (!match) {
-            return errorHandler2.fatalError("processing instruction is not well-formed at position " + p2.getIndex());
-          }
-          if (match[1].toLowerCase() === "xml") {
-            return errorHandler2.fatalError(
-              "xml declaration is only allowed at the start of the document, but found at position " + p2.getIndex()
-            );
-          }
-          p2.skip(match[0].length);
-          return match[0];
-        }
-        var source = p.getSource();
-        if (p.char() === "[") {
-          p.skip(1);
-          var intSubsetStart = p.getIndex();
-          while (p.getIndex() < source.length) {
-            p.skipBlanks();
-            if (p.char() === "]") {
-              var internalSubset = source.substring(intSubsetStart, p.getIndex());
-              p.skip(1);
-              return internalSubset;
-            }
-            var current = null;
-            if (p.char() === "<" && p.char(1) === "!") {
-              switch (p.char(2)) {
-                case "E":
-                  if (p.char(3) === "L") {
-                    current = p.getMatch(g.elementdecl);
-                  } else if (p.char(3) === "N") {
-                    current = p.getMatch(g.EntityDecl);
-                  }
-                  break;
-                case "A":
-                  current = p.getMatch(g.AttlistDecl);
-                  break;
-                case "N":
-                  current = p.getMatch(g.NotationDecl);
-                  break;
-                case "-":
-                  current = p.getMatch(g.Comment);
-                  break;
-              }
-            } else if (p.char() === "<" && p.char(1) === "?") {
-              current = parsePI(p, errorHandler);
-            } else if (p.char() === "%") {
-              current = p.getMatch(g.PEReference);
-            } else {
-              return errorHandler.fatalError("Error detected in Markup declaration");
-            }
-            if (!current) {
-              return errorHandler.fatalError("Error in internal subset at position " + p.getIndex());
-            }
-          }
-          return errorHandler.fatalError("doctype internal subset is not well-formed, missing ]");
-        }
-      }
-      function parseDoctypeCommentOrCData(source, start, domBuilder, errorHandler, isHTML) {
-        var p = parseUtils(source, start);
-        switch (isHTML ? p.char(2).toUpperCase() : p.char(2)) {
-          case "-":
-            var comment = p.getMatch(g.Comment);
-            if (comment) {
-              domBuilder.comment(comment, g.COMMENT_START.length, comment.length - g.COMMENT_START.length - g.COMMENT_END.length);
-              return p.getIndex();
-            } else {
-              return errorHandler.fatalError("comment is not well-formed at position " + p.getIndex());
-            }
-          case "[":
-            var cdata = p.getMatch(g.CDSect);
-            if (cdata) {
-              if (!isHTML && !domBuilder.currentElement) {
-                return errorHandler.fatalError("CDATA outside of element");
-              }
-              domBuilder.startCDATA();
-              domBuilder.characters(cdata, g.CDATA_START.length, cdata.length - g.CDATA_START.length - g.CDATA_END.length);
-              domBuilder.endCDATA();
-              return p.getIndex();
-            } else {
-              return errorHandler.fatalError("Invalid CDATA starting at position " + start);
-            }
-          case "D": {
-            if (domBuilder.doc && domBuilder.doc.documentElement) {
-              return errorHandler.fatalError("Doctype not allowed inside or after documentElement at position " + p.getIndex());
-            }
-            if (isHTML ? !p.substringStartsWithCaseInsensitive(g.DOCTYPE_DECL_START) : !p.substringStartsWith(g.DOCTYPE_DECL_START)) {
-              return errorHandler.fatalError("Expected " + g.DOCTYPE_DECL_START + " at position " + p.getIndex());
-            }
-            p.skip(g.DOCTYPE_DECL_START.length);
-            if (p.skipBlanks() < 1) {
-              return errorHandler.fatalError("Expected whitespace after " + g.DOCTYPE_DECL_START + " at position " + p.getIndex());
-            }
-            var doctype = {
-              name: void 0,
-              publicId: void 0,
-              systemId: void 0,
-              internalSubset: void 0
-            };
-            doctype.name = p.getMatch(g.Name);
-            if (!doctype.name)
-              return errorHandler.fatalError("doctype name missing or contains unexpected characters at position " + p.getIndex());
-            if (isHTML && doctype.name.toLowerCase() !== "html") {
-              errorHandler.warning("Unexpected DOCTYPE in HTML document at position " + p.getIndex());
-            }
-            p.skipBlanks();
-            if (p.substringStartsWith(g.PUBLIC) || p.substringStartsWith(g.SYSTEM)) {
-              var match = g.ExternalID_match.exec(p.substringFromIndex());
-              if (!match) {
-                return errorHandler.fatalError("doctype external id is not well-formed at position " + p.getIndex());
-              }
-              if (match.groups.SystemLiteralOnly !== void 0) {
-                doctype.systemId = match.groups.SystemLiteralOnly;
-              } else {
-                doctype.systemId = match.groups.SystemLiteral;
-                doctype.publicId = match.groups.PubidLiteral;
-              }
-              p.skip(match[0].length);
-            } else if (isHTML && p.substringStartsWithCaseInsensitive(g.SYSTEM)) {
-              p.skip(g.SYSTEM.length);
-              if (p.skipBlanks() < 1) {
-                return errorHandler.fatalError("Expected whitespace after " + g.SYSTEM + " at position " + p.getIndex());
-              }
-              doctype.systemId = p.getMatch(g.ABOUT_LEGACY_COMPAT_SystemLiteral);
-              if (!doctype.systemId) {
-                return errorHandler.fatalError(
-                  "Expected " + g.ABOUT_LEGACY_COMPAT + " in single or double quotes after " + g.SYSTEM + " at position " + p.getIndex()
-                );
-              }
-            }
-            if (isHTML && doctype.systemId && !g.ABOUT_LEGACY_COMPAT_SystemLiteral.test(doctype.systemId)) {
-              errorHandler.warning("Unexpected doctype.systemId in HTML document at position " + p.getIndex());
-            }
-            if (!isHTML) {
-              p.skipBlanks();
-              doctype.internalSubset = parseDoctypeInternalSubset(p, errorHandler);
-            }
-            p.skipBlanks();
-            if (p.char() !== ">") {
-              return errorHandler.fatalError("doctype not terminated with > at position " + p.getIndex());
-            }
-            p.skip(1);
-            domBuilder.startDTD(doctype.name, doctype.publicId, doctype.systemId, doctype.internalSubset);
-            domBuilder.endDTD();
-            return p.getIndex();
-          }
-          default:
-            return errorHandler.fatalError('Not well-formed XML starting with "<!" at position ' + start);
-        }
-      }
-      function parseProcessingInstruction(source, start, domBuilder, errorHandler) {
-        var match = source.substring(start).match(g.PI);
-        if (!match) {
-          return errorHandler.fatalError("Invalid processing instruction starting at position " + start);
-        }
-        if (match[1].toLowerCase() === "xml") {
-          if (start > 0) {
-            return errorHandler.fatalError(
-              "processing instruction at position " + start + " is an xml declaration which is only at the start of the document"
-            );
-          }
-          if (!g.XMLDecl.test(source.substring(start))) {
-            return errorHandler.fatalError("xml declaration is not well-formed");
-          }
-        }
-        domBuilder.processingInstruction(match[1], match[2]);
-        return start + match[0].length;
-      }
-      function ElementAttributes() {
-        this.attributeNames = /* @__PURE__ */ Object.create(null);
-      }
-      ElementAttributes.prototype = {
-        setTagName: function(tagName) {
-          if (!g.QName_exact.test(tagName)) {
-            throw new Error("invalid tagName:" + tagName);
-          }
-          this.tagName = tagName;
-        },
-        addValue: function(qName, value, offset) {
-          if (!g.QName_exact.test(qName)) {
-            throw new Error("invalid attribute:" + qName);
-          }
-          this.attributeNames[qName] = this.length;
-          this[this.length++] = { qName, value, offset };
-        },
-        length: 0,
-        getLocalName: function(i) {
-          return this[i].localName;
-        },
-        getLocator: function(i) {
-          return this[i].locator;
-        },
-        getQName: function(i) {
-          return this[i].qName;
-        },
-        getURI: function(i) {
-          return this[i].uri;
-        },
-        getValue: function(i) {
-          return this[i].value;
-        }
-        //	,getIndex:function(uri, localName)){
-        //		if(localName){
-        //
-        //		}else{
-        //			var qName = uri
-        //		}
-        //	},
-        //	getValue:function(){return this.getValue(this.getIndex.apply(this,arguments))},
-        //	getType:function(uri,localName){}
-        //	getType:function(i){},
-      };
-      exports2.XMLReader = XMLReader;
-      exports2.parseUtils = parseUtils;
-      exports2.parseDoctypeCommentOrCData = parseDoctypeCommentOrCData;
     }
   });
 
-  // node_modules/@xmldom/xmldom/lib/dom-parser.js
-  var require_dom_parser = __commonJS({
-    "node_modules/@xmldom/xmldom/lib/dom-parser.js"(exports2) {
-      "use strict";
+  // node_modules/exifreader/src/tags.js
+  function read(dataView, tiffHeaderOffset, includeUnknown, computed = false, tagFilter = void 0, valueBudget = getValueBudget(dataView), tagNames = void 0, readThumbnailIfd = void 0) {
+    const byteOrder = byte_order_default.getByteOrder(dataView, tiffHeaderOffset);
+    let tags = read0thIfd(dataView, tiffHeaderOffset, byteOrder, includeUnknown, computed, tagFilter, valueBudget, tagNames, readThumbnailIfd);
+    for (let i = 0; i < SUB_IFDS.length; i++) {
+      tags = readSubIfd(SUB_IFDS[i], tags, dataView, tiffHeaderOffset, byteOrder, includeUnknown, computed, tagFilter, valueBudget, tagNames);
+    }
+    return { tags, byteOrder };
+  }
+  function read0thIfd(dataView, tiffHeaderOffset, byteOrder, includeUnknown, computed, tagFilter, valueBudget, tagNames, readThumbnailIfd) {
+    const ifdOffset = get0thIfdOffset(dataView, tiffHeaderOffset, byteOrder);
+    if (ifdOffset === void 0) {
+      return {};
+    }
+    return readIfd(
+      dataView,
+      IFD_TYPE_0TH,
+      tiffHeaderOffset,
+      ifdOffset,
+      byteOrder,
+      includeUnknown,
+      computed,
+      tagFilter,
+      "exif",
+      valueBudget,
+      tagNames,
+      readThumbnailIfd
+    );
+  }
+  function readSubIfd(subIfd, tags, dataView, tiffHeaderOffset, byteOrder, includeUnknown, computed, tagFilter, valueBudget, tagNames) {
+    const pointerTag = tags[subIfd.pointerKey];
+    if (pointerTag === void 0) {
+      return tags;
+    }
+    if (!isOffsetPastTiffHeader(pointerTag.value)) {
+      return tags;
+    }
+    return objectAssign(
+      tags,
+      readIfd(
+        dataView,
+        subIfd.ifdType,
+        tiffHeaderOffset,
+        tiffHeaderOffset + pointerTag.value,
+        byteOrder,
+        includeUnknown,
+        computed,
+        tagFilter,
+        "exif",
+        valueBudget,
+        tagNames
+      )
+    );
+  }
+  function isOffsetPastTiffHeader(value) {
+    return typeof value === "number" && value >= TIFF_HEADER_LENGTH && value % 1 === 0;
+  }
+  var SUB_IFDS, tags_default;
+  var init_tags = __esm({
+    "node_modules/exifreader/src/tags.js"() {
       init_esbuild_shims();
-      var conventions = require_conventions();
-      var dom = require_dom();
-      var errors = require_errors();
-      var entities = require_entities();
-      var sax = require_sax();
-      var DOMImplementation = dom.DOMImplementation;
-      var hasDefaultHTMLNamespace = conventions.hasDefaultHTMLNamespace;
-      var isHTMLMimeType = conventions.isHTMLMimeType;
-      var isValidMimeType = conventions.isValidMimeType;
-      var MIME_TYPE = conventions.MIME_TYPE;
-      var NAMESPACE = conventions.NAMESPACE;
-      var ParseError = errors.ParseError;
-      var XMLReader = sax.XMLReader;
-      function normalizeLineEndings(input) {
-        return input.replace(/\r[\n\u0085]/g, "\n").replace(/[\r\u0085\u2028\u2029]/g, "\n");
-      }
-      function DOMParser2(options) {
-        options = options || {};
-        if (options.locator === void 0) {
-          options.locator = true;
-        }
-        this.assign = options.assign || conventions.assign;
-        this.domHandler = options.domHandler || DOMHandler;
-        this.onError = options.onError || options.errorHandler;
-        if (options.errorHandler && typeof options.errorHandler !== "function") {
-          throw new TypeError("errorHandler object is no longer supported, switch to onError!");
-        } else if (options.errorHandler) {
-          options.errorHandler("warning", "The `errorHandler` option has been deprecated, use `onError` instead!", this);
-        }
-        this.normalizeLineEndings = options.normalizeLineEndings || normalizeLineEndings;
-        this.locator = !!options.locator;
-        this.xmlns = this.assign(/* @__PURE__ */ Object.create(null), options.xmlns);
-      }
-      DOMParser2.prototype.parseFromString = function(source, mimeType) {
-        if (!isValidMimeType(mimeType)) {
-          throw new TypeError('DOMParser.parseFromString: the provided mimeType "' + mimeType + '" is not valid.');
-        }
-        var defaultNSMap = this.assign(/* @__PURE__ */ Object.create(null), this.xmlns);
-        var entityMap = entities.XML_ENTITIES;
-        var defaultNamespace = defaultNSMap[""] || null;
-        if (hasDefaultHTMLNamespace(mimeType)) {
-          entityMap = entities.HTML_ENTITIES;
-          defaultNamespace = NAMESPACE.HTML;
-        } else if (mimeType === MIME_TYPE.XML_SVG_IMAGE) {
-          defaultNamespace = NAMESPACE.SVG;
-        }
-        defaultNSMap[""] = defaultNamespace;
-        defaultNSMap.xml = defaultNSMap.xml || NAMESPACE.XML;
-        var domBuilder = new this.domHandler({
-          mimeType,
-          defaultNamespace,
-          onError: this.onError
-        });
-        var locator = this.locator ? {} : void 0;
-        if (this.locator) {
-          domBuilder.setDocumentLocator(locator);
-        }
-        var sax2 = new XMLReader();
-        sax2.errorHandler = domBuilder;
-        sax2.domBuilder = domBuilder;
-        var isXml = !conventions.isHTMLMimeType(mimeType);
-        if (isXml && typeof source !== "string") {
-          sax2.errorHandler.fatalError("source is not a string");
-        }
-        sax2.parse(this.normalizeLineEndings(String(source)), defaultNSMap, entityMap);
-        if (!domBuilder.doc.documentElement) {
-          sax2.errorHandler.fatalError("missing root element");
-        }
-        return domBuilder.doc;
+      init_utils();
+      init_byte_order();
+      init_ifd_types();
+      init_tags_helpers();
+      init_tiff_constants();
+      SUB_IFDS = [
+        { pointerKey: "Exif IFD Pointer", ifdType: IFD_TYPE_EXIF },
+        { pointerKey: "GPS Info IFD Pointer", ifdType: IFD_TYPE_GPS },
+        { pointerKey: "Interoperability IFD Pointer", ifdType: IFD_TYPE_INTEROPERABILITY }
+      ];
+      tags_default = {
+        read
       };
-      function DOMHandler(options) {
-        var opt = options || {};
-        this.mimeType = opt.mimeType || MIME_TYPE.XML_APPLICATION;
-        this.defaultNamespace = opt.defaultNamespace || null;
-        this.cdata = false;
-        this.currentElement = void 0;
-        this.doc = void 0;
-        this.locator = void 0;
-        this.onError = opt.onError;
-      }
-      function position(locator, node) {
-        node.lineNumber = locator.lineNumber;
-        node.columnNumber = locator.columnNumber;
-      }
-      DOMHandler.prototype = {
-        /**
-         * Either creates an XML or an HTML document and stores it under `this.doc`.
-         * If it is an XML document, `this.defaultNamespace` is used to create it,
-         * and it will not contain any `childNodes`.
-         * If it is an HTML document, it will be created without any `childNodes`.
-         *
-         * @see http://www.saxproject.org/apidoc/org/xml/sax/ContentHandler.html
-         */
-        startDocument: function() {
-          var impl = new DOMImplementation();
-          this.doc = isHTMLMimeType(this.mimeType) ? impl.createHTMLDocument(false) : impl.createDocument(this.defaultNamespace, "");
-        },
-        startElement: function(namespaceURI, localName, qName, attrs) {
-          var doc = this.doc;
-          var el = doc.createElementNS(namespaceURI, qName || localName);
-          var len2 = attrs.length;
-          appendElement(this, el);
-          this.currentElement = el;
-          this.locator && position(this.locator, el);
-          for (var i = 0; i < len2; i++) {
-            var namespaceURI = attrs.getURI(i);
-            var value = attrs.getValue(i);
-            var qName = attrs.getQName(i);
-            var attr = doc.createAttributeNS(namespaceURI, qName);
-            this.locator && position(attrs.getLocator(i), attr);
-            attr.value = attr.nodeValue = value;
-            el.setAttributeNode(attr);
-          }
-        },
-        endElement: function(namespaceURI, localName, qName) {
-          this.currentElement = this.currentElement.parentNode;
-        },
-        startPrefixMapping: function(prefix, uri) {
-        },
-        endPrefixMapping: function(prefix) {
-        },
-        processingInstruction: function(target, data) {
-          var ins = this.doc.createProcessingInstruction(target, data);
-          this.locator && position(this.locator, ins);
-          appendElement(this, ins);
-        },
-        ignorableWhitespace: function(ch, start, length) {
-        },
-        characters: function(chars, start, length) {
-          chars = _toString.apply(this, arguments);
-          if (chars) {
-            if (this.cdata) {
-              var charNode = this.doc.createCDATASection(chars);
-            } else {
-              var charNode = this.doc.createTextNode(chars);
-            }
-            if (this.currentElement) {
-              this.currentElement.appendChild(charNode);
-            } else if (/^\s*$/.test(chars)) {
-              this.doc.appendChild(charNode);
-            }
-            this.locator && position(this.locator, charNode);
-          }
-        },
-        skippedEntity: function(name) {
-        },
-        endDocument: function() {
-          this.doc.normalize();
-        },
-        /**
-         * Stores the locator to be able to set the `columnNumber` and `lineNumber`
-         * on the created DOM nodes.
-         *
-         * @param {Locator} locator
-         */
-        setDocumentLocator: function(locator) {
-          if (locator) {
-            locator.lineNumber = 0;
-          }
-          this.locator = locator;
-        },
-        //LexicalHandler
-        comment: function(chars, start, length) {
-          chars = _toString.apply(this, arguments);
-          var comm = this.doc.createComment(chars);
-          this.locator && position(this.locator, comm);
-          appendElement(this, comm);
-        },
-        startCDATA: function() {
-          this.cdata = true;
-        },
-        endCDATA: function() {
-          this.cdata = false;
-        },
-        startDTD: function(name, publicId, systemId, internalSubset) {
-          var impl = this.doc.implementation;
-          if (impl && impl.createDocumentType) {
-            var dt = impl.createDocumentType(name, publicId, systemId, internalSubset);
-            this.locator && position(this.locator, dt);
-            appendElement(this, dt);
-            this.doc.doctype = dt;
-          }
-        },
-        reportError: function(level, message) {
-          if (typeof this.onError === "function") {
-            try {
-              this.onError(level, message, this);
-            } catch (e) {
-              throw new ParseError("Reporting " + level + ' "' + message + '" caused ' + e, this.locator);
-            }
-          } else {
-            console.error("[xmldom " + level + "]	" + message, _locator(this.locator));
-          }
-        },
-        /**
-         * @see http://www.saxproject.org/apidoc/org/xml/sax/ErrorHandler.html
-         */
-        warning: function(message) {
-          this.reportError("warning", message);
-        },
-        error: function(message) {
-          this.reportError("error", message);
-        },
-        /**
-         * This function reports a fatal error and throws a ParseError.
-         *
-         * @param {string} message
-         * - The message to be used for reporting and throwing the error.
-         * @returns {never}
-         * This function always throws an error and never returns a value.
-         * @throws {ParseError}
-         * Always throws a ParseError with the provided message.
-         */
-        fatalError: function(message) {
-          this.reportError("fatalError", message);
-          throw new ParseError(message, this.locator);
-        }
-      };
-      function _locator(l) {
-        if (l) {
-          return "\n@#[line:" + l.lineNumber + ",col:" + l.columnNumber + "]";
-        }
-      }
-      function _toString(chars, start, length) {
-        if (typeof chars == "string") {
-          return chars.substr(start, length);
-        } else {
-          if (chars.length >= start + length || start) {
-            return new java.lang.String(chars, start, length) + "";
-          }
-          return chars;
-        }
-      }
-      "endDTD,startEntity,endEntity,attributeDecl,elementDecl,externalEntityDecl,internalEntityDecl,resolveEntity,getExternalSubset,notationDecl,unparsedEntityDecl".replace(
-        /\w+/g,
-        function(key) {
-          DOMHandler.prototype[key] = function() {
-            return null;
-          };
-        }
-      );
-      function appendElement(handler, node) {
-        if (!handler.currentElement) {
-          handler.doc.appendChild(node);
-        } else {
-          handler.currentElement.appendChild(node);
-        }
-      }
-      function onErrorStopParsing(level) {
-        if (level === "error") throw "onErrorStopParsing";
-      }
-      function onWarningStopParsing() {
-        throw "onWarningStopParsing";
-      }
-      exports2.__DOMHandler = DOMHandler;
-      exports2.DOMParser = DOMParser2;
-      exports2.normalizeLineEndings = normalizeLineEndings;
-      exports2.onErrorStopParsing = onErrorStopParsing;
-      exports2.onWarningStopParsing = onWarningStopParsing;
     }
   });
 
-  // node_modules/@xmldom/xmldom/lib/index.js
-  var require_lib = __commonJS({
-    "node_modules/@xmldom/xmldom/lib/index.js"(exports2) {
-      "use strict";
+  // node_modules/exifreader/src/tag-names-common.js
+  function getComponentText(component) {
+    if (component === 1) {
+      return "Y";
+    } else if (component === 2) {
+      return "Cb";
+    } else if (component === 3) {
+      return "Cr";
+    } else if (component === 4) {
+      return "R";
+    } else if (component === 5) {
+      return "G";
+    } else if (component === 6) {
+      return "B";
+    }
+  }
+  function FocalLengthIn35mmFilm(value) {
+    if (value === 0) {
+      return "Unknown";
+    }
+    return value + " mm";
+  }
+  var tag_names_common_default;
+  var init_tag_names_common = __esm({
+    "node_modules/exifreader/src/tag-names-common.js"() {
       init_esbuild_shims();
-      var conventions = require_conventions();
-      exports2.assign = conventions.assign;
-      exports2.hasDefaultHTMLNamespace = conventions.hasDefaultHTMLNamespace;
-      exports2.isHTMLMimeType = conventions.isHTMLMimeType;
-      exports2.isValidMimeType = conventions.isValidMimeType;
-      exports2.MIME_TYPE = conventions.MIME_TYPE;
-      exports2.NAMESPACE = conventions.NAMESPACE;
-      var errors = require_errors();
-      exports2.DOMException = errors.DOMException;
-      exports2.DOMExceptionName = errors.DOMExceptionName;
-      exports2.ExceptionCode = errors.ExceptionCode;
-      exports2.ParseError = errors.ParseError;
-      var dom = require_dom();
-      exports2.Attr = dom.Attr;
-      exports2.CDATASection = dom.CDATASection;
-      exports2.CharacterData = dom.CharacterData;
-      exports2.Comment = dom.Comment;
-      exports2.Document = dom.Document;
-      exports2.DocumentFragment = dom.DocumentFragment;
-      exports2.DocumentType = dom.DocumentType;
-      exports2.DOMImplementation = dom.DOMImplementation;
-      exports2.Element = dom.Element;
-      exports2.Entity = dom.Entity;
-      exports2.EntityReference = dom.EntityReference;
-      exports2.LiveNodeList = dom.LiveNodeList;
-      exports2.NamedNodeMap = dom.NamedNodeMap;
-      exports2.Node = dom.Node;
-      exports2.NodeList = dom.NodeList;
-      exports2.Notation = dom.Notation;
-      exports2.ProcessingInstruction = dom.ProcessingInstruction;
-      exports2.Text = dom.Text;
-      exports2.XMLSerializer = dom.XMLSerializer;
-      var domParser = require_dom_parser();
-      exports2.DOMParser = domParser.DOMParser;
-      exports2.normalizeLineEndings = domParser.normalizeLineEndings;
-      exports2.onErrorStopParsing = domParser.onErrorStopParsing;
-      exports2.onWarningStopParsing = domParser.onWarningStopParsing;
+      init_utils();
+      tag_names_common_default = {
+        ApertureValue: (value) => Math.pow(Math.sqrt(2), value[0] / value[1]).toFixed(2),
+        ColorSpace(value) {
+          if (value === 1) {
+            return "sRGB";
+          } else if (value === 65535) {
+            return "Uncalibrated";
+          }
+          return "Unknown";
+        },
+        ComponentsConfiguration(value) {
+          return joinMapped(value, getComponentText, "");
+        },
+        Contrast(value) {
+          if (value === 0) {
+            return "Normal";
+          } else if (value === 1) {
+            return "Soft";
+          } else if (value === 2) {
+            return "Hard";
+          }
+          return "Unknown";
+        },
+        CustomRendered(value) {
+          if (value === 0) {
+            return "Normal process";
+          } else if (value === 1) {
+            return "Custom process";
+          }
+          return "Unknown";
+        },
+        ExposureMode(value) {
+          if (value === 0) {
+            return "Auto exposure";
+          } else if (value === 1) {
+            return "Manual exposure";
+          } else if (value === 2) {
+            return "Auto bracket";
+          }
+          return "Unknown";
+        },
+        ExposureProgram(value) {
+          if (value === 0) {
+            return "Undefined";
+          } else if (value === 1) {
+            return "Manual";
+          } else if (value === 2) {
+            return "Normal program";
+          } else if (value === 3) {
+            return "Aperture priority";
+          } else if (value === 4) {
+            return "Shutter priority";
+          } else if (value === 5) {
+            return "Creative program";
+          } else if (value === 6) {
+            return "Action program";
+          } else if (value === 7) {
+            return "Portrait mode";
+          } else if (value === 8) {
+            return "Landscape mode";
+          } else if (value === 9) {
+            return "Bulb";
+          }
+          return "Unknown";
+        },
+        ExposureTime(value) {
+          if (value[0] / value[1] > 0.25) {
+            const decimal = value[0] / value[1];
+            if (Number.isInteger(decimal)) {
+              return "" + decimal;
+            }
+            return decimal.toFixed(1);
+          }
+          if (value[0] !== 0) {
+            return `1/${Math.round(value[1] / value[0])}`;
+          }
+          return `0/${value[1]}`;
+        },
+        FNumber: (value) => `f/${Number(value[0] / value[1]).toFixed(1)}`,
+        FocalLength: (value) => value[0] / value[1] + " mm",
+        FocalPlaneResolutionUnit(value) {
+          if (value === 2) {
+            return "inches";
+          } else if (value === 3) {
+            return "centimeters";
+          } else if (value === 4) {
+            return "millimeters";
+          }
+          return "Unknown";
+        },
+        LightSource: (value) => {
+          if (value === 1) {
+            return "Daylight";
+          } else if (value === 2) {
+            return "Fluorescent";
+          } else if (value === 3) {
+            return "Tungsten (incandescent light)";
+          } else if (value === 4) {
+            return "Flash";
+          } else if (value === 9) {
+            return "Fine weather";
+          } else if (value === 10) {
+            return "Cloudy weather";
+          } else if (value === 11) {
+            return "Shade";
+          } else if (value === 12) {
+            return "Daylight fluorescent (D 5700 \u2013 7100K)";
+          } else if (value === 13) {
+            return "Day white fluorescent (N 4600 \u2013 5400K)";
+          } else if (value === 14) {
+            return "Cool white fluorescent (W 3900 \u2013 4500K)";
+          } else if (value === 15) {
+            return "White fluorescent (WW 3200 \u2013 3700K)";
+          } else if (value === 17) {
+            return "Standard light A";
+          } else if (value === 18) {
+            return "Standard light B";
+          } else if (value === 19) {
+            return "Standard light C";
+          } else if (value === 20) {
+            return "D55";
+          } else if (value === 21) {
+            return "D65";
+          } else if (value === 22) {
+            return "D75";
+          } else if (value === 23) {
+            return "D50";
+          } else if (value === 24) {
+            return "ISO studio tungsten";
+          } else if (value === 255) {
+            return "Other light source";
+          }
+          return "Unknown";
+        },
+        MeteringMode(value) {
+          if (value === 1) {
+            return "Average";
+          } else if (value === 2) {
+            return "CenterWeightedAverage";
+          } else if (value === 3) {
+            return "Spot";
+          } else if (value === 4) {
+            return "MultiSpot";
+          } else if (value === 5) {
+            return "Pattern";
+          } else if (value === 6) {
+            return "Partial";
+          } else if (value === 255) {
+            return "Other";
+          }
+          return "Unknown";
+        },
+        ResolutionUnit(value) {
+          if (value === 2) {
+            return "inches";
+          }
+          if (value === 3) {
+            return "centimeters";
+          }
+          return "Unknown";
+        },
+        Saturation(value) {
+          if (value === 0) {
+            return "Normal";
+          } else if (value === 1) {
+            return "Low saturation";
+          } else if (value === 2) {
+            return "High saturation";
+          }
+          return "Unknown";
+        },
+        FocalLengthIn35mmFilm,
+        SceneCaptureType(value) {
+          if (value === 0) {
+            return "Standard";
+          } else if (value === 1) {
+            return "Landscape";
+          } else if (value === 2) {
+            return "Portrait";
+          } else if (value === 3) {
+            return "Night scene";
+          }
+          return "Unknown";
+        },
+        Sharpness(value) {
+          if (value === 0) {
+            return "Normal";
+          } else if (value === 1) {
+            return "Soft";
+          } else if (value === 2) {
+            return "Hard";
+          }
+          return "Unknown";
+        },
+        ShutterSpeedValue(value) {
+          const denominator = Math.pow(2, value[0] / value[1]);
+          if (denominator <= 1) {
+            return `${Math.round(1 / denominator)}`;
+          }
+          return `1/${Math.round(denominator)}`;
+        },
+        WhiteBalance(value) {
+          if (value === 0) {
+            return "Auto white balance";
+          } else if (value === 1) {
+            return "Manual white balance";
+          }
+          return "Unknown";
+        },
+        XResolution: (value) => "" + Math.round(value[0] / value[1]),
+        YResolution: (value) => "" + Math.round(value[0] / value[1])
+      };
     }
   });
 
-  // node_modules/exifreader/dist/exif-reader.js
-  var require_exif_reader = __commonJS({
-    "node_modules/exifreader/dist/exif-reader.js"(exports2, module2) {
+  // node_modules/exifreader/src/tag-names-0th-ifd.js
+  function getRationalText(value) {
+    if (!Array.isArray(value)) {
+      throw new TypeError("Expected a rational.");
+    }
+    return `${value[0]}/${value[1]}`;
+  }
+  function getSampleFormatText(sample) {
+    const formats = {
+      1: "Unsigned",
+      2: "Signed",
+      3: "Float",
+      4: "Undefined",
+      5: "Complex int",
+      6: "Complex float"
+    };
+    return getTableDescription(formats, sample);
+  }
+  function decodeXPValue(value) {
+    if (!Array.isArray(value)) {
+      return "";
+    }
+    const decodedValue = new TextDecoder("utf-16").decode(new Uint8Array(value));
+    return removeTrailingNulls(decodedValue);
+  }
+  function removeTrailingNulls(text) {
+    let end = text.length;
+    while (end > 0 && text.charCodeAt(end - 1) === 0) {
+      end--;
+    }
+    return text.slice(0, end);
+  }
+  var tag_names_0th_ifd_default;
+  var init_tag_names_0th_ifd = __esm({
+    "node_modules/exifreader/src/tag-names-0th-ifd.js"() {
       init_esbuild_shims();
-      !(function(e, t) {
-        "object" == typeof exports2 && "object" == typeof module2 ? module2.exports = t() : "function" == typeof define && define.amd ? define([], t) : "object" == typeof exports2 ? exports2.ExifReader = t() : e.ExifReader = t();
-      })(Object("undefined" != typeof self ? self : exports2), (function() {
-        return (function() {
-          "use strict";
-          var e = { d: function(t2, n2) {
-            for (var r2 in n2) e.o(n2, r2) && !e.o(t2, r2) && Object.defineProperty(t2, r2, { enumerable: 1, get: n2[r2] });
-          }, o: function(e2, t2) {
-            return Object.prototype.hasOwnProperty.call(e2, t2);
-          }, r: function(e2) {
-            "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e2, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(e2, "__esModule", { value: 1 });
-          } }, t = {};
-          function n(e2) {
-            return n = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e3) {
-              return typeof e3;
-            } : function(e3) {
-              return e3 && "function" == typeof Symbol && e3.constructor === Symbol && e3 !== Symbol.prototype ? "symbol" : typeof e3;
-            }, n(e2);
-          }
-          function r(e2) {
-            var t2 = (function(e3) {
-              if ("object" != n(e3) || !e3) return e3;
-              var t3 = e3[Symbol.toPrimitive];
-              if (void 0 !== t3) {
-                var r2 = t3.call(e3, "string");
-                if ("object" != n(r2)) return r2;
-                throw new TypeError("@@toPrimitive must return a primitive value.");
-              }
-              return e3 + "";
-            })(e2);
-            return "symbol" == n(t2) ? t2 : t2 + "";
-          }
-          e.r(t), e.d(t, { default: function() {
-            return la;
-          }, errors: function() {
-            return da;
-          }, load: function() {
-            return pa;
-          }, loadView: function() {
-            return ma;
-          } });
-          var i = (function() {
-            return e2 = function e3(t3) {
-              if ((function(e4, t4) {
-                if (!(e4 instanceof t4)) throw new TypeError("Cannot call a class as a function");
-              })(this, e3), (function(e4) {
-                return "object" !== n(e4) || void 0 === e4.length || void 0 === e4.readUInt8 || void 0 === e4.readUInt16LE || void 0 === e4.readUInt16BE || void 0 === e4.readUInt32LE || void 0 === e4.readUInt32BE || void 0 === e4.readInt32LE || void 0 === e4.readInt32BE;
-              })(t3)) throw Error("DataView: Passed buffer type is unsupported.");
-              this.buffer = t3, this.byteLength = this.buffer.length;
-            }, (t2 = [{ key: "getUint8", value: function(e3) {
-              return this.buffer.readUInt8(e3);
-            } }, { key: "getUint16", value: function(e3, t3) {
-              return t3 ? this.buffer.readUInt16LE(e3) : this.buffer.readUInt16BE(e3);
-            } }, { key: "getUint32", value: function(e3, t3) {
-              return t3 ? this.buffer.readUInt32LE(e3) : this.buffer.readUInt32BE(e3);
-            } }, { key: "getInt32", value: function(e3, t3) {
-              return t3 ? this.buffer.readInt32LE(e3) : this.buffer.readInt32BE(e3);
-            } }]) && (function(e3, t3) {
-              for (var n2 = 0; n2 < t3.length; n2++) {
-                var i2 = t3[n2];
-                i2.enumerable = i2.enumerable || 0, i2.configurable = 1, "value" in i2 && (i2.writable = 1), Object.defineProperty(e3, r(i2.key), i2);
-              }
-            })(e2.prototype, t2), Object.defineProperty(e2, "prototype", { writable: 0 }), e2;
-            var e2, t2;
-          })();
-          function o(e2, t2, n2) {
-            try {
-              return new DataView(e2, t2, n2);
-            } catch (r2) {
-              return new i(e2, t2, n2);
+      init_tag_names_common();
+      init_utils();
+      init_tag_names_utils();
+      tag_names_0th_ifd_default = {
+        11: "ProcessingSoftware",
+        254: {
+          name: "SubfileType",
+          description: (value) => getTableDescription({
+            0: "Full-resolution image",
+            1: "Reduced-resolution image",
+            2: "Single page of multi-page image",
+            3: "Single page of multi-page reduced-resolution image",
+            4: "Transparency mask",
+            5: "Transparency mask of reduced-resolution image",
+            6: "Transparency mask of multi-page image",
+            7: "Transparency mask of reduced-resolution multi-page image",
+            65537: "Alternate reduced-resolution image",
+            4294967295: "Invalid"
+          }, value)
+        },
+        255: {
+          name: "OldSubfileType",
+          description: (value) => getTableDescription({
+            0: "Full-resolution image",
+            1: "Reduced-resolution image",
+            2: "Single page of multi-page image"
+          }, value)
+        },
+        256: "ImageWidth",
+        257: "ImageLength",
+        258: "BitsPerSample",
+        259: "Compression",
+        262: "PhotometricInterpretation",
+        263: {
+          name: "Thresholding",
+          description: (value) => getTableDescription({
+            1: "No dithering or halftoning",
+            2: "Ordered dither or halfton",
+            3: "Randomized dither"
+          }, value)
+        },
+        264: "CellWidth",
+        265: "CellLength",
+        266: {
+          name: "FillOrder",
+          description: (value) => getTableDescription({
+            1: "Normal",
+            2: "Reversed"
+          }, value)
+        },
+        269: "DocumentName",
+        270: "ImageDescription",
+        271: "Make",
+        272: "Model",
+        273: "StripOffsets",
+        274: {
+          name: "Orientation",
+          description: (value) => {
+            if (value === 1) {
+              return "top-left";
             }
-          }
-          function a(e2, t2, n2) {
-            for (var r2 = [], i2 = 0; i2 < n2 && t2 + i2 < e2.byteLength; i2++) r2.push(e2.getUint8(t2 + i2));
-            return c(r2);
-          }
-          function u(e2, t2) {
-            for (var n2 = [], r2 = 0; t2 + r2 < e2.byteLength; ) {
-              var i2 = e2.getUint8(t2 + r2);
-              if (0 === i2) break;
-              n2.push(i2), r2++;
+            if (value === 2) {
+              return "top-right";
             }
-            return c(n2);
-          }
-          function f(e2, t2, n2) {
-            for (var r2 = [], i2 = 0; i2 + 2 <= n2 && t2 + i2 + 2 <= e2.byteLength; i2 += 2) r2.push(e2.getUint16(t2 + i2));
-            return 0 === r2[r2.length - 1] && r2.pop(), c(r2);
-          }
-          function s(e2, t2) {
-            var n2 = e2.getUint8(t2);
-            return [n2, a(e2, t2 + 1, n2)];
-          }
-          function c(e2) {
-            return e2.map((function(e3) {
-              return String.fromCharCode(e3);
-            })).join("");
-          }
-          function l() {
-            for (var e2 = 1; e2 < arguments.length; e2++) for (var t2 in arguments[e2]) arguments[0][t2] = arguments[e2][t2];
-            return arguments[0];
-          }
-          function d(e2, t2, n2) {
-            var r2 = 0;
-            Object.defineProperty(e2, t2, { get: function() {
-              return r2 || (r2 = 1, Object.defineProperty(e2, t2, { configurable: 1, enumerable: 1, value: n2.apply(e2), writable: 1 })), e2[t2];
-            }, configurable: 1, enumerable: 1 });
-          }
-          function p(e2) {
-            return "undefined" != typeof btoa ? "string" == typeof e2 ? btoa(e2) : btoa(Array.prototype.reduce.call(new Uint8Array(e2), (function(e3, t2) {
-              return e3 + String.fromCharCode(t2);
-            }), "")) : "undefined" != typeof Buffer ? "undefined" != typeof Buffer.from ? Buffer.from(e2).toString("base64") : new Buffer(e2).toString("base64") : void 0;
-          }
-          function g(e2) {
-            var t2 = e2.substring(e2.indexOf(",") + 1);
-            if (-1 !== e2.indexOf(";base64")) {
-              if ("undefined" != typeof atob) return Uint8Array.from(atob(t2), (function(e3) {
-                return e3.charCodeAt(0);
-              })).buffer;
-              if ("undefined" == typeof Buffer) return;
-              return "undefined" != typeof Buffer.from ? Buffer.from(t2, "base64") : new Buffer(t2, "base64");
+            if (value === 3) {
+              return "bottom-right";
             }
-            var n2 = decodeURIComponent(t2);
-            return "undefined" != typeof Buffer ? "undefined" != typeof Buffer.from ? Buffer.from(n2) : new Buffer(n2) : Uint8Array.from(n2, (function(e3) {
-              return e3.charCodeAt(0);
-            })).buffer;
-          }
-          function m(e2, t2) {
-            return Array(t2 + 1).join(e2);
-          }
-          var h = void 0, v = 0, y = "brotli", b = 134217728;
-          function S(e2, t2, n2) {
-            var r2 = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : "string", i2 = arguments.length > 4 ? arguments[4] : void 0, o2 = (function(e3) {
-              return e3 && "number" == typeof e3.maxDecompressedSize ? e3.maxDecompressedSize : b;
-            })(i2);
-            if (i2 && t2 !== h) {
-              var a2 = i2[t2 === v ? "deflate" : "brotli"];
-              if ("function" == typeof a2) {
-                var u2 = new Uint8Array(e2.buffer, e2.byteOffset, e2.byteLength);
-                return Promise.resolve(a2(u2)).then((function(e3) {
-                  return (function(e4) {
-                    return e4 && "number" == typeof e4.byteLength ? e4.byteLength : 0;
-                  })(e3) > o2 ? P(o2) : "dataview" === r2 ? e3 instanceof DataView ? e3 : e3 instanceof ArrayBuffer ? new DataView(e3) : new DataView(e3.buffer, e3.byteOffset, e3.byteLength) : new TextDecoder(n2).decode(e3);
-                }));
-              }
+            if (value === 4) {
+              return "bottom-left";
             }
-            if (t2 === v && "function" == typeof DecompressionStream) return I(e2, "deflate", o2).then((function(e3) {
-              return A(e3, r2, n2);
-            }));
-            if (t2 === y) {
-              if ("function" == typeof DecompressionStream) try {
-                return I(e2, "brotli", o2).then((function(e3) {
-                  return A(e3, r2, n2);
-                }));
-              } catch (e3) {
-              }
-              return Promise.reject("Brotli decompression is not supported in this environment. Pass in a brotli decompression function via the decompress option.");
+            if (value === 5) {
+              return "left-top";
             }
-            if (void 0 !== t2) return Promise.reject("Unknown compression method ".concat(t2, "."));
-            if ("string" === r2) try {
-              return new TextDecoder(n2).decode(e2);
-            } catch (t3) {
-              var f2 = new Uint8Array(e2.buffer, e2.byteOffset, e2.byteLength);
-              return Array.from(f2, (function(e3) {
-                return String.fromCharCode(e3);
-              })).join("");
+            if (value === 6) {
+              return "right-top";
             }
-            return e2;
-          }
-          function I(e2, t2, n2) {
-            var r2 = new DecompressionStream(t2), i2 = new Blob([e2]).stream().pipeThrough(r2).getReader(), o2 = [], a2 = 0;
-            return (function e3() {
-              return i2.read().then((function(t3) {
-                var r3 = t3.done, u2 = t3.value;
-                return r3 ? (function(e4, t4) {
-                  for (var n3 = new Uint8Array(t4), r4 = 0, i3 = 0; i3 < e4.length; i3++) n3.set(e4[i3], r4), r4 += e4[i3].byteLength;
-                  return n3.buffer;
-                })(o2, a2) : (a2 += u2.byteLength) > n2 ? i2.cancel().then((function() {
-                  return P(n2);
-                })) : (o2.push(u2), e3());
-              }));
-            })();
-          }
-          function A(e2, t2, n2) {
-            return "dataview" === t2 ? new DataView(e2) : new TextDecoder(n2).decode(e2);
-          }
-          function P(e2) {
-            return "undefined" != typeof console && "function" == typeof console.warn && console.warn("ExifReader: skipped a compressed metadata block that would exceed the maximum decompressed size of ".concat(e2, " bytes.")), Promise.reject("Decompressed metadata exceeded the maximum allowed size of ".concat(e2, " bytes."));
-          }
-          var x = 200, C = 299, T = 416;
-          function U(e2) {
-            return "string" == typeof e2;
-          }
-          function E(e2) {
-            return "undefined" != typeof File && e2 instanceof File;
-          }
-          function w(e2) {
-            return /^data:[^;,]*(;base64)?,/.test(e2);
-          }
-          function O(e2) {
-            return e2 && Number.isInteger(e2.length) && e2.length >= 0 ? { start: 0, end: e2.length } : { start: 0 };
-          }
-          function F(e2) {
-            var t2 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}, n2 = t2.start, r2 = void 0 === n2 ? 0 : n2, i2 = t2.end, o2 = { method: "GET" };
-            return (r2 > 0 || void 0 !== i2 && i2 !== 1 / 0) && (o2.headers = { range: R(r2, i2) }), fetch(e2, o2).then((function(e3) {
-              var t3 = (function(e4) {
-                if (e4 && e4.headers && "function" == typeof e4.headers.get) {
-                  var t4 = e4.headers.get("Content-Range");
-                  if (t4) {
-                    var n4 = /\/(\d+|\*)$/.exec(t4);
-                    if (n4 && "*" !== n4[1]) return parseInt(n4[1], 10);
-                  }
-                  var r3 = e4.headers.get("Content-Length");
-                  if (r3) {
-                    var i3 = parseInt(r3, 10);
-                    if (Number.isFinite(i3)) return i3;
-                  }
-                }
-              })(e3), n3 = e3 && "number" == typeof e3.status ? e3.status : void 0;
-              return Promise.resolve(e3.arrayBuffer()).then((function(e4) {
-                return { buffer: e4, totalSize: t3, status: n3 };
-              }));
-            }));
-          }
-          function R(e2, t2) {
-            return void 0 === t2 || t2 === 1 / 0 ? "bytes=".concat(e2, "-") : "bytes=".concat(e2, "-").concat(t2 - 1);
-          }
-          function L(e2) {
-            var t2 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}, n2 = t2.start, r2 = void 0 === n2 ? 0 : n2, i2 = t2.end;
-            return new Promise((function(t3, n3) {
-              var o2 = {};
-              (r2 > 0 || void 0 !== i2 && i2 !== 1 / 0) && (o2.headers = { range: R(r2, i2) });
-              var a2 = (function(e3) {
-                return /^https:\/\//.test(e3) ? require_https().get : require_http().get;
-              })(e2);
-              a2(e2, o2, (function(e3) {
-                if (e3.statusCode >= x && e3.statusCode <= C) {
-                  var r3 = M(e3), i3 = [];
-                  e3.on("data", (function(e4) {
-                    return i3.push(Buffer.from(e4));
-                  })), e3.on("error", (function(e4) {
-                    return n3(e4);
-                  })), e3.on("end", (function() {
-                    return t3({ buffer: Buffer.concat(i3), totalSize: r3, status: e3.statusCode });
-                  }));
-                } else e3.statusCode === T ? (e3.resume(), t3({ buffer: Buffer.alloc(0), totalSize: M(e3), status: e3.statusCode })) : (n3("Could not fetch file: ".concat(e3.statusCode, " ").concat(e3.statusMessage)), e3.resume());
-              })).on("error", (function(e3) {
-                return n3(e3);
-              }));
-            }));
-          }
-          function M(e2) {
-            if (e2 && e2.headers) {
-              var t2 = e2.headers["content-range"];
-              if (t2) {
-                var n2 = /\/(\d+|\*)$/.exec(t2);
-                if (n2 && "*" !== n2[1]) return parseInt(n2[1], 10);
-              }
-              var r2 = e2.headers["content-length"];
-              if (r2) {
-                var i2 = parseInt(r2, 10);
-                if (Number.isFinite(i2)) return i2;
-              }
+            if (value === 7) {
+              return "right-bottom";
             }
-          }
-          function N(e2) {
-            var t2 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}, n2 = t2.start, r2 = void 0 === n2 ? 0 : n2, i2 = t2.end, o2 = t2.totalSize;
-            return new Promise((function(t3, n3) {
-              var a2 = (function() {
-                try {
-                  return require_fs();
-                } catch (e3) {
-                  return;
-                }
-              })();
-              a2.open(e2, (function(u2, f2) {
-                if (u2) return n3(u2);
-                !(function(e3, t4, n4, r3) {
-                  if (void 0 !== n4) return r3(null, n4);
-                  e3.stat(t4, (function(e4, t5) {
-                    return r3(e4, e4 ? void 0 : t5.size);
-                  }));
-                })(a2, e2, o2, (function(o3, u3) {
-                  if (o3) return a2.close(f2, (function() {
-                    return n3(o3);
-                  }));
-                  var s2 = void 0 === i2 || i2 === 1 / 0 || i2 > u3 ? u3 : i2, c2 = Math.min(Math.max(0, r2), s2), l2 = s2 - c2, d2 = Buffer.alloc(l2);
-                  if (0 === l2) return a2.close(f2, (function(n4) {
-                    return k(e2, n4, d2, u3, t3);
-                  }));
-                  a2.read(f2, { buffer: d2, length: l2, position: c2 }, (function(r3) {
-                    if (r3) return a2.close(f2, (function() {
-                      return n3(r3);
-                    }));
-                    a2.close(f2, (function(n4) {
-                      return k(e2, n4, d2, u3, t3);
-                    }));
-                  }));
-                }));
-              }));
-            }));
-          }
-          function k(e2, t2, n2, r2, i2) {
-            t2 && console.warn("Could not close file ".concat(e2, ":"), t2), i2({ buffer: n2, totalSize: r2 });
-          }
-          function D(e2) {
-            var t2 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}, n2 = t2.start, r2 = void 0 === n2 ? 0 : n2, i2 = t2.end;
-            return new Promise((function(t3, n3) {
-              var o2 = new FileReader(), a2 = "number" == typeof e2.size ? e2.size : void 0;
-              if (o2.onload = function(e3) {
-                return t3({ buffer: e3.target.result, totalSize: a2 });
-              }, o2.onerror = function() {
-                return n3(o2.error);
-              }, e2 && "function" == typeof e2.slice && (r2 > 0 || void 0 !== i2 && i2 !== 1 / 0)) {
-                var u2 = void 0 === i2 || i2 === 1 / 0 ? a2 : i2;
-                o2.readAsArrayBuffer(e2.slice(r2, u2));
-              } else o2.readAsArrayBuffer(e2);
-            }));
-          }
-          function G(e2) {
-            return e2 instanceof ArrayBuffer ? new Uint8Array(e2) : "undefined" != typeof Buffer && Buffer.isBuffer(e2) || ArrayBuffer.isView(e2) ? new Uint8Array(e2.buffer, e2.byteOffset, e2.byteLength) : new Uint8Array(e2);
-          }
-          var _ = 131072, B = 4, j = 'length: "auto" could not locate metadata in this file (no metadata blocks found after reading the file \u2014 e.g. plain TIFF, bare JPEG XL codestream, or a file with no recognizable metadata).', z = 'length: "auto" is not supported for this file type (no leading metadata container \u2014 e.g. plain TIFF or bare JPEG XL codestream).';
-          function V(e2) {
-            return function(e3, r3) {
-              if ("undefined" == typeof Promise) throw Error("Promise is required when async mode is enabled.");
-              var i3 = l({}, r3, { async: 1 });
-              return U(e3) ? (function(e4, r4) {
-                return /^\w+:\/\//.test(e4) ? "undefined" != typeof fetch ? n2({ readRange: function(t3, n3) {
-                  return F(e4, { start: t3, end: n3 });
-                }, options: r4 }) : n2({ readRange: function(t3, n3) {
-                  return L(e4, { start: t3, end: n3 });
-                }, options: r4 }) : w(e4) ? t2(g(e4), r4) : n2({ readRange: function(t3, n3, r5) {
-                  return N(e4, { start: t3, end: n3, totalSize: r5 ? r5.totalSize : void 0 });
-                }, options: r4 });
-              })(e3, i3) : E(e3) ? (function(e4, t3) {
-                return n2({ readRange: function(t4, n3) {
-                  return D(e4, { start: t4, end: n3 });
-                }, options: t3 });
-              })(e3, i3) : t2(e3, i3);
-            };
-            function t2(t3, n3) {
-              return Promise.resolve().then((function() {
-                return e2(t3, n3);
-              })).then((function(e3) {
-                if (!e3 || !e3.metadataRange) throw Error(z);
-                var n4 = e3.metadataRange.end;
-                return e3.metadataRange.buffer = (function(e4, t4) {
-                  return "undefined" != typeof Buffer && Buffer.isBuffer(e4) ? Buffer.from(e4.subarray(0, t4)) : e4 instanceof ArrayBuffer || "undefined" != typeof SharedArrayBuffer && e4 instanceof SharedArrayBuffer ? e4.slice(0, t4) : ArrayBuffer.isView(e4) ? e4.buffer.slice(e4.byteOffset, e4.byteOffset + t4) : e4;
-                })(t3, n4), e3.metadataRange.fetched = W(e3.metadataRange.buffer), e3.metadataRange.requests = 0, e3;
-              }));
-            }
-            function n2(e3) {
-              return r2({ readRange: e3.readRange, options: e3.options, buffer: null, fetched: 0, requests: 0, totalSize: void 0, need: _, iter: 0 });
-            }
-            function r2(t3) {
-              return t3.iter >= B ? i2(t3) : (void 0 !== t3.totalSize && (t3.need = Math.min(t3.need, t3.totalSize)), t3.need <= t3.fetched ? i2(t3) : t3.readRange(t3.fetched, t3.need, { totalSize: t3.totalSize }).then((function(n3) {
-                return t3.requests++, n3.status === T ? (function(t4) {
-                  return t4.readRange(0, 1 / 0, { totalSize: void 0 }).then((function(n4) {
-                    return t4.requests++, t4.buffer = n4.buffer, t4.fetched = W(t4.buffer), void 0 !== n4.totalSize && (t4.totalSize = n4.totalSize), Promise.resolve(e2(t4.buffer, t4.options));
-                  })).then((function(e3) {
-                    if (!e3 || !e3.metadataRange) throw Error(j);
-                    return H(e3, t4.buffer, t4.fetched, t4.requests);
-                  }));
-                })(t3) : (X(t3, n3), Promise.resolve(e2(t3.buffer, t3.options)).then((function(e3) {
-                  return (function(e4, t4) {
-                    var n4 = t4 && t4.metadataRange;
-                    if (n4 && n4.complete) return H(t4, e4.buffer, e4.fetched, e4.requests);
-                    var i3 = void 0 !== e4.totalSize && e4.fetched >= e4.totalSize;
-                    if (!n4 && i3) throw Error(j);
-                    var o2 = (function(e5) {
-                      var t5 = e5.range, n5 = e5.totalSize, r3 = e5.fetched;
-                      return t5 ? Math.min(Math.max(t5.end, 2 * r3), void 0 !== n5 ? n5 : 1 / 0) : void 0 !== n5 ? n5 : 2 * r3;
-                    })({ range: n4, totalSize: e4.totalSize, fetched: e4.fetched });
-                    if (o2 <= e4.fetched) {
-                      if (n4) return H(t4, e4.buffer, e4.fetched, e4.requests);
-                      throw Error(j);
-                    }
-                    return e4.need = o2, e4.iter++, r2(e4);
-                  })(t3, e3);
-                })));
-              })));
-            }
-            function i2(t3) {
-              return console.warn('ExifReader: length:"auto" did not converge in '.concat(B, " iterations; falling back to full read.")), (void 0 !== t3.totalSize && t3.fetched < t3.totalSize ? t3.readRange(t3.fetched, t3.totalSize, { totalSize: t3.totalSize }).then((function(e3) {
-                t3.requests++, X(t3, e3);
-              })) : void 0 === t3.totalSize ? t3.readRange(t3.fetched, 1 / 0, { totalSize: t3.totalSize }).then((function(e3) {
-                t3.requests++, X(t3, e3);
-              })) : Promise.resolve()).then((function() {
-                return Promise.resolve(e2(t3.buffer, t3.options));
-              })).then((function(e3) {
-                if (!e3 || !e3.metadataRange) throw Error(j);
-                return H(e3, t3.buffer, t3.fetched, t3.requests);
-              }));
-            }
-          }
-          function X(e2, t2) {
-            if (t2.status === x && e2.fetched > 0) return e2.buffer = t2.buffer, e2.fetched = W(e2.buffer), void (void 0 !== t2.totalSize && (e2.totalSize = t2.totalSize));
-            void 0 !== t2.totalSize && void 0 === e2.totalSize && (e2.totalSize = t2.totalSize), e2.buffer = (function(e3, t3) {
-              if (!e3) return t3;
-              if (!t3) return e3;
-              if ("undefined" != typeof Buffer && Buffer.isBuffer(e3) && Buffer.isBuffer(t3)) return Buffer.concat([e3, t3]);
-              var n2 = G(e3), r2 = G(t3), i2 = new Uint8Array(n2.byteLength + r2.byteLength);
-              return i2.set(n2, 0), i2.set(r2, n2.byteLength), i2.buffer;
-            })(e2.buffer, t2.buffer), e2.fetched = W(e2.buffer);
-          }
-          function H(e2, t2, n2, r2) {
-            var i2 = e2.metadataRange.end;
-            return e2.metadataRange.buffer = (function(e3, t3) {
-              return !e3 || "number" != typeof t3 || t3 < 0 ? e3 : "undefined" != typeof Buffer && Buffer.isBuffer(e3) ? Buffer.from(e3.subarray(0, Math.min(t3, e3.length))) : e3 instanceof ArrayBuffer || "undefined" != typeof SharedArrayBuffer && e3 instanceof SharedArrayBuffer ? e3.slice(0, Math.min(t3, e3.byteLength)) : e3;
-            })(t2, i2), e2.metadataRange.fetched = n2, e2.metadataRange.requests = r2, e2;
-          }
-          function W(e2) {
-            return e2 ? "number" == typeof e2.byteLength ? e2.byteLength : "number" == typeof e2.length ? e2.length : 0 : 0;
-          }
-          var K = { USE_FILE: 1, USE_JFIF: 1, USE_PNG_FILE: 1, USE_EXIF: 1, USE_IPTC: 1, USE_XMP: 1, USE_ICC: 1, USE_MPF: 1, USE_PHOTOSHOP: 1, USE_THUMBNAIL: 1, USE_TIFF: 1, USE_JPEG: 1, USE_PNG: 1, USE_HEIC: 1, USE_AVIF: 1, USE_JXL: 1, USE_WEBP: 1, USE_GIF: 1, USE_MAKER_NOTES: 1 };
-          function J(e2) {
-            return e2.map((function(e3) {
-              return String.fromCharCode(e3);
-            })).join("");
-          }
-          function q(e2) {
-            if (e2.length >= 8) {
-              var t2 = J(e2.slice(0, 8));
-              if ("ASCII\0\0\0" === t2) return J(e2.slice(8));
-              if ("JIS\0\0\0\0\0" === t2) return "[JIS encoded text]";
-              if ("UNICODE\0" === t2) return "[Unicode encoded text]";
-              if ("\0\0\0\0\0\0\0\0" === t2) {
-                var n2 = J(e2.slice(8));
-                return /[\x20-\x7e]/.test(n2) ? n2 : "[Undefined encoding]";
-              }
+            if (value === 8) {
+              return "left-bottom";
             }
             return "Undefined";
           }
-          function Y(e2) {
-            return e2[0][0] / e2[0][1] + e2[1][0] / e2[1][1] / 60 + e2[2][0] / e2[2][1] / 3600;
+        },
+        277: "SamplesPerPixel",
+        278: "RowsPerStrip",
+        279: "StripByteCounts",
+        280: "MinSampleValue",
+        281: "MaxSampleValue",
+        282: {
+          "name": "XResolution",
+          "description": tag_names_common_default.XResolution
+        },
+        283: {
+          "name": "YResolution",
+          "description": tag_names_common_default.YResolution
+        },
+        284: "PlanarConfiguration",
+        285: "PageName",
+        286: {
+          "name": "XPosition",
+          "description": (value) => {
+            return "" + Math.round(value[0] / value[1]);
           }
-          var $ = 18761, Z = 19789, Q = { BIG_ENDIAN: Z, LITTLE_ENDIAN: $, getByteOrder: function(e2, t2) {
-            if (e2.getUint16(t2) === $) return $;
-            if (e2.getUint16(t2) === Z) return Z;
-            throw Error("Illegal byte order value. Faulty image.");
-          } };
-          function ee(e2, t2, n2) {
-            return t2 + n2 <= e2.byteLength;
+        },
+        287: {
+          "name": "YPosition",
+          "description": (value) => {
+            return "" + Math.round(value[0] / value[1]);
           }
-          function te(e2, t2, n2, r2, i2, o2, a2, u2) {
-            if (void 0 === u2) return [];
-            for (var f2 = [], s2 = n2.items, c2 = 0; c2 < u2; c2++) {
-              var l2 = { extents: [] };
-              l2.itemId = ne(e2, s2, t2), s2 += r2.item.itemId, l2.constructionMethod = 1 === t2 || 2 === t2 ? 15 & e2.getUint16(s2) : void 0, s2 += r2.item.constructionMethod, l2.dataReferenceIndex = e2.getUint16(s2), s2 += r2.item.dataReferenceIndex, l2.baseOffset = ie(e2, s2, r2.item.baseOffset), s2 += r2.item.baseOffset, l2.extentCount = e2.getUint16(s2), s2 += r2.item.extentCount;
-              for (var d2 = 0; d2 < l2.extentCount; d2++) {
-                var p2 = {};
-                p2.extentIndex = re(e2, t2, s2, a2), s2 += r2.item.extent.extentIndex, p2.extentOffset = ie(e2, s2, i2), s2 += r2.item.extent.extentOffset, p2.extentLength = ie(e2, s2, o2), s2 += r2.item.extent.extentLength, l2.extents.push(p2);
+        },
+        290: {
+          name: "GrayResponseUnit",
+          description: (value) => getTableDescription({
+            1: "0.1",
+            2: "0.001",
+            3: "0.0001",
+            4: "1e-05",
+            5: "1e-06"
+          }, value)
+        },
+        296: {
+          name: "ResolutionUnit",
+          description: tag_names_common_default.ResolutionUnit
+        },
+        297: "PageNumber",
+        301: "TransferFunction",
+        305: "Software",
+        306: "DateTime",
+        315: "Artist",
+        316: "HostComputer",
+        317: "Predictor",
+        318: {
+          "name": "WhitePoint",
+          "description": (values) => joinMapped(values, getRationalText, ", ")
+        },
+        319: {
+          "name": "PrimaryChromaticities",
+          "description": (values) => joinMapped(values, getRationalText, ", ")
+        },
+        321: "HalftoneHints",
+        322: "TileWidth",
+        323: "TileLength",
+        330: "A100DataOffset",
+        332: {
+          name: "InkSet",
+          description: (value) => getTableDescription({
+            1: "CMYK",
+            2: "Not CMYK"
+          }, value)
+        },
+        337: "TargetPrinter",
+        338: {
+          name: "ExtraSamples",
+          description: (value) => getTableDescription({
+            0: "Unspecified",
+            1: "Associated Alpha",
+            2: "Unassociated Alpha"
+          }, value)
+        },
+        339: {
+          name: "SampleFormat",
+          description: (value) => {
+            if (!Array.isArray(value)) {
+              return getSampleFormatText(value);
+            }
+            return value.map(getSampleFormatText).join(", ");
+          }
+        },
+        513: "JPEGInterchangeFormat",
+        514: "JPEGInterchangeFormatLength",
+        529: {
+          "name": "YCbCrCoefficients",
+          "description": (values) => {
+            return values.map((value) => "" + value[0] / value[1]).join("/");
+          }
+        },
+        530: "YCbCrSubSampling",
+        531: {
+          name: "YCbCrPositioning",
+          description: (value) => {
+            if (value === 1) {
+              return "centered";
+            }
+            if (value === 2) {
+              return "co-sited";
+            }
+            return "undefined " + value;
+          }
+        },
+        532: {
+          "name": "ReferenceBlackWhite",
+          "description": (values) => {
+            return values.map((value) => "" + value[0] / value[1]).join(", ");
+          }
+        },
+        700: "ApplicationNotes",
+        18246: "Rating",
+        18249: "RatingPercent",
+        33432: {
+          name: "Copyright",
+          description: (value) => value.join("; ")
+        },
+        33550: "PixelScale",
+        33723: "IPTC-NAA",
+        33920: "IntergraphMatrix",
+        33922: "ModelTiePoint",
+        34118: "SEMInfo",
+        34264: "ModelTransform",
+        34377: "PhotoshopSettings",
+        34665: "Exif IFD Pointer",
+        34675: "ICC_Profile",
+        34735: "GeoTiffDirectory",
+        34736: "GeoTiffDoubleParams",
+        34737: "GeoTiffAsciiParams",
+        34853: "GPS Info IFD Pointer",
+        40091: {
+          name: "XPTitle",
+          description: decodeXPValue
+        },
+        40092: {
+          name: "XPComment",
+          description: decodeXPValue
+        },
+        40093: {
+          name: "XPAuthor",
+          description: decodeXPValue
+        },
+        40094: {
+          name: "XPKeywords",
+          description: decodeXPValue
+        },
+        40095: {
+          name: "XPSubject",
+          description: decodeXPValue
+        },
+        42112: "GDALMetadata",
+        42113: "GDALNoData",
+        50341: "PrintIM",
+        50707: "DNGBackwardVersion",
+        50708: "UniqueCameraModel",
+        50709: "LocalizedCameraModel",
+        50721: "ColorMatrix1",
+        50722: "ColorMatrix2",
+        50723: "CameraCalibration1",
+        50724: "CameraCalibration2",
+        50725: "ReductionMatrix1",
+        50726: "ReductionMatrix2",
+        50727: "AnalogBalance",
+        50728: "AsShotNeutral",
+        50729: "AsShotWhiteXY",
+        50730: "BaselineExposure",
+        50731: "BaselineNoise",
+        50732: "BaselineSharpness",
+        50734: "LinearResponseLimit",
+        50735: "CameraSerialNumber",
+        50736: "DNGLensInfo",
+        50739: "ShadowScale",
+        50741: {
+          name: "MakerNoteSafety",
+          description: (value) => getTableDescription({
+            0: "Unsafe",
+            1: "Safe"
+          }, value)
+        },
+        50778: {
+          name: "CalibrationIlluminant1",
+          description: tag_names_common_default["LightSource"]
+        },
+        50779: {
+          name: "CalibrationIlluminant2",
+          description: tag_names_common_default["LightSource"]
+        },
+        50781: "RawDataUniqueID",
+        50827: "OriginalRawFileName",
+        50828: "OriginalRawFileData",
+        50831: "AsShotICCProfile",
+        50832: "AsShotPreProfileMatrix",
+        50833: "CurrentICCProfile",
+        50834: "CurrentPreProfileMatrix",
+        50879: "ColorimetricReference",
+        50885: "SRawType",
+        50898: "PanasonicTitle",
+        50899: "PanasonicTitle2",
+        50931: "CameraCalibrationSig",
+        50932: "ProfileCalibrationSig",
+        50933: "ProfileIFD",
+        50934: "AsShotProfileName",
+        50936: "ProfileName",
+        50937: "ProfileHueSatMapDims",
+        50938: "ProfileHueSatMapData1",
+        50939: "ProfileHueSatMapData2",
+        50940: "ProfileToneCurve",
+        50941: {
+          name: "ProfileEmbedPolicy",
+          description: (value) => getTableDescription({
+            0: "Allow Copying",
+            1: "Embed if Used",
+            2: "Never Embed",
+            3: "No Restrictions"
+          }, value)
+        },
+        50942: "ProfileCopyright",
+        50964: "ForwardMatrix1",
+        50965: "ForwardMatrix2",
+        50966: "PreviewApplicationName",
+        50967: "PreviewApplicationVersion",
+        50968: "PreviewSettingsName",
+        50969: "PreviewSettingsDigest",
+        50970: {
+          name: "PreviewColorSpace",
+          description: (value) => getTableDescription({
+            1: "Gray Gamma 2.2",
+            2: "sRGB",
+            3: "Adobe RGB",
+            4: "ProPhoto RGB"
+          }, value)
+        },
+        50971: "PreviewDateTime",
+        50972: "RawImageDigest",
+        50973: "OriginalRawFileDigest",
+        50981: "ProfileLookTableDims",
+        50982: "ProfileLookTableData",
+        51043: "TimeCodes",
+        51044: "FrameRate",
+        51058: "TStop",
+        51081: "ReelName",
+        51089: "OriginalDefaultFinalSize",
+        51090: "OriginalBestQualitySize",
+        51091: "OriginalDefaultCropSize",
+        51105: "CameraLabel",
+        51107: {
+          name: "ProfileHueSatMapEncoding",
+          description: (value) => getTableDescription({
+            0: "Linear",
+            1: "sRGB"
+          }, value)
+        },
+        51108: {
+          name: "ProfileLookTableEncoding",
+          description: (value) => getTableDescription({
+            0: "Linear",
+            1: "sRGB"
+          }, value)
+        },
+        51109: "BaselineExposureOffset",
+        51110: {
+          name: "DefaultBlackRender",
+          description: (value) => getTableDescription({
+            0: "Auto",
+            1: "None"
+          }, value)
+        },
+        51111: "NewRawImageDigest",
+        51112: "RawToPreviewGain"
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/tag-names-exif-ifd.js
+  function getLensFocalLengths(from, to) {
+    const focalLengthFrom = getRoundedRational(from);
+    const focalLengthTo = getRoundedRational(to);
+    if (focalLengthTo === 0 || focalLengthTo === focalLengthFrom) {
+      return `${focalLengthFrom}`;
+    }
+    return `${focalLengthFrom}-${focalLengthTo}`;
+  }
+  function getLensApertures(wide, long) {
+    const apertures = [wide, long].filter(isKnownRational).map(getRoundedRational);
+    if (apertures.length === 0) {
+      return "?";
+    }
+    if (apertures.length === 1 || apertures[1] === 0 || apertures[1] === apertures[0]) {
+      return `${apertures[0]}`;
+    }
+    return `${apertures[0]}-${apertures[1]}`;
+  }
+  function getRoundedRational(rational) {
+    return parseFloat((rational[0] / rational[1]).toFixed(5));
+  }
+  function isKnownRational(rational) {
+    return rational[1] !== 0;
+  }
+  var tag_names_exif_ifd_default;
+  var init_tag_names_exif_ifd = __esm({
+    "node_modules/exifreader/src/tag-names-exif-ifd.js"() {
+      init_esbuild_shims();
+      init_tag_names_utils();
+      init_tag_names_common();
+      tag_names_exif_ifd_default = {
+        33434: {
+          "name": "ExposureTime",
+          "description": tag_names_common_default.ExposureTime
+        },
+        33437: {
+          "name": "FNumber",
+          "description": tag_names_common_default.FNumber
+        },
+        34850: {
+          "name": "ExposureProgram",
+          "description": tag_names_common_default.ExposureProgram
+        },
+        34852: "SpectralSensitivity",
+        34855: "ISOSpeedRatings",
+        34856: {
+          "name": "OECF",
+          "description": () => "[Raw OECF table data]"
+        },
+        34858: "TimeZoneOffset",
+        34859: "SelfTimerMode",
+        34864: {
+          name: "SensitivityType",
+          description: (value) => getTableDescription({
+            1: "Standard Output Sensitivity",
+            2: "Recommended Exposure Index",
+            3: "ISO Speed",
+            4: "Standard Output Sensitivity and Recommended Exposure Index",
+            5: "Standard Output Sensitivity and ISO Speed",
+            6: "Recommended Exposure Index and ISO Speed",
+            7: "Standard Output Sensitivity, Recommended Exposure Index and ISO Speed"
+          }, value)
+        },
+        34865: "StandardOutputSensitivity",
+        34866: "RecommendedExposureIndex",
+        34867: "ISOSpeed",
+        34868: "ISOSpeedLatitudeyyy",
+        34869: "ISOSpeedLatitudezzz",
+        36864: {
+          "name": "ExifVersion",
+          "description": getVersionString
+        },
+        36867: "DateTimeOriginal",
+        36868: "DateTimeDigitized",
+        36873: "GooglePlusUploadCode",
+        36880: "OffsetTime",
+        36881: "OffsetTimeOriginal",
+        36882: "OffsetTimeDigitized",
+        37121: {
+          "name": "ComponentsConfiguration",
+          "description": tag_names_common_default.ComponentsConfiguration
+        },
+        37122: "CompressedBitsPerPixel",
+        37377: {
+          "name": "ShutterSpeedValue",
+          "description": tag_names_common_default.ShutterSpeedValue
+        },
+        37378: {
+          "name": "ApertureValue",
+          "description": tag_names_common_default.ApertureValue
+        },
+        37379: "BrightnessValue",
+        37380: "ExposureBiasValue",
+        37381: {
+          "name": "MaxApertureValue",
+          "description": (value) => {
+            return Math.pow(Math.sqrt(2), value[0] / value[1]).toFixed(2);
+          }
+        },
+        37382: {
+          "name": "SubjectDistance",
+          "description": (value) => value[0] / value[1] + " m"
+        },
+        37383: {
+          "name": "MeteringMode",
+          "description": tag_names_common_default.MeteringMode
+        },
+        37384: {
+          "name": "LightSource",
+          description: tag_names_common_default.LightSource
+        },
+        37385: {
+          "name": "Flash",
+          "description": (value) => {
+            if (value === 0) {
+              return "Flash did not fire";
+            } else if (value === 1) {
+              return "Flash fired";
+            } else if (value === 5) {
+              return "Strobe return light not detected";
+            } else if (value === 7) {
+              return "Strobe return light detected";
+            } else if (value === 9) {
+              return "Flash fired, compulsory flash mode";
+            } else if (value === 13) {
+              return "Flash fired, compulsory flash mode, return light not detected";
+            } else if (value === 15) {
+              return "Flash fired, compulsory flash mode, return light detected";
+            } else if (value === 16) {
+              return "Flash did not fire, compulsory flash mode";
+            } else if (value === 24) {
+              return "Flash did not fire, auto mode";
+            } else if (value === 25) {
+              return "Flash fired, auto mode";
+            } else if (value === 29) {
+              return "Flash fired, auto mode, return light not detected";
+            } else if (value === 31) {
+              return "Flash fired, auto mode, return light detected";
+            } else if (value === 32) {
+              return "No flash function";
+            } else if (value === 65) {
+              return "Flash fired, red-eye reduction mode";
+            } else if (value === 69) {
+              return "Flash fired, red-eye reduction mode, return light not detected";
+            } else if (value === 71) {
+              return "Flash fired, red-eye reduction mode, return light detected";
+            } else if (value === 73) {
+              return "Flash fired, compulsory flash mode, red-eye reduction mode";
+            } else if (value === 77) {
+              return "Flash fired, compulsory flash mode, red-eye reduction mode, return light not detected";
+            } else if (value === 79) {
+              return "Flash fired, compulsory flash mode, red-eye reduction mode, return light detected";
+            } else if (value === 89) {
+              return "Flash fired, auto mode, red-eye reduction mode";
+            } else if (value === 93) {
+              return "Flash fired, auto mode, return light not detected, red-eye reduction mode";
+            } else if (value === 95) {
+              return "Flash fired, auto mode, return light detected, red-eye reduction mode";
+            }
+            return "Unknown";
+          }
+        },
+        37386: {
+          "name": "FocalLength",
+          "description": tag_names_common_default.FocalLength
+        },
+        37393: "ImageNumber",
+        37394: {
+          name: "SecurityClassification",
+          description: (value) => getTableDescription({
+            "C": "Confidential",
+            "R": "Restricted",
+            "S": "Secret",
+            "T": "Top Secret",
+            "U": "Unclassified"
+          }, value)
+        },
+        37395: "ImageHistory",
+        37396: {
+          "name": "SubjectArea",
+          "description": (value) => {
+            if (value.length === 2) {
+              return `Location; X: ${value[0]}, Y: ${value[1]}`;
+            } else if (value.length === 3) {
+              return `Circle; X: ${value[0]}, Y: ${value[1]}, diameter: ${value[2]}`;
+            } else if (value.length === 4) {
+              return `Rectangle; X: ${value[0]}, Y: ${value[1]}, width: ${value[2]}, height: ${value[3]}`;
+            }
+            return "Unknown";
+          }
+        },
+        37500: {
+          "name": "MakerNote",
+          "description": () => "[Raw maker note data]"
+        },
+        37510: {
+          "name": "UserComment",
+          "description": getEncodedString
+        },
+        37520: "SubSecTime",
+        37521: "SubSecTimeOriginal",
+        37522: "SubSecTimeDigitized",
+        37724: "ImageSourceData",
+        37888: {
+          "name": "AmbientTemperature",
+          "description": (value) => value[0] / value[1] + " \xB0C"
+        },
+        37889: {
+          "name": "Humidity",
+          "description": (value) => value[0] / value[1] + " %"
+        },
+        37890: {
+          "name": "Pressure",
+          "description": (value) => value[0] / value[1] + " hPa"
+        },
+        37891: {
+          "name": "WaterDepth",
+          "description": (value) => value[0] / value[1] + " m"
+        },
+        37892: {
+          "name": "Acceleration",
+          "description": (value) => value[0] / value[1] + " mGal"
+        },
+        37893: {
+          "name": "CameraElevationAngle",
+          "description": (value) => value[0] / value[1] + " \xB0"
+        },
+        40960: {
+          "name": "FlashpixVersion",
+          "description": getVersionString
+        },
+        40961: {
+          "name": "ColorSpace",
+          "description": tag_names_common_default.ColorSpace
+        },
+        40962: "PixelXDimension",
+        40963: "PixelYDimension",
+        40964: "RelatedSoundFile",
+        40965: "Interoperability IFD Pointer",
+        41483: "FlashEnergy",
+        41484: {
+          "name": "SpatialFrequencyResponse",
+          "description": () => "[Raw SFR table data]"
+        },
+        41486: "FocalPlaneXResolution",
+        41487: "FocalPlaneYResolution",
+        41488: {
+          "name": "FocalPlaneResolutionUnit",
+          "description": tag_names_common_default.FocalPlaneResolutionUnit
+        },
+        41492: {
+          "name": "SubjectLocation",
+          "description": ([x, y]) => `X: ${x}, Y: ${y}`
+        },
+        41493: "ExposureIndex",
+        41495: {
+          "name": "SensingMethod",
+          "description": (value) => {
+            if (value === 1) {
+              return "Undefined";
+            } else if (value === 2) {
+              return "One-chip color area sensor";
+            } else if (value === 3) {
+              return "Two-chip color area sensor";
+            } else if (value === 4) {
+              return "Three-chip color area sensor";
+            } else if (value === 5) {
+              return "Color sequential area sensor";
+            } else if (value === 7) {
+              return "Trilinear sensor";
+            } else if (value === 8) {
+              return "Color sequential linear sensor";
+            }
+            return "Unknown";
+          }
+        },
+        41728: {
+          "name": "FileSource",
+          "description": (value) => {
+            if (value === 3) {
+              return "DSC";
+            }
+            return "Unknown";
+          }
+        },
+        41729: {
+          "name": "SceneType",
+          "description": (value) => {
+            if (value === 1) {
+              return "A directly photographed image";
+            }
+            return "Unknown";
+          }
+        },
+        41730: {
+          "name": "CFAPattern",
+          "description": () => "[Raw CFA pattern table data]"
+        },
+        41985: {
+          "name": "CustomRendered",
+          "description": tag_names_common_default.CustomRendered
+        },
+        41986: {
+          "name": "ExposureMode",
+          "description": tag_names_common_default.ExposureMode
+        },
+        41987: {
+          "name": "WhiteBalance",
+          "description": tag_names_common_default.WhiteBalance
+        },
+        41988: {
+          "name": "DigitalZoomRatio",
+          "description": (value) => {
+            if (value[0] === 0) {
+              return "Digital zoom was not used";
+            }
+            return "" + value[0] / value[1];
+          }
+        },
+        41989: {
+          "name": "FocalLengthIn35mmFilm",
+          // Sometimes called FocalLengthIn35mmFormat.
+          "description": tag_names_common_default.FocalLengthIn35mmFilm
+        },
+        41990: {
+          "name": "SceneCaptureType",
+          "description": tag_names_common_default.SceneCaptureType
+        },
+        41991: {
+          "name": "GainControl",
+          "description": (value) => {
+            if (value === 0) {
+              return "None";
+            } else if (value === 1) {
+              return "Low gain up";
+            } else if (value === 2) {
+              return "High gain up";
+            } else if (value === 3) {
+              return "Low gain down";
+            } else if (value === 4) {
+              return "High gain down";
+            }
+            return "Unknown";
+          }
+        },
+        41992: {
+          "name": "Contrast",
+          "description": tag_names_common_default.Contrast
+        },
+        41993: {
+          "name": "Saturation",
+          "description": tag_names_common_default.Saturation
+        },
+        41994: {
+          "name": "Sharpness",
+          "description": tag_names_common_default.Sharpness
+        },
+        41995: {
+          "name": "DeviceSettingDescription",
+          "description": () => "[Raw device settings table data]"
+        },
+        41996: {
+          "name": "SubjectDistanceRange",
+          "description": (value) => {
+            if (value === 1) {
+              return "Macro";
+            } else if (value === 2) {
+              return "Close view";
+            } else if (value === 3) {
+              return "Distant view";
+            }
+            return "Unknown";
+          }
+        },
+        42016: "ImageUniqueID",
+        42032: "CameraOwnerName",
+        42033: "BodySerialNumber",
+        42034: {
+          "name": "LensSpecification",
+          "description": (value) => {
+            return `${getLensFocalLengths(value[0], value[1])} mm f/${getLensApertures(value[2], value[3])}`;
+          }
+        },
+        42035: "LensMake",
+        42036: "LensModel",
+        42037: "LensSerialNumber",
+        42080: {
+          name: "CompositeImage",
+          description: (value) => getTableDescription({
+            1: "Not a Composite Image",
+            2: "General Composite Image",
+            3: "Composite Image Captured While Shooting"
+          }, value)
+        },
+        42081: "SourceImageNumberOfCompositeImage",
+        42082: "SourceExposureTimesOfCompositeImage",
+        42240: "Gamma",
+        59932: "Padding",
+        59933: "OffsetSchema",
+        65e3: "OwnerName",
+        65001: "SerialNumber",
+        65002: "Lens",
+        65100: "RawFile",
+        65101: "Converter",
+        65102: "WhiteBalance",
+        65105: "Exposure",
+        65106: "Shadows",
+        65107: "Brightness",
+        65108: "Contrast",
+        65109: "Saturation",
+        65110: "Sharpness",
+        65111: "Smoothness",
+        65112: "MoireFilter"
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/tag-names-gps-ifd.js
+  var tag_names_gps_ifd_default;
+  var init_tag_names_gps_ifd = __esm({
+    "node_modules/exifreader/src/tag-names-gps-ifd.js"() {
+      init_esbuild_shims();
+      init_tag_names_utils();
+      tag_names_gps_ifd_default = {
+        0: {
+          "name": "GPSVersionID",
+          "description": (value) => {
+            if (value[0] === 2 && value[1] === 2 && value[2] === 0 && value[3] === 0) {
+              return "Version 2.2";
+            }
+            return "Unknown";
+          }
+        },
+        1: {
+          "name": "GPSLatitudeRef",
+          "description": (value) => {
+            const ref = value.join("");
+            if (ref === "N") {
+              return "North latitude";
+            } else if (ref === "S") {
+              return "South latitude";
+            }
+            return "Unknown";
+          }
+        },
+        2: {
+          "name": "GPSLatitude",
+          "description": getCalculatedGpsValue
+        },
+        3: {
+          "name": "GPSLongitudeRef",
+          "description": (value) => {
+            const ref = value.join("");
+            if (ref === "E") {
+              return "East longitude";
+            } else if (ref === "W") {
+              return "West longitude";
+            }
+            return "Unknown";
+          }
+        },
+        4: {
+          "name": "GPSLongitude",
+          "description": getCalculatedGpsValue
+        },
+        5: {
+          "name": "GPSAltitudeRef",
+          "description": (value) => {
+            if (value === 0) {
+              return "Sea level";
+            } else if (value === 1) {
+              return "Sea level reference (negative value)";
+            }
+            return "Unknown";
+          }
+        },
+        6: {
+          "name": "GPSAltitude",
+          "description": (value) => {
+            return value[0] / value[1] + " m";
+          }
+        },
+        7: {
+          "name": "GPSTimeStamp",
+          "description": (values) => {
+            return values.map(([numerator, denominator]) => {
+              const num = numerator / denominator;
+              if (/^\d(\.|$)/.test(`${num}`)) {
+                return `0${num}`;
               }
-              f2.push(l2);
+              return num;
+            }).join(":");
+          }
+        },
+        8: "GPSSatellites",
+        9: {
+          "name": "GPSStatus",
+          "description": (value) => {
+            const status = value.join("");
+            if (status === "A") {
+              return "Measurement in progress";
+            } else if (status === "V") {
+              return "Measurement Interoperability";
             }
-            return f2;
+            return "Unknown";
           }
-          function ne(e2, t2, n2) {
-            return n2 < 2 ? e2.getUint16(t2) : 2 === n2 ? e2.getUint32(t2) : void 0;
-          }
-          function re(e2, t2, n2, r2) {
-            if ((1 === t2 || 2 === t2) && r2 > 0) return ie(e2, n2, r2);
-          }
-          function ie(e2, t2, n2) {
-            return 4 === n2 ? e2.getUint32(t2) : 8 === n2 ? (console.warn("This file uses an 8-bit offset which is currently not supported by ExifReader. Contact the maintainer to get it fixed."), (function(e3, t3) {
-              return e3.getUint32(t3 + 4);
-            })(e2, t2)) : 0;
-          }
-          var oe = 1165519206, ae = 1835625829;
-          function ue(e2, t2) {
-            if (ee(e2, t2, 8)) try {
-              var n2 = fe(e2, t2), r2 = n2.length, i2 = n2.contentOffset;
-              if (r2 < 8) return;
-              var o2 = e2.getUint32(t2 + 4);
-              if (1718909296 === o2) return (function(e3, t3, n3) {
-                return { type: "ftyp", majorBrand: a(e3, t3, 4), length: n3 };
-              })(e2, i2, r2);
-              if (1768977008 === o2) return (function(e3, t3, n3, r3) {
-                return { type: "iprp", subBoxes: ye(e3, n3, r3 - (n3 - t3)), length: r3 };
-              })(e2, t2, i2, r2);
-              if (1768973167 === o2) return (function(e3, t3, n3, r3) {
-                return { type: "ipco", properties: ye(e3, n3, r3 - (n3 - t3)), length: r3 };
-              })(e2, t2, i2, r2);
-              if (1668246642 === o2) return (function(e3, t3, n3) {
-                return { type: "colr", icc: ve(e3, t3), length: n3 };
-              })(e2, i2, r2);
-              if (1768186228 === o2) return /* @__PURE__ */ (function(e3, t3) {
-                return { type: "idat", contentOffset: e3, length: t3 };
-              })(i2, r2);
-              if (!ee(e2, i2, 1)) return;
-              var f2 = e2.getUint8(i2);
-              return 1835365473 === o2 ? (function(e3, t3, n3, r3) {
-                return { type: "meta", subBoxes: ye(e3, n3 + 3, r3 - (n3 + 3 - t3)), length: r3 };
-              })(e2, t2, i2 + 1, r2) : 1768714083 === o2 ? (function(e3, t3, n3, r3) {
-                var i3 = (function(e4, t4) {
-                  var n4 = { item: { dataReferenceIndex: 2, extentCount: 2, extent: {} } };
-                  e4 < 2 ? (n4.itemCount = 2, n4.item.itemId = 2) : 2 === e4 && (n4.itemCount = 4, n4.item.itemId = 4), n4.item.constructionMethod = 1 === e4 || 2 === e4 ? 2 : 0;
-                  var r4 = { offsetSize: t4, lengthSize: t4, baseOffsetSize: t4 + 1, indexSize: t4 + 1 };
-                  return r4.itemCount = t4 + 2, r4.items = r4.itemCount + n4.itemCount, r4.item = { itemId: 0 }, r4.item.constructionMethod = r4.item.itemId + n4.item.itemId, r4.item.dataReferenceIndex = r4.item.constructionMethod + n4.item.constructionMethod, { offsets: r4, sizes: n4 };
-                })(t3, n3 + 3), o3 = i3.offsets, a2 = i3.sizes, u2 = e3.getUint8(o3.offsetSize) >> 4;
-                a2.item.extent.extentOffset = u2;
-                var f3 = 15 & e3.getUint8(o3.lengthSize);
-                a2.item.extent.extentLength = f3;
-                var s2 = e3.getUint8(o3.baseOffsetSize) >> 4;
-                a2.item.baseOffset = s2;
-                var c2 = (function(e4, t4, n4) {
-                  if (1 === n4 || 2 === n4) return 15 & e4.getUint8(t4);
-                })(e3, o3.indexSize, t3);
-                a2.item.extent.extentIndex = void 0 !== c2 ? c2 : 0;
-                var l2 = (function(e4, t4, n4) {
-                  return n4 < 2 ? e4.getUint16(t4) : 2 === n4 ? e4.getUint32(t4) : void 0;
-                })(e3, o3.itemCount, t3);
-                return { type: "iloc", items: te(e3, t3, o3, a2, u2, f3, c2, l2), length: r3 };
-              })(e2, f2, i2 + 1, r2) : 1768517222 === o2 ? (function(e3, t3, n3, r3, i3) {
-                var o3 = (function(e4, t4) {
-                  var n4 = { entryCount: t4 + 3 }, r4 = {};
-                  return r4.entryCount = 0 === e4 ? 2 : 4, n4.itemInfos = n4.entryCount + r4.entryCount, { offsets: n4 };
-                })(n3, r3), a2 = o3.offsets;
-                return { type: "iinf", itemInfos: ye(e3, a2.itemInfos, i3 - (a2.itemInfos - t3)), length: i3 };
-              })(e2, t2, f2, i2 + 1, r2) : 1768842853 === o2 ? (function(e3, t3, n3, r3, i3) {
-                r3 += 3;
-                var o3 = { type: "infe", length: i3 };
-                return 0 !== n3 && 1 !== n3 || (o3.itemId = e3.getUint16(r3), r3 += 2, o3.itemProtectionIndex = e3.getUint16(r3), r3 += 2, o3.itemName = u(e3, r3), r3 += o3.itemName.length + 1), n3 >= 2 && (2 === n3 ? (o3.itemId = e3.getUint16(r3), r3 += 2) : 3 === n3 && (o3.itemId = e3.getUint32(r3), r3 += 4), o3.itemProtectionIndex = e3.getUint16(r3), r3 += 2, o3.itemType = e3.getUint32(r3), r3 += 4, o3.itemName = u(e3, r3), r3 += o3.itemName.length + 1, o3.itemType === ae ? (o3.contentType = u(e3, r3), t3 + i3 > (r3 += o3.contentType.length + 1) && (o3.contentEncoding = u(e3, r3), r3 += o3.contentEncoding.length + 1)) : 1970432288 === o3.itemType && (o3.itemUri = u(e3, r3), r3 += o3.itemUri.length + 1)), o3;
-              })(e2, t2, f2, i2 + 1, r2) : { type: void 0, length: r2 };
-            } catch (e3) {
-              return;
+        },
+        10: {
+          "name": "GPSMeasureMode",
+          "description": (value) => {
+            const mode = value.join("");
+            if (mode === "2") {
+              return "2-dimensional measurement";
+            } else if (mode === "3") {
+              return "3-dimensional measurement";
             }
+            return "Unknown";
           }
-          function fe(e2, t2) {
-            var n2 = e2.getUint32(t2);
-            if (/* @__PURE__ */ (function(e3) {
-              return 0 === e3;
-            })(n2)) return { length: e2.byteLength - t2, contentOffset: t2 + 4 + 4 };
-            if (/* @__PURE__ */ (function(e3) {
-              return 1 === e3;
-            })(n2)) {
-              if (!ee(e2, t2, 16)) return { length: 0, contentOffset: t2 + 4 + 4 };
-              if ((function(e3, t3) {
-                return 0 === e3.getUint32(t3 + 8);
-              })(e2, t2)) return { length: e2.getUint32(t2 + 12), contentOffset: t2 + 4 + 4 + 8 };
+        },
+        11: "GPSDOP",
+        12: {
+          "name": "GPSSpeedRef",
+          "description": (value) => {
+            const ref = value.join("");
+            if (ref === "K") {
+              return "Kilometers per hour";
+            } else if (ref === "M") {
+              return "Miles per hour";
+            } else if (ref === "N") {
+              return "Knots";
             }
-            return { length: n2, contentOffset: t2 + 4 + 4 };
+            return "Unknown";
           }
-          function se(e2, t2) {
-            if (K.USE_EXIF || K.USE_XMP || K.USE_ICC) {
-              var n2 = {}, r2 = (function(e3) {
-                for (var t3 = 0; t3 + 4 + 4 <= e3.byteLength; ) {
-                  var n3 = ue(e3, t3);
-                  if (void 0 === n3) break;
-                  if ("meta" === n3.type) return n3;
-                  t3 += n3.length;
+        },
+        13: "GPSSpeed",
+        14: {
+          "name": "GPSTrackRef",
+          "description": (value) => {
+            const ref = value.join("");
+            if (ref === "T") {
+              return "True direction";
+            } else if (ref === "M") {
+              return "Magnetic direction";
+            }
+            return "Unknown";
+          }
+        },
+        15: "GPSTrack",
+        16: {
+          "name": "GPSImgDirectionRef",
+          "description": (value) => {
+            const ref = value.join("");
+            if (ref === "T") {
+              return "True direction";
+            } else if (ref === "M") {
+              return "Magnetic direction";
+            }
+            return "Unknown";
+          }
+        },
+        17: "GPSImgDirection",
+        18: "GPSMapDatum",
+        19: {
+          "name": "GPSDestLatitudeRef",
+          "description": (value) => {
+            const ref = value.join("");
+            if (ref === "N") {
+              return "North latitude";
+            } else if (ref === "S") {
+              return "South latitude";
+            }
+            return "Unknown";
+          }
+        },
+        20: {
+          "name": "GPSDestLatitude",
+          "description": (value) => {
+            return value[0][0] / value[0][1] + value[1][0] / value[1][1] / 60 + value[2][0] / value[2][1] / 3600;
+          }
+        },
+        21: {
+          "name": "GPSDestLongitudeRef",
+          "description": (value) => {
+            const ref = value.join("");
+            if (ref === "E") {
+              return "East longitude";
+            } else if (ref === "W") {
+              return "West longitude";
+            }
+            return "Unknown";
+          }
+        },
+        22: {
+          "name": "GPSDestLongitude",
+          "description": (value) => {
+            return value[0][0] / value[0][1] + value[1][0] / value[1][1] / 60 + value[2][0] / value[2][1] / 3600;
+          }
+        },
+        23: {
+          "name": "GPSDestBearingRef",
+          "description": (value) => {
+            const ref = value.join("");
+            if (ref === "T") {
+              return "True direction";
+            } else if (ref === "M") {
+              return "Magnetic direction";
+            }
+            return "Unknown";
+          }
+        },
+        24: "GPSDestBearing",
+        25: {
+          "name": "GPSDestDistanceRef",
+          "description": (value) => {
+            const ref = value.join("");
+            if (ref === "K") {
+              return "Kilometers";
+            } else if (ref === "M") {
+              return "Miles";
+            } else if (ref === "N") {
+              return "Knots";
+            }
+            return "Unknown";
+          }
+        },
+        26: "GPSDestDistance",
+        27: {
+          "name": "GPSProcessingMethod",
+          "description": getEncodedString
+        },
+        28: {
+          "name": "GPSAreaInformation",
+          "description": getEncodedString
+        },
+        29: "GPSDateStamp",
+        30: {
+          "name": "GPSDifferential",
+          "description": (value) => {
+            if (value === 0) {
+              return "Measurement without differential correction";
+            } else if (value === 1) {
+              return "Differential correction applied";
+            }
+            return "Unknown";
+          }
+        },
+        31: "GPSHPositioningError"
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/tag-names-interoperability-ifd.js
+  var tag_names_interoperability_ifd_default;
+  var init_tag_names_interoperability_ifd = __esm({
+    "node_modules/exifreader/src/tag-names-interoperability-ifd.js"() {
+      init_esbuild_shims();
+      init_tag_names_utils();
+      tag_names_interoperability_ifd_default = {
+        1: "InteroperabilityIndex",
+        2: {
+          name: "InteroperabilityVersion",
+          description: getVersionString
+        },
+        4096: "RelatedImageFileFormat",
+        4097: "RelatedImageWidth",
+        4098: "RelatedImageHeight"
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/tag-names-mpf-ifd.js
+  var tag_names_mpf_ifd_default;
+  var init_tag_names_mpf_ifd = __esm({
+    "node_modules/exifreader/src/tag-names-mpf-ifd.js"() {
+      init_esbuild_shims();
+      init_tag_names_utils();
+      tag_names_mpf_ifd_default = {
+        45056: {
+          "name": "MPFVersion",
+          "description": getVersionString
+        },
+        45057: "NumberOfImages",
+        45058: "MPEntry",
+        45059: "ImageUIDList",
+        45060: "TotalFrames"
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/mpf-tags.js
+  function read2(dataView, dataOffset, includeUnknown, computed = false, tagFilter = void 0, valueBudget = void 0) {
+    try {
+      const byteOrder = byte_order_default.getByteOrder(dataView, dataOffset);
+      const ifdOffset = get0thIfdOffset(dataView, dataOffset, byteOrder);
+      if (ifdOffset === void 0) {
+        return {};
+      }
+      const tags = readIfd(
+        dataView,
+        IFD_TYPE_MPF,
+        dataOffset,
+        ifdOffset,
+        byteOrder,
+        includeUnknown,
+        computed,
+        tagFilter,
+        "mpf",
+        valueBudget,
+        getTagNames()
+      );
+      return addMpfImages(dataView, dataOffset, tags, byteOrder);
+    } catch (error) {
+      return {};
+    }
+  }
+  function getTagNames() {
+    const tagNames = {};
+    tagNames[IFD_TYPE_MPF] = tag_names_mpf_ifd_default;
+    return tagNames;
+  }
+  function addMpfImages(dataView, dataOffset, tags, byteOrder) {
+    if (!tags["MPEntry"]) {
+      return tags;
+    }
+    const bufferLength = dataView.byteLength;
+    const byteOffset = dataView.byteOffset;
+    let remainingImageBytes = bufferLength * MAX_IMAGE_SIZE_PER_BUFFER_SIZE;
+    const images = [];
+    const imageCount = Math.min(Math.ceil(tags["MPEntry"].value.length / ENTRY_SIZE), MAX_IMAGES);
+    for (let i = 0; i < imageCount; i++) {
+      images[i] = {};
+      const attributes = getImageNumberValue(tags["MPEntry"].value, i * ENTRY_SIZE, types_default.getTypeSize("LONG"), byteOrder);
+      images[i]["ImageFlags"] = getImageFlags(attributes);
+      images[i]["ImageFormat"] = getImageFormat(attributes);
+      images[i]["ImageType"] = getImageType(attributes);
+      const imageSize = getImageNumberValue(tags["MPEntry"].value, i * ENTRY_SIZE + 4, types_default.getTypeSize("LONG"), byteOrder);
+      images[i]["ImageSize"] = {
+        value: imageSize,
+        description: "" + imageSize
+      };
+      const imageOffset = getImageOffset(i, tags["MPEntry"], byteOrder, dataOffset);
+      images[i]["ImageOffset"] = {
+        value: imageOffset,
+        description: "" + imageOffset
+      };
+      const dependentImage1EntryNumber = getImageNumberValue(tags["MPEntry"].value, i * ENTRY_SIZE + 12, types_default.getTypeSize("SHORT"), byteOrder);
+      images[i]["DependentImage1EntryNumber"] = {
+        value: dependentImage1EntryNumber,
+        description: "" + dependentImage1EntryNumber
+      };
+      const dependentImage2EntryNumber = getImageNumberValue(tags["MPEntry"].value, i * ENTRY_SIZE + 14, types_default.getTypeSize("SHORT"), byteOrder);
+      images[i]["DependentImage2EntryNumber"] = {
+        value: dependentImage2EntryNumber,
+        description: "" + dependentImage2EntryNumber
+      };
+      const start = Math.min(Math.max(imageOffset, 0), bufferLength);
+      const end = Math.min(start + Math.max(imageSize, 0), bufferLength, start + remainingImageBytes);
+      images[i].image = dataView.buffer.slice(byteOffset + start, byteOffset + end);
+      remainingImageBytes -= end - start;
+      deferInit(images[i], "base64", function() {
+        return getBase64Image(this.image);
+      });
+    }
+    tags["Images"] = images;
+    return tags;
+  }
+  function getImageNumberValue(entries, offset, size, byteOrder) {
+    if (byteOrder === byte_order_default.LITTLE_ENDIAN) {
+      let value2 = 0;
+      for (let i = 0; i < size; i++) {
+        value2 += entries[offset + i] << 8 * i;
+      }
+      return value2;
+    }
+    let value = 0;
+    for (let i = 0; i < size; i++) {
+      value += entries[offset + i] << 8 * (size - 1 - i);
+    }
+    return value;
+  }
+  function getImageFlags(attributes) {
+    const flags = [
+      attributes >> 31 & 1,
+      attributes >> 30 & 1,
+      attributes >> 29 & 1
+    ];
+    const flagsDescription = [];
+    if (flags[0]) {
+      flagsDescription.push("Dependent Parent Image");
+    }
+    if (flags[1]) {
+      flagsDescription.push("Dependent Child Image");
+    }
+    if (flags[2]) {
+      flagsDescription.push("Representative Image");
+    }
+    return {
+      value: flags,
+      description: flagsDescription.join(", ") || "None"
+    };
+  }
+  function getImageFormat(attributes) {
+    const imageFormat = attributes >> 24 & 7;
+    return {
+      value: imageFormat,
+      description: imageFormat === 0 ? "JPEG" : "Unknown"
+    };
+  }
+  function getImageType(attributes) {
+    const type = attributes & 16777215;
+    const descriptions = {
+      196608: "Baseline MP Primary Image",
+      65537: "Large Thumbnail (VGA equivalent)",
+      65538: "Large Thumbnail (Full HD equivalent)",
+      131073: "Multi-Frame Image (Panorama)",
+      131074: "Multi-Frame Image (Disparity)",
+      131075: "Multi-Frame Image (Multi-Angle)",
+      0: "Undefined"
+    };
+    return {
+      value: type,
+      description: descriptions[type] || "Unknown"
+    };
+  }
+  function getImageOffset(imageIndex, mpEntry, byteOrder, dataOffset) {
+    if (isFirstIndividualImage(imageIndex)) {
+      return 0;
+    }
+    return getImageNumberValue(mpEntry.value, imageIndex * ENTRY_SIZE + 8, types_default.getTypeSize("LONG"), byteOrder) + dataOffset;
+  }
+  function isFirstIndividualImage(imageIndex) {
+    return imageIndex === 0;
+  }
+  var mpf_tags_default, ENTRY_SIZE, MAX_IMAGE_SIZE_PER_BUFFER_SIZE, MAX_IMAGES;
+  var init_mpf_tags = __esm({
+    "node_modules/exifreader/src/mpf-tags.js"() {
+      init_esbuild_shims();
+      init_byte_order();
+      init_types();
+      init_tag_names_mpf_ifd();
+      init_ifd_types();
+      init_utils();
+      init_tags_helpers();
+      mpf_tags_default = {
+        read: read2
+      };
+      ENTRY_SIZE = 16;
+      MAX_IMAGE_SIZE_PER_BUFFER_SIZE = 8;
+      MAX_IMAGES = 256;
+    }
+  });
+
+  // node_modules/exifreader/src/file-tags.js
+  function read3(dataView, fileDataOffset) {
+    const length = getLength(dataView, fileDataOffset);
+    const numberOfColorComponents = getNumberOfColorComponents(dataView, fileDataOffset, length);
+    return {
+      "Bits Per Sample": getDataPrecision(dataView, fileDataOffset, length),
+      "Image Height": getImageHeight(dataView, fileDataOffset, length),
+      "Image Width": getImageWidth(dataView, fileDataOffset, length),
+      "Color Components": numberOfColorComponents,
+      "Subsampling": numberOfColorComponents && getSubsampling(dataView, fileDataOffset, numberOfColorComponents.value, length)
+    };
+  }
+  function getLength(dataView, fileDataOffset) {
+    return Math.min(types_default.getShortAt(dataView, fileDataOffset), dataView.byteLength - fileDataOffset);
+  }
+  function getDataPrecision(dataView, fileDataOffset, length) {
+    const OFFSET = 2;
+    const SIZE = 1;
+    if (OFFSET + SIZE > length) {
+      return void 0;
+    }
+    const value = types_default.getByteAt(dataView, fileDataOffset + OFFSET);
+    return {
+      value,
+      description: "" + value
+    };
+  }
+  function getImageHeight(dataView, fileDataOffset, length) {
+    const OFFSET = 3;
+    const SIZE = 2;
+    if (OFFSET + SIZE > length) {
+      return void 0;
+    }
+    const value = types_default.getShortAt(dataView, fileDataOffset + OFFSET);
+    return {
+      value,
+      description: `${value}px`
+    };
+  }
+  function getImageWidth(dataView, fileDataOffset, length) {
+    const OFFSET = 5;
+    const SIZE = 2;
+    if (OFFSET + SIZE > length) {
+      return void 0;
+    }
+    const value = types_default.getShortAt(dataView, fileDataOffset + OFFSET);
+    return {
+      value,
+      description: `${value}px`
+    };
+  }
+  function getNumberOfColorComponents(dataView, fileDataOffset, length) {
+    const OFFSET = 7;
+    const SIZE = 1;
+    if (OFFSET + SIZE > length) {
+      return void 0;
+    }
+    const value = types_default.getByteAt(dataView, fileDataOffset + OFFSET);
+    return {
+      value,
+      description: "" + value
+    };
+  }
+  function getSubsampling(dataView, fileDataOffset, numberOfColorComponents, length) {
+    const OFFSET = 8;
+    const SIZE = 3 * numberOfColorComponents;
+    if (OFFSET + SIZE > length) {
+      return void 0;
+    }
+    const components = [];
+    for (let i = 0; i < numberOfColorComponents; i++) {
+      const componentOffset = fileDataOffset + OFFSET + i * 3;
+      components.push([
+        types_default.getByteAt(dataView, componentOffset),
+        types_default.getByteAt(dataView, componentOffset + 1),
+        types_default.getByteAt(dataView, componentOffset + 2)
+      ]);
+    }
+    return {
+      value: components,
+      description: components.length > 1 ? getComponentIds(components) + getSamplingType(components) : ""
+    };
+  }
+  function getComponentIds(components) {
+    const ids = {
+      1: "Y",
+      2: "Cb",
+      3: "Cr",
+      4: "I",
+      5: "Q"
+    };
+    return components.map((compontent) => ids[compontent[0]]).join("");
+  }
+  function getSamplingType(components) {
+    const types = {
+      17: "4:4:4 (1 1)",
+      18: "4:4:0 (1 2)",
+      20: "4:4:1 (1 4)",
+      33: "4:2:2 (2 1)",
+      34: "4:2:0 (2 2)",
+      36: "4:2:1 (2 4)",
+      65: "4:1:1 (4 1)",
+      66: "4:1:0 (4 2)"
+    };
+    if (components.length === 0 || components[0][1] === void 0 || types[components[0][1]] === void 0) {
+      return "";
+    }
+    return types[components[0][1]];
+  }
+  var file_tags_default;
+  var init_file_tags = __esm({
+    "node_modules/exifreader/src/file-tags.js"() {
+      init_esbuild_shims();
+      init_types();
+      file_tags_default = {
+        read: read3
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/jxl-file-tags.js
+  function read4(dataView, codestreamOffset) {
+    const tags = {};
+    try {
+      const reader = createBitReader(dataView, codestreamOffset + CODESTREAM_SIGNATURE_SIZE);
+      const { height, width } = parseSizeHeader(reader);
+      tags["Image Height"] = { value: height, description: `${height}px` };
+      tags["Image Width"] = { value: width, description: `${width}px` };
+    } catch (_error) {
+    }
+    return tags;
+  }
+  function parseSizeHeader(reader) {
+    const small = reader.readBits(1);
+    let height;
+    let width;
+    if (small) {
+      height = (reader.readBits(5) + 1) * 8;
+      const ratio = reader.readBits(3);
+      width = ratio === 0 ? (reader.readBits(5) + 1) * 8 : Math.ceil(height * RATIOS[ratio]);
+    } else {
+      height = readSizeU32(reader);
+      const ratio = reader.readBits(3);
+      width = ratio === 0 ? readSizeU32(reader) : Math.ceil(height * RATIOS[ratio]);
+    }
+    return { height, width };
+  }
+  function readSizeU32(reader) {
+    const selector = reader.readBits(2);
+    return 1 + reader.readBits(SIZE_U32_BITS[selector]);
+  }
+  function createBitReader(dataView, byteOffset) {
+    let currentByte = byteOffset;
+    let currentBit = 0;
+    return {
+      readBits(n) {
+        let value = 0;
+        for (let i = 0; i < n; i++) {
+          if (currentByte >= dataView.byteLength) {
+            throw new Error("Unexpected end of data");
+          }
+          const bit = dataView.getUint8(currentByte) >> currentBit & 1;
+          value |= bit << i;
+          currentBit++;
+          if (currentBit >= 8) {
+            currentBit = 0;
+            currentByte++;
+          }
+        }
+        return value;
+      }
+    };
+  }
+  var jxl_file_tags_default, CODESTREAM_SIGNATURE_SIZE, SIZE_U32_BITS, RATIOS;
+  var init_jxl_file_tags = __esm({
+    "node_modules/exifreader/src/jxl-file-tags.js"() {
+      init_esbuild_shims();
+      jxl_file_tags_default = {
+        read: read4
+      };
+      CODESTREAM_SIGNATURE_SIZE = 2;
+      SIZE_U32_BITS = [9, 13, 18, 30];
+      RATIOS = [0, 1, 12 / 10, 4 / 3, 3 / 2, 16 / 9, 5 / 4, 2];
+    }
+  });
+
+  // node_modules/exifreader/src/iso-bmff-file-tags.js
+  function read5(dataView, dimensionsOffset, pixelInformationOffset) {
+    const tags = {};
+    if (dimensionsOffset !== void 0) {
+      objectAssign(tags, readImageDimensions(dataView, dimensionsOffset));
+    }
+    if (pixelInformationOffset !== void 0) {
+      objectAssign(tags, readPixelInformation(dataView, pixelInformationOffset));
+    }
+    return tags;
+  }
+  function readImageDimensions(dataView, offset) {
+    if (!hasBytes(dataView, offset, DIMENSIONS_SIZE)) {
+      return {};
+    }
+    const width = dataView.getUint32(offset);
+    const height = dataView.getUint32(offset + HEIGHT_OFFSET);
+    return {
+      "Image Width": { value: width, description: `${width}px` },
+      "Image Height": { value: height, description: `${height}px` }
+    };
+  }
+  function readPixelInformation(dataView, offset) {
+    if (!hasBytes(dataView, offset, CHANNEL_COUNT_SIZE)) {
+      return {};
+    }
+    const channelCount = dataView.getUint8(offset);
+    const depthsOffset = offset + CHANNEL_COUNT_SIZE;
+    if (!hasBytes(dataView, depthsOffset, channelCount)) {
+      return {};
+    }
+    const tags = {
+      "Color Components": { value: channelCount, description: `${channelCount}` }
+    };
+    const bitsPerSample = getSharedBitDepth(dataView, depthsOffset, channelCount);
+    if (bitsPerSample !== void 0) {
+      tags["Bits Per Sample"] = { value: bitsPerSample, description: `${bitsPerSample}` };
+    }
+    return tags;
+  }
+  function getSharedBitDepth(dataView, offset, channelCount) {
+    if (channelCount === 0) {
+      return void 0;
+    }
+    const firstDepth = dataView.getUint8(offset);
+    for (let i = 1; i < channelCount; i++) {
+      if (dataView.getUint8(offset + i) !== firstDepth) {
+        return void 0;
+      }
+    }
+    return firstDepth;
+  }
+  var iso_bmff_file_tags_default, DIMENSIONS_SIZE, HEIGHT_OFFSET, CHANNEL_COUNT_SIZE;
+  var init_iso_bmff_file_tags = __esm({
+    "node_modules/exifreader/src/iso-bmff-file-tags.js"() {
+      init_esbuild_shims();
+      init_utils();
+      init_image_header_iso_bmff_utils();
+      iso_bmff_file_tags_default = {
+        read: read5
+      };
+      DIMENSIONS_SIZE = 8;
+      HEIGHT_OFFSET = 4;
+      CHANNEL_COUNT_SIZE = 1;
+    }
+  });
+
+  // node_modules/exifreader/src/jfif-tags.js
+  function read6(dataView, jfifDataOffset) {
+    const length = getLength2(dataView, jfifDataOffset);
+    const thumbnailWidth = getThumbnailWidth(dataView, jfifDataOffset, length);
+    const thumbnailHeight = getThumbnailHeight(dataView, jfifDataOffset, length);
+    const tags = {
+      "JFIF Version": getVersion(dataView, jfifDataOffset, length),
+      "Resolution Unit": getResolutionUnit(dataView, jfifDataOffset, length),
+      "XResolution": getXResolution(dataView, jfifDataOffset, length),
+      "YResolution": getYResolution(dataView, jfifDataOffset, length),
+      "JFIF Thumbnail Width": thumbnailWidth,
+      "JFIF Thumbnail Height": thumbnailHeight
+    };
+    if (thumbnailWidth !== void 0 && thumbnailHeight !== void 0) {
+      const thumbnail = getThumbnail(dataView, jfifDataOffset, 3 * thumbnailWidth.value * thumbnailHeight.value, length);
+      if (thumbnail) {
+        tags["JFIF Thumbnail"] = thumbnail;
+      }
+    }
+    for (const tagName in tags) {
+      if (tags[tagName] === void 0) {
+        delete tags[tagName];
+      }
+    }
+    return tags;
+  }
+  function getLength2(dataView, jfifDataOffset) {
+    return Math.min(types_default.getShortAt(dataView, jfifDataOffset), dataView.byteLength - jfifDataOffset);
+  }
+  function getVersion(dataView, jfifDataOffset, length) {
+    const OFFSET = 7;
+    const SIZE = 2;
+    if (OFFSET + SIZE > length) {
+      return void 0;
+    }
+    const majorVersion = types_default.getByteAt(dataView, jfifDataOffset + OFFSET);
+    const minorVersion = types_default.getByteAt(dataView, jfifDataOffset + OFFSET + 1);
+    return {
+      value: majorVersion * 256 + minorVersion,
+      description: majorVersion + "." + minorVersion
+    };
+  }
+  function getResolutionUnit(dataView, jfifDataOffset, length) {
+    const OFFSET = 9;
+    const SIZE = 1;
+    if (OFFSET + SIZE > length) {
+      return void 0;
+    }
+    const value = types_default.getByteAt(dataView, jfifDataOffset + OFFSET);
+    return {
+      value,
+      description: getResolutionUnitDescription(value)
+    };
+  }
+  function getResolutionUnitDescription(value) {
+    if (value === 0) {
+      return "None";
+    }
+    if (value === 1) {
+      return "inches";
+    }
+    if (value === 2) {
+      return "cm";
+    }
+    return "Unknown";
+  }
+  function getXResolution(dataView, jfifDataOffset, length) {
+    const OFFSET = 10;
+    const SIZE = 2;
+    if (OFFSET + SIZE > length) {
+      return void 0;
+    }
+    const value = types_default.getShortAt(dataView, jfifDataOffset + OFFSET);
+    return {
+      value,
+      description: "" + value
+    };
+  }
+  function getYResolution(dataView, jfifDataOffset, length) {
+    const OFFSET = 12;
+    const SIZE = 2;
+    if (OFFSET + SIZE > length) {
+      return void 0;
+    }
+    const value = types_default.getShortAt(dataView, jfifDataOffset + OFFSET);
+    return {
+      value,
+      description: "" + value
+    };
+  }
+  function getThumbnailWidth(dataView, jfifDataOffset, length) {
+    const OFFSET = 14;
+    const SIZE = 1;
+    if (OFFSET + SIZE > length) {
+      return void 0;
+    }
+    const value = types_default.getByteAt(dataView, jfifDataOffset + OFFSET);
+    return {
+      value,
+      description: `${value}px`
+    };
+  }
+  function getThumbnailHeight(dataView, jfifDataOffset, length) {
+    const OFFSET = 15;
+    const SIZE = 1;
+    if (OFFSET + SIZE > length) {
+      return void 0;
+    }
+    const value = types_default.getByteAt(dataView, jfifDataOffset + OFFSET);
+    return {
+      value,
+      description: `${value}px`
+    };
+  }
+  function getThumbnail(dataView, jfifDataOffset, thumbnailLength, length) {
+    const OFFSET = 16;
+    if (thumbnailLength === 0 || OFFSET + thumbnailLength > length) {
+      return void 0;
+    }
+    const byteOffset = dataView.byteOffset;
+    const value = dataView.buffer.slice(byteOffset + jfifDataOffset + OFFSET, byteOffset + jfifDataOffset + OFFSET + thumbnailLength);
+    return {
+      value,
+      description: "<24-bit RGB pixel data>"
+    };
+  }
+  var jfif_tags_default;
+  var init_jfif_tags = __esm({
+    "node_modules/exifreader/src/jfif-tags.js"() {
+      init_esbuild_shims();
+      init_types();
+      jfif_tags_default = {
+        read: read6
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/iptc-tag-names.js
+  function getCreationDate(value) {
+    const date = getStringValueFromArray(value);
+    if (date.length >= 8) {
+      return date.substr(0, 4) + "-" + date.substr(4, 2) + "-" + date.substr(6, 2);
+    }
+    return date;
+  }
+  function getCreationTime(value) {
+    const time = getStringValueFromArray(value);
+    let parsedTime = time;
+    if (time.length >= 6) {
+      parsedTime = time.substr(0, 2) + ":" + time.substr(2, 2) + ":" + time.substr(4, 2);
+      if (time.length === 11) {
+        parsedTime += time.substr(6, 1) + time.substr(7, 2) + ":" + time.substr(9, 2);
+      }
+    }
+    return parsedTime;
+  }
+  function getEncodingName(value) {
+    const string = getStringValueFromArray(value);
+    if (string === "\x1B%G") {
+      return "UTF-8";
+    } else if (string === "\x1B%5") {
+      return "Windows-1252";
+    } else if (string === "\x1B%/G") {
+      return "UTF-8 Level 1";
+    } else if (string === "\x1B%/H") {
+      return "UTF-8 Level 2";
+    } else if (string === "\x1B%/I") {
+      return "UTF-8 Level 3";
+    } else if (string === "\x1B/A") {
+      return "ISO-8859-1";
+    } else if (string === "\x1B/B") {
+      return "ISO-8859-2";
+    } else if (string === "\x1B/C") {
+      return "ISO-8859-3";
+    } else if (string === "\x1B/D") {
+      return "ISO-8859-4";
+    } else if (string === "\x1B/@") {
+      return "ISO-8859-5";
+    } else if (string === "\x1B/G") {
+      return "ISO-8859-6";
+    } else if (string === "\x1B/F") {
+      return "ISO-8859-7";
+    } else if (string === "\x1B/H") {
+      return "ISO-8859-8";
+    }
+    return "Unknown";
+  }
+  function getPreviewNumber(value) {
+    const number = getBinaryNumber(value);
+    return number === null ? parseInt(getStringValueFromArray(value), 10) : number;
+  }
+  function getBinaryNumber(value) {
+    if (value.length !== 2 || isAsciiDigit(value[0]) && isAsciiDigit(value[1])) {
+      return null;
+    }
+    return (value[0] << 8) + value[1];
+  }
+  function isAsciiDigit(octet) {
+    return octet >= 48 && octet <= 57;
+  }
+  var iptc_tag_names_default;
+  var init_iptc_tag_names = __esm({
+    "node_modules/exifreader/src/iptc-tag-names.js"() {
+      init_esbuild_shims();
+      init_tag_names_utils();
+      iptc_tag_names_default = {
+        "iptc": {
+          256: {
+            "name": "Model Version",
+            "description": (value) => {
+              return ((value[0] << 8) + value[1]).toString();
+            }
+          },
+          261: {
+            "name": "Destination",
+            "repeatable": true
+          },
+          276: {
+            "name": "File Format",
+            "description": (value) => {
+              return ((value[0] << 8) + value[1]).toString();
+            }
+          },
+          278: {
+            "name": "File Format Version",
+            "description": (value) => {
+              return ((value[0] << 8) + value[1]).toString();
+            }
+          },
+          286: "Service Identifier",
+          296: "Envelope Number",
+          306: "Product ID",
+          316: "Envelope Priority",
+          326: {
+            "name": "Date Sent",
+            "description": getCreationDate
+          },
+          336: {
+            "name": "Time Sent",
+            "description": getCreationTime
+          },
+          346: {
+            "name": "Coded Character Set",
+            "description": getEncodingName,
+            "encoding_name": getEncodingName
+          },
+          356: "UNO",
+          376: {
+            "name": "ARM Identifier",
+            "description": (value) => {
+              return ((value[0] << 8) + value[1]).toString();
+            }
+          },
+          378: {
+            "name": "ARM Version",
+            "description": (value) => {
+              return ((value[0] << 8) + value[1]).toString();
+            }
+          },
+          512: {
+            "name": "Record Version",
+            "description": (value) => {
+              return ((value[0] << 8) + value[1]).toString();
+            }
+          },
+          515: "Object Type Reference",
+          516: "Object Attribute Reference",
+          517: "Object Name",
+          519: "Edit Status",
+          520: {
+            "name": "Editorial Update",
+            "description": (value) => {
+              if (getStringValueFromArray(value) === "01") {
+                return "Additional Language";
+              }
+              return "Unknown";
+            }
+          },
+          522: "Urgency",
+          524: {
+            "name": "Subject Reference",
+            "repeatable": true,
+            "description": (value) => {
+              const parts = getStringValueFromArray(value).split(":");
+              return parts[2] + (parts[3] ? "/" + parts[3] : "") + (parts[4] ? "/" + parts[4] : "");
+            }
+          },
+          527: "Category",
+          532: {
+            "name": "Supplemental Category",
+            "repeatable": true
+          },
+          534: "Fixture Identifier",
+          537: {
+            "name": "Keywords",
+            "repeatable": true
+          },
+          538: {
+            "name": "Content Location Code",
+            "repeatable": true
+          },
+          539: {
+            "name": "Content Location Name",
+            "repeatable": true
+          },
+          542: "Release Date",
+          547: "Release Time",
+          549: "Expiration Date",
+          550: "Expiration Time",
+          552: "Special Instructions",
+          554: {
+            "name": "Action Advised",
+            "description": (value) => {
+              const string = getStringValueFromArray(value);
+              if (string === "01") {
+                return "Object Kill";
+              } else if (string === "02") {
+                return "Object Replace";
+              } else if (string === "03") {
+                return "Object Append";
+              } else if (string === "04") {
+                return "Object Reference";
+              }
+              return "Unknown";
+            }
+          },
+          557: {
+            "name": "Reference Service",
+            "repeatable": true
+          },
+          559: {
+            "name": "Reference Date",
+            "repeatable": true
+          },
+          562: {
+            "name": "Reference Number",
+            "repeatable": true
+          },
+          567: {
+            "name": "Date Created",
+            "description": getCreationDate
+          },
+          572: {
+            "name": "Time Created",
+            "description": getCreationTime
+          },
+          574: {
+            "name": "Digital Creation Date",
+            "description": getCreationDate
+          },
+          575: {
+            "name": "Digital Creation Time",
+            "description": getCreationTime
+          },
+          577: "Originating Program",
+          582: "Program Version",
+          587: {
+            "name": "Object Cycle",
+            "description": (value) => {
+              const string = getStringValueFromArray(value);
+              if (string === "a") {
+                return "morning";
+              } else if (string === "p") {
+                return "evening";
+              } else if (string === "b") {
+                return "both";
+              }
+              return "Unknown";
+            }
+          },
+          592: {
+            "name": "By-line",
+            "repeatable": true
+          },
+          597: {
+            "name": "By-line Title",
+            "repeatable": true
+          },
+          602: "City",
+          604: "Sub-location",
+          607: "Province/State",
+          612: "Country/Primary Location Code",
+          613: "Country/Primary Location Name",
+          615: "Original Transmission Reference",
+          617: "Headline",
+          622: "Credit",
+          627: "Source",
+          628: "Copyright Notice",
+          630: {
+            "name": "Contact",
+            "repeatable": true
+          },
+          632: "Caption/Abstract",
+          634: {
+            "name": "Writer/Editor",
+            "repeatable": true
+          },
+          637: {
+            "name": "Rasterized Caption",
+            "description": (value) => value
+          },
+          642: "Image Type",
+          643: {
+            "name": "Image Orientation",
+            "description": (value) => {
+              const string = getStringValueFromArray(value);
+              if (string === "P") {
+                return "Portrait";
+              } else if (string === "L") {
+                return "Landscape";
+              } else if (string === "S") {
+                return "Square";
+              }
+              return "Unknown";
+            }
+          },
+          647: "Language Identifier",
+          662: {
+            "name": "Audio Type",
+            "description": (value) => {
+              const stringValue = getStringValueFromArray(value);
+              const character0 = stringValue.charAt(0);
+              const character1 = stringValue.charAt(1);
+              let description = "";
+              if (character0 === "1") {
+                description += "Mono";
+              } else if (character0 === "2") {
+                description += "Stereo";
+              }
+              if (character1 === "A") {
+                description += ", actuality";
+              } else if (character1 === "C") {
+                description += ", question and answer session";
+              } else if (character1 === "M") {
+                description += ", music, transmitted by itself";
+              } else if (character1 === "Q") {
+                description += ", response to a question";
+              } else if (character1 === "R") {
+                description += ", raw sound";
+              } else if (character1 === "S") {
+                description += ", scener";
+              } else if (character1 === "V") {
+                description += ", voicer";
+              } else if (character1 === "W") {
+                description += ", wrap";
+              }
+              if (description !== "") {
+                return description;
+              }
+              return stringValue;
+            }
+          },
+          663: {
+            "name": "Audio Sampling Rate",
+            "description": (value) => parseInt(getStringValueFromArray(value), 10) + " Hz"
+          },
+          664: {
+            "name": "Audio Sampling Resolution",
+            "description": (value) => {
+              const bits = parseInt(getStringValueFromArray(value), 10);
+              return bits + (bits === 1 ? " bit" : " bits");
+            }
+          },
+          665: {
+            "name": "Audio Duration",
+            "description": (value) => {
+              const duration = getStringValueFromArray(value);
+              if (duration.length >= 6) {
+                return duration.substr(0, 2) + ":" + duration.substr(2, 2) + ":" + duration.substr(4, 2);
+              }
+              return duration;
+            }
+          },
+          666: "Audio Outcue",
+          698: "Short Document ID",
+          699: "Unique Document ID",
+          700: "Owner ID",
+          712: {
+            "name": (value) => {
+              if (value.length === 2) {
+                return "ObjectData Preview File Format";
+              }
+              return "Record 2 destination";
+            },
+            "description": (value) => {
+              if (value.length === 2) {
+                const intValue = getPreviewNumber(value);
+                if (intValue === 0) {
+                  return "No ObjectData";
+                } else if (intValue === 1) {
+                  return "IPTC-NAA Digital Newsphoto Parameter Record";
+                } else if (intValue === 2) {
+                  return "IPTC7901 Recommended Message Format";
+                } else if (intValue === 3) {
+                  return "Tagged Image File Format (Adobe/Aldus Image data)";
+                } else if (intValue === 4) {
+                  return "Illustrator (Adobe Graphics data)";
+                } else if (intValue === 5) {
+                  return "AppleSingle (Apple Computer Inc)";
+                } else if (intValue === 6) {
+                  return "NAA 89-3 (ANPA 1312)";
+                } else if (intValue === 7) {
+                  return "MacBinary II";
+                } else if (intValue === 8) {
+                  return "IPTC Unstructured Character Oriented File Format (UCOFF)";
+                } else if (intValue === 9) {
+                  return "United Press International ANPA 1312 variant";
+                } else if (intValue === 10) {
+                  return "United Press International Down-Load Message";
+                } else if (intValue === 11) {
+                  return "JPEG File Interchange (JFIF)";
+                } else if (intValue === 12) {
+                  return "Photo-CD Image-Pac (Eastman Kodak)";
+                } else if (intValue === 13) {
+                  return "Microsoft Bit Mapped Graphics File [*.BMP]";
+                } else if (intValue === 14) {
+                  return "Digital Audio File [*.WAV] (Microsoft & Creative Labs)";
+                } else if (intValue === 15) {
+                  return "Audio plus Moving Video [*.AVI] (Microsoft)";
+                } else if (intValue === 16) {
+                  return "PC DOS/Windows Executable Files [*.COM][*.EXE]";
+                } else if (intValue === 17) {
+                  return "Compressed Binary File [*.ZIP] (PKWare Inc)";
+                } else if (intValue === 18) {
+                  return "Audio Interchange File Format AIFF (Apple Computer Inc)";
+                } else if (intValue === 19) {
+                  return "RIFF Wave (Microsoft Corporation)";
+                } else if (intValue === 20) {
+                  return "Freehand (Macromedia/Aldus)";
+                } else if (intValue === 21) {
+                  return 'Hypertext Markup Language "HTML" (The Internet Society)';
+                } else if (intValue === 22) {
+                  return "MPEG 2 Audio Layer 2 (Musicom), ISO/IEC";
+                } else if (intValue === 23) {
+                  return "MPEG 2 Audio Layer 3, ISO/IEC";
+                } else if (intValue === 24) {
+                  return "Portable Document File (*.PDF) Adobe";
+                } else if (intValue === 25) {
+                  return "News Industry Text Format (NITF)";
+                } else if (intValue === 26) {
+                  return "Tape Archive (*.TAR)";
+                } else if (intValue === 27) {
+                  return "Tidningarnas Telegrambyr\xE5 NITF version (TTNITF DTD)";
+                } else if (intValue === 28) {
+                  return "Ritzaus Bureau NITF version (RBNITF DTD)";
+                } else if (intValue === 29) {
+                  return "Corel Draw [*.CDR]";
                 }
-              })(e2);
-              if (!r2) return { hasAppMarkers: 0 };
-              if (K.USE_EXIF) {
-                var i2 = (function(e3, t3, n3) {
-                  try {
-                    var r3 = (function(e4) {
-                      return e4.subBoxes.find((function(e5) {
-                        return "iinf" === e5.type;
-                      })).itemInfos.find((function(e5) {
-                        return e5.itemType === oe;
-                      }));
-                    })(t3).itemId, i3 = me(t3, r3);
-                    pe(i3);
-                    var o3 = de(t3);
-                    if (ce(n3, i3, "exif", o3), i3.extents.length > 1) {
-                      var a2 = ge(e3, i3, o3);
-                      if (void 0 === a2) return;
-                      return { tiffHeaderOffset: he(a2, 0), dataView: a2 };
-                    }
-                    var u2 = le(i3, i3.extents[0], o3);
-                    if (void 0 === u2) return;
-                    return { tiffHeaderOffset: he(e3, u2) };
-                  } catch (e4) {
-                    return;
-                  }
-                })(e2, r2, t2);
-                void 0 !== i2 && (n2.tiffHeaderOffset = i2.tiffHeaderOffset, void 0 !== i2.dataView && (n2.exifDataView = i2.dataView));
+                return `Unknown format ${intValue}`;
               }
-              if (K.USE_XMP) {
-                var o2 = (function(e3, t3, n3) {
-                  try {
-                    var r3 = (function(e4) {
-                      return e4.subBoxes.find((function(e5) {
-                        return "iinf" === e5.type;
-                      })).itemInfos.find((function(e5) {
-                        return e5.itemType === ae && "application/rdf+xml" === e5.contentType;
-                      }));
-                    })(t3).itemId, i3 = me(t3, r3);
-                    pe(i3);
-                    var o3 = de(t3);
-                    if (ce(n3, i3, "xmp", o3), i3.extents.length > 1) {
-                      var a2 = ge(e3, i3, o3);
-                      if (void 0 === a2) return;
-                      return { chunks: [{ dataOffset: 0, length: a2.byteLength }], dataView: a2 };
-                    }
-                    var u2 = i3.extents[0], f2 = le(i3, u2, o3);
-                    if (void 0 === f2) return;
-                    return { chunks: [{ dataOffset: f2, length: u2.extentLength }] };
-                  } catch (e4) {
-                    return;
-                  }
-                })(e2, r2, t2);
-                void 0 !== o2 && (n2.xmpChunks = o2.chunks, void 0 !== o2.dataView && (n2.xmpDataView = o2.dataView));
-              }
-              return K.USE_ICC && (n2.iccChunks = (function(e3, t3) {
-                try {
-                  var n3 = e3.subBoxes.find((function(e4) {
-                    return "iprp" === e4.type;
-                  })).subBoxes.find((function(e4) {
-                    return "ipco" === e4.type;
-                  })).properties.find((function(e4) {
-                    return "colr" === e4.type;
-                  })).icc;
-                  if (n3) return t3 && t3.push({ type: "icc", start: n3.offset, end: n3.offset + n3.length }), [n3];
-                } catch (e4) {
+              return getStringValueFromArray(value);
+            }
+          },
+          713: {
+            "name": "ObjectData Preview File Format Version",
+            "description": (value, tags) => {
+              const formatVersions = {
+                0: { 0: "1" },
+                1: { 1: "1", 2: "2", 3: "3", 4: "4" },
+                2: { 4: "4" },
+                3: { 1: "5.0", 2: "6.0" },
+                4: { 1: "1.40" },
+                5: { 1: "2" },
+                6: { 1: "1" },
+                11: { 1: "1.02" },
+                20: { 1: "3.1", 2: "4.0", 3: "5.0", 4: "5.5" },
+                21: { 2: "2.0" }
+              };
+              const version = getPreviewNumber(value);
+              if (tags["ObjectData Preview File Format"]) {
+                const format = getPreviewNumber(tags["ObjectData Preview File Format"].value);
+                if (Object.prototype.hasOwnProperty.call(formatVersions, format) && Object.prototype.hasOwnProperty.call(formatVersions[format], version)) {
+                  return formatVersions[format][version];
                 }
-              })(r2, t2)), n2.hasAppMarkers = void 0 !== n2.tiffHeaderOffset || void 0 !== n2.xmpChunks || void 0 !== n2.iccChunks, n2;
-            }
-            return {};
-          }
-          function ce(e2, t2, n2, r2) {
-            if (e2) for (var i2 = 0; i2 < t2.extents.length; i2++) {
-              var o2 = t2.extents[i2], a2 = le(t2, o2, r2);
-              void 0 !== a2 && e2.push({ type: n2, start: a2, end: a2 + o2.extentLength });
-            }
-          }
-          function le(e2, t2, n2) {
-            var r2 = e2.constructionMethod;
-            return void 0 === r2 || 0 === r2 ? e2.baseOffset + t2.extentOffset : 1 === r2 && void 0 !== n2 ? n2 + e2.baseOffset + t2.extentOffset : void 0;
-          }
-          function de(e2) {
-            var t2 = e2.subBoxes.find((function(e3) {
-              return "idat" === e3.type;
-            }));
-            return t2 ? t2.contentOffset : void 0;
-          }
-          function pe(e2) {
-            2 === e2.constructionMethod && console.warn("This file uses iloc constructionMethod 2 (item_offset) which is currently not supported by ExifReader. Contact the maintainer to get it fixed.");
-          }
-          function ge(e2, t2, n2) {
-            for (var r2 = [], i2 = 0, o2 = 0; o2 < t2.extents.length; o2++) {
-              var a2 = t2.extents[o2], u2 = le(t2, a2, n2);
-              if (void 0 === u2 || u2 + a2.extentLength > e2.byteLength) return;
-              if (r2.push({ start: u2, length: a2.extentLength }), (i2 += a2.extentLength) > e2.byteLength) return;
-            }
-            for (var f2 = new Uint8Array(i2), s2 = 0, c2 = 0; c2 < r2.length; c2++) {
-              for (var l2 = r2[c2], d2 = l2.start, p2 = l2.length, g2 = 0; g2 < p2; g2++) f2[s2 + g2] = e2.getUint8(d2 + g2);
-              s2 += p2;
-            }
-            return new DataView(f2.buffer);
-          }
-          function me(e2, t2) {
-            return e2.subBoxes.find((function(e3) {
-              return "iloc" === e3.type;
-            })).items.find((function(e3) {
-              return e3.itemId === t2;
-            }));
-          }
-          function he(e2, t2) {
-            return t2 + 4 + e2.getUint32(t2);
-          }
-          function ve(e2, t2) {
-            var n2 = a(e2, t2, 4);
-            if ("prof" === n2 || "rICC" === n2) return { offset: t2 + 4, length: e2.getUint32(t2 + 4), chunkNumber: 1, chunksTotal: 1 };
-          }
-          function ye(e2, t2, n2) {
-            for (var r2 = [oe, ae], i2 = [], o2 = t2; o2 < t2 + n2; ) {
-              var a2 = ue(e2, o2);
-              if (void 0 === a2) break;
-              void 0 === a2.type || void 0 !== a2.itemType && -1 === r2.indexOf(a2.itemType) || i2.push(a2), o2 += a2.length;
-            }
-            return i2;
-          }
-          var be = 2, Se = 65496, Ie = 2, Ae = 4, Pe = 2, xe = 2, Ce = 10, Te = 18, Ue = 33, Ee = 79, we = 18, Oe = 8, Fe = "ICC_PROFILE\0", Re = Ae + Fe.length, Le = Re + 1, Me = "MPF\0", Ne = 65472, ke = 65474, De = 65476, Ge = 65499, _e = 65501, Be = 65498, je = 65504, ze = 65505, Ve = 65506, Xe = 65517, He = 65519, We = 65534, Ke = 65535, Je = "JFIF", qe = "Exif", Ye = "http://ns.adobe.com/xap/1.0/\0", $e = "http://ns.adobe.com/xmp/extension/\0", Ze = "Photoshop 3.0", Qe = "8BIM";
-          function et(e2, t2) {
-            return e2.getUint16(t2) === Ne;
-          }
-          function tt(e2, t2) {
-            return e2.getUint16(t2) === ke;
-          }
-          function nt(e2, t2) {
-            var n2 = Fe.length;
-            return e2.getUint16(t2) === Ve && a(e2, t2 + Ae, n2) === Fe;
-          }
-          function rt(e2, t2) {
-            var n2 = Me.length;
-            return e2.getUint16(t2) === Ve && a(e2, t2 + Ae, n2) === Me;
-          }
-          function it(e2, t2) {
-            var n2 = Je.length;
-            return e2.getUint16(t2) === je && a(e2, t2 + Ae, n2) === Je && 0 === e2.getUint8(t2 + Ae + n2);
-          }
-          function ot(e2, t2) {
-            var n2 = qe.length;
-            return e2.getUint16(t2) === ze && a(e2, t2 + Ae, n2) === qe && 0 === e2.getUint8(t2 + Ae + n2);
-          }
-          function at(e2, t2) {
-            return e2.getUint16(t2) === ze && (function(e3, t3) {
-              var n2 = Ye.length;
-              return a(e3, t3 + Ae, n2) === Ye;
-            })(e2, t2);
-          }
-          function ut(e2, t2) {
-            return e2.getUint16(t2) === ze && (function(e3, t3) {
-              var n2 = $e.length;
-              return a(e3, t3 + Ae, n2) === $e;
-            })(e2, t2);
-          }
-          function ft(e2, t2) {
-            return { dataOffset: e2 + Ue, length: t2 - (Ue - Pe) };
-          }
-          function st(e2, t2) {
-            return { dataOffset: e2 + Ee, length: t2 - (Ee - Pe) };
-          }
-          function ct(e2, t2) {
-            var n2 = Ze.length, r2 = Qe.length, i2 = t2 + Ae + n2 + 1;
-            return e2.getUint16(t2) === Xe && a(e2, t2 + Ae, n2) === Ze && 0 === e2.getUint8(t2 + Ae + n2) && a(e2, i2, r2) === Qe;
-          }
-          function lt(e2, t2) {
-            var n2 = e2.getUint16(t2);
-            return n2 >= je && n2 <= He || n2 === We || n2 === Ne || n2 === ke || n2 === De || n2 === Ge || n2 === _e || n2 === Be;
-          }
-          function dt(e2, t2) {
-            return e2.getUint16(t2) === Ke;
-          }
-          function pt(e2, t2, n2, r2) {
-            var i2 = (function(e3, t3, n3) {
-              try {
-                if (t3 + 8 > n3) return;
-                var r3 = e3.getUint16(t3 + 0), i3 = r3 === Q.LITTLE_ENDIAN;
-                if (!i3 && r3 !== Q.BIG_ENDIAN) return;
-                if (42 !== e3.getUint16(t3 + 2, i3)) return;
-                var o3 = t3 + e3.getUint32(t3 + 4, i3);
-                if (o3 + 2 > n3) return;
-                var a2 = e3.getUint16(o3, i3);
-                return { ifdEntries: a2, isValid: o3 + (2 + 12 * a2 + 4) <= n3 && a2 > 0 };
-              } catch (e4) {
-                return;
               }
-            })(e2, r2, t2 + Pe + n2);
-            if (!i2) return 0;
-            var o2 = Number.isInteger(i2.ifdEntries) ? i2.ifdEntries : 0;
-            return (i2.isValid ? 1e9 : 0) + 1e6 * o2 + n2;
-          }
-          var gt = "\x89PNG\r\n\n", mt = 4, ht = 4, vt = 0, yt = mt, bt = mt + ht, St = "XML:com.adobe.xmp\0", It = "tEXt", At = "iTXt", Pt = "zTXt", xt = "pHYs", Ct = "tIME", Tt = "eXIf", Ut = "iCCP";
-          function Et(e2, t2) {
-            return "IHDR" === a(e2, t2 + yt, ht);
-          }
-          function wt(e2, t2) {
-            return a(e2, t2 + yt, ht) === At && a(e2, t2 + bt, St.length) === St;
-          }
-          function Ot(e2, t2, n2) {
-            var r2 = a(e2, t2 + yt, ht);
-            return r2 === It || r2 === At || r2 === Pt && n2;
-          }
-          function Ft(e2, t2) {
-            return a(e2, t2 + yt, ht) === Tt;
-          }
-          function Rt(e2, t2) {
-            return a(e2, t2 + yt, ht) === Ut;
-          }
-          function Lt(e2, t2) {
-            var n2 = [xt, Ct], r2 = a(e2, t2 + yt, ht);
-            return n2.includes(r2);
-          }
-          function Mt(e2, t2) {
-            t2 += bt + St.length + 1 + 1;
-            for (var n2 = 0; n2 < 2 && t2 < e2.byteLength; ) 0 === e2.getUint8(t2) && n2++, t2++;
-            if (!(n2 < 2)) return t2;
-          }
-          function Nt(e2, t2) {
-            var n2 = u(e2, t2);
-            if (!((t2 += n2.length + 1) + 1 > e2.byteLength)) return { profileName: n2, compressionMethod: e2.getUint8(t2), compressedProfileOffset: t2 += 1 };
-          }
-          var kt = [0, 0, 0, 12, 74, 88, 76, 32, 13, 10, 135, 10], Dt = [255, 10], Gt = 4, _t = 8, Bt = 1165519206, jt = 2020437024, zt = 1651666786, Vt = 1786276963, Xt = 1786276976, Ht = 4, Wt = 4;
-          function Kt(e2) {
-            return !e2 || e2.byteLength < Dt.length ? 0 : e2.getUint8(0) === Dt[0] && e2.getUint8(1) === Dt[1];
-          }
-          var Jt = 6, qt = ["GIF87a", "GIF89a"], Yt = 13, $t = 0, Zt = "<?xpacket begin", Qt = ["<?xpacket end=", "</x:xmpmeta>"], en = { parseAppMarkers: function(e2, t2, n2) {
-            var r2 = n2 ? [] : void 0;
-            if (K.USE_TIFF && (function(e3) {
-              return !!e3 && e3.byteLength >= 4 && (function(e4) {
-                var t3 = e4.getUint16(0) === Q.LITTLE_ENDIAN;
-                return 42 === e4.getUint16(2, t3);
-              })(e3);
-            })(e2)) return tn(K.USE_EXIF ? { hasAppMarkers: 1, tiffHeaderOffset: 0 } : {}, "tiff", "TIFF", r2);
-            if (K.USE_JPEG && (function(e3) {
-              return !!e3 && e3.byteLength >= be && e3.getUint16(0) === Se;
-            })(e2)) return tn((function(e3, t3) {
-              for (var n3, r3, i2, o2, a2, u2, f2, s2, c2, l2, d2, p2, g2, m2 = Ie, h2 = 0, v2 = 0; m2 + Ae + 5 <= e3.byteLength; ) {
-                var y2 = void 0;
-                if (e3.getUint16(m2) === Be && (v2 = 1), K.USE_FILE && et(e3, m2)) n3 = e3.getUint16(m2 + Pe), r3 = m2 + Pe, y2 = "file";
-                else if (K.USE_FILE && tt(e3, m2)) n3 = e3.getUint16(m2 + Pe), i2 = m2 + Pe, y2 = "file";
-                else if (K.USE_JFIF && it(e3, m2)) n3 = e3.getUint16(m2 + Pe), o2 = m2 + xe, y2 = "jfif";
-                else if (K.USE_EXIF && ot(e3, m2)) {
-                  n3 = e3.getUint16(m2 + Pe), h2++;
-                  var b2 = m2 + Ce;
-                  if (1 === h2) d2 = b2, p2 = m2, g2 = n3;
-                  else if (2 === h2) {
-                    l2 = pt(e3, p2, g2, d2);
-                    var S2 = pt(e3, m2, n3, b2);
-                    S2 > l2 && (l2 = S2, d2 = b2, p2 = m2, g2 = n3);
-                  } else {
-                    var I2 = pt(e3, m2, n3, b2);
-                    I2 > l2 && (l2 = I2, d2 = b2, p2 = m2, g2 = n3);
-                  }
-                  a2 = d2, y2 = "exif";
-                } else if (K.USE_XMP && at(e3, m2)) f2 || (f2 = []), n3 = e3.getUint16(m2 + Pe), f2.push(ft(m2, n3)), y2 = "xmp";
-                else if (K.USE_XMP && ut(e3, m2)) f2 || (f2 = []), n3 = e3.getUint16(m2 + Pe), f2.push(st(m2, n3)), y2 = "xmp";
-                else if (K.USE_IPTC && ct(e3, m2)) n3 = e3.getUint16(m2 + Pe), u2 = m2 + Te, y2 = "iptc";
-                else if (K.USE_ICC && nt(e3, m2)) {
-                  n3 = e3.getUint16(m2 + Pe);
-                  var A2 = m2 + we, P2 = n3 - (we - Pe), x2 = e3.getUint8(m2 + Re), C2 = e3.getUint8(m2 + Le);
-                  s2 || (s2 = []), s2.push({ offset: A2, length: P2, chunkNumber: x2, chunksTotal: C2 }), y2 = "icc";
-                } else if (K.USE_MPF && rt(e3, m2)) n3 = e3.getUint16(m2 + Pe), c2 = m2 + Oe, y2 = "mpf";
-                else {
-                  if (!lt(e3, m2)) {
-                    if (dt(e3, m2)) {
-                      m2++;
-                      continue;
-                    }
-                    break;
-                  }
-                  n3 = e3.getUint16(m2 + Pe);
-                }
-                t3 && y2 && t3.push({ type: y2, start: m2, end: m2 + Pe + n3 }), m2 += Pe + n3;
+              const versionNumber = getBinaryNumber(value);
+              return versionNumber === null ? getStringValueFromArray(value) : String(versionNumber);
+            }
+          },
+          714: "ObjectData Preview Data",
+          1802: {
+            "name": "Size Mode",
+            "description": (value) => {
+              return value[0].toString();
+            }
+          },
+          1812: {
+            "name": "Max Subfile Size",
+            "description": (value) => {
+              let n = 0;
+              for (let i = 0; i < value.length; i++) {
+                n = (n << 8) + value[i];
               }
-              return h2 > 1 && (function(e4) {
-                "undefined" != typeof console && "function" == typeof console.warn && console.warn("ExifReader: Found ".concat(e4, " Exif segments (APP1). ") + "Will pick the best candidate segment.");
-              })(h2), t3 && (!v2 && m2 + Pe <= e3.byteLength && e3.getUint16(m2) === Be && (v2 = 1), t3.truncated = !v2), { hasAppMarkers: m2 > Ie, fileDataOffset: r3 || i2, jfifDataOffset: o2, tiffHeaderOffset: a2, iptcDataOffset: u2, xmpChunks: f2, iccChunks: s2, mpfDataOffset: c2 };
-            })(e2, r2), "jpeg", "JPEG", r2);
-            if (K.USE_PNG && (function(e3) {
-              return !!e3 && a(e3, 0, gt.length) === gt;
-            })(e2)) return tn((function(e3, t3, n3) {
-              for (var r3 = { hasAppMarkers: 0 }, i2 = gt.length, o2 = 0; i2 + mt + ht <= e3.byteLength; ) {
-                var u2 = void 0, f2 = e3.getUint32(i2 + vt);
-                if (n3 && "IEND" === a(e3, i2 + yt, ht) && (o2 = 1), K.USE_PNG_FILE && Et(e3, i2)) r3.hasAppMarkers = 1, r3.pngHeaderOffset = i2 + bt, u2 = "file";
-                else if (K.USE_XMP && wt(e3, i2)) {
-                  var s2 = Mt(e3, i2);
-                  void 0 !== s2 && (r3.hasAppMarkers = 1, r3.xmpChunks = [{ dataOffset: s2, length: f2 - (s2 - (i2 + bt)) }], u2 = "xmp");
-                } else if (Ot(e3, i2, t3)) {
-                  r3.hasAppMarkers = 1;
-                  var c2 = a(e3, i2 + yt, ht);
-                  r3.pngTextChunks || (r3.pngTextChunks = []), r3.pngTextChunks.push({ length: f2, type: c2, offset: i2 + bt }), u2 = "png";
-                } else if (Ft(e3, i2)) r3.hasAppMarkers = 1, r3.tiffHeaderOffset = i2 + bt, u2 = "exif";
-                else if (K.USE_ICC && t3 && Rt(e3, i2)) {
-                  var l2 = i2 + bt, d2 = Nt(e3, l2);
-                  void 0 !== d2 && (r3.hasAppMarkers = 1, r3.iccChunks || (r3.iccChunks = []), r3.iccChunks.push({ offset: d2.compressedProfileOffset, length: f2 - (d2.compressedProfileOffset - l2), chunkNumber: 1, chunksTotal: 1, profileName: d2.profileName, compressionMethod: d2.compressionMethod }), u2 = "icc");
-                } else Lt(e3, i2) && (r3.hasAppMarkers = 1, r3.pngChunkOffsets || (r3.pngChunkOffsets = []), r3.pngChunkOffsets.push(i2 + vt), u2 = "png");
-                var p2 = f2 + mt + ht + 4;
-                n3 && u2 && n3.push({ type: u2, start: i2, end: i2 + p2 }), i2 += p2;
+              return n.toString();
+            }
+          },
+          1882: {
+            "name": "ObjectData Size Announced",
+            "description": (value) => {
+              let n = 0;
+              for (let i = 0; i < value.length; i++) {
+                n = (n << 8) + value[i];
               }
-              return n3 && (n3.truncated = !o2), r3;
-            })(e2, t2, r2), "png", "PNG", r2);
-            if (K.USE_HEIC && (function(e3) {
-              if (!e3) return 0;
-              try {
-                var t3 = ue(e3, 0);
-                return void 0 !== t3 && -1 !== ["heic", "heix", "hevc", "hevx", "heim", "heis", "hevm", "hevs", "mif1"].indexOf(t3.majorBrand);
-              } catch (e4) {
-                return 0;
+              return n.toString();
+            }
+          },
+          1887: {
+            "name": "Maximum ObjectData Size",
+            "description": (value) => {
+              let n = 0;
+              for (let i = 0; i < value.length; i++) {
+                n = (n << 8) + value[i];
               }
-            })(e2)) return tn((function(e3, t3) {
-              return se(e3, t3);
-            })(e2, r2), "heic", "HEIC", r2);
-            if (K.USE_AVIF && (function(e3) {
-              if (!e3) return 0;
-              try {
-                var t3 = ue(e3, 0);
-                return void 0 !== t3 && "avif" === t3.majorBrand;
-              } catch (e4) {
-                return 0;
-              }
-            })(e2)) return tn((function(e3, t3) {
-              return se(e3, t3);
-            })(e2, r2), "avif", "AVIF", r2);
-            if (K.USE_JXL && (function(e3) {
-              try {
-                return (function(e4) {
-                  if (!e4 || e4.byteLength < kt.length) return 0;
-                  for (var t3 = 0; t3 < kt.length; t3++) if (e4.getUint8(t3) !== kt[t3]) return 0;
-                  return 1;
-                })(e3) || Kt(e3);
-              } catch (e4) {
-                return 0;
-              }
-            })(e2)) return tn((function(e3, t3) {
-              var n3, r3, i2, o2, a2, u2 = 0;
-              if (Kt(e3)) return { hasAppMarkers: 1, tiffHeaderOffset: void 0, xmpChunks: void 0, brobExifChunk: void 0, brobXmpChunk: void 0, jxlCodestreamOffset: 0 };
-              for (; u2 + _t <= e3.byteLength; ) {
-                var f2 = fe(e3, u2), s2 = f2.length, c2 = f2.contentOffset;
-                if (s2 < _t) break;
-                var l2 = e3.getUint32(u2 + Gt), d2 = void 0;
-                if (K.USE_EXIF && l2 === Bt) {
-                  try {
-                    n3 = he(e3, c2);
-                  } catch (e4) {
-                  }
-                  d2 = "exif";
-                }
-                if (K.USE_XMP && l2 === jt && (r3 = [{ dataOffset: c2, length: s2 - (c2 - u2) }], d2 = "xmp"), l2 === Vt && void 0 === a2 && (a2 = c2), l2 === Xt && void 0 === a2 && c2 + Ht <= e3.byteLength && !(2147483647 & e3.getUint32(c2)) && (a2 = c2 + Ht), l2 === zt && c2 + Wt <= e3.byteLength) {
-                  var p2 = e3.getUint32(c2), g2 = c2 + Wt, m2 = s2 - (g2 - u2);
-                  K.USE_EXIF && p2 === Bt && (d2 = "exif", void 0 !== n3 || i2 || (i2 = { dataOffset: g2, length: m2 })), K.USE_XMP && p2 === jt && (d2 = "xmp", r3 || o2 || (o2 = { dataOffset: g2, length: m2 }));
-                }
-                t3 && d2 && t3.push({ type: d2, start: u2, end: u2 + s2 }), u2 += s2;
-              }
-              return { hasAppMarkers: void 0 !== n3 || void 0 !== r3 || void 0 !== i2 || void 0 !== o2 || void 0 !== a2, tiffHeaderOffset: n3, xmpChunks: r3, brobExifChunk: i2, brobXmpChunk: o2, jxlCodestreamOffset: a2 };
-            })(e2, r2), "jxl", "JPEG XL", r2);
-            if (K.USE_WEBP && (function(e3) {
-              return !!e3 && "RIFF" === a(e3, 0, 4) && "WEBP" === a(e3, 8, 4);
-            })(e2)) return tn((function(e3, t3) {
-              for (var n3, r3, i2, o2, u2 = 12, f2 = 0; u2 + 8 < e3.byteLength; ) {
-                var s2 = a(e3, u2, 4), c2 = e3.getUint32(u2 + 4, 1), l2 = void 0;
-                K.USE_EXIF && "EXIF" === s2 ? (f2 = 1, n3 = "Exif\0\0" === a(e3, u2 + 8, 6) ? u2 + 8 + 6 : u2 + 8, l2 = "exif") : K.USE_XMP && "XMP " === s2 ? (f2 = 1, r3 = [{ dataOffset: u2 + 8, length: c2 }], l2 = "xmp") : K.USE_ICC && "ICCP" === s2 ? (f2 = 1, i2 = [{ offset: u2 + 8, length: c2, chunkNumber: 1, chunksTotal: 1 }], l2 = "icc") : "VP8X" === s2 && (f2 = 1, o2 = u2 + 8, l2 = "riff");
-                var d2 = 8 + (c2 % 2 == 0 ? c2 : c2 + 1);
-                t3 && l2 && t3.push({ type: l2, start: u2, end: u2 + d2 }), u2 += d2;
-              }
-              return { hasAppMarkers: f2, tiffHeaderOffset: n3, xmpChunks: r3, iccChunks: i2, vp8xChunkOffset: o2 };
-            })(e2, r2), "webp", "WebP", r2);
-            if (K.USE_GIF && (function(e3) {
-              return !!e3 && qt.includes(a(e3, 0, Jt));
-            })(e2)) return tn((function(e3, t3) {
-              return t3 && t3.push({ type: "gif", start: 0, end: Yt }), { gifHeaderOffset: 0 };
-            })(0, r2), "gif", "GIF", r2);
-            if (K.USE_XMP && (function(e3) {
-              return !!e3 && a(e3, $t, Zt.length) === Zt;
-            })(e2)) return tn((function(e3, t3) {
-              var n3 = [];
-              return n3.push({ dataOffset: $t, length: e3.byteLength }), t3 && (t3.push({ type: "xmp", start: 0, end: e3.byteLength }), t3.truncated = !(function(e4) {
-                for (var t4 = a(e4, 0, e4.byteLength), n4 = 0; n4 < Qt.length; n4++) if (-1 !== t4.indexOf(Qt[n4])) return 1;
-                return 0;
-              })(e3)), { xmpChunks: n3 };
-            })(e2, r2), "xml", "XML", r2);
-            throw Error("Invalid image format");
-          } };
-          function tn(e2, t2, n2, r2) {
-            var i2 = l({}, e2, { fileType: { value: t2, description: n2 } });
-            return void 0 !== r2 && (i2.metadataBlocks = r2, i2.metadataTruncated = !!r2.truncated), i2;
-          }
-          var nn = { ApertureValue: function(e2) {
-            return Math.pow(Math.sqrt(2), e2[0] / e2[1]).toFixed(2);
-          }, ColorSpace: function(e2) {
-            return 1 === e2 ? "sRGB" : 65535 === e2 ? "Uncalibrated" : "Unknown";
-          }, ComponentsConfiguration: function(e2) {
-            return e2.map((function(e3) {
-              return 49 === e3 ? "Y" : 50 === e3 ? "Cb" : 51 === e3 ? "Cr" : 52 === e3 ? "R" : 53 === e3 ? "G" : 54 === e3 ? "B" : void 0;
-            })).join("");
-          }, Contrast: function(e2) {
-            return 0 === e2 ? "Normal" : 1 === e2 ? "Soft" : 2 === e2 ? "Hard" : "Unknown";
-          }, CustomRendered: function(e2) {
-            return 0 === e2 ? "Normal process" : 1 === e2 ? "Custom process" : "Unknown";
-          }, ExposureMode: function(e2) {
-            return 0 === e2 ? "Auto exposure" : 1 === e2 ? "Manual exposure" : 2 === e2 ? "Auto bracket" : "Unknown";
-          }, ExposureProgram: function(e2) {
-            return 0 === e2 ? "Undefined" : 1 === e2 ? "Manual" : 2 === e2 ? "Normal program" : 3 === e2 ? "Aperture priority" : 4 === e2 ? "Shutter priority" : 5 === e2 ? "Creative program" : 6 === e2 ? "Action program" : 7 === e2 ? "Portrait mode" : 8 === e2 ? "Landscape mode" : 9 === e2 ? "Bulb" : "Unknown";
-          }, ExposureTime: function(e2) {
-            if (e2[0] / e2[1] > 0.25) {
-              var t2 = e2[0] / e2[1];
-              return Number.isInteger(t2) ? "" + t2 : t2.toFixed(1);
-            }
-            return 0 !== e2[0] ? "1/".concat(Math.round(e2[1] / e2[0])) : "0/".concat(e2[1]);
-          }, FNumber: function(e2) {
-            return "f/".concat(Number(e2[0] / e2[1]).toFixed(1));
-          }, FocalLength: function(e2) {
-            return e2[0] / e2[1] + " mm";
-          }, FocalPlaneResolutionUnit: function(e2) {
-            return 2 === e2 ? "inches" : 3 === e2 ? "centimeters" : 4 === e2 ? "millimeters" : "Unknown";
-          }, LightSource: function(e2) {
-            return 1 === e2 ? "Daylight" : 2 === e2 ? "Fluorescent" : 3 === e2 ? "Tungsten (incandescent light)" : 4 === e2 ? "Flash" : 9 === e2 ? "Fine weather" : 10 === e2 ? "Cloudy weather" : 11 === e2 ? "Shade" : 12 === e2 ? "Daylight fluorescent (D 5700 \u2013 7100K)" : 13 === e2 ? "Day white fluorescent (N 4600 \u2013 5400K)" : 14 === e2 ? "Cool white fluorescent (W 3900 \u2013 4500K)" : 15 === e2 ? "White fluorescent (WW 3200 \u2013 3700K)" : 17 === e2 ? "Standard light A" : 18 === e2 ? "Standard light B" : 19 === e2 ? "Standard light C" : 20 === e2 ? "D55" : 21 === e2 ? "D65" : 22 === e2 ? "D75" : 23 === e2 ? "D50" : 24 === e2 ? "ISO studio tungsten" : 255 === e2 ? "Other light source" : "Unknown";
-          }, MeteringMode: function(e2) {
-            return 1 === e2 ? "Average" : 2 === e2 ? "CenterWeightedAverage" : 3 === e2 ? "Spot" : 4 === e2 ? "MultiSpot" : 5 === e2 ? "Pattern" : 6 === e2 ? "Partial" : 255 === e2 ? "Other" : "Unknown";
-          }, ResolutionUnit: function(e2) {
-            return 2 === e2 ? "inches" : 3 === e2 ? "centimeters" : "Unknown";
-          }, Saturation: function(e2) {
-            return 0 === e2 ? "Normal" : 1 === e2 ? "Low saturation" : 2 === e2 ? "High saturation" : "Unknown";
-          }, FocalLengthIn35mmFilm: function(e2) {
-            return 0 === e2 ? "Unknown" : e2 + " mm";
-          }, SceneCaptureType: function(e2) {
-            return 0 === e2 ? "Standard" : 1 === e2 ? "Landscape" : 2 === e2 ? "Portrait" : 3 === e2 ? "Night scene" : "Unknown";
-          }, Sharpness: function(e2) {
-            return 0 === e2 ? "Normal" : 1 === e2 ? "Soft" : 2 === e2 ? "Hard" : "Unknown";
-          }, ShutterSpeedValue: function(e2) {
-            var t2 = Math.pow(2, e2[0] / e2[1]);
-            return t2 <= 1 ? "".concat(Math.round(1 / t2)) : "1/".concat(Math.round(t2));
-          }, WhiteBalance: function(e2) {
-            return 0 === e2 ? "Auto white balance" : 1 === e2 ? "Manual white balance" : "Unknown";
-          }, XResolution: function(e2) {
-            return "" + Math.round(e2[0] / e2[1]);
-          }, YResolution: function(e2) {
-            return "" + Math.round(e2[0] / e2[1]);
-          } }, rn = { 11: "ProcessingSoftware", 254: { name: "SubfileType", description: function(e2) {
-            return { 0: "Full-resolution image", 1: "Reduced-resolution image", 2: "Single page of multi-page image", 3: "Single page of multi-page reduced-resolution image", 4: "Transparency mask", 5: "Transparency mask of reduced-resolution image", 6: "Transparency mask of multi-page image", 7: "Transparency mask of reduced-resolution multi-page image", 65537: "Alternate reduced-resolution image", 4294967295: "Invalid" }[e2] || "Unknown";
-          } }, 255: { name: "OldSubfileType", description: function(e2) {
-            return { 0: "Full-resolution image", 1: "Reduced-resolution image", 2: "Single page of multi-page image" }[e2] || "Unknown";
-          } }, 256: "ImageWidth", 257: "ImageLength", 258: "BitsPerSample", 259: "Compression", 262: "PhotometricInterpretation", 263: { name: "Thresholding", description: function(e2) {
-            return { 1: "No dithering or halftoning", 2: "Ordered dither or halfton", 3: "Randomized dither" }[e2] || "Unknown";
-          } }, 264: "CellWidth", 265: "CellLength", 266: { name: "FillOrder", description: function(e2) {
-            return { 1: "Normal", 2: "Reversed" }[e2] || "Unknown";
-          } }, 269: "DocumentName", 270: "ImageDescription", 271: "Make", 272: "Model", 273: "StripOffsets", 274: { name: "Orientation", description: function(e2) {
-            return 1 === e2 ? "top-left" : 2 === e2 ? "top-right" : 3 === e2 ? "bottom-right" : 4 === e2 ? "bottom-left" : 5 === e2 ? "left-top" : 6 === e2 ? "right-top" : 7 === e2 ? "right-bottom" : 8 === e2 ? "left-bottom" : "Undefined";
-          } }, 277: "SamplesPerPixel", 278: "RowsPerStrip", 279: "StripByteCounts", 280: "MinSampleValue", 281: "MaxSampleValue", 282: { name: "XResolution", description: nn.XResolution }, 283: { name: "YResolution", description: nn.YResolution }, 284: "PlanarConfiguration", 285: "PageName", 286: { name: "XPosition", description: function(e2) {
-            return "" + Math.round(e2[0] / e2[1]);
-          } }, 287: { name: "YPosition", description: function(e2) {
-            return "" + Math.round(e2[0] / e2[1]);
-          } }, 290: { name: "GrayResponseUnit", description: function(e2) {
-            return { 1: "0.1", 2: "0.001", 3: "0.0001", 4: "1e-05", 5: "1e-06" }[e2] || "Unknown";
-          } }, 296: { name: "ResolutionUnit", description: nn.ResolutionUnit }, 297: "PageNumber", 301: "TransferFunction", 305: "Software", 306: "DateTime", 315: "Artist", 316: "HostComputer", 317: "Predictor", 318: { name: "WhitePoint", description: function(e2) {
-            return e2.map((function(e3) {
-              return "".concat(e3[0], "/").concat(e3[1]);
-            })).join(", ");
-          } }, 319: { name: "PrimaryChromaticities", description: function(e2) {
-            return e2.map((function(e3) {
-              return "".concat(e3[0], "/").concat(e3[1]);
-            })).join(", ");
-          } }, 321: "HalftoneHints", 322: "TileWidth", 323: "TileLength", 330: "A100DataOffset", 332: { name: "InkSet", description: function(e2) {
-            return { 1: "CMYK", 2: "Not CMYK" }[e2] || "Unknown";
-          } }, 337: "TargetPrinter", 338: { name: "ExtraSamples", description: function(e2) {
-            return { 0: "Unspecified", 1: "Associated Alpha", 2: "Unassociated Alpha" }[e2] || "Unknown";
-          } }, 339: { name: "SampleFormat", description: function(e2) {
-            var t2 = { 1: "Unsigned", 2: "Signed", 3: "Float", 4: "Undefined", 5: "Complex int", 6: "Complex float" };
-            return Array.isArray(e2) ? e2.map((function(e3) {
-              return t2[e3] || "Unknown";
-            })).join(", ") : "Unknown";
-          } }, 513: "JPEGInterchangeFormat", 514: "JPEGInterchangeFormatLength", 529: { name: "YCbCrCoefficients", description: function(e2) {
-            return e2.map((function(e3) {
-              return "" + e3[0] / e3[1];
-            })).join("/");
-          } }, 530: "YCbCrSubSampling", 531: { name: "YCbCrPositioning", description: function(e2) {
-            return 1 === e2 ? "centered" : 2 === e2 ? "co-sited" : "undefined " + e2;
-          } }, 532: { name: "ReferenceBlackWhite", description: function(e2) {
-            return e2.map((function(e3) {
-              return "" + e3[0] / e3[1];
-            })).join(", ");
-          } }, 700: "ApplicationNotes", 18246: "Rating", 18249: "RatingPercent", 33432: { name: "Copyright", description: function(e2) {
-            return e2.join("; ");
-          } }, 33550: "PixelScale", 33723: "IPTC-NAA", 33920: "IntergraphMatrix", 33922: "ModelTiePoint", 34118: "SEMInfo", 34264: "ModelTransform", 34377: "PhotoshopSettings", 34665: "Exif IFD Pointer", 34675: "ICC_Profile", 34735: "GeoTiffDirectory", 34736: "GeoTiffDoubleParams", 34737: "GeoTiffAsciiParams", 34853: "GPS Info IFD Pointer", 40091: { name: "XPTitle", description: on }, 40092: { name: "XPComment", description: on }, 40093: { name: "XPAuthor", description: on }, 40094: { name: "XPKeywords", description: on }, 40095: { name: "XPSubject", description: on }, 42112: "GDALMetadata", 42113: "GDALNoData", 50341: "PrintIM", 50707: "DNGBackwardVersion", 50708: "UniqueCameraModel", 50709: "LocalizedCameraModel", 50721: "ColorMatrix1", 50722: "ColorMatrix2", 50723: "CameraCalibration1", 50724: "CameraCalibration2", 50725: "ReductionMatrix1", 50726: "ReductionMatrix2", 50727: "AnalogBalance", 50728: "AsShotNeutral", 50729: "AsShotWhiteXY", 50730: "BaselineExposure", 50731: "BaselineNoise", 50732: "BaselineSharpness", 50734: "LinearResponseLimit", 50735: "CameraSerialNumber", 50736: "DNGLensInfo", 50739: "ShadowScale", 50741: { name: "MakerNoteSafety", description: function(e2) {
-            return { 0: "Unsafe", 1: "Safe" }[e2] || "Unknown";
-          } }, 50778: { name: "CalibrationIlluminant1", description: nn.LightSource }, 50779: { name: "CalibrationIlluminant2", description: nn.LightSource }, 50781: "RawDataUniqueID", 50827: "OriginalRawFileName", 50828: "OriginalRawFileData", 50831: "AsShotICCProfile", 50832: "AsShotPreProfileMatrix", 50833: "CurrentICCProfile", 50834: "CurrentPreProfileMatrix", 50879: "ColorimetricReference", 50885: "SRawType", 50898: "PanasonicTitle", 50899: "PanasonicTitle2", 50931: "CameraCalibrationSig", 50932: "ProfileCalibrationSig", 50933: "ProfileIFD", 50934: "AsShotProfileName", 50936: "ProfileName", 50937: "ProfileHueSatMapDims", 50938: "ProfileHueSatMapData1", 50939: "ProfileHueSatMapData2", 50940: "ProfileToneCurve", 50941: { name: "ProfileEmbedPolicy", description: function(e2) {
-            return { 0: "Allow Copying", 1: "Embed if Used", 2: "Never Embed", 3: "No Restrictions" }[e2] || "Unknown";
-          } }, 50942: "ProfileCopyright", 50964: "ForwardMatrix1", 50965: "ForwardMatrix2", 50966: "PreviewApplicationName", 50967: "PreviewApplicationVersion", 50968: "PreviewSettingsName", 50969: "PreviewSettingsDigest", 50970: { name: "PreviewColorSpace", description: function(e2) {
-            return { 1: "Gray Gamma 2.2", 2: "sRGB", 3: "Adobe RGB", 4: "ProPhoto RGB" }[e2] || "Unknown";
-          } }, 50971: "PreviewDateTime", 50972: "RawImageDigest", 50973: "OriginalRawFileDigest", 50981: "ProfileLookTableDims", 50982: "ProfileLookTableData", 51043: "TimeCodes", 51044: "FrameRate", 51058: "TStop", 51081: "ReelName", 51089: "OriginalDefaultFinalSize", 51090: "OriginalBestQualitySize", 51091: "OriginalDefaultCropSize", 51105: "CameraLabel", 51107: { name: "ProfileHueSatMapEncoding", description: function(e2) {
-            return { 0: "Linear", 1: "sRGB" }[e2] || "Unknown";
-          } }, 51108: { name: "ProfileLookTableEncoding", description: function(e2) {
-            return { 0: "Linear", 1: "sRGB" }[e2] || "Unknown";
-          } }, 51109: "BaselineExposureOffset", 51110: { name: "DefaultBlackRender", description: function(e2) {
-            return { 0: "Auto", 1: "None" }[e2] || "Unknown";
-          } }, 51111: "NewRawImageDigest", 51112: "RawToPreviewGain" };
-          function on(e2) {
-            return new TextDecoder("utf-16").decode(new Uint8Array(e2)).replace(/\u0000+$/, "");
-          }
-          function an(e2, t2) {
-            (null == t2 || t2 > e2.length) && (t2 = e2.length);
-            for (var n2 = 0, r2 = Array(t2); n2 < t2; n2++) r2[n2] = e2[n2];
-            return r2;
-          }
-          function un(e2, t2) {
-            (null == t2 || t2 > e2.length) && (t2 = e2.length);
-            for (var n2 = 0, r2 = Array(t2); n2 < t2; n2++) r2[n2] = e2[n2];
-            return r2;
-          }
-          var fn = { 0: { name: "GPSVersionID", description: function(e2) {
-            return 2 === e2[0] && 2 === e2[1] && 0 === e2[2] && 0 === e2[3] ? "Version 2.2" : "Unknown";
-          } }, 1: { name: "GPSLatitudeRef", description: function(e2) {
-            var t2 = e2.join("");
-            return "N" === t2 ? "North latitude" : "S" === t2 ? "South latitude" : "Unknown";
-          } }, 2: { name: "GPSLatitude", description: Y }, 3: { name: "GPSLongitudeRef", description: function(e2) {
-            var t2 = e2.join("");
-            return "E" === t2 ? "East longitude" : "W" === t2 ? "West longitude" : "Unknown";
-          } }, 4: { name: "GPSLongitude", description: Y }, 5: { name: "GPSAltitudeRef", description: function(e2) {
-            return 0 === e2 ? "Sea level" : 1 === e2 ? "Sea level reference (negative value)" : "Unknown";
-          } }, 6: { name: "GPSAltitude", description: function(e2) {
-            return e2[0] / e2[1] + " m";
-          } }, 7: { name: "GPSTimeStamp", description: function(e2) {
-            return e2.map((function(e3) {
-              var t2, n2 = (function(e4) {
-                if (Array.isArray(e4)) return e4;
-              })(t2 = e3) || (function(e4) {
-                var t3 = null == e4 ? null : "undefined" != typeof Symbol && e4[Symbol.iterator] || e4["@@iterator"];
-                if (null != t3) {
-                  var n3, r3, i2, o2, a2 = [], u2 = 1, f2 = 0;
-                  try {
-                    for (i2 = (t3 = t3.call(e4)).next, false; !(u2 = (n3 = i2.call(t3)).done) && (a2.push(n3.value), 2 !== a2.length); u2 = 1) ;
-                  } catch (e5) {
-                    f2 = 1, r3 = e5;
-                  } finally {
-                    try {
-                      if (!u2 && null != t3.return && (o2 = t3.return(), Object(o2) !== o2)) return;
-                    } finally {
-                      if (f2) throw r3;
-                    }
-                  }
-                  return a2;
-                }
-              })(t2) || (function(e4) {
-                if (e4) {
-                  if ("string" == typeof e4) return un(e4, 2);
-                  var t3 = {}.toString.call(e4).slice(8, -1);
-                  return "Object" === t3 && e4.constructor && (t3 = e4.constructor.name), "Map" === t3 || "Set" === t3 ? Array.from(e4) : "Arguments" === t3 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t3) ? un(e4, 2) : void 0;
-                }
-              })(t2) || (function() {
-                throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-              })(), r2 = n2[0] / n2[1];
-              return /^\d(\.|$)/.test("".concat(r2)) ? "0".concat(r2) : r2;
-            })).join(":");
-          } }, 8: "GPSSatellites", 9: { name: "GPSStatus", description: function(e2) {
-            var t2 = e2.join("");
-            return "A" === t2 ? "Measurement in progress" : "V" === t2 ? "Measurement Interoperability" : "Unknown";
-          } }, 10: { name: "GPSMeasureMode", description: function(e2) {
-            var t2 = e2.join("");
-            return "2" === t2 ? "2-dimensional measurement" : "3" === t2 ? "3-dimensional measurement" : "Unknown";
-          } }, 11: "GPSDOP", 12: { name: "GPSSpeedRef", description: function(e2) {
-            var t2 = e2.join("");
-            return "K" === t2 ? "Kilometers per hour" : "M" === t2 ? "Miles per hour" : "N" === t2 ? "Knots" : "Unknown";
-          } }, 13: "GPSSpeed", 14: { name: "GPSTrackRef", description: function(e2) {
-            var t2 = e2.join("");
-            return "T" === t2 ? "True direction" : "M" === t2 ? "Magnetic direction" : "Unknown";
-          } }, 15: "GPSTrack", 16: { name: "GPSImgDirectionRef", description: function(e2) {
-            var t2 = e2.join("");
-            return "T" === t2 ? "True direction" : "M" === t2 ? "Magnetic direction" : "Unknown";
-          } }, 17: "GPSImgDirection", 18: "GPSMapDatum", 19: { name: "GPSDestLatitudeRef", description: function(e2) {
-            var t2 = e2.join("");
-            return "N" === t2 ? "North latitude" : "S" === t2 ? "South latitude" : "Unknown";
-          } }, 20: { name: "GPSDestLatitude", description: function(e2) {
-            return e2[0][0] / e2[0][1] + e2[1][0] / e2[1][1] / 60 + e2[2][0] / e2[2][1] / 3600;
-          } }, 21: { name: "GPSDestLongitudeRef", description: function(e2) {
-            var t2 = e2.join("");
-            return "E" === t2 ? "East longitude" : "W" === t2 ? "West longitude" : "Unknown";
-          } }, 22: { name: "GPSDestLongitude", description: function(e2) {
-            return e2[0][0] / e2[0][1] + e2[1][0] / e2[1][1] / 60 + e2[2][0] / e2[2][1] / 3600;
-          } }, 23: { name: "GPSDestBearingRef", description: function(e2) {
-            var t2 = e2.join("");
-            return "T" === t2 ? "True direction" : "M" === t2 ? "Magnetic direction" : "Unknown";
-          } }, 24: "GPSDestBearing", 25: { name: "GPSDestDistanceRef", description: function(e2) {
-            var t2 = e2.join("");
-            return "K" === t2 ? "Kilometers" : "M" === t2 ? "Miles" : "N" === t2 ? "Knots" : "Unknown";
-          } }, 26: "GPSDestDistance", 27: { name: "GPSProcessingMethod", description: q }, 28: { name: "GPSAreaInformation", description: q }, 29: "GPSDateStamp", 30: { name: "GPSDifferential", description: function(e2) {
-            return 0 === e2 ? "Measurement without differential correction" : 1 === e2 ? "Differential correction applied" : "Unknown";
-          } }, 31: "GPSHPositioningError" }, sn = { 1: "InteroperabilityIndex", 2: { name: "InteroperabilityVersion", description: function(e2) {
-            return J(e2);
-          } }, 4096: "RelatedImageFileFormat", 4097: "RelatedImageWidth", 4098: "RelatedImageHeight" }, cn = { 45056: { name: "MPFVersion", description: function(e2) {
-            return J(e2);
-          } }, 45057: "NumberOfImages", 45058: "MPEntry", 45059: "ImageUIDList", 45060: "TotalFrames" };
-          function ln(e2) {
-            return ln = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e3) {
-              return typeof e3;
-            } : function(e3) {
-              return e3 && "function" == typeof Symbol && e3.constructor === Symbol && e3 !== Symbol.prototype ? "symbol" : typeof e3;
-            }, ln(e2);
-          }
-          function dn(e2, t2, n2) {
-            return (t2 = (function(e3) {
-              var t3 = (function(e4) {
-                if ("object" != ln(e4) || !e4) return e4;
-                var t4 = e4[Symbol.toPrimitive];
-                if (void 0 !== t4) {
-                  var n3 = t4.call(e4, "string");
-                  if ("object" != ln(n3)) return n3;
-                  throw new TypeError("@@toPrimitive must return a primitive value.");
-                }
-                return e4 + "";
-              })(e3);
-              return "symbol" == ln(t3) ? t3 : t3 + "";
-            })(t2)) in e2 ? Object.defineProperty(e2, t2, { value: n2, enumerable: 1, configurable: 1, writable: 1 }) : e2[t2] = n2, e2;
-          }
-          var pn = l({}, rn, { 33434: { name: "ExposureTime", description: nn.ExposureTime }, 33437: { name: "FNumber", description: nn.FNumber }, 34850: { name: "ExposureProgram", description: nn.ExposureProgram }, 34852: "SpectralSensitivity", 34855: "ISOSpeedRatings", 34856: { name: "OECF", description: function() {
-            return "[Raw OECF table data]";
-          } }, 34858: "TimeZoneOffset", 34859: "SelfTimerMode", 34864: { name: "SensitivityType", description: function(e2) {
-            return { 1: "Standard Output Sensitivity", 2: "Recommended Exposure Index", 3: "ISO Speed", 4: "Standard Output Sensitivity and Recommended Exposure Index", 5: "Standard Output Sensitivity and ISO Speed", 6: "Recommended Exposure Index and ISO Speed", 7: "Standard Output Sensitivity, Recommended Exposure Index and ISO Speed" }[e2] || "Unknown";
-          } }, 34865: "StandardOutputSensitivity", 34866: "RecommendedExposureIndex", 34867: "ISOSpeed", 34868: "ISOSpeedLatitudeyyy", 34869: "ISOSpeedLatitudezzz", 36864: { name: "ExifVersion", description: function(e2) {
-            return J(e2);
-          } }, 36867: "DateTimeOriginal", 36868: "DateTimeDigitized", 36873: "GooglePlusUploadCode", 36880: "OffsetTime", 36881: "OffsetTimeOriginal", 36882: "OffsetTimeDigitized", 37121: { name: "ComponentsConfiguration", description: nn.ComponentsConfiguration }, 37122: "CompressedBitsPerPixel", 37377: { name: "ShutterSpeedValue", description: nn.ShutterSpeedValue }, 37378: { name: "ApertureValue", description: nn.ApertureValue }, 37379: "BrightnessValue", 37380: "ExposureBiasValue", 37381: { name: "MaxApertureValue", description: function(e2) {
-            return Math.pow(Math.sqrt(2), e2[0] / e2[1]).toFixed(2);
-          } }, 37382: { name: "SubjectDistance", description: function(e2) {
-            return e2[0] / e2[1] + " m";
-          } }, 37383: { name: "MeteringMode", description: nn.MeteringMode }, 37384: { name: "LightSource", description: nn.LightSource }, 37385: { name: "Flash", description: function(e2) {
-            return 0 === e2 ? "Flash did not fire" : 1 === e2 ? "Flash fired" : 5 === e2 ? "Strobe return light not detected" : 7 === e2 ? "Strobe return light detected" : 9 === e2 ? "Flash fired, compulsory flash mode" : 13 === e2 ? "Flash fired, compulsory flash mode, return light not detected" : 15 === e2 ? "Flash fired, compulsory flash mode, return light detected" : 16 === e2 ? "Flash did not fire, compulsory flash mode" : 24 === e2 ? "Flash did not fire, auto mode" : 25 === e2 ? "Flash fired, auto mode" : 29 === e2 ? "Flash fired, auto mode, return light not detected" : 31 === e2 ? "Flash fired, auto mode, return light detected" : 32 === e2 ? "No flash function" : 65 === e2 ? "Flash fired, red-eye reduction mode" : 69 === e2 ? "Flash fired, red-eye reduction mode, return light not detected" : 71 === e2 ? "Flash fired, red-eye reduction mode, return light detected" : 73 === e2 ? "Flash fired, compulsory flash mode, red-eye reduction mode" : 77 === e2 ? "Flash fired, compulsory flash mode, red-eye reduction mode, return light not detected" : 79 === e2 ? "Flash fired, compulsory flash mode, red-eye reduction mode, return light detected" : 89 === e2 ? "Flash fired, auto mode, red-eye reduction mode" : 93 === e2 ? "Flash fired, auto mode, return light not detected, red-eye reduction mode" : 95 === e2 ? "Flash fired, auto mode, return light detected, red-eye reduction mode" : "Unknown";
-          } }, 37386: { name: "FocalLength", description: nn.FocalLength }, 37393: "ImageNumber", 37394: { name: "SecurityClassification", description: function(e2) {
-            return { C: "Confidential", R: "Restricted", S: "Secret", T: "Top Secret", U: "Unclassified" }[e2] || "Unknown";
-          } }, 37395: "ImageHistory", 37396: { name: "SubjectArea", description: function(e2) {
-            return 2 === e2.length ? "Location; X: ".concat(e2[0], ", Y: ").concat(e2[1]) : 3 === e2.length ? "Circle; X: ".concat(e2[0], ", Y: ").concat(e2[1], ", diameter: ").concat(e2[2]) : 4 === e2.length ? "Rectangle; X: ".concat(e2[0], ", Y: ").concat(e2[1], ", width: ").concat(e2[2], ", height: ").concat(e2[3]) : "Unknown";
-          } }, 37500: { name: "MakerNote", description: function() {
-            return "[Raw maker note data]";
-          } }, 37510: { name: "UserComment", description: q }, 37520: "SubSecTime", 37521: "SubSecTimeOriginal", 37522: "SubSecTimeDigitized", 37724: "ImageSourceData", 37888: { name: "AmbientTemperature", description: function(e2) {
-            return e2[0] / e2[1] + " \xB0C";
-          } }, 37889: { name: "Humidity", description: function(e2) {
-            return e2[0] / e2[1] + " %";
-          } }, 37890: { name: "Pressure", description: function(e2) {
-            return e2[0] / e2[1] + " hPa";
-          } }, 37891: { name: "WaterDepth", description: function(e2) {
-            return e2[0] / e2[1] + " m";
-          } }, 37892: { name: "Acceleration", description: function(e2) {
-            return e2[0] / e2[1] + " mGal";
-          } }, 37893: { name: "CameraElevationAngle", description: function(e2) {
-            return e2[0] / e2[1] + " \xB0";
-          } }, 40960: { name: "FlashpixVersion", description: function(e2) {
-            return e2.map((function(e3) {
-              return String.fromCharCode(e3);
-            })).join("");
-          } }, 40961: { name: "ColorSpace", description: nn.ColorSpace }, 40962: "PixelXDimension", 40963: "PixelYDimension", 40964: "RelatedSoundFile", 40965: "Interoperability IFD Pointer", 41483: "FlashEnergy", 41484: { name: "SpatialFrequencyResponse", description: function() {
-            return "[Raw SFR table data]";
-          } }, 41486: "FocalPlaneXResolution", 41487: "FocalPlaneYResolution", 41488: { name: "FocalPlaneResolutionUnit", description: nn.FocalPlaneResolutionUnit }, 41492: { name: "SubjectLocation", description: function(e2) {
-            var t2, n2 = (function(e3) {
-              if (Array.isArray(e3)) return e3;
-            })(t2 = e2) || (function(e3) {
-              var t3 = null == e3 ? null : "undefined" != typeof Symbol && e3[Symbol.iterator] || e3["@@iterator"];
-              if (null != t3) {
-                var n3, r3, i3, o2, a2 = [], u2 = 1, f2 = 0;
-                try {
-                  for (i3 = (t3 = t3.call(e3)).next, false; !(u2 = (n3 = i3.call(t3)).done) && (a2.push(n3.value), 2 !== a2.length); u2 = 1) ;
-                } catch (e4) {
-                  f2 = 1, r3 = e4;
-                } finally {
-                  try {
-                    if (!u2 && null != t3.return && (o2 = t3.return(), Object(o2) !== o2)) return;
-                  } finally {
-                    if (f2) throw r3;
-                  }
-                }
-                return a2;
-              }
-            })(t2) || (function(e3) {
-              if (e3) {
-                if ("string" == typeof e3) return an(e3, 2);
-                var t3 = {}.toString.call(e3).slice(8, -1);
-                return "Object" === t3 && e3.constructor && (t3 = e3.constructor.name), "Map" === t3 || "Set" === t3 ? Array.from(e3) : "Arguments" === t3 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t3) ? an(e3, 2) : void 0;
-              }
-            })(t2) || (function() {
-              throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-            })(), r2 = n2[0], i2 = n2[1];
-            return "X: ".concat(r2, ", Y: ").concat(i2);
-          } }, 41493: "ExposureIndex", 41495: { name: "SensingMethod", description: function(e2) {
-            return 1 === e2 ? "Undefined" : 2 === e2 ? "One-chip color area sensor" : 3 === e2 ? "Two-chip color area sensor" : 4 === e2 ? "Three-chip color area sensor" : 5 === e2 ? "Color sequential area sensor" : 7 === e2 ? "Trilinear sensor" : 8 === e2 ? "Color sequential linear sensor" : "Unknown";
-          } }, 41728: { name: "FileSource", description: function(e2) {
-            return 3 === e2 ? "DSC" : "Unknown";
-          } }, 41729: { name: "SceneType", description: function(e2) {
-            return 1 === e2 ? "A directly photographed image" : "Unknown";
-          } }, 41730: { name: "CFAPattern", description: function() {
-            return "[Raw CFA pattern table data]";
-          } }, 41985: { name: "CustomRendered", description: nn.CustomRendered }, 41986: { name: "ExposureMode", description: nn.ExposureMode }, 41987: { name: "WhiteBalance", description: nn.WhiteBalance }, 41988: { name: "DigitalZoomRatio", description: function(e2) {
-            return 0 === e2[0] ? "Digital zoom was not used" : "" + e2[0] / e2[1];
-          } }, 41989: { name: "FocalLengthIn35mmFilm", description: nn.FocalLengthIn35mmFilm }, 41990: { name: "SceneCaptureType", description: nn.SceneCaptureType }, 41991: { name: "GainControl", description: function(e2) {
-            return 0 === e2 ? "None" : 1 === e2 ? "Low gain up" : 2 === e2 ? "High gain up" : 3 === e2 ? "Low gain down" : 4 === e2 ? "High gain down" : "Unknown";
-          } }, 41992: { name: "Contrast", description: nn.Contrast }, 41993: { name: "Saturation", description: nn.Saturation }, 41994: { name: "Sharpness", description: nn.Sharpness }, 41995: { name: "DeviceSettingDescription", description: function() {
-            return "[Raw device settings table data]";
-          } }, 41996: { name: "SubjectDistanceRange", description: function(e2) {
-            return 1 === e2 ? "Macro" : 2 === e2 ? "Close view" : 3 === e2 ? "Distant view" : "Unknown";
-          } }, 42016: "ImageUniqueID", 42032: "CameraOwnerName", 42033: "BodySerialNumber", 42034: { name: "LensSpecification", description: function(e2) {
-            var t2 = parseFloat((e2[0][0] / e2[0][1]).toFixed(5)), n2 = parseFloat((e2[1][0] / e2[1][1]).toFixed(5)), r2 = "".concat(t2, "-").concat(n2, " mm");
-            if (0 === e2[3][1]) return "".concat(r2, " f/?");
-            var i2 = 1 / (e2[2][1] / e2[2][1] / (e2[3][0] / e2[3][1]));
-            return "".concat(r2, " f/").concat(parseFloat(i2.toFixed(5)));
-          } }, 42035: "LensMake", 42036: "LensModel", 42037: "LensSerialNumber", 42080: { name: "CompositeImage", description: function(e2) {
-            return { 1: "Not a Composite Image", 2: "General Composite Image", 3: "Composite Image Captured While Shooting" }[e2] || "Unknown";
-          } }, 42081: "SourceImageNumberOfCompositeImage", 42082: "SourceExposureTimesOfCompositeImage", 42240: "Gamma", 59932: "Padding", 59933: "OffsetSchema", 65e3: "OwnerName", 65001: "SerialNumber", 65002: "Lens", 65100: "RawFile", 65101: "Converter", 65102: "WhiteBalance", 65105: "Exposure", 65106: "Shadows", 65107: "Brightness", 65108: "Contrast", 65109: "Saturation", 65110: "Sharpness", 65111: "Smoothness", 65112: "MoireFilter" }), gn = "0th", mn = "exif", hn = "interoperability", vn = "canon", yn = "pentax", bn = dn(dn(dn(dn(dn(dn(dn(dn({}, gn, pn), "1st", rn), mn, pn), "gps", fn), hn, sn), "mpf", K.USE_MPF ? cn : {}), vn, K.USE_MAKER_NOTES ? { 1: { name: "CameraSettings", description: function(e2) {
-            return e2;
-          } }, 4: { name: "ShotInfo", description: function(e2) {
-            return e2;
-          } }, 149: "LensModel" } : {}), yn, K.USE_MAKER_NOTES ? { 0: { name: "PentaxVersion", description: function(e2) {
-            return e2.join(".");
-          } }, 5: "PentaxModelID", 555: "LevelInfo" } : {}), Sn = { 1: 1, 2: 1, 3: 2, 4: 4, 5: 8, 7: 1, 9: 4, 10: 8, 13: 4 }, In = { BYTE: 1, ASCII: 2, SHORT: 3, LONG: 4, RATIONAL: 5, UNDEFINED: 7, SLONG: 9, SRATIONAL: 10, IFD: 13 }, An = { getAsciiValue: function(e2) {
-            return e2.map((function(e3) {
-              return String.fromCharCode(e3);
-            }));
-          }, getByteAt: Pn, getAsciiAt: function(e2, t2) {
-            return e2.getUint8(t2);
-          }, getShortAt: function(e2, t2, n2) {
-            return e2.getUint16(t2, n2 === Q.LITTLE_ENDIAN);
-          }, getLongAt: xn, getRationalAt: function(e2, t2, n2) {
-            return [xn(e2, t2, n2), xn(e2, t2 + 4, n2)];
-          }, getUndefinedAt: function(e2, t2) {
-            return Pn(e2, t2);
-          }, getSlongAt: Cn, getSrationalAt: function(e2, t2, n2) {
-            return [Cn(e2, t2, n2), Cn(e2, t2 + 4, n2)];
-          }, getIfdPointerAt: function(e2, t2, n2) {
-            return xn(e2, t2, n2);
-          }, typeSizes: Sn, tagTypes: In, getTypeSize: function(e2) {
-            if (void 0 === In[e2]) throw Error("No such type found.");
-            return Sn[In[e2]];
-          } };
-          function Pn(e2, t2) {
-            return e2.getUint8(t2);
-          }
-          function xn(e2, t2, n2) {
-            return e2.getUint32(t2, n2 === Q.LITTLE_ENDIAN);
-          }
-          function Cn(e2, t2, n2) {
-            return e2.getInt32(t2, n2 === Q.LITTLE_ENDIAN);
-          }
-          var Tn = { exif: 1, iptc: 1, photoshop: 1, mpf: 1, makerNotes: 1 }, Un = { exif: 1, iptc: 1, xmp: 1, icc: 1, photoshop: 1, makerNotes: 1, mpf: 1, file: 1, jfif: 1, png: 1, riff: 1, gif: 1, gps: 1, composite: 1, thumbnail: 1 }, En = { exifIfdPointer: "Exif IFD Pointer", gpsInfoIfdPointer: "GPS Info IFD Pointer", interoperabilityIfdPointer: "Interoperability IFD Pointer" }, wn = { thumbnail: ["JPEGInterchangeFormat", "JPEGInterchangeFormatLength"], iptc: ["IPTC-NAA"], xmp: ["ApplicationNotes"], icc: ["ICC_Profile"], photoshop: ["ImageSourceData", "PhotoshopSettings"], makerNotes: ["MakerNote", "Make"], gps: ["GPSLatitude", "GPSLatitudeRef", "GPSLongitude", "GPSLongitudeRef", "GPSAltitude", "GPSAltitudeRef"] }, On = { file: ["Image Width", "Image Height"], exif: ["FocalLength", "FocalPlaneXResolution", "FocalPlaneYResolution", "FocalPlaneResolutionUnit", "FocalLengthIn35mmFilm"] };
-          function Fn(e2) {
-            return 1 == e2 ? 1 : Array.isArray(e2) && e2.length > 0;
-          }
-          function Rn() {
-            return { isActive: 0, shouldReturnGroup: e2, shouldParseGroup: e2, shouldReturnTag: e2, shouldParseTag: e2 };
-            function e2() {
-              return 1;
+              return n.toString();
             }
           }
-          var Ln = Rn();
-          function Mn(e2) {
-            var t2 = e2.groupKey, n2 = e2.hasIncludeTags, r2 = e2.hasIncludeEntry, i2 = e2.includeTags, o2 = e2.shouldParseExif, a2 = e2.shouldParseFile;
-            return n2 ? r2 ? "thumbnail" === t2 && Array.isArray(i2[t2]) ? 1 : i2[t2] : "exif" === t2 && o2 || "file" === t2 && a2 ? [] : void 0 : 1;
-          }
-          function Nn(e2) {
-            var t2 = e2.groupKey, n2 = e2.hasIncludeTags, r2 = e2.hasIncludeEntry, i2 = e2.shouldParseExif, o2 = e2.shouldParseFile, a2 = e2.exifIncludeDependencies, u2 = e2.fileIncludeDependencies;
-            return n2 ? "exif" === t2 && (i2 || r2 && Object.keys(a2).length > 0) ? a2 : "file" === t2 && o2 ? u2 : /* @__PURE__ */ Object.create(null) : /* @__PURE__ */ Object.create(null);
-          }
-          function kn(e2, t2) {
-            if (!e2 || !Object.prototype.hasOwnProperty.call(e2, t2)) return 0;
-            var n2 = e2[t2];
-            return 1 == n2 ? 1 : Array.isArray(n2) && n2.length > 0;
-          }
-          function Dn(e2) {
-            var t2, n2, r2 = e2.groupKey, i2 = e2.includeValue, o2 = e2.excludeValue, a2 = e2.extraIncludeNames, u2 = !!Tn[r2], f2 = { includeAll: 0, includeNames: void 0, includeIds: void 0, excludeAll: 0, excludeNames: void 0, excludeIds: void 0 };
-            if (1 == i2) f2.includeAll = 1;
-            else if (Array.isArray(i2)) {
-              f2.includeNames = /* @__PURE__ */ Object.create(null), u2 && (f2.includeIds = /* @__PURE__ */ Object.create(null));
-              for (var s2 = 0; s2 < i2.length; s2++) t2 = f2, "number" == typeof (n2 = i2[s2]) && t2.includeIds ? t2.includeIds[n2 + ""] = 1 : "string" == typeof n2 && (t2.includeNames[n2.toLowerCase()] = 1);
-              for (var c2 in a2) f2.includeNames[c2.toLowerCase()] = 1;
-            } else if (a2 && Object.keys(a2).length > 0) for (var l2 in f2.includeNames = /* @__PURE__ */ Object.create(null), a2) f2.includeNames[l2.toLowerCase()] = 1;
-            if (1 == o2) return f2.excludeAll = 1, f2;
-            if (Array.isArray(o2)) {
-              f2.excludeNames = /* @__PURE__ */ Object.create(null), u2 && (f2.excludeIds = /* @__PURE__ */ Object.create(null));
-              for (var d2 = 0; d2 < o2.length; d2++) p2(f2, o2[d2]);
-            }
-            return f2;
-            function p2(e3, t3) {
-              "number" == typeof t3 && e3.excludeIds ? e3.excludeIds[t3 + ""] = 1 : "string" == typeof t3 && (e3.excludeNames[t3.toLowerCase()] = 1);
-            }
-          }
-          function Gn(e2, t2, n2) {
-            return e2.excludeAll ? 0 : e2.includeAll ? !_n(e2, t2, n2) : e2.includeNames || e2.includeIds ? (function(e3, t3, n3) {
-              return void 0 !== n3 && e3.includeIds && e3.includeIds[n3 + ""] || t3 && e3.includeNames && e3.includeNames[(t3 + "").toLowerCase()] ? 1 : 0;
-            })(e2, t2, n2) ? !_n(e2, t2, n2) : 0 : !_n(e2, t2, n2);
-          }
-          function _n(e2, t2, n2) {
-            return void 0 !== n2 && e2.excludeIds && e2.excludeIds[n2 + ""] || t2 && e2.excludeNames && e2.excludeNames[(t2 + "").toLowerCase()] ? 1 : 0;
-          }
-          var Bn = { 1: An.getByteAt, 2: An.getAsciiAt, 3: An.getShortAt, 4: An.getLongAt, 5: An.getRationalAt, 7: An.getUndefinedAt, 9: An.getSlongAt, 10: An.getSrationalAt, 13: An.getIfdPointerAt };
-          function jn(e2, t2, n2) {
-            var r2 = t2 + 4;
-            if (!(r2 + An.getTypeSize("LONG") > e2.byteLength)) return t2 + An.getLongAt(e2, r2, n2);
-          }
-          function zn(e2, t2, n2, r2, i2, o2) {
-            var a2, u2, f2 = arguments.length > 6 && void 0 !== arguments[6] ? arguments[6] : 0, s2 = arguments.length > 7 && void 0 !== arguments[7] ? arguments[7] : Ln, c2 = arguments.length > 8 && void 0 !== arguments[8] ? arguments[8] : "exif", l2 = An.getTypeSize("SHORT"), d2 = {}, p2 = (function(e3, t3, n3) {
-              return t3 + An.getTypeSize("SHORT") <= e3.byteLength ? An.getShortAt(e3, t3, n3) : 0;
-            })(e2, r2, i2);
-            r2 += l2;
-            for (var g2 = 0; g2 < p2 && !(r2 + 12 > e2.byteLength); g2++) {
-              var m2 = Vn(e2, t2, n2, r2, i2, o2, s2, c2);
-              void 0 !== m2 && (d2[m2.name] = { id: m2.id, value: m2.value, description: m2.description }, f2 && (d2[m2.name].computed = (a2 = m2.tagType, u2 = m2.value, a2 === An.tagTypes.ASCII ? Array.isArray(u2) && 1 === u2.length ? u2[0] : u2 : a2 === An.tagTypes.RATIONAL || a2 === An.tagTypes.SRATIONAL ? (function(e3) {
-                return Array.isArray(e3) && 2 === e3.length ? "number" == typeof e3[0] && "number" == typeof e3[1] : 0;
-              })(u2) ? Wn(u2) : Array.isArray(u2) ? u2.map((function(e3) {
-                return Wn(e3);
-              })) : u2 : u2)), ("MakerNote" === m2.name || t2 === yn && "LevelInfo" === m2.name) && (d2[m2.name].__offset = m2.__offset)), r2 += 12;
-            }
-            if (K.USE_THUMBNAIL && r2 < e2.byteLength - An.getTypeSize("LONG")) {
-              var h2 = An.getLongAt(e2, r2, i2);
-              0 !== h2 && t2 === gn && s2.shouldParseGroup("thumbnail") && (d2.Thumbnail = zn(e2, "1st", n2, n2 + h2, i2, o2, f2, s2, "thumbnail"));
-            }
-            return d2;
-          }
-          function Vn(e2, t2, n2, r2, i2) {
-            var o2, a2, u2 = arguments.length > 5 && void 0 !== arguments[5] ? arguments[5] : 0, f2 = arguments.length > 6 && void 0 !== arguments[6] ? arguments[6] : Ln, s2 = arguments.length > 7 && void 0 !== arguments[7] ? arguments[7] : "exif", c2 = An.getTypeSize("SHORT"), l2 = c2 + An.getTypeSize("SHORT"), d2 = l2 + An.getTypeSize("LONG"), p2 = An.getShortAt(e2, r2, i2), g2 = An.getShortAt(e2, r2 + c2, i2), m2 = An.getLongAt(e2, r2 + l2, i2);
-            if (void 0 !== An.typeSizes[g2] && (u2 || void 0 !== bn[t2][p2])) {
-              var h2 = (function(e3, t3) {
-                if (void 0 !== bn[e3][t3]) {
-                  if ("string" == typeof bn[e3][t3]) return bn[e3][t3];
-                  if (bn[e3][t3].name) return bn[e3][t3].name;
-                }
-                return "undefined-".concat(t3);
-              })(t2, p2);
-              if (f2.shouldParseTag(s2, h2, p2)) {
-                o2 = (function(e3, t3) {
-                  return An.typeSizes[e3] * t3 <= An.getTypeSize("LONG");
-                })(g2, m2) ? Xn(e2, a2 = r2 + d2, g2, m2, i2) : (function(e3, t3, n3, r3, i3) {
-                  return t3 + n3 + An.typeSizes[r3] * i3 <= e3.byteLength;
-                })(e2, n2, a2 = An.getLongAt(e2, r2 + d2, i2), g2, m2) ? Xn(e2, n2 + a2, g2, m2, i2, 33723 === p2) : "<faulty value>", g2 === An.tagTypes.ASCII && (o2 = (function(e3) {
-                  try {
-                    return e3.map((function(e4) {
-                      return decodeURIComponent(escape(e4));
-                    }));
-                  } catch (t3) {
-                    return e3;
-                  }
-                })(o2 = (function(e3) {
-                  for (var t3 = [], n3 = 0, r3 = 0; r3 < e3.length; r3++) "\0" !== e3[r3] ? (void 0 === t3[n3] && (t3[n3] = ""), t3[n3] += e3[r3]) : n3++;
-                  return t3;
-                })(o2)));
-                var v2 = o2;
-                if (void 0 !== bn[t2][p2]) if (void 0 !== bn[t2][p2].name && void 0 !== bn[t2][p2].description) try {
-                  v2 = bn[t2][p2].description(o2);
-                } catch (e3) {
-                  v2 = Hn(o2);
-                }
-                else v2 = g2 === An.tagTypes.RATIONAL || g2 === An.tagTypes.SRATIONAL ? "" + o2[0] / o2[1] : Hn(o2);
-                return { id: p2, name: h2, value: o2, description: v2, tagType: g2, __offset: a2 };
-              }
-            }
-          }
-          function Xn(e2, t2, n2, r2, i2) {
-            var o2 = [];
-            arguments.length > 5 && void 0 !== arguments[5] && arguments[5] && (r2 *= An.typeSizes[n2], n2 = An.tagTypes.BYTE);
-            for (var a2 = 0; a2 < r2; a2++) o2.push(Bn[n2](e2, t2, i2)), t2 += An.typeSizes[n2];
-            return n2 === An.tagTypes.ASCII ? o2 = An.getAsciiValue(o2) : 1 === o2.length && (o2 = o2[0]), o2;
-          }
-          function Hn(e2) {
-            return e2 instanceof Array ? e2.join(", ") : e2;
-          }
-          function Wn(e2) {
-            if (!Array.isArray(e2) || 2 !== e2.length) return e2;
-            var t2 = e2[0], n2 = e2[1];
-            return Number.isFinite(t2) && Number.isFinite(n2) ? 0 === n2 ? null : t2 / n2 : e2;
-          }
-          var Kn = "Exif IFD Pointer", Jn = "GPS Info IFD Pointer", qn = "Interoperability IFD Pointer", Yn = { read: function(e2, t2, n2) {
-            var r2 = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : 0, i2 = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : void 0, o2 = Q.getByteOrder(e2, t2), a2 = (function(e3, t3, n3, r3, i3, o3) {
-              var a3 = jn(e3, t3, n3);
-              return void 0 === a3 ? {} : zn(e3, gn, t3, a3, n3, r3, i3, o3, "exif");
-            })(e2, t2, o2, n2, r2, i2);
-            return { tags: a2 = Qn(a2 = Zn(a2 = $n(a2, e2, t2, o2, n2, r2, i2), e2, t2, o2, n2, r2, i2), e2, t2, o2, n2, r2, i2), byteOrder: o2 };
-          } };
-          function $n(e2, t2, n2, r2, i2, o2, a2) {
-            return void 0 !== e2[Kn] ? l(e2, zn(t2, mn, n2, n2 + e2[Kn].value, r2, i2, o2, a2, "exif")) : e2;
-          }
-          function Zn(e2, t2, n2, r2, i2, o2, a2) {
-            return void 0 !== e2[Jn] ? l(e2, zn(t2, "gps", n2, n2 + e2[Jn].value, r2, i2, o2, a2, "exif")) : e2;
-          }
-          function Qn(e2, t2, n2, r2, i2, o2, a2) {
-            return void 0 !== e2[qn] ? l(e2, zn(t2, hn, n2, n2 + e2[qn].value, r2, i2, o2, a2, "exif")) : e2;
-          }
-          var er = { read: function(e2, t2, n2) {
-            var r2 = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : 0, i2 = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : void 0;
-            try {
-              var o2 = Q.getByteOrder(e2, t2), a2 = jn(e2, t2, o2);
-              return void 0 === a2 ? {} : (function(e3, t3, n3, r3) {
-                if (!n3.MPEntry) return n3;
-                for (var i3 = [], o3 = 0; o3 < Math.ceil(n3.MPEntry.value.length / tr); o3++) {
-                  i3[o3] = {};
-                  var a3 = nr(n3.MPEntry.value, o3 * tr, An.getTypeSize("LONG"), r3);
-                  i3[o3].ImageFlags = rr(a3), i3[o3].ImageFormat = ir(a3), i3[o3].ImageType = or(a3);
-                  var u2 = nr(n3.MPEntry.value, o3 * tr + 4, An.getTypeSize("LONG"), r3);
-                  i3[o3].ImageSize = { value: u2, description: "" + u2 };
-                  var f2 = ar(o3, n3.MPEntry, r3, t3);
-                  i3[o3].ImageOffset = { value: f2, description: "" + f2 };
-                  var s2 = nr(n3.MPEntry.value, o3 * tr + 12, An.getTypeSize("SHORT"), r3);
-                  i3[o3].DependentImage1EntryNumber = { value: s2, description: "" + s2 };
-                  var c2 = nr(n3.MPEntry.value, o3 * tr + 14, An.getTypeSize("SHORT"), r3);
-                  i3[o3].DependentImage2EntryNumber = { value: c2, description: "" + c2 }, i3[o3].image = e3.buffer.slice(f2, f2 + u2), d(i3[o3], "base64", (function() {
-                    return p(this.image);
-                  }));
-                }
-                return n3.Images = i3, n3;
-              })(e2, t2, zn(e2, "mpf", t2, a2, o2, n2, r2, i2, "mpf"), o2);
-            } catch (e3) {
-              return {};
-            }
-          } }, tr = 16;
-          function nr(e2, t2, n2, r2) {
-            if (r2 === Q.LITTLE_ENDIAN) {
-              for (var i2 = 0, o2 = 0; o2 < n2; o2++) i2 += e2[t2 + o2] << 8 * o2;
-              return i2;
-            }
-            for (var a2 = 0, u2 = 0; u2 < n2; u2++) a2 += e2[t2 + u2] << 8 * (n2 - 1 - u2);
-            return a2;
-          }
-          function rr(e2) {
-            var t2 = [e2 >> 31 & 1, e2 >> 30 & 1, e2 >> 29 & 1], n2 = [];
-            return t2[0] && n2.push("Dependent Parent Image"), t2[1] && n2.push("Dependent Child Image"), t2[2] && n2.push("Representative Image"), { value: t2, description: n2.join(", ") || "None" };
-          }
-          function ir(e2) {
-            var t2 = e2 >> 24 & 7;
-            return { value: t2, description: 0 === t2 ? "JPEG" : "Unknown" };
-          }
-          function or(e2) {
-            var t2 = 16777215 & e2;
-            return { value: t2, description: { 196608: "Baseline MP Primary Image", 65537: "Large Thumbnail (VGA equivalent)", 65538: "Large Thumbnail (Full HD equivalent)", 131073: "Multi-Frame Image (Panorama)", 131074: "Multi-Frame Image (Disparity)", 131075: "Multi-Frame Image (Multi-Angle)", 0: "Undefined" }[t2] || "Unknown" };
-          }
-          function ar(e2, t2, n2, r2) {
-            return /* @__PURE__ */ (function(e3) {
-              return 0 === e3;
-            })(e2) ? 0 : nr(t2.value, e2 * tr + 8, An.getTypeSize("LONG"), n2) + r2;
-          }
-          var ur = { read: function(e2, t2) {
-            var n2 = (function(e3, t3) {
-              return An.getShortAt(e3, t3);
-            })(e2, t2), r2 = (function(e3, t3, n3) {
-              if (!(8 > n3)) {
-                var r3 = An.getByteAt(e3, t3 + 7);
-                return { value: r3, description: "" + r3 };
-              }
-            })(e2, t2, n2);
-            return { "Bits Per Sample": fr(e2, t2, n2), "Image Height": sr(e2, t2, n2), "Image Width": cr(e2, t2, n2), "Color Components": r2, Subsampling: r2 && lr(e2, t2, r2.value, n2) };
-          } };
-          function fr(e2, t2, n2) {
-            if (!(3 > n2)) {
-              var r2 = An.getByteAt(e2, t2 + 2);
-              return { value: r2, description: "" + r2 };
-            }
-          }
-          function sr(e2, t2, n2) {
-            if (!(5 > n2)) {
-              var r2 = An.getShortAt(e2, t2 + 3);
-              return { value: r2, description: "".concat(r2, "px") };
-            }
-          }
-          function cr(e2, t2, n2) {
-            if (!(7 > n2)) {
-              var r2 = An.getShortAt(e2, t2 + 5);
-              return { value: r2, description: "".concat(r2, "px") };
-            }
-          }
-          function lr(e2, t2, n2, r2) {
-            if (!(8 + 3 * n2 > r2)) {
-              for (var i2 = [], o2 = 0; o2 < n2; o2++) {
-                var a2 = t2 + 8 + 3 * o2;
-                i2.push([An.getByteAt(e2, a2), An.getByteAt(e2, a2 + 1), An.getByteAt(e2, a2 + 2)]);
-              }
-              return { value: i2, description: i2.length > 1 ? dr(i2) + pr(i2) : "" };
-            }
-          }
-          function dr(e2) {
-            var t2 = { 1: "Y", 2: "Cb", 3: "Cr", 4: "I", 5: "Q" };
-            return e2.map((function(e3) {
-              return t2[e3[0]];
-            })).join("");
-          }
-          function pr(e2) {
-            var t2 = { 17: "4:4:4 (1 1)", 18: "4:4:0 (1 2)", 20: "4:4:1 (1 4)", 33: "4:2:2 (2 1)", 34: "4:2:0 (2 2)", 36: "4:2:1 (2 4)", 65: "4:1:1 (4 1)", 66: "4:1:0 (4 2)" };
-            return 0 === e2.length || void 0 === e2[0][1] || void 0 === t2[e2[0][1]] ? "" : t2[e2[0][1]];
-          }
-          var gr = { read: function(e2, t2) {
-            var n2 = {};
-            try {
-              var r2 = /* @__PURE__ */ (function(e3, t3) {
-                var n3 = t3, r3 = 0;
-                return { readBits: function(t4) {
-                  for (var i3 = 0, o3 = 0; o3 < t4; o3++) {
-                    if (n3 >= e3.byteLength) throw Error("Unexpected end of data");
-                    i3 |= (e3.getUint8(n3) >> r3 & 1) << o3, ++r3 >= 8 && (r3 = 0, n3++);
-                  }
-                  return i3;
-                } };
-              })(e2, t2 + mr), i2 = (function(e3) {
-                var t3, n3;
-                if (e3.readBits(1)) {
-                  t3 = 8 * (e3.readBits(5) + 1);
-                  var r3 = e3.readBits(3);
-                  n3 = 0 === r3 ? 8 * (e3.readBits(5) + 1) : Math.ceil(t3 * vr[r3]);
-                } else {
-                  t3 = yr(e3);
-                  var i3 = e3.readBits(3);
-                  n3 = 0 === i3 ? yr(e3) : Math.ceil(t3 * vr[i3]);
-                }
-                return { height: t3, width: n3 };
-              })(r2), o2 = i2.height, a2 = i2.width;
-              n2["Image Height"] = { value: o2, description: "".concat(o2, "px") }, n2["Image Width"] = { value: a2, description: "".concat(a2, "px") };
-            } catch (e3) {
-            }
-            return n2;
-          } }, mr = 2, hr = [9, 13, 18, 30], vr = [0, 1, 1.2, 4 / 3, 1.5, 16 / 9, 5 / 4, 2];
-          function yr(e2) {
-            var t2 = e2.readBits(2);
-            return 1 + e2.readBits(hr[t2]);
-          }
-          var br = { read: function(e2, t2) {
-            var n2 = (function(e3, t3) {
-              return An.getShortAt(e3, t3);
-            })(e2, t2), r2 = (function(e3, t3, n3) {
-              if (!(15 > n3)) {
-                var r3 = An.getByteAt(e3, t3 + 14);
-                return { value: r3, description: "".concat(r3, "px") };
-              }
-            })(e2, t2, n2), i2 = (function(e3, t3, n3) {
-              if (!(16 > n3)) {
-                var r3 = An.getByteAt(e3, t3 + 15);
-                return { value: r3, description: "".concat(r3, "px") };
-              }
-            })(e2, t2, n2), o2 = { "JFIF Version": Sr(e2, t2, n2), "Resolution Unit": Ir(e2, t2, n2), XResolution: Pr(e2, t2, n2), YResolution: xr(e2, t2, n2), "JFIF Thumbnail Width": r2, "JFIF Thumbnail Height": i2 };
-            if (void 0 !== r2 && void 0 !== i2) {
-              var a2 = (function(e3, t3, n3, r3) {
-                if (!(0 === n3 || 16 + n3 > r3)) return { value: e3.buffer.slice(t3 + 16, t3 + 16 + n3), description: "<24-bit RGB pixel data>" };
-              })(e2, t2, 3 * r2.value * i2.value, n2);
-              a2 && (o2["JFIF Thumbnail"] = a2);
-            }
-            for (var u2 in o2) void 0 === o2[u2] && delete o2[u2];
-            return o2;
-          } };
-          function Sr(e2, t2, n2) {
-            if (!(9 > n2)) {
-              var r2 = An.getByteAt(e2, t2 + 7), i2 = An.getByteAt(e2, t2 + 7 + 1);
-              return { value: 256 * r2 + i2, description: r2 + "." + i2 };
-            }
-          }
-          function Ir(e2, t2, n2) {
-            if (!(10 > n2)) {
-              var r2 = An.getByteAt(e2, t2 + 9);
-              return { value: r2, description: Ar(r2) };
-            }
-          }
-          function Ar(e2) {
-            return 0 === e2 ? "None" : 1 === e2 ? "inches" : 2 === e2 ? "cm" : "Unknown";
-          }
-          function Pr(e2, t2, n2) {
-            if (!(12 > n2)) {
-              var r2 = An.getShortAt(e2, t2 + 10);
-              return { value: r2, description: "" + r2 };
-            }
-          }
-          function xr(e2, t2, n2) {
-            if (!(14 > n2)) {
-              var r2 = An.getShortAt(e2, t2 + 12);
-              return { value: r2, description: "" + r2 };
-            }
-          }
-          var Cr = { iptc: { 256: { name: "Model Version", description: function(e2) {
-            return "" + ((e2[0] << 8) + e2[1]);
-          } }, 261: { name: "Destination", repeatable: 1 }, 276: { name: "File Format", description: function(e2) {
-            return "" + ((e2[0] << 8) + e2[1]);
-          } }, 278: { name: "File Format Version", description: function(e2) {
-            return "" + ((e2[0] << 8) + e2[1]);
-          } }, 286: "Service Identifier", 296: "Envelope Number", 306: "Product ID", 316: "Envelope Priority", 326: { name: "Date Sent", description: Tr }, 336: { name: "Time Sent", description: Ur }, 346: { name: "Coded Character Set", description: Er, encoding_name: Er }, 356: "UNO", 376: { name: "ARM Identifier", description: function(e2) {
-            return "" + ((e2[0] << 8) + e2[1]);
-          } }, 378: { name: "ARM Version", description: function(e2) {
-            return "" + ((e2[0] << 8) + e2[1]);
-          } }, 512: { name: "Record Version", description: function(e2) {
-            return "" + ((e2[0] << 8) + e2[1]);
-          } }, 515: "Object Type Reference", 516: "Object Attribute Reference", 517: "Object Name", 519: "Edit Status", 520: { name: "Editorial Update", description: function(e2) {
-            return "01" === J(e2) ? "Additional Language" : "Unknown";
-          } }, 522: "Urgency", 524: { name: "Subject Reference", repeatable: 1, description: function(e2) {
-            var t2 = J(e2).split(":");
-            return t2[2] + (t2[3] ? "/" + t2[3] : "") + (t2[4] ? "/" + t2[4] : "");
-          } }, 527: "Category", 532: { name: "Supplemental Category", repeatable: 1 }, 534: "Fixture Identifier", 537: { name: "Keywords", repeatable: 1 }, 538: { name: "Content Location Code", repeatable: 1 }, 539: { name: "Content Location Name", repeatable: 1 }, 542: "Release Date", 547: "Release Time", 549: "Expiration Date", 550: "Expiration Time", 552: "Special Instructions", 554: { name: "Action Advised", description: function(e2) {
-            var t2 = J(e2);
-            return "01" === t2 ? "Object Kill" : "02" === t2 ? "Object Replace" : "03" === t2 ? "Object Append" : "04" === t2 ? "Object Reference" : "Unknown";
-          } }, 557: { name: "Reference Service", repeatable: 1 }, 559: { name: "Reference Date", repeatable: 1 }, 562: { name: "Reference Number", repeatable: 1 }, 567: { name: "Date Created", description: Tr }, 572: { name: "Time Created", description: Ur }, 574: { name: "Digital Creation Date", description: Tr }, 575: { name: "Digital Creation Time", description: Ur }, 577: "Originating Program", 582: "Program Version", 587: { name: "Object Cycle", description: function(e2) {
-            var t2 = J(e2);
-            return "a" === t2 ? "morning" : "p" === t2 ? "evening" : "b" === t2 ? "both" : "Unknown";
-          } }, 592: { name: "By-line", repeatable: 1 }, 597: { name: "By-line Title", repeatable: 1 }, 602: "City", 604: "Sub-location", 607: "Province/State", 612: "Country/Primary Location Code", 613: "Country/Primary Location Name", 615: "Original Transmission Reference", 617: "Headline", 622: "Credit", 627: "Source", 628: "Copyright Notice", 630: { name: "Contact", repeatable: 1 }, 632: "Caption/Abstract", 634: { name: "Writer/Editor", repeatable: 1 }, 637: { name: "Rasterized Caption", description: function(e2) {
-            return e2;
-          } }, 642: "Image Type", 643: { name: "Image Orientation", description: function(e2) {
-            var t2 = J(e2);
-            return "P" === t2 ? "Portrait" : "L" === t2 ? "Landscape" : "S" === t2 ? "Square" : "Unknown";
-          } }, 647: "Language Identifier", 662: { name: "Audio Type", description: function(e2) {
-            var t2 = J(e2), n2 = t2.charAt(0), r2 = t2.charAt(1), i2 = "";
-            return "1" === n2 ? i2 += "Mono" : "2" === n2 && (i2 += "Stereo"), "A" === r2 ? i2 += ", actuality" : "C" === r2 ? i2 += ", question and answer session" : "M" === r2 ? i2 += ", music, transmitted by itself" : "Q" === r2 ? i2 += ", response to a question" : "R" === r2 ? i2 += ", raw sound" : "S" === r2 ? i2 += ", scener" : "V" === r2 ? i2 += ", voicer" : "W" === r2 && (i2 += ", wrap"), "" !== i2 ? i2 : t2;
-          } }, 663: { name: "Audio Sampling Rate", description: function(e2) {
-            return parseInt(J(e2), 10) + " Hz";
-          } }, 664: { name: "Audio Sampling Resolution", description: function(e2) {
-            var t2 = parseInt(J(e2), 10);
-            return t2 + (1 === t2 ? " bit" : " bits");
-          } }, 665: { name: "Audio Duration", description: function(e2) {
-            var t2 = J(e2);
-            return t2.length >= 6 ? t2.substr(0, 2) + ":" + t2.substr(2, 2) + ":" + t2.substr(4, 2) : t2;
-          } }, 666: "Audio Outcue", 698: "Short Document ID", 699: "Unique Document ID", 700: "Owner ID", 712: { name: function(e2) {
-            return 2 === e2.length ? "ObjectData Preview File Format" : "Record 2 destination";
-          }, description: function(e2) {
-            if (2 === e2.length) {
-              var t2 = (e2[0] << 8) + e2[1];
-              return 0 === t2 ? "No ObjectData" : 1 === t2 ? "IPTC-NAA Digital Newsphoto Parameter Record" : 2 === t2 ? "IPTC7901 Recommended Message Format" : 3 === t2 ? "Tagged Image File Format (Adobe/Aldus Image data)" : 4 === t2 ? "Illustrator (Adobe Graphics data)" : 5 === t2 ? "AppleSingle (Apple Computer Inc)" : 6 === t2 ? "NAA 89-3 (ANPA 1312)" : 7 === t2 ? "MacBinary II" : 8 === t2 ? "IPTC Unstructured Character Oriented File Format (UCOFF)" : 9 === t2 ? "United Press International ANPA 1312 variant" : 10 === t2 ? "United Press International Down-Load Message" : 11 === t2 ? "JPEG File Interchange (JFIF)" : 12 === t2 ? "Photo-CD Image-Pac (Eastman Kodak)" : 13 === t2 ? "Microsoft Bit Mapped Graphics File [*.BMP]" : 14 === t2 ? "Digital Audio File [*.WAV] (Microsoft & Creative Labs)" : 15 === t2 ? "Audio plus Moving Video [*.AVI] (Microsoft)" : 16 === t2 ? "PC DOS/Windows Executable Files [*.COM][*.EXE]" : 17 === t2 ? "Compressed Binary File [*.ZIP] (PKWare Inc)" : 18 === t2 ? "Audio Interchange File Format AIFF (Apple Computer Inc)" : 19 === t2 ? "RIFF Wave (Microsoft Corporation)" : 20 === t2 ? "Freehand (Macromedia/Aldus)" : 21 === t2 ? 'Hypertext Markup Language "HTML" (The Internet Society)' : 22 === t2 ? "MPEG 2 Audio Layer 2 (Musicom), ISO/IEC" : 23 === t2 ? "MPEG 2 Audio Layer 3, ISO/IEC" : 24 === t2 ? "Portable Document File (*.PDF) Adobe" : 25 === t2 ? "News Industry Text Format (NITF)" : 26 === t2 ? "Tape Archive (*.TAR)" : 27 === t2 ? "Tidningarnas Telegrambyr\xE5 NITF version (TTNITF DTD)" : 28 === t2 ? "Ritzaus Bureau NITF version (RBNITF DTD)" : 29 === t2 ? "Corel Draw [*.CDR]" : "Unknown format ".concat(t2);
-            }
-            return J(e2);
-          } }, 713: { name: "ObjectData Preview File Format Version", description: function(e2, t2) {
-            var n2 = { "00": { "00": "1" }, "01": { "01": "1", "02": "2", "03": "3", "04": "4" }, "02": { "04": "4" }, "03": { "01": "5.0", "02": "6.0" }, "04": { "01": "1.40" }, "05": { "01": "2" }, "06": { "01": "1" }, 11: { "01": "1.02" }, 20: { "01": "3.1", "02": "4.0", "03": "5.0", "04": "5.5" }, 21: { "02": "2.0" } }, r2 = J(e2);
-            if (t2["ObjectData Preview File Format"]) {
-              var i2 = J(t2["ObjectData Preview File Format"].value);
-              if (n2[i2] && n2[i2][r2]) return n2[i2][r2];
-            }
-            return r2;
-          } }, 714: "ObjectData Preview Data", 1802: { name: "Size Mode", description: function(e2) {
-            return e2[0].toString();
-          } }, 1812: { name: "Max Subfile Size", description: function(e2) {
-            for (var t2 = 0, n2 = 0; n2 < e2.length; n2++) t2 = (t2 << 8) + e2[n2];
-            return t2.toString();
-          } }, 1882: { name: "ObjectData Size Announced", description: function(e2) {
-            for (var t2 = 0, n2 = 0; n2 < e2.length; n2++) t2 = (t2 << 8) + e2[n2];
-            return t2.toString();
-          } }, 1887: { name: "Maximum ObjectData Size", description: function(e2) {
-            for (var t2 = 0, n2 = 0; n2 < e2.length; n2++) t2 = (t2 << 8) + e2[n2];
-            return t2.toString();
-          } } } };
-          function Tr(e2) {
-            var t2 = J(e2);
-            return t2.length >= 8 ? t2.substr(0, 4) + "-" + t2.substr(4, 2) + "-" + t2.substr(6, 2) : t2;
-          }
-          function Ur(e2) {
-            var t2 = J(e2), n2 = t2;
-            return t2.length >= 6 && (n2 = t2.substr(0, 2) + ":" + t2.substr(2, 2) + ":" + t2.substr(4, 2), 11 === t2.length && (n2 += t2.substr(6, 1) + t2.substr(7, 2) + ":" + t2.substr(9, 2))), n2;
-          }
-          function Er(e2) {
-            var t2 = J(e2);
-            return "\x1B%G" === t2 ? "UTF-8" : "\x1B%5" === t2 ? "Windows-1252" : "\x1B%/G" === t2 ? "UTF-8 Level 1" : "\x1B%/H" === t2 ? "UTF-8 Level 2" : "\x1B%/I" === t2 ? "UTF-8 Level 3" : "\x1B/A" === t2 ? "ISO-8859-1" : "\x1B/B" === t2 ? "ISO-8859-2" : "\x1B/C" === t2 ? "ISO-8859-3" : "\x1B/D" === t2 ? "ISO-8859-4" : "\x1B/@" === t2 ? "ISO-8859-5" : "\x1B/G" === t2 ? "ISO-8859-6" : "\x1B/F" === t2 ? "ISO-8859-7" : "\x1B/H" === t2 ? "ISO-8859-8" : "Unknown";
-          }
-          var wr = { 128: 8364, 130: 8218, 131: 402, 132: 8222, 133: 8230, 134: 8224, 135: 8225, 136: 710, 137: 8240, 138: 352, 139: 8249, 140: 338, 142: 381, 145: 8216, 146: 8217, 147: 8220, 148: 8221, 149: 8226, 150: 8211, 151: 8212, 152: 732, 153: 8482, 154: 353, 155: 8250, 156: 339, 158: 382, 159: 376 }, Or = function(e2, t2) {
-            if ("string" == typeof t2) return (function(e3) {
-              try {
-                return decodeURIComponent(escape(e3));
-              } catch (t3) {
-                return e3;
-              }
-            })(t2);
-            var n2 = (function() {
-              if ("undefined" != typeof TextDecoder) return TextDecoder;
-            })();
-            if ("undefined" != typeof n2 && void 0 !== e2) try {
-              return new n2(e2).decode(t2 instanceof DataView ? t2.buffer : Uint8Array.from(t2));
-            } catch (e3) {
-            }
-            var r2 = t2.map((function(e3) {
-              return String.fromCharCode(e3);
-            })).join("");
-            try {
-              return decodeURIComponent(escape(r2));
-            } catch (e3) {
-              return (function(e4) {
-                for (var t3 = e4 instanceof DataView, n3 = t3 ? e4.byteLength : e4.length, r3 = t3 ? function(t4) {
-                  return e4.getUint8(t4);
-                } : function(t4) {
-                  return e4[t4];
-                }, i2 = Array(n3), o2 = 0; o2 < n3; o2++) {
-                  var a2 = r3(o2), u2 = wr[a2];
-                  i2[o2] = void 0 !== u2 ? u2 : a2;
-                }
-                return String.fromCharCode.apply(null, i2);
-              })(t2);
-            }
-          }, Fr = { read: function(e2, t2, n2) {
-            var r2 = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : Ln;
-            try {
-              if (Array.isArray(e2)) return Nr(new DataView(Uint8Array.from(e2).buffer), { size: e2.length }, 0, n2, r2);
-              var i2 = (function(e3, t3) {
-                for (; t3 + 12 <= e3.byteLength; ) {
-                  var n3 = Rr(e3, t3);
-                  if (Lr(n3)) return { naaBlock: n3, dataOffset: t3 + n3.headerSize };
-                  t3 += n3.headerSize + n3.size + Mr(n3);
-                }
-                throw Error("No IPTC NAA resource block.");
-              })(e2, t2);
-              return Nr(e2, i2.naaBlock, i2.dataOffset, n2, r2);
-            } catch (e3) {
-              return {};
-            }
-          } };
-          function Rr(e2, t2) {
-            if (943868237 !== e2.getUint32(t2, 0)) throw Error("Not an IPTC resource block.");
-            var n2 = e2.getUint8(t2 + 4 + 2), r2 = (n2 % 2 == 0 ? n2 + 1 : n2) + 1;
-            return { headerSize: 6 + r2 + 4, type: e2.getUint16(t2 + 4), size: e2.getUint32(t2 + 4 + 2 + r2) };
-          }
-          function Lr(e2) {
-            return 1028 === e2.type;
-          }
-          function Mr(e2) {
-            return e2.size % 2 != 0 ? 1 : 0;
-          }
-          function Nr(e2, t2, n2, r2, i2) {
-            for (var o2 = {}, a2 = void 0, u2 = n2 + t2.size; n2 < u2 && n2 < e2.byteLength; ) {
-              var f2 = kr(e2, n2, o2, a2, r2, i2), s2 = f2.tag, c2 = f2.tagSize;
-              if (null === s2) break;
-              s2 && ("encoding" in s2 && (a2 = s2.encoding), void 0 === o2[s2.name] || void 0 === s2.repeatable ? o2[s2.name] = { id: s2.id, value: s2.value, description: s2.description } : (o2[s2.name] instanceof Array || (o2[s2.name] = [{ id: o2[s2.name].id, value: o2[s2.name].value, description: o2[s2.name].description }]), o2[s2.name].push({ id: s2.id, value: s2.value, description: s2.description }))), n2 += 5 + c2;
-            }
-            return o2;
-          }
-          function kr(e2, t2) {
-            var n2 = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : {}, r2 = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : void 0, i2 = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : 0, o2 = arguments.length > 5 && void 0 !== arguments[5] ? arguments[5] : Ln;
-            if ((function(e3, t3) {
-              return 28 !== e3.getUint8(t3);
-            })(e2, t2)) return { tag: null, tagSize: 0 };
-            var a2 = e2.getUint16(t2 + 1), u2 = e2.getUint16(t2 + 3);
-            if (!i2 && !Cr.iptc[a2]) return { tag: void 0, tagSize: u2 };
-            if (!o2.shouldParseTag("iptc", (function(e3, t3) {
-              var n3 = Cr.iptc[e3];
-              return n3 ? "string" == typeof n3 ? n3 : n3 && "string" == typeof n3.name ? n3.name : void 0 : t3 ? "undefined-".concat(e3) : void 0;
-            })(a2, i2), a2)) return { tag: void 0, tagSize: u2 };
-            var f2 = (function(e3, t3, n3) {
-              for (var r3 = [], i3 = 0; i3 < n3; i3++) r3.push(e3.getUint8(t3 + i3));
-              return r3;
-            })(e2, t2 + 5, u2), s2 = { id: a2, name: Dr(Cr.iptc[a2], a2, f2), value: f2, description: Gr(Cr.iptc[a2], f2, n2, r2) };
-            return (function(e3) {
-              return Cr.iptc[e3] && Cr.iptc[e3].repeatable;
-            })(a2) && (s2.repeatable = 1), (function(e3) {
-              return Cr.iptc[e3] && void 0 !== Cr.iptc[e3].encoding_name;
-            })(a2) && (s2.encoding = Cr.iptc[a2].encoding_name(f2)), { tag: s2, tagSize: u2 };
-          }
-          function Dr(e2, t2, n2) {
-            return e2 ? /* @__PURE__ */ (function(e3) {
-              return "string" == typeof e3;
-            })(e2) ? e2 : (function(e3) {
-              return "function" == typeof e3.name;
-            })(e2) ? e2.name(n2) : e2.name : "undefined-".concat(t2);
-          }
-          function Gr(e2, t2, n2, r2) {
-            if ((function(e3) {
-              return e3 && void 0 !== e3.description;
-            })(e2)) try {
-              return e2.description(t2, n2);
-            } catch (e3) {
-            }
-            return (function(e3, t3) {
-              return e3 && t3 instanceof Array;
-            })(e2, t2) ? Or(r2, t2) : t2;
-          }
-          function _r(e2, t2) {
-            (null == t2 || t2 > e2.length) && (t2 = e2.length);
-            for (var n2 = 0, r2 = Array(t2); n2 < t2; n2++) r2[n2] = e2[n2];
-            return r2;
-          }
-          var Br = { "tiff:Orientation": function(e2) {
-            return "1" === e2 ? "Horizontal (normal)" : "2" === e2 ? "Mirror horizontal" : "3" === e2 ? "Rotate 180" : "4" === e2 ? "Mirror vertical" : "5" === e2 ? "Mirror horizontal and rotate 270 CW" : "6" === e2 ? "Rotate 90 CW" : "7" === e2 ? "Mirror horizontal and rotate 90 CW" : "8" === e2 ? "Rotate 270 CW" : e2;
-          }, "tiff:ResolutionUnit": function(e2) {
-            return nn.ResolutionUnit(parseInt(e2, 10));
-          }, "tiff:XResolution": function(e2) {
-            return jr(nn.XResolution, e2);
-          }, "tiff:YResolution": function(e2) {
-            return jr(nn.YResolution, e2);
-          }, "exif:ApertureValue": function(e2) {
-            return jr(nn.ApertureValue, e2);
-          }, "exif:GPSLatitude": Vr, "exif:GPSLongitude": Vr, "exif:FNumber": function(e2) {
-            return jr(nn.FNumber, e2);
-          }, "exif:FocalLength": function(e2) {
-            return jr(nn.FocalLength, e2);
-          }, "exif:FocalPlaneResolutionUnit": function(e2) {
-            return nn.FocalPlaneResolutionUnit(parseInt(e2, 10));
-          }, "exif:ColorSpace": function(e2) {
-            return nn.ColorSpace((function(e3) {
-              return "0x" === e3.substring(0, 2) ? parseInt(e3.substring(2), 16) : parseInt(e3, 10);
-            })(e2));
-          }, "exif:ComponentsConfiguration": function(e2, t2) {
-            if (/^\d, \d, \d, \d$/.test(t2)) {
-              var n2 = t2.split(", ").map((function(e3) {
-                return e3.charCodeAt(0);
-              }));
-              return nn.ComponentsConfiguration(n2);
-            }
-            return t2;
-          }, "exif:Contrast": function(e2) {
-            return nn.Contrast(parseInt(e2, 10));
-          }, "exif:CustomRendered": function(e2) {
-            return nn.CustomRendered(parseInt(e2, 10));
-          }, "exif:ExposureMode": function(e2) {
-            return nn.ExposureMode(parseInt(e2, 10));
-          }, "exif:ExposureProgram": function(e2) {
-            return nn.ExposureProgram(parseInt(e2, 10));
-          }, "exif:ExposureTime": function(e2) {
-            return zr(e2) ? nn.ExposureTime(e2.split("/").map((function(e3) {
-              return parseInt(e3, 10);
-            }))) : e2;
-          }, "exif:MeteringMode": function(e2) {
-            return nn.MeteringMode(parseInt(e2, 10));
-          }, "exif:Saturation": function(e2) {
-            return nn.Saturation(parseInt(e2, 10));
-          }, "exif:SceneCaptureType": function(e2) {
-            return nn.SceneCaptureType(parseInt(e2, 10));
-          }, "exif:Sharpness": function(e2) {
-            return nn.Sharpness(parseInt(e2, 10));
-          }, "exif:ShutterSpeedValue": function(e2) {
-            return jr(nn.ShutterSpeedValue, e2);
-          }, "exif:WhiteBalance": function(e2) {
-            return nn.WhiteBalance(parseInt(e2, 10));
-          } };
-          function jr(e2, t2) {
-            return zr(t2) ? e2(t2.split("/")) : t2;
-          }
-          function zr(e2) {
-            return /^-?\d+\/-?\d+$/.test(e2);
-          }
-          function Vr(e2) {
-            var t2, n2 = (function(e3) {
-              if (Array.isArray(e3)) return e3;
-            })(t2 = e2.split(",")) || (function(e3) {
-              var t3 = null == e3 ? null : "undefined" != typeof Symbol && e3[Symbol.iterator] || e3["@@iterator"];
-              if (null != t3) {
-                var n3, r3, i3, o3, a3 = [], u3 = 1, f2 = 0;
-                try {
-                  for (i3 = (t3 = t3.call(e3)).next, false; !(u3 = (n3 = i3.call(t3)).done) && (a3.push(n3.value), 2 !== a3.length); u3 = 1) ;
-                } catch (e4) {
-                  f2 = 1, r3 = e4;
-                } finally {
-                  try {
-                    if (!u3 && null != t3.return && (o3 = t3.return(), Object(o3) !== o3)) return;
-                  } finally {
-                    if (f2) throw r3;
-                  }
-                }
-                return a3;
-              }
-            })(t2) || (function(e3) {
-              if (e3) {
-                if ("string" == typeof e3) return _r(e3, 2);
-                var t3 = {}.toString.call(e3).slice(8, -1);
-                return "Object" === t3 && e3.constructor && (t3 = e3.constructor.name), "Map" === t3 || "Set" === t3 ? Array.from(e3) : "Arguments" === t3 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t3) ? _r(e3, 2) : void 0;
-              }
-            })(t2) || (function() {
-              throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-            })(), r2 = n2[0], i2 = n2[1];
-            if (void 0 !== r2 && void 0 !== i2) {
-              var o2 = parseFloat(r2), a2 = parseFloat(i2), u2 = i2.charAt(i2.length - 1);
-              if (!Number.isNaN(o2) && !Number.isNaN(a2)) return "" + (o2 + a2 / 60) + u2;
-            }
-            return e2;
-          }
-          var Xr = { xmp: "http://ns.adobe.com/xap/1.0/", tiff: "http://ns.adobe.com/tiff/1.0/", exif: "http://ns.adobe.com/exif/1.0/", dc: "http://purl.org/dc/elements/1.1/", xmpMM: "http://ns.adobe.com/xap/1.0/mm/", stEvt: "http://ns.adobe.com/xap/1.0/sType/ResourceEvent#", stRef: "http://ns.adobe.com/xap/1.0/sType/ResourceRef#", photoshop: "http://ns.adobe.com/photoshop/1.0/" };
-          function Hr(e2) {
-            return Hr = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e3) {
-              return typeof e3;
-            } : function(e3) {
-              return e3 && "function" == typeof Symbol && e3.constructor === Symbol && e3 !== Symbol.prototype ? "symbol" : typeof e3;
-            }, Hr(e2);
-          }
-          function Wr(e2, t2) {
-            (null == t2 || t2 > e2.length) && (t2 = e2.length);
-            for (var n2 = 0, r2 = Array(t2); n2 < t2; n2++) r2[n2] = e2[n2];
-            return r2;
-          }
-          function Kr(e2) {
-            var t2 = "function" == typeof Map ? /* @__PURE__ */ new Map() : void 0;
-            return Kr = function(e3) {
-              if (null === e3 || !(function(e4) {
-                try {
-                  return -1 !== Function.toString.call(e4).indexOf("[native code]");
-                } catch (t3) {
-                  return "function" == typeof e4;
-                }
-              })(e3)) return e3;
-              if ("function" != typeof e3) throw new TypeError("Super expression must either be null or a function");
-              if (void 0 !== t2) {
-                if (t2.has(e3)) return t2.get(e3);
-                t2.set(e3, n2);
-              }
-              function n2() {
-                return (function(e4, t3, n3) {
-                  if (Jr()) return Reflect.construct.apply(null, arguments);
-                  var r2 = [null];
-                  r2.push.apply(r2, t3);
-                  var i2 = new (e4.bind.apply(e4, r2))();
-                  return n3 && qr(i2, n3.prototype), i2;
-                })(e3, arguments, Yr(this).constructor);
-              }
-              return n2.prototype = Object.create(e3.prototype, { constructor: { value: n2, enumerable: 0, writable: 1, configurable: 1 } }), qr(n2, e3);
-            }, Kr(e2);
-          }
-          function Jr() {
-            try {
-              var e2 = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], (function() {
-              })));
-            } catch (e3) {
-            }
-            return (Jr = function() {
-              return !!e2;
-            })();
-          }
-          function qr(e2, t2) {
-            return qr = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(e3, t3) {
-              return e3.__proto__ = t3, e3;
-            }, qr(e2, t2);
-          }
-          function Yr(e2) {
-            return Yr = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(e3) {
-              return e3.__proto__ || Object.getPrototypeOf(e3);
-            }, Yr(e2);
-          }
-          var $r = { read: function(e2, t2, n2) {
-            var r2 = {};
-            if ("string" == typeof e2) return ei(r2, e2, n2), r2;
-            var i2, o2 = (i2 = (function(e3, t3) {
-              if (0 === t3.length) return [];
-              var n3 = [Qr(e3, t3.slice(0, 1))];
-              return t3.length > 1 && n3.push(Qr(e3, t3.slice(1))), n3;
-            })(e2, t2), (function(e3) {
-              if (Array.isArray(e3)) return e3;
-            })(i2) || (function(e3) {
-              var t3 = null == e3 ? null : "undefined" != typeof Symbol && e3[Symbol.iterator] || e3["@@iterator"];
-              if (null != t3) {
-                var n3, r3, i3, o3, a3 = [], u3 = 1, f3 = 0;
-                try {
-                  for (i3 = (t3 = t3.call(e3)).next, false; !(u3 = (n3 = i3.call(t3)).done) && (a3.push(n3.value), 2 !== a3.length); u3 = 1) ;
-                } catch (e4) {
-                  f3 = 1, r3 = e4;
-                } finally {
-                  try {
-                    if (!u3 && null != t3.return && (o3 = t3.return(), Object(o3) !== o3)) return;
-                  } finally {
-                    if (f3) throw r3;
-                  }
-                }
-                return a3;
-              }
-            })(i2) || (function(e3) {
-              if (e3) {
-                if ("string" == typeof e3) return Wr(e3, 2);
-                var t3 = {}.toString.call(e3).slice(8, -1);
-                return "Object" === t3 && e3.constructor && (t3 = e3.constructor.name), "Map" === t3 || "Set" === t3 ? Array.from(e3) : "Arguments" === t3 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t3) ? Wr(e3, 2) : void 0;
-              }
-            })(i2) || (function() {
-              throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-            })()), a2 = o2[0], u2 = o2[1], f2 = ei(r2, a2, n2);
-            if (u2) {
-              var s2 = ei(r2, u2, n2);
-              f2 || s2 || (delete r2._raw, ei(r2, Qr(e2, t2), n2));
-            }
-            return r2;
-          } }, Zr = (function(e2) {
-            function t2(e3) {
-              var n3;
-              return (function(e4, t3) {
-                if (!(e4 instanceof t3)) throw new TypeError("Cannot call a class as a function");
-              })(this, t2), (n3 = (function(e4, t3, n4) {
-                return t3 = Yr(t3), (function(e5, t4) {
-                  if (t4 && ("object" == Hr(t4) || "function" == typeof t4)) return t4;
-                  if (void 0 !== t4) throw new TypeError("Derived constructors may only return object or undefined");
-                  return (function(e6) {
-                    if (void 0 === e6) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-                    return e6;
-                  })(e5);
-                })(e4, Jr() ? Reflect.construct(t3, n4 || [], Yr(e4).constructor) : t3.apply(e4, n4));
-              })(this, t2, [e3])).name = "ParseError", n3;
-            }
-            return (function(e3, t3) {
-              if ("function" != typeof t3 && null !== t3) throw new TypeError("Super expression must either be null or a function");
-              e3.prototype = Object.create(t3 && t3.prototype, { constructor: { value: e3, writable: 1, configurable: 1 } }), Object.defineProperty(e3, "prototype", { writable: 0 }), t3 && qr(e3, t3);
-            })(t2, e2), Object.defineProperty(n2 = t2, "prototype", { writable: 0 }), n2;
-            var n2;
-          })(Kr(Error));
-          function Qr(e2, t2) {
-            for (var n2 = t2.reduce((function(e3, t3) {
-              return e3 + t3.length;
-            }), 0), r2 = new Uint8Array(n2), i2 = 0, o2 = 0; o2 < t2.length; o2++) {
-              var a2 = t2[o2], u2 = e2.buffer.slice(a2.dataOffset, a2.dataOffset + a2.length);
-              r2.set(new Uint8Array(u2), i2), i2 += a2.length;
-            }
-            return new DataView(r2.buffer);
-          }
-          function ei(e2, t2, n2) {
-            try {
-              var r2 = (function(e3, t3) {
-                var n3 = (function(e4) {
-                  if (e4) return e4;
-                  if ("undefined" != typeof DOMParser) return new DOMParser();
-                  try {
-                    var t4 = require_lib();
-                    return new (0, t4.DOMParser)({ onError: t4.onErrorStopParsing });
-                  } catch (e5) {
-                    return;
-                  }
-                })(t3);
-                if (!n3) throw console.warn("Warning: DOMParser is not available. It is needed to be able to parse XMP tags."), Error();
-                var r3 = "string" == typeof e3 ? e3 : a(e3, 0, e3.byteLength);
-                return { doc: ti(n3, r3.replace(/^.+(<\?xpacket begin)/, "$1").replace(/(<\?xpacket end=".*"\?>).+$/, "$1")), raw: r3 };
-              })(t2, n2), i2 = r2.doc, o2 = r2.raw;
-              return e2._raw = (e2._raw || "") + o2, l(e2, oi(ri(ni(i2), 1))), 1;
-            } catch (e3) {
-              return 0;
-            }
-          }
-          function ti(e2, t2) {
-            var n2 = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : 0;
-            try {
-              var r2 = e2.parseFromString(t2, "application/xml"), i2 = r2.getElementsByTagName("parsererror");
-              if (i2.length > 0) throw new Zr(i2[0].textContent);
-              return r2;
-            } catch (r3) {
-              if ("ParseError" === r3.name && (function(e3) {
-                for (var t3 = ["prefix is non-null and namespace is null", "prefix not bound to a namespace", "prefix inte bundet till en namnrymd", /Namespace prefix .+ is not defined/], n3 = 0; n3 < t3.length; n3++) if (RegExp(t3[n3]).test(e3.message)) return 1;
-                return 0;
-              })(r3) && !n2) return ti(e2, (function(e3) {
-                var t3 = e3.match(/<([A-Za-z_][A-Za-z0-9._-]*)([^>]*)>/);
-                if (!t3) return e3;
-                var n3 = t3[1], r4 = (function(e4) {
-                  for (var t4, n4 = [], r5 = /xmlns:([\w-]+)=["'][^"']+["']/g; null !== (t4 = r5.exec(e4)); ) -1 === n4.indexOf(t4[1]) && n4.push(t4[1]);
-                  return n4;
-                })(e3), i3 = (function(e4) {
-                  for (var t4, n4 = [], r5 = /\b([A-Za-z_][A-Za-z0-9._-]*):[A-Za-z_][A-Za-z0-9._-]*\b/g; null !== (t4 = r5.exec(e4)); ) {
-                    var i4 = t4[1];
-                    "xmlns" !== i4 && "xml" !== i4 && -1 === n4.indexOf(i4) && n4.push(i4);
-                  }
-                  return n4;
-                })(e3).filter((function(e4) {
-                  return -1 === r4.indexOf(e4);
-                }));
-                return 0 === i3.length ? e3 : (function(e4, t4, n4) {
-                  var r5 = RegExp("<" + t4 + "([^>]*)>");
-                  return e4.replace(r5, "<" + t4 + "$1" + n4 + ">");
-                })(e3, n3, (function(e4) {
-                  for (var t4 = [], n4 = 0; n4 < e4.length; n4++) {
-                    var r5 = e4[n4], i4 = Xr[r5] || "http://fallback.namespace/" + r5;
-                    t4.push(" xmlns:" + r5 + '="' + i4 + '"');
-                  }
-                  return t4.join("");
-                })(i3));
-              })(t2), 1);
-              throw r3;
-            }
-          }
-          function ni(e2) {
-            for (var t2 = 0; t2 < e2.childNodes.length; t2++) {
-              if ("x:xmpmeta" === e2.childNodes[t2].tagName) return ni(e2.childNodes[t2]);
-              if ("rdf:RDF" === e2.childNodes[t2].tagName) return e2.childNodes[t2];
-            }
-            throw Error();
-          }
-          function ri(e2) {
-            var t2, n2 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : 0, r2 = (function(e3) {
-              for (var t3 = [], n3 = 0; n3 < e3.childNodes.length; n3++) t3.push(e3.childNodes[n3]);
-              return t3;
-            })(e2);
-            return 1 === (t2 = r2).length && "#text" === t2[0].nodeName ? n2 ? {} : (function(e3) {
-              return e3.nodeValue;
-            })(r2[0]) : (function(e3) {
-              var t3 = {};
-              return e3.forEach((function(e4) {
-                if ((function(e5) {
-                  return e5.nodeName && "#text" !== e5.nodeName;
-                })(e4)) {
-                  var n3 = (function(e5) {
-                    return { attributes: ii(e5), value: ri(e5) };
-                  })(e4);
-                  void 0 !== t3[e4.nodeName] ? (Array.isArray(t3[e4.nodeName]) || (t3[e4.nodeName] = [t3[e4.nodeName]]), t3[e4.nodeName].push(n3)) : t3[e4.nodeName] = n3;
-                }
-              })), t3;
-            })(r2);
-          }
-          function ii(e2) {
-            for (var t2 = {}, n2 = 0; n2 < e2.attributes.length; n2++) t2[e2.attributes[n2].nodeName] = decodeURIComponent(escape(e2.attributes[n2].value));
-            return t2;
-          }
-          function oi(e2) {
-            var t2 = {};
-            if ("string" == typeof e2) return e2;
-            for (var n2 in e2) {
-              var r2 = e2[n2];
-              Array.isArray(r2) || (r2 = [r2]), r2.forEach((function(e3) {
-                l(t2, ai(e3.attributes)), "object" === Hr(e3.value) && l(t2, di(e3.value));
-              }));
-            }
-            return t2;
-          }
-          function ai(e2) {
-            var t2 = {};
-            for (var n2 in e2) try {
-              ui(n2) && (t2[si(n2)] = { value: e2[n2], attributes: {}, description: ci(e2[n2], n2) });
-            } catch (e3) {
-            }
-            return t2;
-          }
-          function ui(e2) {
-            return "rdf:parseType" !== e2 && !fi(e2);
-          }
-          function fi(e2) {
-            return "xmlns" === e2.split(":")[0];
-          }
-          function si(e2) {
-            return /^MicrosoftPhoto(_\d+_)?:Rating$/i.test(e2) ? "RatingPercent" : e2.split(":")[1];
-          }
-          function ci(e2) {
-            var t2 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : void 0;
-            if (Array.isArray(e2)) {
-              var n2 = (function(e3) {
-                return e3.map((function(e4) {
-                  return void 0 !== e4.value ? ci(e4.value) : ci(e4);
-                })).join(", ");
-              })(e2);
-              return t2 && "function" == typeof Br[t2] ? Br[t2](e2, n2) : n2;
-            }
-            if ("object" === Hr(e2)) return (function(e3) {
-              var t3 = [];
-              for (var n3 in e3) t3.push("".concat(li(n3), ": ").concat(ci(e3[n3].value)));
-              return t3.join("; ");
-            })(e2);
-            try {
-              return t2 && "function" == typeof Br[t2] ? Br[t2](e2) : decodeURIComponent(escape(e2));
-            } catch (t3) {
-              return e2;
-            }
-          }
-          function li(e2) {
-            return "CiAdrCity" === e2 ? "CreatorCity" : "CiAdrCtry" === e2 ? "CreatorCountry" : "CiAdrExtadr" === e2 ? "CreatorAddress" : "CiAdrPcode" === e2 ? "CreatorPostalCode" : "CiAdrRegion" === e2 ? "CreatorRegion" : "CiEmailWork" === e2 ? "CreatorWorkEmail" : "CiTelWork" === e2 ? "CreatorWorkPhone" : "CiUrlWork" === e2 ? "CreatorWorkUrl" : e2;
-          }
-          function di(e2) {
-            var t2 = {};
-            for (var n2 in e2) try {
-              fi(n2) || (t2[si(n2)] = pi(e2[n2], n2));
-            } catch (e3) {
-            }
-            return t2;
-          }
-          function pi(e2, t2) {
-            return (function(e3) {
-              return Array.isArray(e3);
-            })(e2) ? (function(e3, t3) {
-              return Ai(e3[e3.length - 1], t3);
-            })(e2, t2) : (function(e3) {
-              return "Resource" === e3.attributes["rdf:parseType"] && "string" == typeof e3.value && "" === e3.value.trim();
-            })(e2) ? { value: "", attributes: {}, description: "" } : gi(e2) ? mi(e2, t2) : vi(e2) ? yi(e2, t2) : bi(e2) ? Si(e2, t2) : (function(e3) {
-              return void 0 !== Ii(e3.value);
-            })(e2) ? (function(e3, t3) {
-              var n2 = Ii(e3.value).value["rdf:li"], r2 = hi(e3), i2 = [];
-              return void 0 === n2 ? n2 = [] : Array.isArray(n2) || (n2 = [n2]), n2.forEach((function(e4) {
-                i2.push((function(e5) {
-                  return gi(e5) ? mi(e5) : vi(e5) ? yi(e5).value : bi(e5) ? Si(e5).value : Ai(e5);
-                })(e4));
-              })), { value: i2, attributes: r2, description: ci(i2, t3) };
-            })(e2, t2) : Ai(e2, t2);
-          }
-          function gi(e2) {
-            return "Resource" === e2.attributes["rdf:parseType"] && void 0 !== e2.value["rdf:value"] || void 0 !== e2.value["rdf:Description"] && void 0 !== e2.value["rdf:Description"].value["rdf:value"];
-          }
-          function mi(e2, t2) {
-            var n2 = hi(e2);
-            void 0 !== e2.value["rdf:Description"] && (e2 = e2.value["rdf:Description"]), l(n2, hi(e2), (function(e3) {
-              var t3 = {};
-              for (var n3 in e3.value) "rdf:value" === n3 || fi(n3) || (t3[si(n3)] = e3.value[n3].value);
-              return t3;
-            })(e2));
-            var r2 = (function(e3) {
-              return Pi(e3.value["rdf:value"]) || e3.value["rdf:value"].value;
-            })(e2);
-            return { value: r2, attributes: n2, description: ci(r2, t2) };
-          }
-          function hi(e2) {
-            var t2 = {};
-            for (var n2 in e2.attributes) "rdf:parseType" === n2 || "rdf:resource" === n2 || fi(n2) || (t2[si(n2)] = e2.attributes[n2]);
-            return t2;
-          }
-          function vi(e2) {
-            return "Resource" === e2.attributes["rdf:parseType"] || void 0 !== e2.value["rdf:Description"] && void 0 === e2.value["rdf:Description"].value["rdf:value"];
-          }
-          function yi(e2, t2) {
-            var n2 = { value: {}, attributes: {} };
-            return void 0 !== e2.value["rdf:Description"] && (l(n2.value, ai(e2.value["rdf:Description"].attributes)), l(n2.attributes, hi(e2)), e2 = e2.value["rdf:Description"]), l(n2.value, di(e2.value)), n2.description = ci(n2.value, t2), n2;
-          }
-          function bi(e2) {
-            return 0 === Object.keys(e2.value).length && void 0 === e2.attributes["xml:lang"] && void 0 === e2.attributes["rdf:resource"];
-          }
-          function Si(e2, t2) {
-            var n2 = ai(e2.attributes);
-            return { value: n2, attributes: {}, description: ci(n2, t2) };
-          }
-          function Ii(e2) {
-            return e2["rdf:Bag"] || e2["rdf:Seq"] || e2["rdf:Alt"];
-          }
-          function Ai(e2, t2) {
-            var n2 = Pi(e2) || oi(e2.value);
-            return { value: n2, attributes: hi(e2), description: ci(n2, t2) };
-          }
-          function Pi(e2) {
-            return e2.attributes && e2.attributes["rdf:resource"];
-          }
-          function xi(e2) {
-            return xi = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e3) {
-              return typeof e3;
-            } : function(e3) {
-              return e3 && "function" == typeof Symbol && e3.constructor === Symbol && e3 !== Symbol.prototype ? "symbol" : typeof e3;
-            }, xi(e2);
-          }
-          function Ci(e2, t2, n2) {
-            return (t2 = (function(e3) {
-              var t3 = (function(e4) {
-                if ("object" != xi(e4) || !e4) return e4;
-                var t4 = e4[Symbol.toPrimitive];
-                if (void 0 !== t4) {
-                  var n3 = t4.call(e4, "string");
-                  if ("object" != xi(n3)) return n3;
-                  throw new TypeError("@@toPrimitive must return a primitive value.");
-                }
-                return e4 + "";
-              })(e3);
-              return "symbol" == xi(t3) ? t3 : t3 + "";
-            })(t2)) in e2 ? Object.defineProperty(e2, t2, { value: n2, enumerable: 1, configurable: 1, writable: 1 }) : e2[t2] = n2, e2;
-          }
-          function Ti(e2, t2) {
-            (null == t2 || t2 > e2.length) && (t2 = e2.length);
-            for (var n2 = 0, r2 = Array(t2); n2 < t2; n2++) r2[n2] = e2[n2];
-            return r2;
-          }
-          var Ui = { 2e3: { name: "PathInformation", description: function(e2) {
-            for (var t2 = {}, n2 = [], r2 = 0; r2 < e2.byteLength; r2 += 26) {
-              var i2 = An.getShortAt(e2, r2);
-              Ei[i2] && (t2[i2] || (t2[i2] = Ei[i2].description), n2.push({ type: i2, path: Ei[i2].path(e2, r2 + 2) }));
-            }
-            return JSON.stringify({ types: t2, paths: n2 });
-          } }, 2999: { name: "ClippingPathName", description: function(e2) {
-            return (t2 = s(e2, 0), (function(e3) {
-              if (Array.isArray(e3)) return e3;
-            })(t2) || (function(e3) {
-              var t3 = null == e3 ? null : "undefined" != typeof Symbol && e3[Symbol.iterator] || e3["@@iterator"];
-              if (null != t3) {
-                var n2, r2, i2, o2, a2 = [], u2 = 1, f2 = 0;
-                try {
-                  for (i2 = (t3 = t3.call(e3)).next, false; !(u2 = (n2 = i2.call(t3)).done) && (a2.push(n2.value), 2 !== a2.length); u2 = 1) ;
-                } catch (e4) {
-                  f2 = 1, r2 = e4;
-                } finally {
-                  try {
-                    if (!u2 && null != t3.return && (o2 = t3.return(), Object(o2) !== o2)) return;
-                  } finally {
-                    if (f2) throw r2;
-                  }
-                }
-                return a2;
-              }
-            })(t2) || (function(e3) {
-              if (e3) {
-                if ("string" == typeof e3) return Ti(e3, 2);
-                var t3 = {}.toString.call(e3).slice(8, -1);
-                return "Object" === t3 && e3.constructor && (t3 = e3.constructor.name), "Map" === t3 || "Set" === t3 ? Array.from(e3) : "Arguments" === t3 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t3) ? Ti(e3, 2) : void 0;
-              }
-            })(t2) || (function() {
-              throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-            })())[1];
-            var t2;
-          } } }, Ei = Ci(Ci(Ci(Ci(Ci(Ci(Ci(Ci(Ci({}, 0, { description: "Closed subpath length", path: function(e2, t2) {
-            return [An.getShortAt(e2, t2)];
-          } }), 1, { description: "Closed subpath Bezier knot, linked", path: wi }), 2, { description: "Closed subpath Bezier knot, unlinked", path: wi }), 3, { description: "Open subpath length", path: function(e2, t2) {
-            return [An.getShortAt(e2, t2)];
-          } }), 4, { description: "Open subpath Bezier knot, linked", path: wi }), 5, { description: "Open subpath Bezier knot, unlinked", path: wi }), 6, { description: "Path fill rule", path: function() {
-            return [];
-          } }), 8, { description: "Initial fill rule", path: function(e2, t2) {
-            return [An.getShortAt(e2, t2)];
-          } }), 7, { description: "Clipboard", path: function(e2, t2) {
-            return [[Fi(e2, t2, 8), Fi(e2, t2 + 4, 8), Fi(e2, t2 + 8, 8), Fi(e2, t2 + 12, 8)], Fi(e2, t2 + 16, 8)];
-          } });
-          function wi(e2, t2) {
-            for (var n2 = [], r2 = 0; r2 < 24; r2 += 8) n2.push(Oi(e2, t2 + r2));
-            return n2;
-          }
-          function Oi(e2, t2) {
-            var n2 = Fi(e2, t2, 8);
-            return [Fi(e2, t2 + 4, 8), n2];
-          }
-          function Fi(e2, t2, n2) {
-            var r2, i2 = An.getLongAt(e2, t2), o2 = i2 >>> 31 == 0 ? 1 : -1, a2 = (2130706432 & i2) >>> 32 - n2, u2 = i2 & parseInt(m("1", 32 - n2), 2);
-            return o2 * (function(e3) {
-              return parseInt(e3.replace(".", ""), 2) / Math.pow(2, (e3.split(".")[1] || "").length);
-            })(a2.toString(2) + "." + (m("0", 32 - n2 - (r2 = u2.toString(2)).length) + r2));
-          }
-          function Ri(e2, t2) {
-            (null == t2 || t2 > e2.length) && (t2 = e2.length);
-            for (var n2 = 0, r2 = Array(t2); n2 < t2; n2++) r2[n2] = e2[n2];
-            return r2;
-          }
-          var Li = { read: function(e2, t2) {
-            for (var n2 = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : Ln, r2 = o(new Uint8Array(e2).buffer), i2 = {}, u2 = 0; u2 < e2.length; ) {
-              var f2 = a(r2, u2, Di);
-              u2 += Di;
-              var s2 = An.getShortAt(r2, u2), c2 = _i(r2, u2 += Ni), l2 = c2.tagName;
-              u2 += c2.tagNameSize;
-              var d2 = An.getLongAt(r2, u2);
-              if (u2 += ki, f2 === Mi) {
-                var p2 = Gi(s2, l2, t2);
-                if (!n2.shouldParseTag("photoshop", p2, s2)) {
-                  u2 += d2 + d2 % 2;
-                  continue;
-                }
-                var g2 = o(r2.buffer, u2, d2), m2 = { id: s2, value: a(g2, 0, d2) };
-                if (Ui[s2]) {
-                  try {
-                    m2.description = Ui[s2].description(g2);
-                  } catch (e3) {
-                    m2.description = "<no description formatter>";
-                  }
-                  i2[l2 || Ui[s2].name] = m2;
-                } else t2 && (i2["undefined-".concat(s2)] = m2);
-              }
-              u2 += d2 + d2 % 2;
-            }
-            return i2;
-          } }, Mi = "8BIM", Ni = 2, ki = 4, Di = Mi.length;
-          function Gi(e2, t2, n2) {
-            return t2 || (Ui[e2] && Ui[e2].name ? Ui[e2].name : n2 ? "undefined-".concat(e2) : void 0);
-          }
-          function _i(e2, t2) {
-            var n2, r2 = (function(e3) {
-              if (Array.isArray(e3)) return e3;
-            })(n2 = s(e2, t2)) || (function(e3) {
-              var t3 = null == e3 ? null : "undefined" != typeof Symbol && e3[Symbol.iterator] || e3["@@iterator"];
-              if (null != t3) {
-                var n3, r3, i3, o2, a2 = [], u2 = 1, f2 = 0;
-                try {
-                  for (i3 = (t3 = t3.call(e3)).next, false; !(u2 = (n3 = i3.call(t3)).done) && (a2.push(n3.value), 2 !== a2.length); u2 = 1) ;
-                } catch (e4) {
-                  f2 = 1, r3 = e4;
-                } finally {
-                  try {
-                    if (!u2 && null != t3.return && (o2 = t3.return(), Object(o2) !== o2)) return;
-                  } finally {
-                    if (f2) throw r3;
-                  }
-                }
-                return a2;
-              }
-            })(n2) || (function(e3) {
-              if (e3) {
-                if ("string" == typeof e3) return Ri(e3, 2);
-                var t3 = {}.toString.call(e3).slice(8, -1);
-                return "Object" === t3 && e3.constructor && (t3 = e3.constructor.name), "Map" === t3 || "Set" === t3 ? Array.from(e3) : "Arguments" === t3 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t3) ? Ri(e3, 2) : void 0;
-              }
-            })(n2) || (function() {
-              throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-            })(), i2 = r2[0];
-            return { tagName: r2[1], tagNameSize: 1 + i2 + (i2 % 2 == 0 ? 1 : 0) };
-          }
-          var Bi = { desc: { name: "ICC Description" }, cprt: { name: "ICC Copyright" }, dmdd: { name: "ICC Device Model Description" }, vued: { name: "ICC Viewing Conditions Description" }, dmnd: { name: "ICC Device Manufacturer for Display" }, tech: { name: "Technology" } }, ji = { 4: { name: "Preferred CMM type", value: function(e2, t2) {
-            return a(e2, t2, 4);
-          }, description: function(e2) {
-            return null !== e2 ? zi(e2) : "";
-          } }, 8: { name: "Profile Version", value: function(e2, t2) {
-            return e2.getUint8(t2).toString(10) + "." + (e2.getUint8(t2 + 1) >> 4).toString(10) + "." + (e2.getUint8(t2 + 1) % 16).toString(10);
-          } }, 12: { name: "Profile/Device class", value: function(e2, t2) {
-            return a(e2, t2, 4);
-          }, description: function(e2) {
-            switch (e2.toLowerCase()) {
+        }
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/text-decoder.js
+  function get() {
+    if (typeof TextDecoder !== "undefined") {
+      return TextDecoder;
+    }
+    return void 0;
+  }
+  var text_decoder_default;
+  var init_text_decoder = __esm({
+    "node_modules/exifreader/src/text-decoder.js"() {
+      init_esbuild_shims();
+      text_decoder_default = {
+        get
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/tag-decoder.js
+  function decode(encoding, tagValue) {
+    if (typeof tagValue === "string") {
+      return decodeUtf8ByteString(tagValue);
+    }
+    const Decoder = text_decoder_default.get();
+    if (typeof Decoder !== "undefined" && encoding !== void 0) {
+      try {
+        return new Decoder(encoding).decode(tagValue instanceof DataView ? tagValue.buffer : Uint8Array.from(tagValue));
+      } catch (error) {
+      }
+    }
+    const stringValue = getByteString(tagValue);
+    const decoded = tryDecodeUtf8ByteString(stringValue);
+    if (decoded !== void 0) {
+      return decoded;
+    }
+    return decodeWindows1252(tagValue);
+  }
+  function decodeWindows1252(tagValue) {
+    const isDataView = tagValue instanceof DataView;
+    const length = isDataView ? tagValue.byteLength : tagValue.length;
+    const getByte = isDataView ? (i) => tagValue.getUint8(i) : (i) => tagValue[i];
+    const codePoints = new Array(length);
+    for (let i = 0; i < length; i++) {
+      const byte = getByte(i);
+      const mapped = WINDOWS_1252_C1_MAP[byte];
+      codePoints[i] = mapped !== void 0 ? mapped : byte;
+    }
+    return getByteString(codePoints);
+  }
+  var TAG_HEADER_SIZE, WINDOWS_1252_C1_MAP, tag_decoder_default;
+  var init_tag_decoder = __esm({
+    "node_modules/exifreader/src/tag-decoder.js"() {
+      init_esbuild_shims();
+      init_text_decoder();
+      init_utils();
+      TAG_HEADER_SIZE = 5;
+      WINDOWS_1252_C1_MAP = {
+        128: 8364,
+        130: 8218,
+        131: 402,
+        132: 8222,
+        133: 8230,
+        134: 8224,
+        135: 8225,
+        136: 710,
+        137: 8240,
+        138: 352,
+        139: 8249,
+        140: 338,
+        142: 381,
+        145: 8216,
+        146: 8217,
+        147: 8220,
+        148: 8221,
+        149: 8226,
+        150: 8211,
+        151: 8212,
+        152: 732,
+        153: 8482,
+        154: 353,
+        155: 8250,
+        156: 339,
+        158: 382,
+        159: 376
+      };
+      tag_decoder_default = {
+        decode,
+        TAG_HEADER_SIZE
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/iptc-tags.js
+  function read7(dataView, dataOffset, includeUnknown, tagFilter = NOOP_TAG_FILTER, valueBudget) {
+    try {
+      if (Array.isArray(dataView)) {
+        const arrayDataView = new DataView(Uint8Array.from(dataView).buffer);
+        return parseTags(
+          arrayDataView,
+          { size: dataView.length },
+          0,
+          includeUnknown,
+          tagFilter,
+          valueBudget || getValueBudget(arrayDataView)
+        );
+      }
+      const { naaBlock, dataOffset: newDataOffset } = getNaaResourceBlock(dataView, dataOffset);
+      return parseTags(dataView, naaBlock, newDataOffset, includeUnknown, tagFilter, valueBudget || getValueBudget(dataView));
+    } catch (error) {
+      return {};
+    }
+  }
+  function getNaaResourceBlock(dataView, dataOffset) {
+    while (dataOffset + RESOURCE_BLOCK_MIN_HEADER_SIZE <= dataView.byteLength) {
+      const resourceBlock = getResourceBlock(dataView, dataOffset);
+      if (isNaaResourceBlock(resourceBlock)) {
+        return { naaBlock: resourceBlock, dataOffset: dataOffset + resourceBlock.headerSize };
+      }
+      dataOffset += resourceBlock.headerSize + resourceBlock.size + getBlockPadding(resourceBlock);
+    }
+    throw new Error("No IPTC NAA resource block.");
+  }
+  function getResourceBlock(dataView, dataOffset) {
+    if (dataView.getUint32(dataOffset, false) !== BYTES_8BIM) {
+      throw new Error("Not an IPTC resource block.");
+    }
+    const resourceNameSize = dataView.getUint8(dataOffset + BYTES_8BIM_SIZE + RESOURCE_ID_SIZE);
+    const resourceNameTotalSize = (resourceNameSize % 2 === 0 ? resourceNameSize + 1 : resourceNameSize) + RESOURCE_NAME_SIZE_SIZE;
+    return {
+      headerSize: BYTES_8BIM_SIZE + RESOURCE_ID_SIZE + resourceNameTotalSize + RESOURCE_SIZE_SIZE,
+      type: dataView.getUint16(dataOffset + BYTES_8BIM_SIZE),
+      size: dataView.getUint32(dataOffset + BYTES_8BIM_SIZE + RESOURCE_ID_SIZE + resourceNameTotalSize)
+    };
+  }
+  function isNaaResourceBlock(resourceBlock) {
+    return resourceBlock.type === NAA_RESOURCE_BLOCK_TYPE;
+  }
+  function getBlockPadding(resourceBlock) {
+    if (resourceBlock.size % 2 !== 0) {
+      return 1;
+    }
+    return 0;
+  }
+  function parseTags(dataView, naaBlock, dataOffset, includeUnknown, tagFilter, valueBudget) {
+    const tags = {};
+    let encoding = void 0;
+    const endOfBlockOffset = dataOffset + naaBlock["size"];
+    while (dataOffset < endOfBlockOffset && dataOffset < dataView.byteLength) {
+      const { tag, tagSize } = readTag2(
+        dataView,
+        dataOffset,
+        tags,
+        encoding,
+        includeUnknown,
+        tagFilter,
+        valueBudget
+      );
+      if (tag === null) {
+        break;
+      }
+      if (tag) {
+        if ("encoding" in tag) {
+          encoding = tag.encoding;
+        }
+        if (tags[tag.name] === void 0 || tag["repeatable"] === void 0) {
+          tags[tag.name] = {
+            id: tag.id,
+            value: tag.value,
+            description: tag.description
+          };
+        } else {
+          if (!(tags[tag.name] instanceof Array)) {
+            tags[tag.name] = [{
+              id: tags[tag.name].id,
+              value: tags[tag.name].value,
+              description: tags[tag.name].description
+            }];
+          }
+          tags[tag.name].push({
+            id: tag.id,
+            value: tag.value,
+            description: tag.description
+          });
+        }
+      }
+      dataOffset += IPTC_DATASET_HEADER_SIZE + tagSize;
+    }
+    return tags;
+  }
+  function readTag2(dataView, dataOffset, tags = {}, encoding = void 0, includeUnknown = false, tagFilter = NOOP_TAG_FILTER, valueBudget) {
+    const TAG_CODE_OFFSET = 1;
+    const TAG_SIZE_OFFSET = 3;
+    if (leadByteIsMissing(dataView, dataOffset) || headerIsTruncated(dataView, dataOffset)) {
+      return { tag: null, tagSize: 0 };
+    }
+    const tagCode = dataView.getUint16(dataOffset + TAG_CODE_OFFSET);
+    const tagSize = dataView.getUint16(dataOffset + TAG_SIZE_OFFSET);
+    if (valueIsTruncated(dataView, dataOffset, tagSize) || !takeDatasetUnits(valueBudget, tagSize)) {
+      return { tag: null, tagSize: 0 };
+    }
+    if (!includeUnknown && !iptc_tag_names_default["iptc"][tagCode]) {
+      return { tag: void 0, tagSize };
+    }
+    if (!tagFilter.shouldParseTag(
+      "iptc",
+      getIptcTagNameForFiltering(tagCode, includeUnknown),
+      tagCode
+    )) {
+      return { tag: void 0, tagSize };
+    }
+    const tagValue = getTagValue2(dataView, dataOffset + IPTC_DATASET_HEADER_SIZE, tagSize);
+    const tag = {
+      id: tagCode,
+      name: getTagName2(iptc_tag_names_default["iptc"][tagCode], tagCode, tagValue),
+      value: tagValue,
+      description: getTagDescription(iptc_tag_names_default["iptc"][tagCode], tagValue, tags, encoding)
+    };
+    if (tagIsRepeatable(tagCode)) {
+      tag["repeatable"] = true;
+    }
+    if (tagContainsEncoding(tagCode)) {
+      tag["encoding"] = iptc_tag_names_default["iptc"][tagCode]["encoding_name"](tagValue);
+    }
+    return { tag, tagSize };
+  }
+  function takeDatasetUnits(valueBudget, tagSize) {
+    const units = Math.ceil((IPTC_DATASET_HEADER_SIZE + tagSize) / BYTES_PER_IPTC_DATASET);
+    if (valueBudget.iptcDatasetsRemaining >= units) {
+      valueBudget.iptcDatasetsRemaining -= units;
+      return true;
+    }
+    return false;
+  }
+  function getIptcTagNameForFiltering(tagCode, includeUnknown) {
+    const tag = iptc_tag_names_default["iptc"][tagCode];
+    if (!tag) {
+      if (includeUnknown) {
+        return `undefined-${tagCode}`;
+      }
+      return void 0;
+    }
+    if (typeof tag === "string") {
+      return tag;
+    }
+    if (tag && typeof tag.name === "string") {
+      return tag.name;
+    }
+    return void 0;
+  }
+  function leadByteIsMissing(dataView, dataOffset) {
+    const TAG_LEAD_BYTE = 28;
+    return dataView.getUint8(dataOffset) !== TAG_LEAD_BYTE;
+  }
+  function headerIsTruncated(dataView, dataOffset) {
+    return dataOffset + IPTC_DATASET_HEADER_SIZE > dataView.byteLength;
+  }
+  function valueIsTruncated(dataView, dataOffset, tagSize) {
+    return dataOffset + IPTC_DATASET_HEADER_SIZE + tagSize > dataView.byteLength;
+  }
+  function getTagValue2(dataView, offset, size) {
+    const value = [];
+    for (let valueIndex = 0; valueIndex < size; valueIndex++) {
+      value.push(dataView.getUint8(offset + valueIndex));
+    }
+    return value;
+  }
+  function getTagName2(tag, tagCode, tagValue) {
+    if (!tag) {
+      return `undefined-${tagCode}`;
+    }
+    if (tagIsName(tag)) {
+      return tag;
+    }
+    if (hasDynamicName(tag)) {
+      return tag["name"](tagValue);
+    }
+    return tag["name"];
+  }
+  function tagIsName(tag) {
+    return typeof tag === "string";
+  }
+  function hasDynamicName(tag) {
+    return typeof tag["name"] === "function";
+  }
+  function getTagDescription(tag, tagValue, tags, encoding) {
+    if (hasDescriptionProperty(tag)) {
+      try {
+        return tag["description"](tagValue, tags);
+      } catch (error) {
+      }
+    }
+    if (tagValueIsText(tag, tagValue)) {
+      return tag_decoder_default.decode(encoding, tagValue);
+    }
+    return tagValue;
+  }
+  function tagValueIsText(tag, tagValue) {
+    return tag && tagValue instanceof Array;
+  }
+  function hasDescriptionProperty(tag) {
+    return tag && tag["description"] !== void 0;
+  }
+  function tagIsRepeatable(tagCode) {
+    return iptc_tag_names_default["iptc"][tagCode] && iptc_tag_names_default["iptc"][tagCode]["repeatable"];
+  }
+  function tagContainsEncoding(tagCode) {
+    return iptc_tag_names_default["iptc"][tagCode] && iptc_tag_names_default["iptc"][tagCode]["encoding_name"] !== void 0;
+  }
+  var BYTES_8BIM, BYTES_8BIM_SIZE, RESOURCE_ID_SIZE, RESOURCE_NAME_SIZE_SIZE, RESOURCE_NAME_MIN_SIZE, RESOURCE_SIZE_SIZE, RESOURCE_BLOCK_MIN_HEADER_SIZE, NAA_RESOURCE_BLOCK_TYPE, iptc_tags_default;
+  var init_iptc_tags = __esm({
+    "node_modules/exifreader/src/iptc-tags.js"() {
+      init_esbuild_shims();
+      init_iptc_tag_names();
+      init_tag_decoder();
+      init_tag_filter();
+      init_tags_helpers();
+      BYTES_8BIM = 943868237;
+      BYTES_8BIM_SIZE = 4;
+      RESOURCE_ID_SIZE = 2;
+      RESOURCE_NAME_SIZE_SIZE = 1;
+      RESOURCE_NAME_MIN_SIZE = 2;
+      RESOURCE_SIZE_SIZE = 4;
+      RESOURCE_BLOCK_MIN_HEADER_SIZE = BYTES_8BIM_SIZE + RESOURCE_ID_SIZE + RESOURCE_NAME_MIN_SIZE + RESOURCE_SIZE_SIZE;
+      NAA_RESOURCE_BLOCK_TYPE = 1028;
+      iptc_tags_default = {
+        read: read7
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/xmp-tag-names.js
+  function fraction(func, value) {
+    if (isFraction(value)) {
+      return func(value.split("/"));
+    }
+    return value;
+  }
+  function parseNumber(value) {
+    if (value.substring(0, 2) === "0x") {
+      return parseInt(value.substring(2), 16);
+    }
+    return parseInt(value, 10);
+  }
+  function isFraction(value) {
+    return /^-?\d+\/-?\d+$/.test(value);
+  }
+  function calculateGPSValue(value) {
+    const [degreesString, minutesString] = value.split(",");
+    if (degreesString !== void 0 && minutesString !== void 0) {
+      const degrees = parseFloat(degreesString);
+      const minutes = parseFloat(minutesString);
+      const ref = minutesString.charAt(minutesString.length - 1);
+      if (!Number.isNaN(degrees) && !Number.isNaN(minutes)) {
+        return "" + (degrees + minutes / 60) + ref;
+      }
+    }
+    return value;
+  }
+  var xmp_tag_names_default;
+  var init_xmp_tag_names = __esm({
+    "node_modules/exifreader/src/xmp-tag-names.js"() {
+      init_esbuild_shims();
+      init_tag_names_common();
+      xmp_tag_names_default = {
+        "tiff:Orientation"(value) {
+          if (value === "1") {
+            return "Horizontal (normal)";
+          }
+          if (value === "2") {
+            return "Mirror horizontal";
+          }
+          if (value === "3") {
+            return "Rotate 180";
+          }
+          if (value === "4") {
+            return "Mirror vertical";
+          }
+          if (value === "5") {
+            return "Mirror horizontal and rotate 270 CW";
+          }
+          if (value === "6") {
+            return "Rotate 90 CW";
+          }
+          if (value === "7") {
+            return "Mirror horizontal and rotate 90 CW";
+          }
+          if (value === "8") {
+            return "Rotate 270 CW";
+          }
+          return value;
+        },
+        "tiff:ResolutionUnit": (value) => tag_names_common_default.ResolutionUnit(parseInt(value, 10)),
+        "tiff:XResolution": (value) => fraction(tag_names_common_default.XResolution, value),
+        "tiff:YResolution": (value) => fraction(tag_names_common_default.YResolution, value),
+        "exif:ApertureValue": (value) => fraction(tag_names_common_default.ApertureValue, value),
+        "exif:GPSLatitude": calculateGPSValue,
+        "exif:GPSLongitude": calculateGPSValue,
+        "exif:FNumber": (value) => fraction(tag_names_common_default.FNumber, value),
+        "exif:FocalLength": (value) => fraction(tag_names_common_default.FocalLength, value),
+        "exif:FocalPlaneResolutionUnit": (value) => tag_names_common_default.FocalPlaneResolutionUnit(parseInt(value, 10)),
+        "exif:ColorSpace": (value) => tag_names_common_default.ColorSpace(parseNumber(value)),
+        "exif:ComponentsConfiguration"(value, description) {
+          if (/^\d, \d, \d, \d$/.test(description)) {
+            const numbers = description.split(", ").map((number) => parseInt(number, 10));
+            return tag_names_common_default.ComponentsConfiguration(numbers);
+          }
+          return description;
+        },
+        "exif:Contrast": (value) => tag_names_common_default.Contrast(parseInt(value, 10)),
+        "exif:CustomRendered": (value) => tag_names_common_default.CustomRendered(parseInt(value, 10)),
+        "exif:ExposureMode": (value) => tag_names_common_default.ExposureMode(parseInt(value, 10)),
+        "exif:ExposureProgram": (value) => tag_names_common_default.ExposureProgram(parseInt(value, 10)),
+        "exif:ExposureTime"(value) {
+          if (isFraction(value)) {
+            return tag_names_common_default.ExposureTime(value.split("/").map((number) => parseInt(number, 10)));
+          }
+          return value;
+        },
+        "exif:MeteringMode": (value) => tag_names_common_default.MeteringMode(parseInt(value, 10)),
+        "exif:Saturation": (value) => tag_names_common_default.Saturation(parseInt(value, 10)),
+        "exif:SceneCaptureType": (value) => tag_names_common_default.SceneCaptureType(parseInt(value, 10)),
+        "exif:Sharpness": (value) => tag_names_common_default.Sharpness(parseInt(value, 10)),
+        "exif:ShutterSpeedValue": (value) => fraction(tag_names_common_default.ShutterSpeedValue, value),
+        "exif:WhiteBalance": (value) => tag_names_common_default.WhiteBalance(parseInt(value, 10))
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/dom-parser.js
+  function get2(domParser) {
+    if (domParser) {
+      return domParser;
+    }
+    if (typeof DOMParser !== "undefined") {
+      return new DOMParser();
+    }
+    try {
+      const { DOMParser: DOMParser2, onErrorStopParsing } = node_require_default.optionalPackage("@xmldom/xmldom");
+      return new DOMParser2({ onError: onErrorStopParsing });
+    } catch (error) {
+      return void 0;
+    }
+  }
+  var dom_parser_default;
+  var init_dom_parser = __esm({
+    "node_modules/exifreader/src/dom-parser.js"() {
+      init_esbuild_shims();
+      init_node_require();
+      dom_parser_default = {
+        get: get2
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/xmp-namespaces.js
+  function isMissingNamespaceError(error) {
+    const message = String(error.message);
+    const missingNamespaceStrings = [
+      // @xmldom/xmldom
+      "prefix is non-null and namespace is null",
+      // Firefox
+      "prefix not bound to a namespace",
+      // en
+      "prefix inte bundet till en namnrymd"
+      // sv
+    ];
+    for (let i = 0; i < missingNamespaceStrings.length; i++) {
+      if (message.indexOf(missingNamespaceStrings[i]) !== -1) {
+        return true;
+      }
+    }
+    return isChromeMissingNamespaceMessage(message);
+  }
+  function isChromeMissingNamespaceMessage(message) {
+    const lines = message.split(/[\n\r\u2028\u2029]/);
+    for (let i = 0; i < lines.length; i++) {
+      const prefixIndex = lines[i].indexOf(CHROME_MESSAGE_START);
+      if (prefixIndex !== -1 && lines[i].lastIndexOf(CHROME_MESSAGE_END) > prefixIndex + CHROME_MESSAGE_START.length) {
+        return true;
+      }
+    }
+    return false;
+  }
+  function addMissingNamespaces(xmlString) {
+    const rootTagStartIndex = findRootTagStartIndex(xmlString);
+    if (rootTagStartIndex === -1) {
+      return xmlString;
+    }
+    const { insertionIndex, attributeValueSpans } = scanStartTag(xmlString, rootTagStartIndex + 1);
+    if (insertionIndex === -1) {
+      return xmlString;
+    }
+    const declaredPrefixLookup = getDeclaredNamespacePrefixLookup(xmlString, rootTagStartIndex, insertionIndex, attributeValueSpans);
+    const usedPrefixes = getUsedNamespacePrefixes(xmlString);
+    const missingPrefixes = usedPrefixes.filter((prefix) => declaredPrefixLookup[prefix] === void 0);
+    if (missingPrefixes.length === 0) {
+      return xmlString;
+    }
+    const namespaceDeclarations = createNamespaceDeclarations(missingPrefixes);
+    return xmlString.slice(0, insertionIndex) + namespaceDeclarations + xmlString.slice(insertionIndex);
+  }
+  function findRootTagStartIndex(xmlString) {
+    let index = 0;
+    while (index < xmlString.length) {
+      index = xmlString.indexOf("<", index);
+      if (index === -1) {
+        return -1;
+      }
+      if (/[A-Za-z_]/.test(xmlString.charAt(index + 1))) {
+        return index;
+      }
+      if (hasSubstringAt(xmlString, "<!--", index)) {
+        index = skipPast(xmlString, index + "<!--".length, "-->");
+      } else if (hasSubstringAt(xmlString, "<![CDATA[", index)) {
+        index = skipPast(xmlString, index + "<![CDATA[".length, "]]>");
+      } else if (xmlString.charAt(index + 1) === "?") {
+        index = skipPast(xmlString, index + "<?".length, "?>");
+      } else {
+        index++;
+      }
+    }
+    return -1;
+  }
+  function scanStartTag(xmlString, fromIndex) {
+    const attributeValueSpans = [];
+    let quoteCharacter;
+    let valueStartIndex;
+    for (let i = fromIndex; i < xmlString.length; i++) {
+      const character = xmlString.charAt(i);
+      if (quoteCharacter !== void 0) {
+        if (character === quoteCharacter) {
+          attributeValueSpans.push({ start: valueStartIndex, end: i });
+          quoteCharacter = void 0;
+        }
+      } else if (character === '"' || character === "'") {
+        quoteCharacter = character;
+        valueStartIndex = i + 1;
+      } else if (character === ">") {
+        if (xmlString.charAt(i - 1) === "/") {
+          return { insertionIndex: i - 1, attributeValueSpans };
+        }
+        return { insertionIndex: i, attributeValueSpans };
+      }
+    }
+    return { insertionIndex: -1, attributeValueSpans };
+  }
+  function hasSubstringAt(xmlString, substring, index) {
+    return xmlString.slice(index, index + substring.length) === substring;
+  }
+  function skipPast(xmlString, fromIndex, endMarker) {
+    const endIndex = xmlString.indexOf(endMarker, fromIndex);
+    if (endIndex === -1) {
+      return xmlString.length;
+    }
+    return endIndex + endMarker.length;
+  }
+  function getDeclaredNamespacePrefixLookup(xmlContent, rootTagStartIndex, insertionIndex, attributeValueSpans) {
+    const prefixes = /* @__PURE__ */ Object.create(null);
+    const namespaceDeclarationRegex = /xmlns:([A-Za-z_][A-Za-z0-9._-]*)\s*=\s*["']([^"']*)["']/g;
+    let match;
+    let spanIndex = 0;
+    while ((match = namespaceDeclarationRegex.exec(xmlContent)) !== null) {
+      while (spanIndex < attributeValueSpans.length && attributeValueSpans[spanIndex].end <= match.index) {
+        spanIndex++;
+      }
+      if (spanIndex < attributeValueSpans.length && attributeValueSpans[spanIndex].start <= match.index) {
+        namespaceDeclarationRegex.lastIndex = attributeValueSpans[spanIndex].end;
+        continue;
+      }
+      if (match[2] !== "" || isInRootStartTag(match.index, rootTagStartIndex, insertionIndex)) {
+        prefixes[match[1]] = true;
+      }
+    }
+    return prefixes;
+  }
+  function isInRootStartTag(index, rootTagStartIndex, insertionIndex) {
+    return index > rootTagStartIndex && index < insertionIndex;
+  }
+  function getUsedNamespacePrefixes(xmlContent) {
+    const prefixes = [];
+    const seenPrefixes = /* @__PURE__ */ Object.create(null);
+    const prefixUsageRegex = /(?:^|[^A-Za-z0-9._-])([A-Za-z_][A-Za-z0-9._-]*):[A-Za-z_][A-Za-z0-9._-]*/g;
+    let match;
+    while ((match = prefixUsageRegex.exec(xmlContent)) !== null) {
+      const prefix = match[1];
+      if (prefix === "xmlns" || prefix === "xml") {
+        continue;
+      }
+      if (seenPrefixes[prefix] === void 0) {
+        seenPrefixes[prefix] = true;
+        prefixes.push(prefix);
+      }
+    }
+    return prefixes;
+  }
+  function createNamespaceDeclarations(prefixes) {
+    const declarations = [];
+    for (let i = 0; i < prefixes.length; i++) {
+      const prefix = prefixes[i];
+      declarations.push(" xmlns:" + prefix + '="' + getNamespaceUri(prefix) + '"');
+    }
+    return declarations.join("");
+  }
+  function getNamespaceUri(prefix) {
+    if (Object.prototype.hasOwnProperty.call(KNOWN_NAMESPACE_URIS, prefix)) {
+      return KNOWN_NAMESPACE_URIS[prefix];
+    }
+    return "http://fallback.namespace/" + prefix;
+  }
+  var CHROME_MESSAGE_START, CHROME_MESSAGE_END, KNOWN_NAMESPACE_URIS;
+  var init_xmp_namespaces = __esm({
+    "node_modules/exifreader/src/xmp-namespaces.js"() {
+      init_esbuild_shims();
+      CHROME_MESSAGE_START = "Namespace prefix ";
+      CHROME_MESSAGE_END = " is not defined";
+      KNOWN_NAMESPACE_URIS = {
+        xmp: "http://ns.adobe.com/xap/1.0/",
+        tiff: "http://ns.adobe.com/tiff/1.0/",
+        exif: "http://ns.adobe.com/exif/1.0/",
+        dc: "http://purl.org/dc/elements/1.1/",
+        xmpMM: "http://ns.adobe.com/xap/1.0/mm/",
+        stEvt: "http://ns.adobe.com/xap/1.0/sType/ResourceEvent#",
+        stRef: "http://ns.adobe.com/xap/1.0/sType/ResourceRef#",
+        photoshop: "http://ns.adobe.com/photoshop/1.0/"
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/xmp-element-depth.js
+  function exceedsMarkupBounds(xmlString, maxDepth, maxNodes = Infinity) {
+    let depth = 0;
+    let nodeCount = 0;
+    let index = xmlString.indexOf("<");
+    while (index !== -1) {
+      if (hasSubstringAt(xmlString, "<!--", index)) {
+        nodeCount++;
+        index = skipPast(xmlString, index + 4, "-->");
+      } else if (hasSubstringAt(xmlString, "<![CDATA[", index)) {
+        nodeCount++;
+        index = skipPast(xmlString, index + 9, "]]>");
+      } else if (hasSubstringAt(xmlString, "<?", index)) {
+        nodeCount++;
+        index = skipPast(xmlString, index + 2, "?>");
+      } else if (hasSubstringAt(xmlString, "<!", index)) {
+        nodeCount++;
+        index = skipDeclaration(xmlString, index + 2);
+      } else if (hasSubstringAt(xmlString, "</", index)) {
+        depth = Math.max(depth - 1, 0);
+        index = skipPast(xmlString, index + 2, ">");
+      } else {
+        if (depth + 1 > maxDepth) {
+          return true;
+        }
+        const nextTagIndex = xmlString.indexOf("<", index + 1);
+        const limit = nextTagIndex === -1 ? xmlString.length : nextTagIndex;
+        if (!isSelfClosingTag(xmlString, index + 1, limit)) {
+          depth++;
+        }
+        nodeCount += 1 + countAttributes(xmlString, index + 1, limit);
+        index++;
+      }
+      if (nodeCount > maxNodes) {
+        return true;
+      }
+      index = xmlString.indexOf("<", index);
+    }
+    return false;
+  }
+  function skipDeclaration(xmlString, fromIndex) {
+    for (let index = fromIndex; index < xmlString.length; index++) {
+      const character = xmlString.charAt(index);
+      if (character === '"' || character === "'") {
+        index = xmlString.indexOf(character, index + 1);
+        if (index === -1) {
+          return xmlString.length;
+        }
+      } else if (character === ">" || character === "[") {
+        return index + 1;
+      }
+    }
+    return xmlString.length;
+  }
+  function isSelfClosingTag(xmlString, nameIndex, limit) {
+    let index = skipName(xmlString, nameIndex, limit);
+    if (index === nameIndex) {
+      return false;
+    }
+    for (; ; ) {
+      const attributeIndex = skipWhitespace(xmlString, index, limit);
+      if (hasSubstringAt(xmlString, "/>", attributeIndex)) {
+        return true;
+      }
+      if (attributeIndex === index) {
+        return false;
+      }
+      index = skipAttribute(xmlString, attributeIndex, limit);
+      if (index === -1) {
+        return false;
+      }
+    }
+  }
+  function skipName(xmlString, fromIndex, limit) {
+    let index = fromIndex;
+    while (index < limit && NAME_END_CHARACTERS.indexOf(xmlString.charAt(index)) === -1) {
+      index++;
+    }
+    return index;
+  }
+  function skipWhitespace(xmlString, fromIndex, limit) {
+    let index = fromIndex;
+    while (index < limit && WHITESPACE_CHARACTERS.indexOf(xmlString.charAt(index)) !== -1) {
+      index++;
+    }
+    return index;
+  }
+  function skipAttribute(xmlString, nameIndex, limit) {
+    const nameEndIndex = skipName(xmlString, nameIndex, limit);
+    if (nameEndIndex === nameIndex) {
+      return -1;
+    }
+    const equalsIndex = skipWhitespace(xmlString, nameEndIndex, limit);
+    if (xmlString.charAt(equalsIndex) !== "=") {
+      return -1;
+    }
+    const quoteIndex = skipWhitespace(xmlString, equalsIndex + 1, limit);
+    const quote = xmlString.charAt(quoteIndex);
+    if (quote !== '"' && quote !== "'") {
+      return -1;
+    }
+    for (let index = quoteIndex + 1; index < limit; index++) {
+      if (xmlString.charAt(index) === quote) {
+        return index + 1;
+      }
+    }
+    return -1;
+  }
+  function countAttributes(xmlString, nameIndex, limit) {
+    let state = TAG;
+    let count = 0;
+    for (let index = nameIndex; index < limit; index++) {
+      const character = xmlString.charAt(index);
+      if (character === "=") {
+        if (state !== ATTRIBUTE_NAME && state !== SPACE_AFTER_ATTRIBUTE_NAME) {
+          return count;
+        }
+        state = EQUALS;
+      } else if (character === '"' || character === "'") {
+        if (state === EQUALS || state === ATTRIBUTE_NAME) {
+          const quoteIndex = xmlString.indexOf(character, index + 1);
+          if (quoteIndex === -1 || quoteIndex >= limit) {
+            return count;
+          }
+          index = quoteIndex;
+        } else if (state !== UNQUOTED_VALUE) {
+          return count;
+        }
+        count++;
+        state = ATTRIBUTE_END;
+      } else if (character === "/") {
+        if (state === EQUALS) {
+          return count;
+        }
+        if (state === TAG || state === ATTRIBUTE_END || state === TAG_SPACE) {
+          state = TAG_CLOSE;
+        }
+      } else if (character === ">") {
+        return isAttributePending(state) ? count + 1 : count;
+      } else if (isXmldomWhitespace(character)) {
+        if (state === UNQUOTED_VALUE) {
+          count++;
+        }
+        if (state === TAG || state === UNQUOTED_VALUE || state === ATTRIBUTE_END) {
+          state = TAG_SPACE;
+        } else if (state === ATTRIBUTE_NAME) {
+          state = SPACE_AFTER_ATTRIBUTE_NAME;
+        }
+      } else {
+        if (state === TAG_CLOSE) {
+          return count;
+        }
+        if (state === SPACE_AFTER_ATTRIBUTE_NAME) {
+          count++;
+        }
+        if (state === SPACE_AFTER_ATTRIBUTE_NAME || state === ATTRIBUTE_END || state === TAG_SPACE) {
+          state = ATTRIBUTE_NAME;
+        } else if (state === EQUALS) {
+          state = UNQUOTED_VALUE;
+        }
+      }
+    }
+    return isAttributePending(state) ? count + 1 : count;
+  }
+  function isAttributePending(state) {
+    return state === ATTRIBUTE_NAME || state === SPACE_AFTER_ATTRIBUTE_NAME || state === UNQUOTED_VALUE;
+  }
+  function isXmldomWhitespace(character) {
+    return character <= " " || character === "\x80" || character === "\x85" || character === "\u2028" || character === "\u2029";
+  }
+  var WHITESPACE_CHARACTERS, NAME_END_CHARACTERS, TAG, ATTRIBUTE_NAME, SPACE_AFTER_ATTRIBUTE_NAME, EQUALS, UNQUOTED_VALUE, ATTRIBUTE_END, TAG_SPACE, TAG_CLOSE;
+  var init_xmp_element_depth = __esm({
+    "node_modules/exifreader/src/xmp-element-depth.js"() {
+      init_esbuild_shims();
+      init_xmp_namespaces();
+      WHITESPACE_CHARACTERS = " 	\r\n";
+      NAME_END_CHARACTERS = ` 	\r
+/><="'`;
+      TAG = 0;
+      ATTRIBUTE_NAME = 1;
+      SPACE_AFTER_ATTRIBUTE_NAME = 2;
+      EQUALS = 3;
+      UNQUOTED_VALUE = 4;
+      ATTRIBUTE_END = 5;
+      TAG_SPACE = 6;
+      TAG_CLOSE = 7;
+    }
+  });
+
+  // node_modules/exifreader/src/xmp-tags.js
+  function read8(dataView, chunks, domParser) {
+    const tags = {};
+    if (typeof dataView === "string") {
+      readTags(tags, dataView, domParser);
+      return tags;
+    }
+    const [standardXmp, extendedXmp] = extractCompleteChunks(dataView, chunks);
+    const hasStandardTags = readTags(tags, standardXmp, domParser);
+    if (extendedXmp) {
+      const hasExtendedTags = readTags(tags, extendedXmp, domParser);
+      if (!hasStandardTags && !hasExtendedTags) {
+        delete tags._raw;
+        readTags(tags, combineChunks(dataView, chunks), domParser);
+      }
+    }
+    return tags;
+  }
+  function extractCompleteChunks(dataView, chunks) {
+    if (chunks.length === 0) {
+      return [];
+    }
+    const completeChunks = [combineChunks(dataView, chunks.slice(0, 1))];
+    if (chunks.length > 1) {
+      completeChunks.push(combineChunks(dataView, chunks.slice(1)));
+    }
+    return completeChunks;
+  }
+  function combineChunks(dataView, chunks) {
+    const slices = chunks.map((chunk) => getBoundedChunkBytes(dataView, chunk));
+    const totalLength = slices.reduce((size, slice) => size + slice.length, 0);
+    const combinedChunks = new Uint8Array(totalLength);
+    let offset = 0;
+    for (let i = 0; i < slices.length; i++) {
+      combinedChunks.set(slices[i], offset);
+      offset += slices[i].length;
+    }
+    return new DataView(combinedChunks.buffer);
+  }
+  function getBoundedChunkBytes(dataView, chunk) {
+    const bufferLength = dataView.byteLength;
+    const byteOffset = dataView.byteOffset;
+    const start = Math.min(Math.max(chunk.dataOffset, 0), bufferLength);
+    const end = Math.min(start + Math.max(chunk.length, 0), bufferLength);
+    return new Uint8Array(dataView.buffer, byteOffset + start, end - start);
+  }
+  function readTags(tags, chunkDataView, domParser) {
+    try {
+      const { doc, raw, decodeValue } = getDocument(chunkDataView, domParser);
+      tags._raw = (tags._raw || "") + raw;
+      const rdf = getRDF(doc);
+      const xmpTags = {};
+      parseXMPObject(convertToObject(rdf, true, decodeValue), xmpTags, /* @__PURE__ */ Object.create(null));
+      delete xmpTags._raw;
+      const names = Object.keys(xmpTags);
+      for (let i = 0; i < names.length; i++) {
+        setProperty(tags, names[i], xmpTags[names[i]]);
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+  function getDocument(chunkDataView, _domParser) {
+    const domParser = dom_parser_default.get(_domParser);
+    if (!domParser) {
+      console.warn("Warning: DOMParser is not available. It is needed to be able to parse XMP tags.");
+      throw new Error();
+    }
+    const { xmlString, decodeValue } = decodeXmlSource(chunkDataView);
+    const doc = parseFromString(domParser, trimXmlSource(xmlString));
+    return {
+      doc,
+      raw: xmlString,
+      decodeValue
+    };
+  }
+  function decodeXmlSource(source) {
+    if (typeof source === "string") {
+      return decodeByteString(source);
+    }
+    const Decoder = text_decoder_default.get();
+    if (Decoder !== void 0) {
+      try {
+        return {
+          xmlString: new Decoder("utf-8", { fatal: true }).decode(source),
+          decodeValue: keepValue
+        };
+      } catch (error) {
+      }
+    }
+    const bytes = new Uint8Array(source.buffer, source.byteOffset, source.byteLength);
+    return decodeByteString(getByteString(bytes));
+  }
+  function decodeByteString(byteString) {
+    const decoded = tryDecodeUtf8ByteString(byteString);
+    if (decoded !== void 0) {
+      return { xmlString: decoded, decodeValue: keepValue };
+    }
+    return { xmlString: byteString, decodeValue: decodeUtf8ByteString };
+  }
+  function keepValue(value) {
+    return value;
+  }
+  function trimXmlSource(xmlSource) {
+    return trimAfterPacketTrailer(xmlSource.replace(/^.+(<\?xpacket begin)/, "$1"));
+  }
+  function trimAfterPacketTrailer(xmlSource) {
+    const lastLineStart = Math.max(
+      xmlSource.lastIndexOf("\n"),
+      xmlSource.lastIndexOf("\r"),
+      xmlSource.lastIndexOf("\u2028"),
+      xmlSource.lastIndexOf("\u2029")
+    ) + 1;
+    const trailerStart = xmlSource.indexOf(PACKET_TRAILER_START, lastLineStart);
+    if (trailerStart === -1) {
+      return xmlSource;
+    }
+    const trailerEnd = xmlSource.lastIndexOf(PACKET_TRAILER_END, xmlSource.length - PACKET_TRAILER_END.length - 1);
+    if (trailerEnd < trailerStart + PACKET_TRAILER_START.length) {
+      return xmlSource;
+    }
+    return xmlSource.slice(0, trailerEnd + PACKET_TRAILER_END.length);
+  }
+  function parseFromString(domParser, xmlString, isRetry = false) {
+    if (exceedsMarkupBounds(xmlString, MAX_ELEMENT_DEPTH, MAX_MARKUP_NODES)) {
+      throw new ParseError(`XMP elements nested deeper than ${MAX_ELEMENT_DEPTH} levels or more than ${MAX_MARKUP_NODES} markup nodes.`);
+    }
+    try {
+      const doc = domParser.parseFromString(xmlString, "application/xml");
+      const errors2 = doc.getElementsByTagName("parsererror");
+      if (errors2.length > 0) {
+        throw new ParseError(errors2[0].textContent);
+      }
+      return doc;
+    } catch (error) {
+      if (error.name === "ParseError" && isMissingNamespaceError(error) && !isRetry) {
+        return parseFromString(domParser, addMissingNamespaces(xmlString), true);
+      }
+      throw error;
+    }
+  }
+  function getRDF(node) {
+    const childNodes = node.childNodes;
+    for (let i = 0; i < childNodes.length; i++) {
+      if (childNodes[i].tagName === "x:xmpmeta") {
+        return getRDF(childNodes[i]);
+      }
+      if (childNodes[i].tagName === "rdf:RDF") {
+        return childNodes[i];
+      }
+    }
+    throw new Error();
+  }
+  function convertToObject(node, isTopNode, decodeValue) {
+    const childNodes = getChildNodes(node);
+    if (hasTextOnlyContent(childNodes)) {
+      if (isTopNode) {
+        return {};
+      }
+      return decodeValue(getTextValue(childNodes));
+    }
+    return getElementsFromNodes(childNodes, decodeValue);
+  }
+  function getChildNodes(node) {
+    const childNodes = node.childNodes;
+    const nodes = [];
+    for (let i = 0; i < childNodes.length; i++) {
+      if (!isCommentOrProcessingInstruction(childNodes[i])) {
+        nodes.push(childNodes[i]);
+      }
+    }
+    return nodes;
+  }
+  function isCommentOrProcessingInstruction(node) {
+    return node.nodeType === COMMENT_NODE || node.nodeType === PROCESSING_INSTRUCTION_NODE;
+  }
+  function hasTextOnlyContent(nodes) {
+    return nodes.length > 0 && nodes.every(isText);
+  }
+  function isText(node) {
+    return node.nodeType === TEXT_NODE || node.nodeType === CDATA_SECTION_NODE;
+  }
+  function getTextValue(nodes) {
+    return nodes.map((node) => node.nodeValue).join("");
+  }
+  function getElementsFromNodes(nodes, decodeValue) {
+    const elements = /* @__PURE__ */ Object.create(null);
+    nodes.forEach((node) => {
+      if (isElement(node)) {
+        const nodeElement = getElementFromNode(node, decodeValue);
+        if (elements[node.nodeName] !== void 0) {
+          if (!Array.isArray(elements[node.nodeName])) {
+            elements[node.nodeName] = [elements[node.nodeName]];
+          }
+          elements[node.nodeName].push(nodeElement);
+        } else {
+          elements[node.nodeName] = nodeElement;
+        }
+      }
+    });
+    return elements;
+  }
+  function isElement(node) {
+    return node.nodeType === ELEMENT_NODE;
+  }
+  function getElementFromNode(node, decodeValue) {
+    return {
+      attributes: getAttributes(node, decodeValue),
+      value: convertToObject(node, false, decodeValue)
+    };
+  }
+  function getAttributes(element, decodeValue) {
+    const elementAttributes = element.attributes;
+    const attributes = /* @__PURE__ */ Object.create(null);
+    for (let i = 0; i < elementAttributes.length; i++) {
+      setProperty(attributes, elementAttributes[i].nodeName, decodeValue(elementAttributes[i].value));
+    }
+    return attributes;
+  }
+  function parseXMPObject(xmpObject, tags, plainDescriptions) {
+    for (const nodeName in xmpObject) {
+      let nodes = xmpObject[nodeName];
+      if (!Array.isArray(nodes)) {
+        nodes = [nodes];
+      }
+      nodes.forEach((node) => {
+        parseNodeAttributesAsTags(node.attributes, tags, plainDescriptions);
+        if (typeof node.value === "object") {
+          parseNodeChildrenAsTags(node.value, tags, plainDescriptions);
+        }
+      });
+    }
+  }
+  function parseNodeAttributesAsTags(attributes, tags, plainDescriptions) {
+    for (const name in attributes) {
+      try {
+        if (isTagAttribute(name)) {
+          setParsedTag(tags, plainDescriptions, getLocalName(name), createParsedTag(attributes[name], attributes[name], {}, name));
+        }
+      } catch (error) {
+      }
+    }
+  }
+  function isTagAttribute(name) {
+    return name !== "rdf:parseType" && !isNamespaceDefinition(name);
+  }
+  function isNamespaceDefinition(name) {
+    return name.split(":")[0] === "xmlns";
+  }
+  function setParsedTag(tags, plainDescriptions, name, parsedTag) {
+    const key = getTagKey(name);
+    setProperty(tags, key, parsedTag.tag);
+    setProperty(plainDescriptions, key, parsedTag.plainDescription);
+  }
+  function getLocalName(name) {
+    if (/^MicrosoftPhoto(_\d+_)?:Rating$/i.test(name)) {
+      return "RatingPercent";
+    }
+    const localName = name.split(":")[1];
+    return localName || name;
+  }
+  function createParsedTag(value, plainDescription, attributes, name) {
+    return {
+      tag: {
+        value,
+        attributes,
+        description: getDescription(value, plainDescription, name)
+      },
+      plainDescription
+    };
+  }
+  function getDescription(value, plainDescription, name) {
+    if (!hasTagNameFunction(name) || isObject(value)) {
+      return plainDescription;
+    }
+    if (Array.isArray(value)) {
+      try {
+        const description = xmp_tag_names_default[name](value, plainDescription);
+        if (typeof description === "string") {
+          return description;
+        }
+      } catch (error) {
+      }
+      return plainDescription;
+    }
+    try {
+      return xmp_tag_names_default[name](value);
+    } catch (error) {
+      return value;
+    }
+  }
+  function hasTagNameFunction(name) {
+    return Object.prototype.hasOwnProperty.call(xmp_tag_names_default, name) && typeof xmp_tag_names_default[name] === "function";
+  }
+  function isObject(value) {
+    return typeof value === "object" && !Array.isArray(value);
+  }
+  function parseNodeChildrenAsTags(children, tags, plainDescriptions) {
+    oneLevelDeeper(() => {
+      for (const name in children) {
+        try {
+          if (!isNamespaceDefinition(name)) {
+            setParsedTag(tags, plainDescriptions, getLocalName(name), parseNodeAsTag(children[name], name));
+          }
+        } catch (error) {
+        }
+      }
+    });
+  }
+  function oneLevelDeeper(callback) {
+    nestingDepth++;
+    try {
+      if (nestingDepth > MAX_NESTING_DEPTH) {
+        throw new ParseError(`XMP value nested deeper than ${MAX_NESTING_DEPTH} levels.`);
+      }
+      return callback();
+    } finally {
+      nestingDepth--;
+    }
+  }
+  function parseNodeAsTag(node, name) {
+    if (isDuplicateTag(node)) {
+      return parseNodeAsDuplicateTag(node, name);
+    }
+    if (isEmptyResourceTag(node)) {
+      return { tag: { value: "", attributes: {}, description: "" }, plainDescription: "" };
+    }
+    if (hasNestedSimpleRdfDescription(node)) {
+      return parseNodeAsSimpleRdfDescription(node, name);
+    }
+    if (hasNestedStructureRdfDescription(node)) {
+      return parseNodeAsStructureRdfDescription(node, name);
+    }
+    if (isCompactStructure(node)) {
+      return parseNodeAsCompactStructure(node, name);
+    }
+    if (isArray(node)) {
+      return parseNodeAsArray(node, name);
+    }
+    return parseNodeAsSimpleValue(node, name);
+  }
+  function isEmptyResourceTag(node) {
+    return node.attributes["rdf:parseType"] === "Resource" && typeof node.value === "string" && node.value.trim() === "";
+  }
+  function isDuplicateTag(node) {
+    return Array.isArray(node);
+  }
+  function parseNodeAsDuplicateTag(node, name) {
+    return parseNodeAsSimpleValue(node[node.length - 1], name);
+  }
+  function hasNestedSimpleRdfDescription(node) {
+    return node.attributes["rdf:parseType"] === "Resource" && node.value["rdf:value"] !== void 0 || node.value["rdf:Description"] !== void 0 && node.value["rdf:Description"].value["rdf:value"] !== void 0;
+  }
+  function parseNodeAsSimpleRdfDescription(node, name) {
+    const attributes = parseNodeAttributes(node);
+    if (node.value["rdf:Description"] !== void 0) {
+      node = node.value["rdf:Description"];
+    }
+    objectAssign(attributes, parseNodeAttributes(node), parseNodeChildrenAsAttributes(node));
+    const { value, plainDescription } = parseRdfValue(node);
+    return createParsedTag(value, plainDescription, attributes, name);
+  }
+  function parseNodeAttributes(node) {
+    const attributes = {};
+    for (const name in node.attributes) {
+      if (name !== "rdf:parseType" && name !== "rdf:resource" && !isNamespaceDefinition(name)) {
+        setProperty(attributes, getTagKey(getLocalName(name)), node.attributes[name]);
+      }
+    }
+    return attributes;
+  }
+  function parseNodeChildrenAsAttributes(node) {
+    const attributes = {};
+    if (typeof node.value !== "object") {
+      return attributes;
+    }
+    for (const name in node.value) {
+      if (name !== "rdf:value" && !isNamespaceDefinition(name)) {
+        setProperty(attributes, getTagKey(getLocalName(name)), node.value[name].value);
+      }
+    }
+    return attributes;
+  }
+  function parseRdfValue(node) {
+    const rdfValueNode = getLastNode(node.value["rdf:value"]);
+    const uri = getURIValue(rdfValueNode);
+    if (uri) {
+      return { value: uri, plainDescription: uri };
+    }
+    return parseRdfValueContent(rdfValueNode);
+  }
+  function getLastNode(node) {
+    if (isDuplicateTag(node)) {
+      return node[node.length - 1];
+    }
+    return node;
+  }
+  function parseRdfValueContent(rdfValueNode) {
+    if (isArray(rdfValueNode)) {
+      return oneLevelDeeper(() => parseArrayItems(rdfValueNode));
+    }
+    if (typeof rdfValueNode.value === "object") {
+      const tags = /* @__PURE__ */ Object.create(null);
+      const plainDescriptions = /* @__PURE__ */ Object.create(null);
+      parseNodeChildrenAsTags(rdfValueNode.value, tags, plainDescriptions);
+      return { value: tags, plainDescription: getDescriptionOfObject(tags, plainDescriptions) };
+    }
+    return { value: rdfValueNode.value, plainDescription: rdfValueNode.value };
+  }
+  function getDescriptionOfObject(tags, plainDescriptions) {
+    const descriptions = [];
+    for (const key in tags) {
+      descriptions.push(`${getClearTextKey(key)}: ${plainDescriptions[key]}`);
+    }
+    return descriptions.join("; ");
+  }
+  function getClearTextKey(key) {
+    if (key === "CiAdrCity") {
+      return "CreatorCity";
+    }
+    if (key === "CiAdrCtry") {
+      return "CreatorCountry";
+    }
+    if (key === "CiAdrExtadr") {
+      return "CreatorAddress";
+    }
+    if (key === "CiAdrPcode") {
+      return "CreatorPostalCode";
+    }
+    if (key === "CiAdrRegion") {
+      return "CreatorRegion";
+    }
+    if (key === "CiEmailWork") {
+      return "CreatorWorkEmail";
+    }
+    if (key === "CiTelWork") {
+      return "CreatorWorkPhone";
+    }
+    if (key === "CiUrlWork") {
+      return "CreatorWorkUrl";
+    }
+    return key;
+  }
+  function hasNestedStructureRdfDescription(node) {
+    return node.attributes["rdf:parseType"] === "Resource" || node.value["rdf:Description"] !== void 0 && node.value["rdf:Description"].value["rdf:value"] === void 0;
+  }
+  function parseNodeAsStructureRdfDescription(node, name) {
+    const value = {};
+    const plainDescriptions = /* @__PURE__ */ Object.create(null);
+    const attributes = {};
+    if (node.value["rdf:Description"] !== void 0) {
+      parseNodeAttributesAsTags(node.value["rdf:Description"].attributes, value, plainDescriptions);
+      objectAssign(attributes, parseNodeAttributes(node));
+      node = node.value["rdf:Description"];
+    }
+    if (typeof node.value === "object") {
+      parseNodeChildrenAsTags(node.value, value, plainDescriptions);
+    }
+    return createParsedTag(value, getDescriptionOfObject(value, plainDescriptions), attributes, name);
+  }
+  function isCompactStructure(node) {
+    return isEmptyValue(node.value) && node.attributes["xml:lang"] === void 0 && node.attributes["rdf:resource"] === void 0;
+  }
+  function isEmptyValue(value) {
+    if (typeof value === "string") {
+      return value === "";
+    }
+    return Object.keys(value).length === 0;
+  }
+  function parseNodeAsCompactStructure(node, name) {
+    const value = {};
+    const plainDescriptions = /* @__PURE__ */ Object.create(null);
+    parseNodeAttributesAsTags(node.attributes, value, plainDescriptions);
+    return createParsedTag(value, getDescriptionOfObject(value, plainDescriptions), {}, name);
+  }
+  function isArray(node) {
+    return getArrayChild(node.value) !== void 0;
+  }
+  function getArrayChild(value) {
+    return getLastNode(value["rdf:Bag"] || value["rdf:Seq"] || value["rdf:Alt"]);
+  }
+  function parseNodeAsArray(node, name) {
+    const attributes = parseNodeAttributes(node);
+    const { value, plainDescription } = parseArrayItems(node);
+    return createParsedTag(value, plainDescription, attributes, name);
+  }
+  function parseArrayItems(node) {
+    let items = getArrayChild(node.value).value["rdf:li"];
+    const value = [];
+    const itemDescriptions = [];
+    if (items === void 0) {
+      items = [];
+    } else if (!Array.isArray(items)) {
+      items = [items];
+    }
+    items.forEach((item) => {
+      const parsedItem = parseArrayValue(item);
+      value.push(parsedItem.value);
+      itemDescriptions.push(parsedItem.plainDescription);
+    });
+    return { value, plainDescription: itemDescriptions.join(", ") };
+  }
+  function parseArrayValue(item) {
+    if (hasNestedSimpleRdfDescription(item)) {
+      return getParsedTagAsItem(parseNodeAsSimpleRdfDescription(item));
+    }
+    if (hasNestedStructureRdfDescription(item)) {
+      return getParsedStructureAsItem(parseNodeAsStructureRdfDescription(item));
+    }
+    if (isCompactStructure(item)) {
+      return getParsedStructureAsItem(parseNodeAsCompactStructure(item));
+    }
+    return getParsedTagAsItem(parseNodeAsSimpleValue(item));
+  }
+  function getParsedTagAsItem(parsedTag) {
+    return { value: parsedTag.tag, plainDescription: parsedTag.plainDescription };
+  }
+  function getParsedStructureAsItem(parsedStructure) {
+    return { value: parsedStructure.tag.value, plainDescription: parsedStructure.plainDescription };
+  }
+  function parseNodeAsSimpleValue(node, name) {
+    const { value, plainDescription } = parseSimpleValue(node);
+    return createParsedTag(value, plainDescription, parseNodeAttributes(node), name);
+  }
+  function parseSimpleValue(node) {
+    const uri = getURIValue(node);
+    if (uri) {
+      return { value: uri, plainDescription: uri };
+    }
+    if (typeof node.value === "string") {
+      return { value: node.value, plainDescription: node.value };
+    }
+    const tags = {};
+    const plainDescriptions = /* @__PURE__ */ Object.create(null);
+    parseXMPObject(node.value, tags, plainDescriptions);
+    return { value: tags, plainDescription: getDescriptionOfObject(tags, plainDescriptions) };
+  }
+  function getURIValue(node) {
+    return node.attributes && node.attributes["rdf:resource"];
+  }
+  var xmp_tags_default, ELEMENT_NODE, TEXT_NODE, CDATA_SECTION_NODE, PROCESSING_INSTRUCTION_NODE, COMMENT_NODE, PACKET_TRAILER_START, PACKET_TRAILER_END, MAX_NESTING_DEPTH, MAX_ELEMENT_DEPTH, MAX_MARKUP_NODES, nestingDepth, ParseError;
+  var init_xmp_tags = __esm({
+    "node_modules/exifreader/src/xmp-tags.js"() {
+      init_esbuild_shims();
+      init_utils();
+      init_xmp_tag_names();
+      init_dom_parser();
+      init_text_decoder();
+      init_xmp_namespaces();
+      init_xmp_element_depth();
+      xmp_tags_default = {
+        read: read8
+      };
+      ELEMENT_NODE = 1;
+      TEXT_NODE = 3;
+      CDATA_SECTION_NODE = 4;
+      PROCESSING_INSTRUCTION_NODE = 7;
+      COMMENT_NODE = 8;
+      PACKET_TRAILER_START = '<?xpacket end="';
+      PACKET_TRAILER_END = '"?>';
+      MAX_NESTING_DEPTH = 16;
+      MAX_ELEMENT_DEPTH = 256;
+      MAX_MARKUP_NODES = 25e4;
+      nestingDepth = 0;
+      ParseError = class extends Error {
+        constructor(message) {
+          super(message);
+          this.name = "ParseError";
+        }
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/photoshop-tag-names.js
+  function pathResource(dataView, recordBudget = { remaining: MAX_PATH_RECORDS }) {
+    const TYPE_SIZE = 2;
+    const types = {};
+    const paths = [];
+    for (let offset = 0; offset < dataView.byteLength && recordBudget.remaining > 0; offset += TYPE_SIZE + PATH_RECORD_SIZE) {
+      const type = types_default.getShortAt(dataView, offset);
+      if (PATH_RECORD_TYPES[type]) {
+        if (!types[type]) {
+          types[type] = PATH_RECORD_TYPES[type].description;
+        }
+        paths.push({
+          type,
+          path: PATH_RECORD_TYPES[type].path(dataView, offset + TYPE_SIZE)
+        });
+        recordBudget.remaining--;
+      }
+    }
+    return JSON.stringify({ types, paths });
+  }
+  function parseBezierKnot(dataView, offset) {
+    const PATH_POINT_SIZE = 8;
+    const path = [];
+    for (let i = 0; i < PATH_RECORD_SIZE; i += PATH_POINT_SIZE) {
+      path.push(parsePathPoint(dataView, offset + i));
+    }
+    return path;
+  }
+  function parsePathPoint(dataView, offset) {
+    const vertical = getFixedPointNumber(dataView, offset, 8);
+    const horizontal = getFixedPointNumber(dataView, offset + 4, 8);
+    return [horizontal, vertical];
+  }
+  function parseClipboard(dataView, offset) {
+    return [
+      [
+        getFixedPointNumber(dataView, offset, 8),
+        // Top
+        getFixedPointNumber(dataView, offset + 4, 8),
+        // Left
+        getFixedPointNumber(dataView, offset + 8, 8),
+        // Botton
+        getFixedPointNumber(dataView, offset + 12, 8)
+        // Right
+      ],
+      getFixedPointNumber(dataView, offset + 16, 8)
+      // Resolution
+    ];
+  }
+  function getFixedPointNumber(dataView, offset, binaryPoint) {
+    const number = types_default.getLongAt(dataView, offset);
+    const sign = number >>> 31 === 0 ? 1 : -1;
+    const integer = (number & 2130706432) >>> 32 - binaryPoint;
+    const fraction2 = number & parseInt(strRepeat("1", 32 - binaryPoint), 2);
+    return sign * parseFloatRadix(integer.toString(2) + "." + padStart(fraction2.toString(2), 32 - binaryPoint, "0"), 2);
+  }
+  var PathRecordTypes, PATH_RECORD_SIZE, MAX_PATH_RECORDS, photoshop_tag_names_default, PATH_RECORD_TYPES;
+  var init_photoshop_tag_names = __esm({
+    "node_modules/exifreader/src/photoshop-tag-names.js"() {
+      init_esbuild_shims();
+      init_types();
+      init_utils();
+      PathRecordTypes = {
+        CLOSED_SUBPATH_LENGTH: 0,
+        CLOSED_SUBPATH_BEZIER_LINKED: 1,
+        CLOSED_SUBPATH_BEZIER_UNLINKED: 2,
+        OPEN_SUBPATH_LENGTH: 3,
+        OPEN_SUBPATH_BEZIER_LINKED: 4,
+        OPEN_SUBPATH_BEZIER_UNLINKED: 5,
+        FILL_RULE: 6,
+        CLIPBOARD: 7,
+        INITIAL_FILL_RULE: 8
+      };
+      PATH_RECORD_SIZE = 24;
+      MAX_PATH_RECORDS = 32768;
+      photoshop_tag_names_default = {
+        2e3: {
+          name: "PathInformation",
+          description: pathResource
+        },
+        2999: {
+          name: "ClippingPathName",
+          description(dataView) {
+            const [, string] = getPascalStringFromDataView(dataView, 0);
+            return string;
+          }
+        }
+      };
+      PATH_RECORD_TYPES = {
+        [PathRecordTypes.CLOSED_SUBPATH_LENGTH]: {
+          description: "Closed subpath length",
+          path: (dataView, offset) => [types_default.getShortAt(dataView, offset)]
+        },
+        [PathRecordTypes.CLOSED_SUBPATH_BEZIER_LINKED]: {
+          description: "Closed subpath Bezier knot, linked",
+          path: parseBezierKnot
+        },
+        [PathRecordTypes.CLOSED_SUBPATH_BEZIER_UNLINKED]: {
+          description: "Closed subpath Bezier knot, unlinked",
+          path: parseBezierKnot
+        },
+        [PathRecordTypes.OPEN_SUBPATH_LENGTH]: {
+          description: "Open subpath length",
+          path: (dataView, offset) => [types_default.getShortAt(dataView, offset)]
+        },
+        [PathRecordTypes.OPEN_SUBPATH_BEZIER_LINKED]: {
+          description: "Open subpath Bezier knot, linked",
+          path: parseBezierKnot
+        },
+        [PathRecordTypes.OPEN_SUBPATH_BEZIER_UNLINKED]: {
+          description: "Open subpath Bezier knot, unlinked",
+          path: parseBezierKnot
+        },
+        [PathRecordTypes.FILL_RULE]: {
+          description: "Path fill rule",
+          path: () => []
+        },
+        [PathRecordTypes.INITIAL_FILL_RULE]: {
+          description: "Initial fill rule",
+          path: (dataView, offset) => [types_default.getShortAt(dataView, offset)]
+        },
+        [PathRecordTypes.CLIPBOARD]: {
+          description: "Clipboard",
+          path: parseClipboard
+        }
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/photoshop-tags.js
+  function read9(bytes, includeUnknown, tagFilter = NOOP_TAG_FILTER) {
+    if (!Array.isArray(bytes)) {
+      return {};
+    }
+    const byteArray = new Uint8Array(bytes);
+    const dataView = getDataView(byteArray.buffer);
+    const pathRecordBudget = { remaining: MAX_PATH_RECORDS };
+    const tags = {};
+    let offset = 0;
+    for (let resourceCount = 0; resourceCount < MAX_RESOURCES && offset + RESOURCE_BLOCK_MIN_HEADER_SIZE2 <= dataView.byteLength; resourceCount++) {
+      const signature = getStringFromDataView(dataView, offset, SIGNATURE_SIZE);
+      offset += SIGNATURE_SIZE;
+      const tagId = types_default.getShortAt(dataView, offset);
+      offset += TAG_ID_SIZE;
+      const { tagName, tagNameSize } = getTagName3(dataView, offset);
+      offset += tagNameSize;
+      if (offset + RESOURCE_LENGTH_SIZE > dataView.byteLength) {
+        break;
+      }
+      const declaredResourceSize = types_default.getLongAt(dataView, offset);
+      offset += RESOURCE_LENGTH_SIZE;
+      const resourceSize = Math.min(declaredResourceSize, dataView.byteLength - offset);
+      if (signature === SIGNATURE) {
+        const tagKey = getResourceTagKey(tagId, tagName);
+        if (!tagFilter.shouldParseTag("photoshop", tagKey, tagId)) {
+          offset += resourceSize + resourceSize % 2;
+          continue;
+        }
+        const valueDataView = getDataView(dataView.buffer, offset, resourceSize);
+        const tag = {
+          id: tagId,
+          value: getByteString(byteArray, offset, offset + resourceSize)
+        };
+        if (photoshop_tag_names_default[tagId]) {
+          try {
+            tag.description = photoshop_tag_names_default[tagId].description(valueDataView, pathRecordBudget);
+          } catch (error) {
+            tag.description = "<no description formatter>";
+          }
+          setProperty(tags, tagKey, tag);
+        } else if (includeUnknown) {
+          tags[tagKey] = tag;
+        }
+      }
+      offset += resourceSize + resourceSize % 2;
+    }
+    return tags;
+  }
+  function getResourceTagKey(tagId, tagName) {
+    if (photoshop_tag_names_default[tagId]) {
+      return getTagKey(tagName || photoshop_tag_names_default[tagId].name);
+    }
+    return `undefined-${tagId}`;
+  }
+  function getTagName3(dataView, offset) {
+    const [stringSize, string] = getPascalStringFromDataView(dataView, offset);
+    return {
+      tagName: string,
+      tagNameSize: 1 + stringSize + (stringSize % 2 === 0 ? 1 : 0)
+    };
+  }
+  var photoshop_tags_default, SIGNATURE, TAG_ID_SIZE, RESOURCE_LENGTH_SIZE, SIGNATURE_SIZE, TAG_NAME_MIN_SIZE, RESOURCE_BLOCK_MIN_HEADER_SIZE2, MAX_RESOURCES;
+  var init_photoshop_tags = __esm({
+    "node_modules/exifreader/src/photoshop-tags.js"() {
+      init_esbuild_shims();
+      init_utils();
+      init_types();
+      init_photoshop_tag_names();
+      init_tag_filter();
+      photoshop_tags_default = {
+        read: read9
+      };
+      SIGNATURE = "8BIM";
+      TAG_ID_SIZE = 2;
+      RESOURCE_LENGTH_SIZE = 4;
+      SIGNATURE_SIZE = SIGNATURE.length;
+      TAG_NAME_MIN_SIZE = 2;
+      RESOURCE_BLOCK_MIN_HEADER_SIZE2 = SIGNATURE_SIZE + TAG_ID_SIZE + TAG_NAME_MIN_SIZE + RESOURCE_LENGTH_SIZE;
+      MAX_RESOURCES = 4096;
+    }
+  });
+
+  // node_modules/exifreader/src/icc-tag-names.js
+  function parseDate(dataView, offset) {
+    const year = dataView.getUint16(offset);
+    const month = dataView.getUint16(offset + 2) - 1;
+    const day = dataView.getUint16(offset + 4);
+    const hours = dataView.getUint16(offset + 6);
+    const minutes = dataView.getUint16(offset + 8);
+    const seconds = dataView.getUint16(offset + 10);
+    return new Date(Date.UTC(year, month, day, hours, minutes, seconds));
+  }
+  function sliceToString(slice) {
+    return getByteString(new Uint8Array(slice));
+  }
+  function toCompany(value) {
+    switch (value.toLowerCase()) {
+      case "appl":
+        return "Apple";
+      case "adbe":
+        return "Adobe";
+      case "msft":
+        return "Microsoft";
+      case "sunw":
+        return "Sun Microsystems";
+      case "sgi":
+        return "Silicon Graphics";
+      case "tgnt":
+        return "Taligent";
+      default:
+        return value;
+    }
+  }
+  var iccTags, iccProfile;
+  var init_icc_tag_names = __esm({
+    "node_modules/exifreader/src/icc-tag-names.js"() {
+      init_esbuild_shims();
+      init_utils();
+      iccTags = {
+        "desc": {
+          "name": "ICC Description"
+        },
+        "cprt": {
+          "name": "ICC Copyright"
+        },
+        "dmdd": {
+          "name": "ICC Device Model Description"
+        },
+        "vued": {
+          "name": "ICC Viewing Conditions Description"
+        },
+        "dmnd": {
+          "name": "ICC Device Manufacturer for Display"
+        },
+        "tech": {
+          "name": "Technology"
+        }
+      };
+      iccProfile = {
+        4: {
+          "name": "Preferred CMM type",
+          "value": (dataView, offset) => getStringFromDataView(dataView, offset, 4),
+          "description": (value) => value !== null ? toCompany(value) : ""
+        },
+        8: {
+          "name": "Profile Version",
+          "value": (dataView, offset) => {
+            return dataView.getUint8(offset).toString(10) + "." + (dataView.getUint8(offset + 1) >> 4).toString(10) + "." + (dataView.getUint8(offset + 1) % 16).toString(10);
+          }
+        },
+        12: {
+          "name": "Profile/Device class",
+          "value": (dataView, offset) => getStringFromDataView(dataView, offset, 4),
+          "description": (value) => {
+            switch (value.toLowerCase()) {
               case "scnr":
                 return "Input Device profile";
               case "mntr":
@@ -13980,34 +13261,45 @@
               case "mvis":
                 return "MultiplexVisualization profile";
               default:
-                return e2;
+                return value;
             }
-          } }, 16: { name: "Color Space", value: function(e2, t2) {
-            return a(e2, t2, 4);
-          } }, 20: { name: "Connection Space", value: function(e2, t2) {
-            return a(e2, t2, 4);
-          } }, 24: { name: "ICC Profile Date", value: function(e2, t2) {
-            return (function(e3, t3) {
-              var n2 = e3.getUint16(t3), r2 = e3.getUint16(t3 + 2) - 1, i2 = e3.getUint16(t3 + 4), o2 = e3.getUint16(t3 + 6), a2 = e3.getUint16(t3 + 8), u2 = e3.getUint16(t3 + 10);
-              return new Date(Date.UTC(n2, r2, i2, o2, a2, u2));
-            })(e2, t2).toISOString();
-          } }, 36: { name: "ICC Signature", value: function(e2, t2) {
-            return n2 = e2.buffer.slice(t2, t2 + 4), String.fromCharCode.apply(null, new Uint8Array(n2));
-            var n2;
-          } }, 40: { name: "Primary Platform", value: function(e2, t2) {
-            return a(e2, t2, 4);
-          }, description: function(e2) {
-            return zi(e2);
-          } }, 48: { name: "Device Manufacturer", value: function(e2, t2) {
-            return a(e2, t2, 4);
-          }, description: function(e2) {
-            return zi(e2);
-          } }, 52: { name: "Device Model Number", value: function(e2, t2) {
-            return a(e2, t2, 4);
-          } }, 64: { name: "Rendering Intent", value: function(e2, t2) {
-            return e2.getUint32(t2);
-          }, description: function(e2) {
-            switch (e2) {
+          }
+        },
+        16: {
+          "name": "Color Space",
+          "value": (dataView, offset) => getStringFromDataView(dataView, offset, 4)
+        },
+        20: {
+          "name": "Connection Space",
+          "value": (dataView, offset) => getStringFromDataView(dataView, offset, 4)
+        },
+        24: {
+          "name": "ICC Profile Date",
+          "value": (dataView, offset) => parseDate(dataView, offset).toISOString()
+        },
+        36: {
+          "name": "ICC Signature",
+          "value": (dataView, offset) => sliceToString(dataView.buffer.slice(offset, offset + 4))
+        },
+        40: {
+          "name": "Primary Platform",
+          "value": (dataView, offset) => getStringFromDataView(dataView, offset, 4),
+          "description": (value) => toCompany(value)
+        },
+        48: {
+          "name": "Device Manufacturer",
+          "value": (dataView, offset) => getStringFromDataView(dataView, offset, 4),
+          "description": (value) => toCompany(value)
+        },
+        52: {
+          "name": "Device Model Number",
+          "value": (dataView, offset) => getStringFromDataView(dataView, offset, 4)
+        },
+        64: {
+          "name": "Rendering Intent",
+          "value": (dataView, offset) => dataView.getUint32(offset),
+          "description": (value) => {
+            switch (value) {
               case 0:
                 return "Perceptual";
               case 1:
@@ -14017,878 +13309,2636 @@
               case 3:
                 return "Absolute Colorimetric";
               default:
-                return e2;
-            }
-          } }, 80: { name: "Profile Creator", value: function(e2, t2) {
-            return a(e2, t2, 4);
-          } } };
-          function zi(e2) {
-            switch (e2.toLowerCase()) {
-              case "appl":
-                return "Apple";
-              case "adbe":
-                return "Adobe";
-              case "msft":
-                return "Microsoft";
-              case "sunw":
-                return "Sun Microsystems";
-              case "sgi":
-                return "Silicon Graphics";
-              case "tgnt":
-                return "Taligent";
-              default:
-                return e2;
+                return value;
             }
           }
-          var Vi = { read: function(e2, t2, n2, r2) {
-            return n2 && t2[0].compressionMethod !== h ? (function(e3, t3, n3) {
-              return t3[0].compressionMethod !== v ? {} : S(new DataView(e3.buffer.slice(t3[0].offset, t3[0].offset + t3[0].length)), t3[0].compressionMethod, "utf-8", "dataview", n3).then(Qi).catch((function() {
-                return {};
-              }));
-            })(e2, t2, r2) : (function(e3, t3) {
-              try {
-                for (var n3 = t3.reduce((function(e4, t4) {
-                  return e4 + t4.length;
-                }), 0), r3 = new Uint8Array(n3), i2 = 0, o2 = (function(e4) {
-                  return Array.isArray(e4) ? new DataView(Uint8Array.from(e4).buffer).buffer : e4.buffer;
-                })(e3), a2 = function(e4) {
-                  var n4 = t3.find((function(t4) {
-                    return t4.chunkNumber === e4;
-                  }));
-                  if (!n4) throw Error("ICC chunk ".concat(e4, " not found"));
-                  var a3 = o2.slice(n4.offset, n4.offset + n4.length), u3 = new Uint8Array(a3);
-                  r3.set(u3, i2), i2 += u3.length;
-                }, u2 = 1; u2 <= t3.length; u2++) a2(u2);
-                return Qi(new DataView(r3.buffer));
-              } catch (e4) {
-                return {};
-              }
-            })(e2, t2);
-          } }, Xi = 84, Hi = 128, Wi = "acsp", Ki = "desc", Ji = "mluc", qi = "text", Yi = "sig ", $i = 12;
-          function Zi(e2, t2) {
-            return e2.length < t2 + $i;
+        },
+        80: {
+          "name": "Profile Creator",
+          "value": (dataView, offset) => getStringFromDataView(dataView, offset, 4)
+        }
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/icc-tags.js
+  function read10(dataView, iccData, async, decompressConfig) {
+    if (async && iccData[0].compressionMethod !== COMPRESSION_METHOD_NONE) {
+      return readCompressedIcc(dataView, iccData, decompressConfig);
+    }
+    return readIcc(dataView, iccData);
+  }
+  function readCompressedIcc(dataView, iccData, decompressConfig) {
+    if (!compressionMethodIsSupported(iccData[0].compressionMethod)) {
+      return {};
+    }
+    const byteOffset = dataView.byteOffset || 0;
+    const slice = dataView.buffer.slice(byteOffset + iccData[0].offset, byteOffset + iccData[0].offset + iccData[0].length);
+    const compressedDataView = new DataView(slice);
+    return decompress(compressedDataView, iccData[0].compressionMethod, "utf-8", "dataview", decompressConfig).then(parseTags2).catch(() => ({}));
+  }
+  function compressionMethodIsSupported(compressionMethod) {
+    return compressionMethod === COMPRESSION_METHOD_DEFLATE;
+  }
+  function readIcc(dataView, iccData) {
+    try {
+      const buffer = getBuffer(dataView);
+      const byteOffset = dataView.byteOffset || 0;
+      const declaredLength = iccData.reduce((sum, icc) => sum + icc.length, 0);
+      const totalIccProfileLength = Math.min(declaredLength, buffer.byteLength);
+      const iccBinaryData = new Uint8Array(totalIccProfileLength);
+      let offset = 0;
+      const chunksByNumber = getChunksByNumber(iccData);
+      for (let chunkNumber = 1; chunkNumber <= iccData.length; chunkNumber++) {
+        const iccDataChunk = chunksByNumber[chunkNumber];
+        if (!iccDataChunk) {
+          throw new Error(`ICC chunk ${chunkNumber} not found`);
+        }
+        const data = buffer.slice(byteOffset + iccDataChunk.offset, byteOffset + iccDataChunk.offset + iccDataChunk.length);
+        const chunkData = new Uint8Array(data);
+        iccBinaryData.set(chunkData, offset);
+        offset += chunkData.length;
+      }
+      return parseTags2(new DataView(iccBinaryData.buffer));
+    } catch (error) {
+      return {};
+    }
+  }
+  function getBuffer(dataView) {
+    if (Array.isArray(dataView)) {
+      return new DataView(Uint8Array.from(dataView).buffer).buffer;
+    }
+    return dataView.buffer;
+  }
+  function getChunksByNumber(iccData) {
+    const chunksByNumber = /* @__PURE__ */ Object.create(null);
+    for (let i = 0; i < iccData.length; i++) {
+      if (chunksByNumber[iccData[i].chunkNumber] === void 0) {
+        chunksByNumber[iccData[i].chunkNumber] = iccData[i];
+      }
+    }
+    return chunksByNumber;
+  }
+  function iccDoesNotHaveTagCount(dataView) {
+    return dataView.byteLength < ICC_TAG_COUNT_OFFSET + 4;
+  }
+  function doesNotHaveTagData(dataView, tagHeaderOffset) {
+    return dataView.byteLength < tagHeaderOffset + TAG_TABLE_SINGLE_TAG_DATA;
+  }
+  function parseTags2(dataView) {
+    const buffer = dataView.buffer;
+    const length = dataView.getUint32();
+    if (dataView.byteLength !== length) {
+      throw new Error("ICC profile length not matching");
+    }
+    if (dataView.byteLength < PROFILE_HEADER_LENGTH) {
+      throw new Error("ICC profile too short");
+    }
+    const tags = {};
+    const iccProfileKeys = Object.keys(iccProfile);
+    for (let i = 0; i < iccProfileKeys.length; i++) {
+      const offset = iccProfileKeys[i];
+      const profileEntry = iccProfile[offset];
+      const value = profileEntry.value(dataView, parseInt(offset, 10));
+      let description = value;
+      if (profileEntry.description) {
+        description = profileEntry.description(value);
+      }
+      tags[profileEntry.name] = {
+        value,
+        description
+      };
+    }
+    const signature = sliceToString(buffer.slice(36, 40));
+    if (signature !== ICC_SIGNATURE) {
+      throw new Error("ICC profile: missing signature");
+    }
+    if (iccDoesNotHaveTagCount(dataView)) {
+      return tags;
+    }
+    const tagCount = Math.min(dataView.getUint32(ICC_TAG_COUNT_OFFSET), MAX_TAG_COUNT);
+    let tagHeaderOffset = 132;
+    const decodeBudget = { remaining: Math.min(dataView.byteLength, MAX_DECODE_BYTES) };
+    for (let i = 0; i < tagCount; i++) {
+      if (doesNotHaveTagData(dataView, tagHeaderOffset)) {
+        return tags;
+      }
+      const tagSignature = getStringFromDataView(dataView, tagHeaderOffset, 4);
+      const tagOffset = dataView.getUint32(tagHeaderOffset + 4);
+      const tagSize = dataView.getUint32(tagHeaderOffset + 8);
+      if (tagOffset > dataView.byteLength) {
+        return tags;
+      }
+      const tagType = getStringFromDataView(dataView, tagOffset, 4);
+      if (tagType === TAG_TYPE_DESC) {
+        if (tagOffset + DESC_VALUE_SIZE_OFFSET_END > dataView.byteLength) {
+          return tags;
+        }
+        const tagValueSize = dataView.getUint32(tagOffset + 8);
+        if (tagValueSize > tagSize) {
+          return tags;
+        }
+        const val = readBoundedString(dataView, tagOffset + 12, tagValueSize - 1, decodeBudget);
+        addTag(tags, tagSignature, val);
+      } else if (tagType === TAG_TYPE_MULTI_LOCALIZED_UNICODE_TYPE) {
+        if (tagOffset + MULTI_LOCALIZED_UNICODE_RECORDS_OFFSET > dataView.byteLength) {
+          return tags;
+        }
+        const numRecords = dataView.getUint32(tagOffset + 8);
+        const recordSize = dataView.getUint32(tagOffset + 12);
+        if (recordSize < MIN_MULTI_LOCALIZED_UNICODE_RECORD_SIZE) {
+          return tags;
+        }
+        if (numRecords > MAX_MLUC_RECORDS) {
+          return tags;
+        }
+        const recordsSize = numRecords * recordSize;
+        const availableRecordsSize = dataView.byteLength - tagOffset - MULTI_LOCALIZED_UNICODE_RECORDS_OFFSET;
+        if (recordsSize > availableRecordsSize) {
+          return tags;
+        }
+        if (recordsSize > decodeBudget.remaining) {
+          return tags;
+        }
+        decodeBudget.remaining -= recordsSize;
+        const tagTextEnd = Math.min(tagSize, dataView.byteLength - tagOffset);
+        let offset = tagOffset + MULTI_LOCALIZED_UNICODE_RECORDS_OFFSET;
+        const val = [];
+        for (let recordNum = 0; recordNum < numRecords; recordNum++) {
+          const languageCode = getStringFromDataView(dataView, offset + 0, 2);
+          const countryCode = getStringFromDataView(dataView, offset + 2, 2);
+          const textLength = dataView.getUint32(offset + 4);
+          const textOffset = dataView.getUint32(offset + 8);
+          const availableInTag = Math.max(0, tagTextEnd - textOffset);
+          const boundedTextLength = Math.min(textLength, availableInTag, decodeBudget.remaining);
+          decodeBudget.remaining -= boundedTextLength;
+          const text = getUnicodeStringFromDataView(dataView, tagOffset + textOffset, boundedTextLength);
+          val.push({ languageCode, countryCode, text });
+          offset += recordSize;
+        }
+        if (numRecords === 1) {
+          addTag(tags, tagSignature, val[0].text);
+        } else {
+          const valObj = {};
+          for (let valIndex = 0; valIndex < val.length; valIndex++) {
+            valObj[`${val[valIndex].languageCode}-${val[valIndex].countryCode}`] = val[valIndex].text;
           }
-          function Qi(e2) {
-            var t2 = e2.buffer, n2 = e2.getUint32();
-            if (e2.byteLength !== n2) throw Error("ICC profile length not matching");
-            if (e2.byteLength < Xi) throw Error("ICC profile too short");
-            for (var r2 = {}, i2 = Object.keys(ji), o2 = 0; o2 < i2.length; o2++) {
-              var u2 = i2[o2], s2 = ji[u2], c2 = s2.value(e2, parseInt(u2, 10)), l2 = c2;
-              s2.description && (l2 = s2.description(c2)), r2[s2.name] = { value: c2, description: l2 };
-            }
-            if (eo(t2.slice(36, 40)) !== Wi) throw Error("ICC profile: missing signature");
-            if ((function(e3) {
-              return e3.length < Hi + 4;
-            })(t2)) return r2;
-            for (var d2 = e2.getUint32(128), p2 = 132, g2 = 0; g2 < d2; g2++) {
-              if (Zi(t2, p2)) return r2;
-              var m2 = a(e2, p2, 4), h2 = e2.getUint32(p2 + 4), v2 = e2.getUint32(p2 + 8);
-              if (h2 > t2.length) return r2;
-              var y2 = a(e2, h2, 4);
-              if (y2 === Ki) {
-                var b2 = e2.getUint32(h2 + 8);
-                if (b2 > v2) return r2;
-                to(r2, m2, eo(t2.slice(h2 + 12, h2 + b2 + 11)));
-              } else if (y2 === Ji) {
-                var S2 = e2.getUint32(h2 + 8), I2 = e2.getUint32(h2 + 12);
-                if (I2 < 12) return r2;
-                if (S2 * I2 > e2.byteLength - h2 - 16) return r2;
-                for (var A2 = h2 + 16, P2 = [], x2 = 0; x2 < S2; x2++) {
-                  var C2 = a(e2, A2 + 0, 2), T2 = a(e2, A2 + 2, 2), U2 = e2.getUint32(A2 + 4), E2 = e2.getUint32(A2 + 8), w2 = f(e2, h2 + E2, U2);
-                  P2.push({ languageCode: C2, countryCode: T2, text: w2 }), A2 += I2;
-                }
-                if (1 === S2) to(r2, m2, P2[0].text);
-                else {
-                  for (var O2 = {}, F2 = 0; F2 < P2.length; F2++) O2["".concat(P2[F2].languageCode, "-").concat(P2[F2].countryCode)] = P2[F2].text;
-                  to(r2, m2, O2);
-                }
-              } else y2 === qi ? to(r2, m2, eo(t2.slice(h2 + 8, h2 + v2 - 7))) : y2 === Yi && to(r2, m2, eo(t2.slice(h2 + 8, h2 + 12)));
-              p2 += 12;
-            }
-            return r2;
+          addTag(tags, tagSignature, valObj);
+        }
+      } else if (tagType === TAG_TYPE_TEXT) {
+        const val = readBoundedString(dataView, tagOffset + 8, tagSize - 8, decodeBudget);
+        const nulIndex = val.indexOf("\0");
+        addTag(tags, tagSignature, nulIndex === -1 ? val : val.slice(0, nulIndex));
+      } else if (tagType === TAG_TYPE_SIGNATURE) {
+        const val = sliceToString(buffer.slice(tagOffset + 8, tagOffset + 12));
+        addTag(tags, tagSignature, val);
+      }
+      tagHeaderOffset = tagHeaderOffset + 12;
+    }
+    return tags;
+  }
+  function readBoundedString(dataView, start, requestedLength, budget) {
+    const length = Math.max(0, Math.min(requestedLength, dataView.byteLength - start, budget.remaining));
+    budget.remaining -= length;
+    return sliceToString(dataView.buffer.slice(start, start + length));
+  }
+  function addTag(tags, tagSignature, value) {
+    if (iccTags[tagSignature]) {
+      tags[iccTags[tagSignature].name] = { value, description: value };
+    } else {
+      tags[tagSignature] = { value, description: value };
+    }
+  }
+  var icc_tags_default, PROFILE_HEADER_LENGTH, ICC_TAG_COUNT_OFFSET, ICC_SIGNATURE, TAG_TYPE_DESC, TAG_TYPE_MULTI_LOCALIZED_UNICODE_TYPE, TAG_TYPE_TEXT, TAG_TYPE_SIGNATURE, TAG_TABLE_SINGLE_TAG_DATA, DESC_VALUE_SIZE_OFFSET_END, MIN_MULTI_LOCALIZED_UNICODE_RECORD_SIZE, MULTI_LOCALIZED_UNICODE_RECORDS_OFFSET, MAX_MLUC_RECORDS, MAX_TAG_COUNT, MAX_DECODE_BYTES;
+  var init_icc_tags = __esm({
+    "node_modules/exifreader/src/icc-tags.js"() {
+      init_esbuild_shims();
+      init_icc_tag_names();
+      init_utils();
+      icc_tags_default = {
+        read: read10
+      };
+      PROFILE_HEADER_LENGTH = 84;
+      ICC_TAG_COUNT_OFFSET = 128;
+      ICC_SIGNATURE = "acsp";
+      TAG_TYPE_DESC = "desc";
+      TAG_TYPE_MULTI_LOCALIZED_UNICODE_TYPE = "mluc";
+      TAG_TYPE_TEXT = "text";
+      TAG_TYPE_SIGNATURE = "sig ";
+      TAG_TABLE_SINGLE_TAG_DATA = 12;
+      DESC_VALUE_SIZE_OFFSET_END = 12;
+      MIN_MULTI_LOCALIZED_UNICODE_RECORD_SIZE = 12;
+      MULTI_LOCALIZED_UNICODE_RECORDS_OFFSET = 16;
+      MAX_MLUC_RECORDS = 1e3;
+      MAX_TAG_COUNT = 1e3;
+      MAX_DECODE_BYTES = 1024 * 1024;
+    }
+  });
+
+  // node_modules/exifreader/src/tag-names-canon-ifd.js
+  var tag_names_canon_ifd_default;
+  var init_tag_names_canon_ifd = __esm({
+    "node_modules/exifreader/src/tag-names-canon-ifd.js"() {
+      init_esbuild_shims();
+      tag_names_canon_ifd_default = {
+        1: {
+          "name": "CameraSettings",
+          "description": (value) => value
+        },
+        4: {
+          "name": "ShotInfo",
+          "description": (value) => value
+        },
+        149: "LensModel"
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/canon-tags.js
+  function read11(dataView, tiffHeaderOffset, offset, byteOrder, includeUnknown, computed = false, tagFilter = void 0, valueBudget = void 0) {
+    let tags = readIfd(
+      dataView,
+      IFD_TYPE_CANON,
+      tiffHeaderOffset,
+      tiffHeaderOffset + offset,
+      byteOrder,
+      includeUnknown,
+      computed,
+      tagFilter,
+      "makerNotes",
+      valueBudget,
+      getTagNames2()
+    );
+    if (tags["ShotInfo"]) {
+      tags = objectAssign({}, tags, parseShotInfo(tags["ShotInfo"].value));
+      delete tags["ShotInfo"];
+    }
+    if (tags["CameraSettings"]) {
+      tags = objectAssign({}, tags, parseCameraSettings(tags["CameraSettings"].value));
+      delete tags["CameraSettings"];
+    }
+    return tags;
+  }
+  function getTagNames2() {
+    const tagNames = {};
+    tagNames[IFD_TYPE_CANON] = tag_names_canon_ifd_default;
+    return tagNames;
+  }
+  function parseShotInfo(shotInfoData) {
+    const tags = {};
+    const autoRotate = shotInfoData[SHOT_INFO_AUTO_ROTATE];
+    if (Number.isFinite(autoRotate)) {
+      tags["AutoRotate"] = {
+        value: autoRotate,
+        description: getAutoRotateDescription(autoRotate)
+      };
+    }
+    return tags;
+  }
+  function parseCameraSettings(cameraSettingsData) {
+    const tags = {};
+    if (!Array.isArray(cameraSettingsData)) {
+      return tags;
+    }
+    const lensType = cameraSettingsData[CAMERA_SETTINGS_LENS_TYPE];
+    if (Number.isFinite(lensType)) {
+      tags["LensType"] = {
+        value: lensType,
+        description: `${lensType}`
+      };
+    }
+    return tags;
+  }
+  function getAutoRotateDescription(autoRotate) {
+    if (autoRotate === 0) {
+      return "None";
+    }
+    if (autoRotate === 1) {
+      return "Rotate 90 CW";
+    }
+    if (autoRotate === 2) {
+      return "Rotate 180";
+    }
+    if (autoRotate === 3) {
+      return "Rotate 270 CW";
+    }
+    return "Unknown";
+  }
+  var SHOT_INFO_AUTO_ROTATE, CAMERA_SETTINGS_LENS_TYPE, canon_tags_default;
+  var init_canon_tags = __esm({
+    "node_modules/exifreader/src/canon-tags.js"() {
+      init_esbuild_shims();
+      init_utils();
+      init_tags_helpers();
+      init_tag_names_canon_ifd();
+      init_ifd_types();
+      SHOT_INFO_AUTO_ROTATE = 27;
+      CAMERA_SETTINGS_LENS_TYPE = 22;
+      canon_tags_default = {
+        read: read11,
+        SHOT_INFO_AUTO_ROTATE,
+        CAMERA_SETTINGS_LENS_TYPE
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/tag-names-pentax-ifd.js
+  var tag_names_pentax_ifd_default;
+  var init_tag_names_pentax_ifd = __esm({
+    "node_modules/exifreader/src/tag-names-pentax-ifd.js"() {
+      init_esbuild_shims();
+      tag_names_pentax_ifd_default = {
+        0: {
+          "name": "PentaxVersion",
+          "description": (value) => value.join(".")
+        },
+        5: "PentaxModelID",
+        555: "LevelInfo"
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/pentax-tags.js
+  function read12(dataView, tiffHeaderOffset, offset, includeUnknown, computed = false, tagFilter = void 0, valueBudget = void 0) {
+    try {
+      const byteOrder = byte_order_default.getByteOrder(dataView, tiffHeaderOffset + offset + BYTE_ORDER_OFFSET);
+      const originOffset = tiffHeaderOffset + offset;
+      let tags = readIfd(
+        dataView,
+        IFD_TYPE_PENTAX,
+        originOffset,
+        originOffset + PENTAX_IFD_OFFSET,
+        byteOrder,
+        includeUnknown,
+        computed,
+        tagFilter,
+        "makerNotes",
+        valueBudget,
+        getTagNames3()
+      );
+      if (hasLevelInfoK3III(tags)) {
+        tags = objectAssign({}, tags, parseLevelInfoK3III(
+          dataView,
+          originOffset + tags["LevelInfo"].__offset,
+          getLevelInfoLength(tags["LevelInfo"].value),
+          byteOrder
+        ));
+        delete tags["LevelInfo"];
+      } else if (tags["LevelInfo"]) {
+        delete tags["LevelInfo"].__offset;
+      }
+      return tags;
+    } catch (error) {
+      return {};
+    }
+  }
+  function getTagNames3() {
+    const tagNames = {};
+    tagNames[IFD_TYPE_PENTAX] = tag_names_pentax_ifd_default;
+    return tagNames;
+  }
+  function hasLevelInfoK3III(tags) {
+    return tags["PentaxModelID"] && tags["PentaxModelID"].value === MODEL_ID.K3_III && tags["LevelInfo"];
+  }
+  function getLevelInfoLength(levelInfoValue) {
+    if (Array.isArray(levelInfoValue) && typeof levelInfoValue[0] === "number") {
+      return levelInfoValue.length;
+    }
+    return 0;
+  }
+  function parseLevelInfoK3III(dataView, levelInfoOffset, levelInfoLength, byteOrder) {
+    const tags = {};
+    const littleEndian = byteOrder === byte_order_default.LITTLE_ENDIAN;
+    if (fieldFitsInLevelInfo(LIK3III.CAMERA_ORIENTATION, INT8_SIZE, levelInfoLength)) {
+      const cameraOrientation = dataView.getInt8(levelInfoOffset + LIK3III.CAMERA_ORIENTATION);
+      tags["CameraOrientation"] = {
+        value: cameraOrientation,
+        description: getOrientationDescription(cameraOrientation)
+      };
+    }
+    if (fieldFitsInLevelInfo(LIK3III.ROLL_ANGLE, INT16_SIZE, levelInfoLength)) {
+      const rollAngle = dataView.getInt16(levelInfoOffset + LIK3III.ROLL_ANGLE, littleEndian);
+      tags["RollAngle"] = {
+        value: rollAngle,
+        description: getRollAngleDescription(rollAngle)
+      };
+    }
+    if (fieldFitsInLevelInfo(LIK3III.PITCH_ANGLE, INT16_SIZE, levelInfoLength)) {
+      const pitchAngle = dataView.getInt16(levelInfoOffset + LIK3III.PITCH_ANGLE, littleEndian);
+      tags["PitchAngle"] = {
+        value: pitchAngle,
+        description: getPitchAngleDescription(pitchAngle)
+      };
+    }
+    return tags;
+  }
+  function fieldFitsInLevelInfo(fieldOffset, fieldSize, levelInfoLength) {
+    return fieldOffset + fieldSize <= levelInfoLength;
+  }
+  function getOrientationDescription(orientation) {
+    if (orientation === 0) {
+      return "Horizontal (normal)";
+    }
+    if (orientation === 1) {
+      return "Rotate 270 CW";
+    }
+    if (orientation === 2) {
+      return "Rotate 180";
+    }
+    if (orientation === 3) {
+      return "Rotate 90 CW";
+    }
+    if (orientation === 4) {
+      return "Upwards";
+    }
+    if (orientation === 5) {
+      return "Downwards";
+    }
+    return "Unknown";
+  }
+  function getRollAngleDescription(rollAngle) {
+    return "" + rollAngle * -0.5;
+  }
+  function getPitchAngleDescription(pitchAngle) {
+    return "" + pitchAngle * -0.5;
+  }
+  var BYTE_ORDER_OFFSET, PENTAX_IFD_OFFSET, MODEL_ID, LIK3III, INT8_SIZE, INT16_SIZE, pentax_tags_default;
+  var init_pentax_tags = __esm({
+    "node_modules/exifreader/src/pentax-tags.js"() {
+      init_esbuild_shims();
+      init_byte_order();
+      init_utils();
+      init_tags_helpers();
+      init_tag_names_pentax_ifd();
+      init_ifd_types();
+      BYTE_ORDER_OFFSET = 8;
+      PENTAX_IFD_OFFSET = BYTE_ORDER_OFFSET + 2;
+      MODEL_ID = {
+        K3_III: 78420
+      };
+      LIK3III = {
+        CAMERA_ORIENTATION: 1,
+        ROLL_ANGLE: 3,
+        PITCH_ANGLE: 5
+      };
+      INT8_SIZE = 1;
+      INT16_SIZE = 2;
+      pentax_tags_default = {
+        read: read12,
+        PENTAX_IFD_OFFSET,
+        MODEL_ID,
+        LIK3III
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/png-file-tags.js
+  function read13(dataView, fileDataOffset) {
+    const tags = {};
+    for (let i = 0; i < FIELDS.length; i++) {
+      tags[FIELDS[i].name] = getFieldTag(dataView, fileDataOffset, FIELDS[i]);
+    }
+    return tags;
+  }
+  function getFieldTag(dataView, fileDataOffset, field) {
+    if (fileDataOffset + field.offset + field.size > dataView.byteLength) {
+      return void 0;
+    }
+    const value = field.read(dataView, fileDataOffset + field.offset);
+    return {
+      value,
+      description: field.description(value)
+    };
+  }
+  var png_file_tags_default, COLOR_TYPES, INTERLACE_TYPES, FIELDS;
+  var init_png_file_tags = __esm({
+    "node_modules/exifreader/src/png-file-tags.js"() {
+      init_esbuild_shims();
+      init_types();
+      png_file_tags_default = {
+        read: read13
+      };
+      COLOR_TYPES = {
+        0: "Grayscale",
+        2: "RGB",
+        3: "Palette",
+        4: "Grayscale with Alpha",
+        6: "RGB with Alpha"
+      };
+      INTERLACE_TYPES = {
+        0: "Noninterlaced",
+        1: "Adam7 Interlace"
+      };
+      FIELDS = [
+        { name: "Image Width", offset: 0, size: 4, read: types_default.getLongAt, description: (value) => `${value}px` },
+        { name: "Image Height", offset: 4, size: 4, read: types_default.getLongAt, description: (value) => `${value}px` },
+        { name: "Bit Depth", offset: 8, size: 1, read: types_default.getByteAt, description: (value) => `${value}` },
+        { name: "Color Type", offset: 9, size: 1, read: types_default.getByteAt, description: (value) => COLOR_TYPES[value] || "Unknown" },
+        { name: "Compression", offset: 10, size: 1, read: types_default.getByteAt, description: (value) => value === 0 ? "Deflate/Inflate" : "Unknown" },
+        { name: "Filter", offset: 11, size: 1, read: types_default.getByteAt, description: (value) => value === 0 ? "Adaptive" : "Unknown" },
+        { name: "Interlace", offset: 12, size: 1, read: types_default.getByteAt, description: (value) => INTERLACE_TYPES[value] || "Unknown" }
+      ];
+    }
+  });
+
+  // node_modules/exifreader/src/png-text-tags.js
+  function read14(dataView, pngTextChunks, async, includeUnknown, computed = false, tagFilter = NOOP_TAG_FILTER, decompressConfig, valueBudget, getThumbnail2, readCarriedGroups, rawProfileReaders = {}) {
+    const tags = {};
+    let embeddedExifTags;
+    let embeddedIptcTags;
+    let embeddedExifThumbnail;
+    let exifCarriedGroups;
+    const uncompressedRawProfiles = [];
+    const compressedChunks = [];
+    for (let i = 0; i < pngTextChunks.length; i++) {
+      const chunkOffset = pngTextChunks[i];
+      const length = dataView.getUint32(chunkOffset + PNG_CHUNK_LENGTH_OFFSET);
+      const type = getStringFromDataView(dataView, chunkOffset + PNG_CHUNK_TYPE_OFFSET, PNG_CHUNK_TYPE_SIZE);
+      const textChunk = parseTextChunk(dataView, chunkOffset + PNG_CHUNK_DATA_OFFSET, length, type);
+      if (!textChunk) {
+        continue;
+      }
+      if (textChunk.compressionMethod === COMPRESSION_METHOD_NONE) {
+        const tag = getUncompressedTag(textChunk);
+        if (isRawProfileTag(tag)) {
+          uncompressedRawProfiles.push(tag);
+        } else if (tag.name && tagFilter.shouldParseGroup("png")) {
+          setProperty(tags, getTagKey(tag.name), {
+            value: tag.value,
+            description: tag.description
+          });
+        }
+      } else if (async && compressedChunks.length < MAX_COMPRESSED_TEXT_CHUNKS) {
+        compressedChunks.push(textChunk);
+      }
+    }
+    const hasIptcProfile = uncompressedRawProfiles.some((tag) => isIptcGroupTag(tag.name, tag.value)) || compressedChunks.some(isCompressedIptcProfile);
+    for (let i = 0; i < uncompressedRawProfiles.length; i++) {
+      const rawProfileTags = getTagsFromTextTag(
+        uncompressedRawProfiles[i],
+        includeUnknown,
+        computed,
+        tagFilter,
+        valueBudget,
+        embeddedExifThumbnail ? void 0 : getThumbnail2,
+        readCarriedGroups,
+        false,
+        hasIptcProfile,
+        rawProfileReaders
+      );
+      if (rawProfileTags.embeddedExifTags) {
+        embeddedExifTags = objectAssign(embeddedExifTags || {}, rawProfileTags.embeddedExifTags);
+      }
+      if (rawProfileTags.exifCarriedGroups) {
+        exifCarriedGroups = mergeCarriedGroups(exifCarriedGroups || {}, rawProfileTags.exifCarriedGroups);
+      }
+      if (rawProfileTags.embeddedExifThumbnail) {
+        embeddedExifThumbnail = rawProfileTags.embeddedExifThumbnail;
+      }
+      if (rawProfileTags.embeddedIptcTags) {
+        embeddedIptcTags = objectAssign(embeddedIptcTags || {}, rawProfileTags.embeddedIptcTags);
+      }
+    }
+    const compressedThumbnailReader = embeddedExifThumbnail ? void 0 : getThumbnail2;
+    const decompressionTasks = compressedChunks.map((textChunk) => () => decompressTextChunk(textChunk, decompressConfig).then((tag) => getTagsFromTextTag(
+      tag,
+      includeUnknown,
+      computed,
+      tagFilter,
+      valueBudget,
+      compressedThumbnailReader,
+      readCarriedGroups,
+      true,
+      hasIptcProfile,
+      rawProfileReaders
+    )));
+    return {
+      readTags: tags,
+      embeddedExifTags,
+      embeddedIptcTags,
+      embeddedExifThumbnail,
+      exifCarriedGroups,
+      readTagsPromise: decompressionTasks.length > 0 ? runTasksInOrder(decompressionTasks, MAX_DECOMPRESSIONS_IN_FLIGHT) : void 0
+    };
+  }
+  function isCompressedIptcProfile({ type, langChars, keywordChars }) {
+    return getName(type, langChars, keywordChars).toLowerCase() === IPTC_PROFILE_NAME;
+  }
+  function mergeCarriedGroups(target, source) {
+    const groupKeys = Object.keys(source);
+    for (let i = 0; i < groupKeys.length; i++) {
+      target[groupKeys[i]] = objectAssign(target[groupKeys[i]] || {}, source[groupKeys[i]]);
+    }
+    return target;
+  }
+  function parseTextChunk(dataView, offset, length, type) {
+    const keywordChars = [];
+    const langChars = [];
+    let valueChars;
+    let parsingState = STATE_KEYWORD;
+    let compressionMethod = COMPRESSION_METHOD_NONE;
+    const byteOffset = dataView.byteOffset;
+    const chunkEnd = Math.min(offset + length, dataView.byteLength);
+    for (let i = 0; i < length && offset + i < dataView.byteLength; i++) {
+      if (parsingState === STATE_COMPRESSION) {
+        compressionMethod = getCompressionMethod({ type, dataView, offset: offset + i, chunkEnd });
+        if (type === TYPE_ITXT) {
+          i += COMPRESSION_SECTION_ITXT_EXTRA_BYTE;
+        }
+        parsingState = moveToNextState(type, parsingState);
+        continue;
+      } else if (parsingState === STATE_TEXT) {
+        const slice = dataView.buffer.slice(byteOffset + offset + i, byteOffset + offset + length);
+        valueChars = new DataView(slice);
+        break;
+      }
+      const byte = dataView.getUint8(offset + i);
+      if (byte === 0) {
+        parsingState = moveToNextState(type, parsingState);
+      } else if (parsingState === STATE_KEYWORD) {
+        if (keywordChars.length >= MAX_KEYWORD_LENGTH) {
+          return void 0;
+        }
+        keywordChars.push(byte);
+      } else if (parsingState === STATE_LANG) {
+        if (langChars.length >= MAX_LANGUAGE_TAG_LENGTH) {
+          return void 0;
+        }
+        langChars.push(byte);
+      }
+    }
+    return { type, keywordChars, langChars, compressionMethod, valueChars };
+  }
+  function getUncompressedTag({ type, keywordChars, langChars, valueChars }) {
+    const decodedValueChars = decompress(valueChars, COMPRESSION_METHOD_NONE, getEncodingFromType(type), "string");
+    return constructTag(decodedValueChars, type, langChars, keywordChars);
+  }
+  function isRawProfileTag({ name, value }) {
+    return isExifGroupTag(name, value) || isIptcGroupTag(name, value);
+  }
+  function getTagsFromTextTag({ name, value, description }, includeUnknown, computed, tagFilter, valueBudget, getThumbnail2, readCarriedGroups, isDecompressed, hasIptcProfile, rawProfileReaders) {
+    try {
+      if (isExifGroupTag(name, value)) {
+        if (!rawProfileReaders.exif || !tagFilter.shouldParseGroup("exif")) {
+          return {};
+        }
+        const exifDataView = decodeRawData(value);
+        if (isDecompressed) {
+          addDecompressedValueAllowance(valueBudget, exifDataView.byteLength);
+        }
+        const { tags: embeddedExifTags, byteOrder } = rawProfileReaders.exif(
+          exifDataView,
+          EXIF_OFFSET,
+          includeUnknown,
+          computed,
+          tagFilter,
+          valueBudget
+        );
+        const result2 = { embeddedExifTags };
+        if (readCarriedGroups) {
+          result2.exifCarriedGroups = readCarriedGroups(
+            exifDataView,
+            embeddedExifTags,
+            EXIF_OFFSET,
+            byteOrder,
+            valueBudget,
+            { decompressed: isDecompressed, hasIptcBlock: hasIptcProfile }
+          );
+        }
+        if (embeddedExifTags["MakerNote"]) {
+          delete embeddedExifTags["MakerNote"].__offset;
+        }
+        const thumbnail = takeEmbeddedExifThumbnail(embeddedExifTags, exifDataView, EXIF_OFFSET, getThumbnail2);
+        if (thumbnail) {
+          result2.embeddedExifThumbnail = thumbnail;
+        }
+        return result2;
+      } else if (isIptcGroupTag(name, value)) {
+        if (!rawProfileReaders.iptc || !tagFilter.shouldParseGroup("iptc")) {
+          return {};
+        }
+        const iptcDataView = decodeRawData(value);
+        if (isDecompressed) {
+          addDecompressedIptcAllowance(valueBudget, iptcDataView.byteLength);
+        }
+        return {
+          embeddedIptcTags: rawProfileReaders.iptc(
+            iptcDataView,
+            0,
+            includeUnknown,
+            tagFilter,
+            valueBudget
+          )
+        };
+      } else if (name) {
+        if (!tagFilter.shouldParseGroup("png")) {
+          return {};
+        }
+        const readTags2 = {};
+        setProperty(readTags2, getTagKey(name), {
+          value,
+          description
+        });
+        return { readTags: readTags2 };
+      }
+    } catch (error) {
+    }
+    return {};
+  }
+  function decompressTextChunk({ type, keywordChars, langChars, compressionMethod, valueChars }, decompressConfig) {
+    if (valueChars === void 0) {
+      return Promise.resolve(constructPlaceholderTag(type, langChars, keywordChars));
+    }
+    return decompress(valueChars, compressionMethod, getEncodingFromType(type), "string", decompressConfig).then((decompressedValueChars) => constructTag(decompressedValueChars, type, langChars, keywordChars)).catch(() => constructPlaceholderTag(type, langChars, keywordChars));
+  }
+  function constructPlaceholderTag(type, langChars, keywordChars) {
+    return constructTag("<text using unknown compression>", type, langChars, keywordChars);
+  }
+  function runTasksInOrder(tasks, limit) {
+    const results = [];
+    const workers = [];
+    let nextIndex = 0;
+    for (let i = 0; i < Math.min(limit, tasks.length); i++) {
+      workers.push(runNext());
+    }
+    return Promise.all(workers).then(() => results);
+    function runNext() {
+      if (nextIndex >= tasks.length) {
+        return Promise.resolve();
+      }
+      const index = nextIndex++;
+      return new Promise((resolve2) => resolve2(tasks[index]())).then((result2) => {
+        results[index] = result2;
+        return runNext();
+      });
+    }
+  }
+  function getCompressionMethod({ type, dataView, offset, chunkEnd }) {
+    if (type === TYPE_ITXT) {
+      if (offset + 1 < chunkEnd && dataView.getUint8(offset) === COMPRESSION_FLAG_COMPRESSED) {
+        return dataView.getUint8(offset + 1);
+      }
+    } else if (type === TYPE_ZTXT) {
+      return dataView.getUint8(offset);
+    }
+    return COMPRESSION_METHOD_NONE;
+  }
+  function moveToNextState(type, parsingState) {
+    if (parsingState === STATE_KEYWORD && [TYPE_ITXT, TYPE_ZTXT].includes(type)) {
+      return STATE_COMPRESSION;
+    }
+    if (parsingState === STATE_COMPRESSION) {
+      if (type === TYPE_ITXT) {
+        return STATE_LANG;
+      }
+      return STATE_TEXT;
+    }
+    if (parsingState === STATE_LANG) {
+      return STATE_TRANSLATED_KEYWORD;
+    }
+    return STATE_TEXT;
+  }
+  function getEncodingFromType(type) {
+    if (type === TYPE_TEXT || type === TYPE_ZTXT) {
+      return "latin1";
+    }
+    return "utf-8";
+  }
+  function constructTag(valueChars, type, langChars, keywordChars) {
+    const value = getValue(valueChars);
+    return {
+      name: getName(type, langChars, keywordChars),
+      value,
+      description: type === TYPE_ITXT ? getDescription2(valueChars) : value
+    };
+  }
+  function getName(type, langChars, keywordChars) {
+    const name = getStringValueFromArray(keywordChars);
+    if (type === TYPE_TEXT || langChars.length === 0) {
+      return name;
+    }
+    const lang = getStringValueFromArray(langChars);
+    return `${name} (${lang})`;
+  }
+  function getValue(valueChars) {
+    if (valueChars instanceof DataView) {
+      return getStringFromDataView(valueChars, 0, valueChars.byteLength);
+    }
+    return valueChars;
+  }
+  function getDescription2(valueChars) {
+    return tag_decoder_default.decode("UTF-8", valueChars);
+  }
+  function isExifGroupTag(name, value) {
+    return name.toLowerCase() === "raw profile type exif" && value.substring(1, 5) === "exif";
+  }
+  function isIptcGroupTag(name, value) {
+    return name.toLowerCase() === IPTC_PROFILE_NAME && value.substring(1, 5) === "iptc";
+  }
+  function decodeRawData(value) {
+    const header = /\n(exif|iptc)\n\s*\d+\n/.exec(value);
+    if (!header) {
+      throw new Error("Invalid raw profile header.");
+    }
+    const dataStart = header.index + header[0].length;
+    const digitCount = countHexDigits(value, dataStart);
+    if (digitCount % 2 !== 0) {
+      throw new Error("Odd number of hex digits in raw profile.");
+    }
+    const bytes = new Uint8Array(digitCount / 2);
+    let byteIndex = 0;
+    let highNibble = -1;
+    for (let i = dataStart; i < value.length; i++) {
+      const nibble = getHexDigitValue(value.charCodeAt(i));
+      if (nibble < 0) {
+        continue;
+      }
+      if (highNibble < 0) {
+        highNibble = nibble;
+      } else {
+        bytes[byteIndex++] = highNibble << 4 | nibble;
+        highNibble = -1;
+      }
+    }
+    return new DataView(bytes.buffer);
+  }
+  function countHexDigits(value, start) {
+    let count = 0;
+    for (let i = start; i < value.length; i++) {
+      if (getHexDigitValue(value.charCodeAt(i)) >= 0) {
+        count++;
+      }
+    }
+    return count;
+  }
+  var png_text_tags_default, STATE_KEYWORD, STATE_COMPRESSION, STATE_LANG, STATE_TRANSLATED_KEYWORD, STATE_TEXT, COMPRESSION_SECTION_ITXT_EXTRA_BYTE, COMPRESSION_FLAG_COMPRESSED, EXIF_OFFSET, MAX_COMPRESSED_TEXT_CHUNKS, MAX_DECOMPRESSIONS_IN_FLIGHT, MAX_KEYWORD_LENGTH, IPTC_PROFILE_NAME, MAX_LANGUAGE_TAG_LENGTH;
+  var init_png_text_tags = __esm({
+    "node_modules/exifreader/src/png-text-tags.js"() {
+      init_esbuild_shims();
+      init_utils();
+      init_tag_decoder();
+      init_image_header_png();
+      init_tag_filter();
+      init_tags_helpers();
+      png_text_tags_default = {
+        read: read14
+      };
+      STATE_KEYWORD = "STATE_KEYWORD";
+      STATE_COMPRESSION = "STATE_COMPRESSION";
+      STATE_LANG = "STATE_LANG";
+      STATE_TRANSLATED_KEYWORD = "STATE_TRANSLATED_KEYWORD";
+      STATE_TEXT = "STATE_TEXT";
+      COMPRESSION_SECTION_ITXT_EXTRA_BYTE = 1;
+      COMPRESSION_FLAG_COMPRESSED = 1;
+      EXIF_OFFSET = 6;
+      MAX_COMPRESSED_TEXT_CHUNKS = 255;
+      MAX_DECOMPRESSIONS_IN_FLIGHT = 4;
+      MAX_KEYWORD_LENGTH = 79;
+      IPTC_PROFILE_NAME = "raw profile type iptc";
+      MAX_LANGUAGE_TAG_LENGTH = 79;
+    }
+  });
+
+  // node_modules/exifreader/src/png-tags.js
+  function read15(dataView, chunkOffsets) {
+    const tags = {};
+    for (let i = 0; i < chunkOffsets.length; i++) {
+      const chunkLength = types_default.getLongAt(dataView, chunkOffsets[i] + PNG_CHUNK_LENGTH_OFFSET);
+      const chunkType = getStringFromDataView(dataView, chunkOffsets[i] + PNG_CHUNK_TYPE_OFFSET, PNG_CHUNK_TYPE_SIZE);
+      if (chunkType === TYPE_PHYS) {
+        tags["Pixels Per Unit X"] = getPixelsPerUnitX(dataView, chunkOffsets[i], chunkLength);
+        tags["Pixels Per Unit Y"] = getPixelsPerUnitY(dataView, chunkOffsets[i], chunkLength);
+        tags["Pixel Units"] = getPixelUnits(dataView, chunkOffsets[i], chunkLength);
+      } else if (chunkType === TYPE_TIME) {
+        tags["Modify Date"] = getModifyDate(dataView, chunkOffsets[i], chunkLength);
+      }
+    }
+    return tags;
+  }
+  function getPixelsPerUnitX(dataView, chunkOffset, chunkLength) {
+    const TAG_OFFSET = 0;
+    const TAG_SIZE = 4;
+    if (!tagFitsInBuffer(dataView, chunkOffset, chunkLength, TAG_OFFSET, TAG_SIZE)) {
+      return void 0;
+    }
+    const value = types_default.getLongAt(dataView, chunkOffset + PNG_CHUNK_DATA_OFFSET + TAG_OFFSET);
+    return {
+      value,
+      description: "" + value
+    };
+  }
+  function getPixelsPerUnitY(dataView, chunkOffset, chunkLength) {
+    const TAG_OFFSET = 4;
+    const TAG_SIZE = 4;
+    if (!tagFitsInBuffer(dataView, chunkOffset, chunkLength, TAG_OFFSET, TAG_SIZE)) {
+      return void 0;
+    }
+    const value = types_default.getLongAt(dataView, chunkOffset + PNG_CHUNK_DATA_OFFSET + TAG_OFFSET);
+    return {
+      value,
+      description: "" + value
+    };
+  }
+  function getPixelUnits(dataView, chunkOffset, chunkLength) {
+    const TAG_OFFSET = 8;
+    const TAG_SIZE = 1;
+    if (!tagFitsInBuffer(dataView, chunkOffset, chunkLength, TAG_OFFSET, TAG_SIZE)) {
+      return void 0;
+    }
+    const value = types_default.getByteAt(dataView, chunkOffset + PNG_CHUNK_DATA_OFFSET + TAG_OFFSET);
+    return {
+      value,
+      description: value === 1 ? "meters" : "Unknown"
+    };
+  }
+  function getModifyDate(dataView, chunkOffset, chunkLength) {
+    const TIME_TAG_SIZE = 7;
+    if (!tagFitsInBuffer(dataView, chunkOffset, chunkLength, 0, TIME_TAG_SIZE)) {
+      return void 0;
+    }
+    const year = types_default.getShortAt(dataView, chunkOffset + PNG_CHUNK_DATA_OFFSET);
+    const month = types_default.getByteAt(dataView, chunkOffset + PNG_CHUNK_DATA_OFFSET + 2);
+    const day = types_default.getByteAt(dataView, chunkOffset + PNG_CHUNK_DATA_OFFSET + 3);
+    const hours = types_default.getByteAt(dataView, chunkOffset + PNG_CHUNK_DATA_OFFSET + 4);
+    const minutes = types_default.getByteAt(dataView, chunkOffset + PNG_CHUNK_DATA_OFFSET + 5);
+    const seconds = types_default.getByteAt(dataView, chunkOffset + PNG_CHUNK_DATA_OFFSET + 6);
+    return {
+      value: [year, month, day, hours, minutes, seconds],
+      description: `${pad(year, 4)}-${pad(month, 2)}-${pad(day, 2)} ${pad(hours, 2)}:${pad(minutes, 2)}:${pad(seconds, 2)}`
+    };
+  }
+  function tagFitsInBuffer(dataView, chunkOffset, chunkLength, tagOffset, tagSize) {
+    return tagOffset + tagSize <= chunkLength && chunkOffset + PNG_CHUNK_DATA_OFFSET + tagOffset + tagSize <= dataView.byteLength;
+  }
+  function pad(number, size) {
+    return padStart("" + number, size, "0");
+  }
+  var png_tags_default;
+  var init_png_tags = __esm({
+    "node_modules/exifreader/src/png-tags.js"() {
+      init_esbuild_shims();
+      init_types();
+      init_image_header_png();
+      init_utils();
+      png_tags_default = {
+        read: read15
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/vp8x-tags.js
+  function read16(dataView, chunkOffset) {
+    const tags = {};
+    if (chunkOffset + VP8X_DATA_SIZE > dataView.byteLength) {
+      return tags;
+    }
+    const flags = types_default.getByteAt(dataView, chunkOffset);
+    tags["Alpha"] = getAlpha(flags);
+    tags["Animation"] = getAnimation(flags);
+    tags["ImageWidth"] = getThreeByteValue(dataView, chunkOffset + IMAGE_WIDTH_OFFSET);
+    tags["ImageHeight"] = getThreeByteValue(dataView, chunkOffset + IMAGE_HEIGHT_OFFSET);
+    return tags;
+  }
+  function getAlpha(flags) {
+    const value = flags & 16;
+    return {
+      value: value ? 1 : 0,
+      description: value ? "Yes" : "No"
+    };
+  }
+  function getAnimation(flags) {
+    const value = flags & 2;
+    return {
+      value: value ? 1 : 0,
+      description: value ? "Yes" : "No"
+    };
+  }
+  function getThreeByteValue(dataView, offset) {
+    const value = types_default.getByteAt(dataView, offset) + 256 * types_default.getByteAt(dataView, offset + 1) + 256 * 256 * types_default.getByteAt(dataView, offset + 2) + 1;
+    return {
+      value,
+      description: value + "px"
+    };
+  }
+  var vp8x_tags_default, IMAGE_WIDTH_OFFSET, IMAGE_HEIGHT_OFFSET, VP8X_DATA_SIZE;
+  var init_vp8x_tags = __esm({
+    "node_modules/exifreader/src/vp8x-tags.js"() {
+      init_esbuild_shims();
+      init_types();
+      vp8x_tags_default = {
+        read: read16
+      };
+      IMAGE_WIDTH_OFFSET = 4;
+      IMAGE_HEIGHT_OFFSET = 7;
+      VP8X_DATA_SIZE = 10;
+    }
+  });
+
+  // node_modules/exifreader/src/gif-file-tags.js
+  function read17(dataView) {
+    const tags = {};
+    for (let i = 0; i < FIELDS2.length; i++) {
+      tags[FIELDS2[i].name] = getFieldTag2(dataView, FIELDS2[i]);
+    }
+    return tags;
+  }
+  function getFieldTag2(dataView, field) {
+    if (field.offset + field.size > dataView.byteLength) {
+      return void 0;
+    }
+    const value = field.getValue(dataView, field.offset);
+    return {
+      value,
+      description: field.description(value)
+    };
+  }
+  var gif_file_tags_default, bitsDescription, FIELDS2;
+  var init_gif_file_tags = __esm({
+    "node_modules/exifreader/src/gif-file-tags.js"() {
+      init_esbuild_shims();
+      init_utils();
+      gif_file_tags_default = {
+        read: read17
+      };
+      bitsDescription = (value) => `${value} ${value === 1 ? "bit" : "bits"}`;
+      FIELDS2 = [
+        { name: "GIF Version", offset: 3, size: 3, getValue: (dataView, offset) => getStringFromDataView(dataView, offset, 3), description: (value) => value },
+        { name: "Image Width", offset: 6, size: 2, getValue: (dataView, offset) => dataView.getUint16(offset, true), description: (value) => `${value}px` },
+        { name: "Image Height", offset: 8, size: 2, getValue: (dataView, offset) => dataView.getUint16(offset, true), description: (value) => `${value}px` },
+        { name: "Global Color Map", offset: 10, size: 1, getValue: (dataView, offset) => (dataView.getUint8(offset) & 128) >>> 7, description: (value) => value === 1 ? "Yes" : "No" },
+        { name: "Bits Per Pixel", offset: 10, size: 1, getValue: (dataView, offset) => (dataView.getUint8(offset) & 7) + 1, description: bitsDescription },
+        { name: "Color Resolution Depth", offset: 10, size: 1, getValue: (dataView, offset) => ((dataView.getUint8(offset) & 112) >>> 4) + 1, description: bitsDescription }
+      ];
+    }
+  });
+
+  // node_modules/exifreader/src/thumbnail.js
+  function get3(dataView, thumbnailTags, tiffHeaderOffset) {
+    if (hasJpegThumbnail(thumbnailTags)) {
+      const offset = tiffHeaderOffset + thumbnailTags.JPEGInterchangeFormat.value;
+      const length = thumbnailTags.JPEGInterchangeFormatLength.value;
+      if (fitsInDataView(dataView, offset, length)) {
+        thumbnailTags.type = "image/jpeg";
+        const byteOffset = dataView.byteOffset;
+        thumbnailTags.image = dataView.buffer.slice(byteOffset + offset, byteOffset + offset + length);
+        deferInit(thumbnailTags, "base64", function() {
+          return getBase64Image(this.image);
+        });
+      }
+    }
+    return thumbnailTags;
+  }
+  function hasJpegThumbnail(tags) {
+    return tags && (tags.Compression === void 0 || COMPRESSION_JPEG.includes(tags.Compression.value)) && tags.JPEGInterchangeFormat && tags.JPEGInterchangeFormat.value && tags.JPEGInterchangeFormatLength && tags.JPEGInterchangeFormatLength.value;
+  }
+  function fitsInDataView(dataView, offset, length) {
+    return isNonNegativeInteger(offset) && isNonNegativeInteger(length) && offset + length <= dataView.byteLength;
+  }
+  function isNonNegativeInteger(value) {
+    return typeof value === "number" && value >= 0 && value % 1 === 0;
+  }
+  var COMPRESSION_JPEG, thumbnail_default;
+  var init_thumbnail = __esm({
+    "node_modules/exifreader/src/thumbnail.js"() {
+      init_esbuild_shims();
+      init_utils();
+      COMPRESSION_JPEG = [6, 7, 99];
+      thumbnail_default = {
+        get: get3
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/composite.js
+  function get4(tags, expanded) {
+    const compositeTags = {};
+    let hasCompositeTags = false;
+    const focalLength = getPositiveRational(getTagValue3(tags, "exif", "FocalLength", expanded));
+    const focalPlaneXResolution = getPositiveRational(getTagValue3(tags, "exif", "FocalPlaneXResolution", expanded));
+    const focalPlaneYResolution = getPositiveRational(getTagValue3(tags, "exif", "FocalPlaneYResolution", expanded));
+    const focalPlaneResolutionUnit = getPositiveNumber(getTagValue3(tags, "exif", "FocalPlaneResolutionUnit", expanded));
+    const pixelDimensions = getPixelDimensions(tags, expanded);
+    const focalLengthIn35mmFilm = getPositiveNumber(getTagValue3(tags, "exif", "FocalLengthIn35mmFilm", expanded)) || getFocalLengthIn35mmFilmValue(focalPlaneXResolution, focalPlaneYResolution, focalPlaneResolutionUnit, pixelDimensions.width, pixelDimensions.height, focalLength);
+    if (focalLengthIn35mmFilm) {
+      compositeTags.FocalLength35efl = {
+        value: focalLengthIn35mmFilm,
+        description: FocalLengthIn35mmFilm(focalLengthIn35mmFilm)
+      };
+      hasCompositeTags = true;
+    }
+    const scaleFactorTo35mmEquivalent = getScaleFactorTo35mmEquivalent(focalLength, focalLengthIn35mmFilm);
+    if (scaleFactorTo35mmEquivalent) {
+      compositeTags.ScaleFactorTo35mmEquivalent = scaleFactorTo35mmEquivalent;
+      hasCompositeTags = true;
+    }
+    const fieldOfView = getFieldOfView(focalLengthIn35mmFilm);
+    if (fieldOfView) {
+      compositeTags.FieldOfView = fieldOfView;
+      hasCompositeTags = true;
+    }
+    if (hasCompositeTags) {
+      return compositeTags;
+    }
+    return void 0;
+  }
+  function getTagValue3(tags, group, tagName, expanded) {
+    if (expanded && tags[group] && tags[group][tagName]) {
+      return tags[group][tagName].value;
+    }
+    if (!expanded && tags[tagName]) {
+      return tags[tagName].value;
+    }
+    return void 0;
+  }
+  function getPositiveRational(value) {
+    if (typeof value === "string") {
+      const parts = value.split("/", 3);
+      if (parts.length === 1) {
+        return getPositiveNumber(value);
+      }
+      return getPositiveQuotient(parts);
+    }
+    if (Array.isArray(value)) {
+      return getPositiveQuotient(value);
+    }
+    return getPositiveNumber(value);
+  }
+  function getPositiveNumber(value) {
+    let number;
+    if (typeof value === "number") {
+      number = value;
+    } else if (typeof value === "string") {
+      number = Number(value);
+    }
+    return number > 0 && number < Infinity ? number : void 0;
+  }
+  function getPositiveQuotient(parts) {
+    if (parts.length !== 2) {
+      return void 0;
+    }
+    return getPositiveNumber(getPositiveNumber(parts[0]) / getPositiveNumber(parts[1]));
+  }
+  function getPixelDimensions(tags, expanded) {
+    const pixelXDimension = getPositiveNumber(getTagValue3(tags, "exif", "PixelXDimension", expanded));
+    const pixelYDimension = getPositiveNumber(getTagValue3(tags, "exif", "PixelYDimension", expanded));
+    if (pixelXDimension && pixelYDimension) {
+      return { width: pixelXDimension, height: pixelYDimension };
+    }
+    return {
+      width: getPositiveNumber(getTagValue3(tags, "file", "Image Width", expanded)),
+      height: getPositiveNumber(getTagValue3(tags, "file", "Image Height", expanded))
+    };
+  }
+  function getFocalLengthIn35mmFilmValue(focalPlaneXResolution, focalPlaneYResolution, focalPlaneResolutionUnit, pixelWidth, pixelHeight, focalLength) {
+    const DIAGONAL_35mm = 43.27;
+    if (focalPlaneXResolution && focalPlaneYResolution && focalPlaneResolutionUnit && pixelWidth && pixelHeight && focalLength) {
+      let resolutionUnitFactor;
+      switch (focalPlaneResolutionUnit) {
+        case FOCAL_PLANE_RESOLUTION_UNIT.INCHES:
+          resolutionUnitFactor = UNIT_FACTORS.INCHES_TO_MM;
+          break;
+        case FOCAL_PLANE_RESOLUTION_UNIT.CENTIMETERS:
+          resolutionUnitFactor = UNIT_FACTORS.CM_TO_MM;
+          break;
+        case FOCAL_PLANE_RESOLUTION_UNIT.MILLIMETERS:
+          resolutionUnitFactor = UNIT_FACTORS.MM_TO_MM;
+          break;
+        default:
+          return void 0;
+      }
+      const focalPlaneXResolutionMm = focalPlaneXResolution / resolutionUnitFactor;
+      const focalPlaneYResolutionMm = focalPlaneYResolution / resolutionUnitFactor;
+      const sensorWidthMm = pixelWidth / focalPlaneXResolutionMm;
+      const sensorHeightMm = pixelHeight / focalPlaneYResolutionMm;
+      const sensorDiagonal = Math.sqrt(sensorWidthMm ** 2 + sensorHeightMm ** 2);
+      const focalLength35mm = focalLength * (DIAGONAL_35mm / sensorDiagonal);
+      return getPositiveNumber(focalLength35mm);
+    }
+    return void 0;
+  }
+  function getScaleFactorTo35mmEquivalent(focalLength, focalLengthIn35mmFilm) {
+    if (focalLength && focalLengthIn35mmFilm) {
+      const value = getPositiveNumber(focalLengthIn35mmFilm / focalLength);
+      if (value) {
+        return {
+          value,
+          description: value.toFixed(1)
+        };
+      }
+    }
+    return void 0;
+  }
+  function getFieldOfView(focalLengthIn35mmFilm) {
+    const FULL_FRAME_SENSOR_WIDTH_MM = 36;
+    if (focalLengthIn35mmFilm) {
+      const value = getPositiveNumber(2 * Math.atan(FULL_FRAME_SENSOR_WIDTH_MM / (2 * focalLengthIn35mmFilm)) * (180 / Math.PI));
+      if (value) {
+        return {
+          value,
+          description: value.toFixed(1) + " deg"
+        };
+      }
+    }
+    return void 0;
+  }
+  var FOCAL_PLANE_RESOLUTION_UNIT, UNIT_FACTORS, composite_default;
+  var init_composite = __esm({
+    "node_modules/exifreader/src/composite.js"() {
+      init_esbuild_shims();
+      init_tag_names_common();
+      FOCAL_PLANE_RESOLUTION_UNIT = {
+        INCHES: 2,
+        CENTIMETERS: 3,
+        MILLIMETERS: 4
+      };
+      UNIT_FACTORS = {
+        INCHES_TO_MM: 25.4,
+        // 1 inch = 25.4 mm
+        CM_TO_MM: 10,
+        // 1 cm = 10 mm
+        MM_TO_MM: 1
+        // Already in mm
+      };
+      composite_default = {
+        get: get4
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/loadview-pipeline.js
+  function buildTagsFromMergeSteps({
+    mergeSteps,
+    deferredResults,
+    parsedGroups,
+    expanded,
+    tagFilter,
+    dataView,
+    tiffHeaderOffset,
+    exifDataView,
+    fileType: fileType2,
+    pngTextChunks,
+    pngTextIsAsync,
+    thumbnailIfdTags,
+    deps
+  }) {
+    let tags = {};
+    const embeddedExifThumbnails = [];
+    for (let i = 0; i < mergeSteps.length; i++) {
+      tags = applyMergeStep({
+        step: mergeSteps[i],
+        deferredResults,
+        parsedGroups,
+        expanded,
+        tagFilter,
+        dataView,
+        tiffHeaderOffset,
+        exifDataView,
+        fileType: fileType2,
+        thumbnailIfdTags,
+        embeddedExifThumbnails,
+        tags,
+        deps
+      });
+    }
+    if (constants_default.USE_PNG && expanded && pngTextIsAsync && tagFilter.shouldReturnGroup("png") && tags.png) {
+      tags.pngText = deps.objectAssign({}, tags.png);
+    }
+    if (constants_default.USE_PNG && expanded && tagFilter.shouldReturnGroup("png") && deps.hasPngTextData(pngTextChunks) && tags.png && !tags.pngText) {
+      tags.pngText = deps.objectAssign({}, tags.png);
+    }
+    return tags;
+  }
+  function applyMergeStep({
+    step,
+    deferredResults,
+    parsedGroups,
+    expanded,
+    tagFilter,
+    dataView,
+    tiffHeaderOffset,
+    exifDataView,
+    fileType: fileType2,
+    thumbnailIfdTags,
+    embeddedExifThumbnails = [],
+    tags,
+    deps
+  }) {
+    if (step.type === "mergeGroupAssign") {
+      const returnedTags = deps.filterTagsForReturn(step.groupKey, step.parsedTags, tagFilter);
+      return mergeAssignGroup(tags, step.groupKey, returnedTags, expanded, deps);
+    }
+    if (step.type === "mergeGroupMerge") {
+      const returnedTags = deps.filterTagsForReturn(step.groupKey, step.parsedTags, tagFilter);
+      return mergeMergeGroup(tags, step.groupKey, returnedTags, expanded, deps);
+    }
+    if (constants_default.USE_XMP && step.type === "mergeXmpGroupAssign") {
+      const returnedTags = deps.filterTagsForReturn("xmp", step.parsedTags, tagFilter);
+      return mergeXmpGroup(tags, returnedTags, expanded, deps);
+    }
+    if (constants_default.USE_ICC && step.type === "mergeIccDeferred") {
+      const resolvedReadTags = deferredResults[step.deferredKey];
+      const parsedIccTags = deps.filterTagsForParse("icc", resolvedReadTags, tagFilter);
+      parsedGroups.icc = parsedIccTags;
+      if (!tagFilter.shouldReturnGroup("icc")) {
+        return tags;
+      }
+      const returnedIccTags = deps.filterTagsForReturn("icc", parsedIccTags, tagFilter);
+      return mergeAssignGroup(tags, "icc", returnedIccTags, expanded, deps);
+    }
+    if (constants_default.USE_JXL && step.type === "mergeBrobExifDeferred") {
+      const resolved = deferredResults[step.deferredKey];
+      if (!resolved) {
+        return tags;
+      }
+      addEmbeddedExifThumbnail(embeddedExifThumbnails, resolved.thumbnail);
+      if (Object.keys(resolved.exifTags).length === 0) {
+        return tags;
+      }
+      return addExifAndCarriedGroupsToTagsAndGroups({
+        exifTags: resolved.exifTags,
+        carriedGroups: resolved.carriedGroups,
+        parsedGroups,
+        expanded,
+        tagFilter,
+        tags,
+        deps,
+        merge: createCopyingMerge(deps)
+      });
+    }
+    if (constants_default.USE_JXL && step.type === "mergeBrobXmpDeferred") {
+      const resolvedReadTags = deferredResults[step.deferredKey];
+      if (!resolvedReadTags || Object.keys(resolvedReadTags).length === 0) {
+        return tags;
+      }
+      const parsedXmpTags = deps.filterTagsForParse("xmp", resolvedReadTags, tagFilter);
+      parsedGroups.xmp = parsedXmpTags;
+      if (!tagFilter.shouldReturnGroup("xmp")) {
+        return tags;
+      }
+      const returnedTags = deps.filterTagsForReturn("xmp", parsedXmpTags, tagFilter);
+      return mergeXmpGroup(tags, returnedTags, expanded, deps);
+    }
+    if (constants_default.USE_PNG && step.type === "mergePngFile") {
+      const returnedPngFileTags = deps.filterTagsForReturn("png", step.parsedTags, tagFilter);
+      if (!tagFilter.shouldReturnGroup("png")) {
+        return tags;
+      }
+      if (expanded) {
+        tags.png = !tags.png ? returnedPngFileTags : deps.objectAssign(
+          {},
+          tags.png,
+          returnedPngFileTags
+        );
+        tags.pngFile = returnedPngFileTags;
+        return tags;
+      }
+      return deps.objectAssign({}, tags, returnedPngFileTags);
+    }
+    if (constants_default.USE_PNG && step.type === "mergePngChunk") {
+      const returnedPngChunkTags = deps.filterTagsForReturn("png", step.parsedTags, tagFilter);
+      if (!tagFilter.shouldReturnGroup("png")) {
+        return tags;
+      }
+      if (expanded) {
+        tags.png = !tags.png ? returnedPngChunkTags : deps.objectAssign(
+          {},
+          tags.png,
+          returnedPngChunkTags
+        );
+        return tags;
+      }
+      return deps.objectAssign({}, tags, returnedPngChunkTags);
+    }
+    if (constants_default.USE_PNG && step.type === "processPngTextReadTags") {
+      addEmbeddedExifThumbnail(embeddedExifThumbnails, step.embeddedExifThumbnail);
+      return addPngTextReadTagsToTagsAndGroups({
+        readTags: step.readTags,
+        embeddedExifTags: step.embeddedExifTags,
+        exifCarriedGroups: step.exifCarriedGroups,
+        embeddedIptcTags: step.embeddedIptcTags,
+        parsedGroups,
+        expanded,
+        tagFilter,
+        tags,
+        deps
+      });
+    }
+    if (constants_default.USE_PNG && step.type === "processPngTextReadTagsDeferredList") {
+      const tagList = deferredResults[step.deferredKey] || [];
+      const merge = createInPlaceMerge(deps);
+      for (let i = 0; i < tagList.length; i++) {
+        const entry = tagList[i];
+        addEmbeddedExifThumbnail(embeddedExifThumbnails, entry.embeddedExifThumbnail);
+        tags = addPngTextReadTagsToTagsAndGroups({
+          readTags: entry.readTags || {},
+          embeddedExifTags: entry.embeddedExifTags,
+          exifCarriedGroups: entry.exifCarriedGroups,
+          embeddedIptcTags: entry.embeddedIptcTags,
+          parsedGroups,
+          expanded,
+          tagFilter,
+          tags,
+          deps,
+          merge
+        });
+      }
+      return tags;
+    }
+    if (constants_default.USE_EXIF && step.type === "gps") {
+      if (expanded && tagFilter.shouldReturnGroup("gps") && parsedGroups.exif) {
+        const gpsGroup = deps.getGpsGroupFromExifTags(parsedGroups.exif);
+        if (gpsGroup) {
+          const returnedGpsGroup = deps.filterTagsForReturn("gps", gpsGroup, tagFilter);
+          tags.gps = returnedGpsGroup;
+        }
+      }
+      return tags;
+    }
+    if ((constants_default.USE_EXIF || constants_default.USE_XMP) && step.type === "composite") {
+      if (!tagFilter.shouldReturnGroup("composite")) {
+        return tags;
+      }
+      let compositeInput = tags;
+      let compositeInputExpanded = expanded;
+      if (tagFilter.isActive) {
+        compositeInput = { exif: parsedGroups.exif, file: parsedGroups.file };
+        compositeInputExpanded = true;
+      }
+      const composite = deps.Composite.get(compositeInput, compositeInputExpanded);
+      if (!composite) {
+        return tags;
+      }
+      const returnedCompositeTags = deps.filterTagsForReturn("composite", composite, tagFilter);
+      return mergeAssignGroup(
+        tags,
+        "composite",
+        returnedCompositeTags,
+        expanded,
+        deps
+      );
+    }
+    if (step.type === "thumbnail") {
+      delete tags.Thumbnail;
+      if (!tagFilter.shouldReturnGroup("thumbnail") || !tagFilter.shouldReturnTag("thumbnail", "Thumbnail")) {
+        return tags;
+      }
+      const mainThumbnail = getMainThumbnail({
+        thumbnailIfdTags,
+        tagFilter,
+        dataView,
+        exifDataView,
+        tiffHeaderOffset,
+        deps
+      });
+      let thumbnail = mainThumbnail;
+      if (!hasImage(mainThumbnail)) {
+        thumbnail = getFirstEmbeddedExifThumbnailWithImage(embeddedExifThumbnails) || mainThumbnail;
+      }
+      if (thumbnail) {
+        tags.Thumbnail = thumbnail;
+      }
+      return tags;
+    }
+    if (step.type === "metadataRange") {
+      if (!expanded) {
+        return tags;
+      }
+      const metadataRange = buildMetadataRange(
+        step.metadataBlocks,
+        step.metadataTruncated,
+        dataView,
+        parsedGroups
+      );
+      if (metadataRange) {
+        tags.metadataRange = metadataRange;
+      }
+      return tags;
+    }
+    if (step.type === "fileType") {
+      delete tags.FileType;
+      if (fileType2 && tagFilter.shouldReturnGroup("file") && tagFilter.shouldReturnTag("file", "FileType")) {
+        if (expanded) {
+          if (!tags.file) {
+            tags.file = {};
           }
-          function eo(e2) {
-            return String.fromCharCode.apply(null, new Uint8Array(e2));
+          tags.file.FileType = fileType2;
+        } else {
+          tags.FileType = fileType2;
+        }
+      }
+      return tags;
+    }
+    return tags;
+  }
+  function addEmbeddedExifThumbnail(embeddedExifThumbnails, embeddedExifThumbnail) {
+    if (embeddedExifThumbnail) {
+      embeddedExifThumbnails.push(embeddedExifThumbnail);
+    }
+  }
+  function getMainThumbnail({ thumbnailIfdTags, tagFilter, dataView, exifDataView, tiffHeaderOffset, deps }) {
+    if (!thumbnailIfdTags) {
+      return void 0;
+    }
+    const parsedThumbnailIfdTags = deps.filterTagsForParse(
+      "thumbnail",
+      thumbnailIfdTags,
+      tagFilter
+    );
+    return constants_default.USE_EXIF && constants_default.USE_THUMBNAIL && deps.Thumbnail.get(exifDataView || dataView, parsedThumbnailIfdTags, tiffHeaderOffset);
+  }
+  function hasImage(thumbnail) {
+    return !!thumbnail && !!thumbnail.image;
+  }
+  function getFirstEmbeddedExifThumbnailWithImage(embeddedExifThumbnails) {
+    if (!((constants_default.USE_PNG || constants_default.USE_JXL) && constants_default.USE_EXIF && constants_default.USE_THUMBNAIL)) {
+      return void 0;
+    }
+    return embeddedExifThumbnails.filter(hasImage)[0];
+  }
+  function mergeAssignGroup(tags, groupKey, returnedTags, expanded, deps) {
+    if (expanded) {
+      tags[groupKey] = returnedTags;
+      return tags;
+    }
+    return deps.objectAssign({}, tags, returnedTags);
+  }
+  function mergeXmpGroup(tags, returnedTags, expanded, deps) {
+    if (expanded) {
+      tags.xmp = returnedTags;
+      return tags;
+    }
+    const returnedTagsForFlat = deps.objectAssign({}, returnedTags);
+    delete returnedTagsForFlat._raw;
+    return deps.objectAssign({}, tags, returnedTagsForFlat);
+  }
+  function mergeMergeGroup(tags, groupKey, returnedTags, expanded, deps) {
+    if (expanded) {
+      if (!tags[groupKey]) {
+        tags[groupKey] = returnedTags;
+      } else {
+        tags[groupKey] = deps.objectAssign({}, tags[groupKey], returnedTags);
+      }
+      return tags;
+    }
+    return deps.objectAssign({}, tags, returnedTags);
+  }
+  function addPngTextReadTagsToTagsAndGroups({
+    readTags: readTags2,
+    embeddedExifTags,
+    exifCarriedGroups,
+    embeddedIptcTags,
+    parsedGroups,
+    expanded,
+    tagFilter,
+    tags,
+    deps,
+    merge = createCopyingMerge(deps)
+  }) {
+    if (embeddedExifTags) {
+      tags = addExifAndCarriedGroupsToTagsAndGroups({
+        exifTags: embeddedExifTags,
+        carriedGroups: exifCarriedGroups || {},
+        parsedGroups,
+        expanded,
+        tagFilter,
+        tags,
+        deps,
+        merge
+      });
+    }
+    if (embeddedIptcTags) {
+      const parsedEmbeddedIptcTags = deps.filterTagsForParse("iptc", embeddedIptcTags, tagFilter);
+      merge.group(parsedGroups, "iptc", parsedEmbeddedIptcTags);
+      if (tagFilter.shouldReturnGroup("iptc")) {
+        const returnedEmbeddedIptcTags = deps.filterTagsForReturn(
+          "iptc",
+          parsedEmbeddedIptcTags,
+          tagFilter
+        );
+        if (expanded) {
+          merge.group(tags, "iptc", returnedEmbeddedIptcTags);
+        } else {
+          tags = merge.topLevel(tags, returnedEmbeddedIptcTags);
+        }
+      }
+    }
+    if (tagFilter.shouldReturnGroup("png")) {
+      const parsedPngTextTags = deps.filterTagsForParse("png", readTags2, tagFilter);
+      const returnedPngTextTags = deps.filterTagsForReturn("png", parsedPngTextTags, tagFilter);
+      parsedGroups.pngText = parsedPngTextTags;
+      if (expanded) {
+        merge.group(tags, "png", returnedPngTextTags);
+        if (returnedPngTextTags && Object.keys(returnedPngTextTags).length > 0) {
+          merge.group(tags, "pngText", returnedPngTextTags);
+        }
+      } else {
+        tags = merge.topLevel(tags, returnedPngTextTags);
+      }
+    }
+    return tags;
+  }
+  function addExifAndCarriedGroupsToTagsAndGroups({
+    exifTags,
+    carriedGroups,
+    parsedGroups,
+    expanded,
+    tagFilter,
+    tags,
+    deps,
+    merge
+  }) {
+    let flatXmpGroup = void 0;
+    for (let i = 0; i < EXIF_CARRIED_GROUP_ORDER.length; i++) {
+      const groupKey = EXIF_CARRIED_GROUP_ORDER[i];
+      const group = carriedGroups[groupKey];
+      if (group === void 0) {
+        continue;
+      }
+      if (groupKey === "xmp" && !expanded) {
+        flatXmpGroup = group;
+        continue;
+      }
+      tags = addCarriedGroup(groupKey, group);
+    }
+    if (exifTags) {
+      const parsedExifTags = deps.filterTagsForParse("exif", exifTags, tagFilter);
+      merge.group(parsedGroups, "exif", parsedExifTags);
+      if (tagFilter.shouldReturnGroup("exif")) {
+        const returnedExifTags = deps.filterTagsForReturn("exif", parsedExifTags, tagFilter);
+        if (expanded) {
+          merge.group(tags, "exif", returnedExifTags);
+        } else {
+          tags = merge.topLevel(tags, returnedExifTags);
+        }
+      }
+    }
+    if (flatXmpGroup !== void 0) {
+      tags = addCarriedGroup("xmp", flatXmpGroup, true);
+    }
+    return tags;
+    function addCarriedGroup(groupKey, group, isFlatXmp) {
+      merge.group(parsedGroups, groupKey, group);
+      if (!tagFilter.shouldReturnGroup(groupKey)) {
+        return tags;
+      }
+      const returnedTags = deps.filterTagsForReturn(groupKey, group, tagFilter);
+      if (expanded) {
+        merge.group(tags, groupKey, returnedTags);
+        return tags;
+      }
+      return merge.topLevel(tags, isFlatXmp ? getXmpTagsWithoutRaw(returnedTags) : returnedTags);
+    }
+    function getXmpTagsWithoutRaw(xmpTags) {
+      const xmpTagsWithoutRaw = deps.objectAssign({}, xmpTags);
+      delete xmpTagsWithoutRaw._raw;
+      return xmpTagsWithoutRaw;
+    }
+  }
+  function createCopyingMerge(deps) {
+    return {
+      group(holder, key, source) {
+        holder[key] = !holder[key] ? source : deps.objectAssign({}, holder[key], source);
+      },
+      topLevel(tags, source) {
+        return deps.objectAssign({}, tags, source);
+      }
+    };
+  }
+  function createInPlaceMerge(deps) {
+    const ownedContainers = [];
+    return {
+      group(holder, key, source) {
+        holder[key] = own(holder[key]);
+        deps.objectAssign(holder[key], source);
+      },
+      topLevel(tags, source) {
+        return deps.objectAssign(own(tags), source);
+      }
+    };
+    function own(container) {
+      if (ownedContainers.indexOf(container) !== -1) {
+        return container;
+      }
+      const copy = deps.objectAssign({}, container);
+      ownedContainers.push(copy);
+      return copy;
+    }
+  }
+  function buildMetadataRange(metadataBlocks, metadataTruncated, dataView, parsedGroups) {
+    const blocks = (metadataBlocks || []).slice();
+    const finderTruncated = !!metadataTruncated;
+    if (parsedGroups && parsedGroups.mpf && Array.isArray(parsedGroups.mpf.Images)) {
+      for (let i = 0; i < parsedGroups.mpf.Images.length; i++) {
+        const image = parsedGroups.mpf.Images[i];
+        if (!image || !image.ImageOffset || !image.ImageSize) {
+          continue;
+        }
+        const offset = image.ImageOffset.value;
+        const size = image.ImageSize.value;
+        if (typeof offset !== "number" || offset <= 0 || typeof size !== "number" || size <= 0) {
+          continue;
+        }
+        blocks.push({
+          type: "mpfImage",
+          start: offset,
+          end: offset + size
+        });
+      }
+    }
+    if (blocks.length === 0) {
+      return void 0;
+    }
+    blocks.sort((a, b) => a.start - b.start);
+    const start = blocks[0].start;
+    let end = blocks[0].end;
+    for (let i = 1; i < blocks.length; i++) {
+      if (blocks[i].end > end) {
+        end = blocks[i].end;
+      }
+    }
+    const byteLength = dataView && typeof dataView.byteLength === "number" ? dataView.byteLength : 0;
+    const complete = !finderTruncated && end <= byteLength;
+    return { start, end, complete, blocks };
+  }
+  var EXIF_CARRIED_GROUP_ORDER;
+  var init_loadview_pipeline = __esm({
+    "node_modules/exifreader/src/loadview-pipeline.js"() {
+      init_esbuild_shims();
+      init_constants();
+      EXIF_CARRIED_GROUP_ORDER = ["iptc", "xmp", "photoshop", "icc", "makerNotes"];
+    }
+  });
+
+  // node_modules/exifreader/src/errors.js
+  function MetadataMissingError(message) {
+    this.name = "MetadataMissingError";
+    this.message = message || "No Exif data";
+    this.stack = new Error().stack;
+  }
+  var errors_default;
+  var init_errors = __esm({
+    "node_modules/exifreader/src/errors.js"() {
+      init_esbuild_shims();
+      MetadataMissingError.prototype = new Error();
+      errors_default = {
+        MetadataMissingError
+      };
+    }
+  });
+
+  // node_modules/exifreader/src/exif-reader.js
+  var exif_reader_exports = {};
+  __export(exif_reader_exports, {
+    default: () => exif_reader_default,
+    errors: () => errors,
+    load: () => load,
+    loadView: () => loadView
+  });
+  function load(data, options = {}) {
+    if (options.length === "auto") {
+      validateAutoOptions(options);
+      return makeLoadAuto(loadFromData)(data, options);
+    }
+    if (isFilePathOrURL(data) || isBrowserFileObject(data)) {
+      assertPromiseSupport();
+      const loadFileFunction = isFilePathOrURL(data) ? loadFile : loadFileObject;
+      const asyncOptions = objectAssign({}, options, { async: true });
+      return loadFileFunction(data, asyncOptions).then((fileContents) => loadFromData(fileContents, asyncOptions));
+    }
+    return loadFromData(data, options);
+  }
+  function loadFromData(data, options) {
+    return loadView(getDataViewFromBytes(data), options);
+  }
+  function loadView(dataView, {
+    expanded = false,
+    async = false,
+    computed = false,
+    includeUnknown = false,
+    includeOffsets = false,
+    domParser = void 0,
+    includeTags = void 0,
+    excludeTags = void 0,
+    decompress: decompressConfig = void 0
+  } = {}) {
+    dataView = getSelfContainedDataView(dataView);
+    decompressConfig = withDecompressBudget(decompressConfig);
+    const tagFilter = createTagFilter({ includeTags, excludeTags });
+    const parsedGroups = /* @__PURE__ */ Object.create(null);
+    const mergeSteps = [];
+    const deferredResults = /* @__PURE__ */ Object.create(null);
+    const deferredPromises = [];
+    let pngTextIsAsync = false;
+    let thumbnailIfdTags = void 0;
+    let valueBudget = void 0;
+    let embeddedXmpStepForFlat = void 0;
+    let decompressedApplicationNotesSize = 0;
+    const {
+      fileType: fileType2,
+      fileDataOffset,
+      jfifDataOffset,
+      tiffHeaderOffset,
+      iptcDataOffset,
+      xmpChunks,
+      iccChunks,
+      mpfDataOffset,
+      pngHeaderOffset,
+      pngTextChunks,
+      pngChunkOffsets,
+      vp8xChunkOffset,
+      gifHeaderOffset,
+      brobExifChunk,
+      brobXmpChunk,
+      jxlCodestreamOffset,
+      imageDimensionsOffset,
+      pixelInformationOffset,
+      metadataBlocks,
+      metadataTruncated,
+      exifDataView,
+      xmpDataView
+    } = image_header_default.parseAppMarkers(dataView, async, expanded && includeOffsets);
+    const fileHasMetaData = hasPotentialMetaData({
+      fileType: fileType2,
+      fileDataOffset,
+      jfifDataOffset,
+      tiffHeaderOffset,
+      iptcDataOffset,
+      xmpChunks,
+      iccChunks,
+      mpfDataOffset,
+      pngHeaderOffset,
+      pngTextChunks,
+      pngChunkOffsets,
+      vp8xChunkOffset,
+      gifHeaderOffset,
+      jxlCodestreamOffset
+    });
+    if (constants_default.USE_JPEG && constants_default.USE_FILE && fileDataOffset !== void 0 && tagFilter.shouldParseGroup("file") && shouldReadFileTagsForFileTypeOnlyOptimization(includeTags)) {
+      const readTags2 = file_tags_default.read(dataView, fileDataOffset);
+      const parsedFileTags = filterTagsForParse("file", readTags2, tagFilter);
+      parsedGroups.file = parsedFileTags;
+      if (tagFilter.shouldReturnGroup("file")) {
+        mergeSteps.push({
+          type: "mergeGroupAssign",
+          groupKey: "file",
+          parsedTags: parsedFileTags
+        });
+      }
+    }
+    if (constants_default.USE_JPEG && constants_default.USE_JFIF && jfifDataOffset !== void 0 && tagFilter.shouldParseGroup("jfif")) {
+      const readTags2 = jfif_tags_default.read(dataView, jfifDataOffset);
+      const parsedJfifTags = filterTagsForParse("jfif", readTags2, tagFilter);
+      parsedGroups.jfif = parsedJfifTags;
+      if (tagFilter.shouldReturnGroup("jfif")) {
+        mergeSteps.push({
+          type: "mergeGroupAssign",
+          groupKey: "jfif",
+          parsedTags: parsedJfifTags
+        });
+      }
+    }
+    if (constants_default.USE_EXIF && tiffHeaderOffset !== void 0 && tagFilter.shouldParseGroup("exif")) {
+      const { tags: readTags2, byteOrder, valueBudget: exifValueBudget } = readExifTagsSafely(
+        exifDataView || dataView,
+        tiffHeaderOffset,
+        includeUnknown,
+        computed,
+        tagFilter
+      );
+      valueBudget = exifValueBudget;
+      if (readTags2.Thumbnail) {
+        thumbnailIfdTags = readTags2.Thumbnail;
+        delete readTags2.Thumbnail;
+      }
+      const parsedExifTags = filterTagsForParse("exif", readTags2, tagFilter);
+      parsedGroups.exif = parsedExifTags;
+      const carriedGroups = readExifCarriedGroups(
+        parsedExifTags,
+        exifDataView || dataView,
+        tiffHeaderOffset,
+        byteOrder,
+        valueBudget,
+        { decompressed: false, hasIptcBlock: iptcDataOffset !== void 0 }
+      );
+      for (let i = 0; i < EXIF_CARRIED_GROUP_ORDER.length; i++) {
+        const groupKey = EXIF_CARRIED_GROUP_ORDER[i];
+        if (carriedGroups[groupKey] === void 0) {
+          continue;
+        }
+        parsedGroups[groupKey] = carriedGroups[groupKey];
+        if (!tagFilter.shouldReturnGroup(groupKey)) {
+          continue;
+        }
+        if (groupKey === "xmp") {
+          const step = {
+            type: "mergeXmpGroupAssign",
+            parsedTags: carriedGroups.xmp
+          };
+          if (expanded) {
+            mergeSteps.push(step);
+          } else {
+            embeddedXmpStepForFlat = step;
           }
-          function to(e2, t2, n2) {
-            Bi[t2] ? e2[Bi[t2].name] = { value: n2, description: n2 } : e2[t2] = { value: n2, description: n2 };
+        } else {
+          mergeSteps.push({
+            type: "mergeGroupAssign",
+            groupKey,
+            parsedTags: carriedGroups[groupKey]
+          });
+        }
+      }
+      if (tagFilter.shouldReturnGroup("exif")) {
+        mergeSteps.push({
+          type: "mergeGroupAssign",
+          groupKey: "exif",
+          parsedTags: parsedExifTags
+        });
+      }
+      if (!expanded && embeddedXmpStepForFlat) {
+        mergeSteps.push(embeddedXmpStepForFlat);
+        embeddedXmpStepForFlat = void 0;
+      }
+    }
+    if (valueBudget === void 0 && dataView !== void 0) {
+      valueBudget = getValueBudget(dataView);
+    }
+    if (constants_default.USE_JPEG && constants_default.USE_IPTC && iptcDataOffset !== void 0 && tagFilter.shouldParseGroup("iptc")) {
+      const readTags2 = iptc_tags_default.read(dataView, iptcDataOffset, includeUnknown, tagFilter, valueBudget);
+      const parsedIptcTags = filterTagsForParse("iptc", readTags2, tagFilter);
+      parsedGroups.iptc = parsedIptcTags;
+      if (tagFilter.shouldReturnGroup("iptc")) {
+        mergeSteps.push({
+          type: "mergeGroupAssign",
+          groupKey: "iptc",
+          parsedTags: parsedIptcTags
+        });
+      }
+    }
+    if (constants_default.USE_XMP && hasXmpData(xmpChunks) && tagFilter.shouldParseGroup("xmp")) {
+      const readTags2 = xmp_tags_default.read(xmpDataView || dataView, xmpChunks, domParser);
+      const parsedXmpTags = filterTagsForParse("xmp", readTags2, tagFilter);
+      parsedGroups.xmp = parsedXmpTags;
+      if (tagFilter.shouldReturnGroup("xmp")) {
+        mergeSteps.push({
+          type: "mergeXmpGroupAssign",
+          parsedTags: parsedXmpTags
+        });
+      }
+    }
+    const readEmbeddedExifThumbnail = getEmbeddedExifThumbnailReader(tagFilter, dataView);
+    if (constants_default.USE_JXL && constants_default.USE_EXIF && brobExifChunk && tiffHeaderOffset === void 0 && tagFilter.shouldParseGroup("exif") && async) {
+      const compressedExifData = getBrobDataView(dataView, brobExifChunk);
+      deferredPromises.push(
+        decompress(compressedExifData, COMPRESSION_METHOD_BROTLI, void 0, "dataview", decompressConfig).then((decompressedDataView) => {
+          const brobTiffHeaderOffset = getTiffHeaderOffset(decompressedDataView, 0);
+          addDecompressedValueAllowance(valueBudget, decompressedDataView.byteLength);
+          const { tags: readTags2, byteOrder: brobByteOrder } = readExifTags(
+            decompressedDataView,
+            brobTiffHeaderOffset,
+            includeUnknown,
+            computed,
+            tagFilter,
+            valueBudget
+          );
+          const thumbnail = takeEmbeddedExifThumbnail(
+            readTags2,
+            decompressedDataView,
+            brobTiffHeaderOffset,
+            readEmbeddedExifThumbnail
+          );
+          const carriedGroups = readEmbeddedExifCarriedGroups(
+            decompressedDataView,
+            readTags2,
+            brobTiffHeaderOffset,
+            brobByteOrder,
+            valueBudget,
+            { decompressed: true, hasIptcBlock: false }
+          );
+          deferredResults.brobExif = { exifTags: readTags2, carriedGroups, thumbnail };
+        }).catch(() => {
+          deferredResults.brobExif = void 0;
+        })
+      );
+      mergeSteps.push({
+        type: "mergeBrobExifDeferred",
+        deferredKey: "brobExif"
+      });
+    }
+    if (constants_default.USE_JXL && constants_default.USE_XMP && brobXmpChunk && !hasXmpData(xmpChunks) && tagFilter.shouldParseGroup("xmp") && async) {
+      const compressedXmpData = getBrobDataView(dataView, brobXmpChunk);
+      deferredPromises.push(
+        decompress(compressedXmpData, COMPRESSION_METHOD_BROTLI, void 0, "dataview", decompressConfig).then((decompressedDataView) => {
+          if (exceedsBrobXmpSizeBound(decompressedDataView.byteLength, dataView)) {
+            deferredResults.brobXmp = {};
+            return;
           }
-          var no = { read: function(e2, t2, n2, r2, i2) {
-            var o2 = zn(e2, vn, t2, t2 + n2, r2, i2, arguments.length > 5 && void 0 !== arguments[5] ? arguments[5] : 0, arguments.length > 6 && void 0 !== arguments[6] ? arguments[6] : void 0, "makerNotes");
-            return o2.ShotInfo && delete (o2 = l({}, o2, (function(e3) {
-              var t3, n3 = {};
-              return void 0 !== e3[27] && (n3.AutoRotate = { value: e3[27], description: (t3 = e3[27], 0 === t3 ? "None" : 1 === t3 ? "Rotate 90 CW" : 2 === t3 ? "Rotate 180" : 3 === t3 ? "Rotate 270 CW" : "Unknown") }), n3;
-            })(o2.ShotInfo.value))).ShotInfo, o2.CameraSettings && delete (o2 = l({}, o2, (function(e3) {
-              var t3 = {};
-              if (!Array.isArray(e3)) return t3;
-              var n3 = e3[22];
-              return Number.isFinite(n3) && (t3.LensType = { value: n3, description: "".concat(n3) }), t3;
-            })(o2.CameraSettings.value))).CameraSettings, o2;
-          }, SHOT_INFO_AUTO_ROTATE: 27, CAMERA_SETTINGS_LENS_TYPE: 22 }, ro = { K3_III: 78420 }, io = { CAMERA_ORIENTATION: 1, ROLL_ANGLE: 3, PITCH_ANGLE: 5 }, oo = { read: function(e2, t2, n2, r2) {
-            var i2 = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : 0, o2 = arguments.length > 5 && void 0 !== arguments[5] ? arguments[5] : void 0;
-            try {
-              var a2 = Q.getByteOrder(e2, t2 + n2 + 8), u2 = t2 + n2, f2 = zn(e2, yn, u2, u2 + 10, a2, r2, i2, o2, "makerNotes");
-              return (function(e3) {
-                return e3.PentaxModelID && e3.PentaxModelID.value === ro.K3_III && e3.LevelInfo;
-              })(f2) && (f2 = l({}, f2, (function(e3, t3, n3) {
-                var r3 = {};
-                if (t3 + 7 > e3.byteLength) return r3;
-                var i3, o3 = e3.getInt8(t3 + io.CAMERA_ORIENTATION);
-                r3.CameraOrientation = { value: o3, description: (i3 = o3, 0 === i3 ? "Horizontal (normal)" : 1 === i3 ? "Rotate 270 CW" : 2 === i3 ? "Rotate 180" : 3 === i3 ? "Rotate 90 CW" : 4 === i3 ? "Upwards" : 5 === i3 ? "Downwards" : "Unknown") };
-                var a3 = e3.getInt16(t3 + io.ROLL_ANGLE, n3 === Q.LITTLE_ENDIAN);
-                r3.RollAngle = { value: a3, description: ao(a3) };
-                var u3 = e3.getInt16(t3 + io.PITCH_ANGLE, n3 === Q.LITTLE_ENDIAN);
-                return r3.PitchAngle = { value: u3, description: uo(u3) }, r3;
-              })(e2, u2 + f2.LevelInfo.__offset, a2)), delete f2.LevelInfo), f2;
-            } catch (e3) {
-              return {};
-            }
-          }, PENTAX_IFD_OFFSET: 10, MODEL_ID: ro, LIK3III: io };
-          function ao(e2) {
-            return "" + -0.5 * e2;
+          deferredResults.brobXmp = xmp_tags_default.read(
+            decompressedDataView,
+            [{ dataOffset: 0, length: decompressedDataView.byteLength }],
+            domParser
+          );
+        }).catch(() => {
+          deferredResults.brobXmp = {};
+        })
+      );
+      mergeSteps.push({
+        type: "mergeBrobXmpDeferred",
+        deferredKey: "brobXmp"
+      });
+    }
+    if (constants_default.USE_ICC && hasIccData(iccChunks) && tagFilter.shouldParseGroup("icc")) {
+      const readTags2 = icc_tags_default.read(dataView, iccChunks, async, decompressConfig);
+      if (isThenable(readTags2)) {
+        if (!async) {
+          throw new Error("Promise is required when async mode is enabled.");
+        }
+        deferredPromises.push(readTags2.then((resolvedTags) => {
+          deferredResults.iccApp = resolvedTags;
+        }));
+        mergeSteps.push({
+          type: "mergeIccDeferred",
+          deferredKey: "iccApp"
+        });
+      } else {
+        const parsedIccTags = filterTagsForParse("icc", readTags2, tagFilter);
+        parsedGroups.icc = parsedIccTags;
+        if (tagFilter.shouldReturnGroup("icc")) {
+          mergeSteps.push({
+            type: "mergeGroupAssign",
+            groupKey: "icc",
+            parsedTags: parsedIccTags
+          });
+        }
+      }
+    }
+    if (constants_default.USE_MPF && mpfDataOffset !== void 0 && tagFilter.shouldParseGroup("mpf")) {
+      const readMpfTags = mpf_tags_default.read(
+        dataView,
+        mpfDataOffset,
+        includeUnknown,
+        computed,
+        tagFilter,
+        valueBudget
+      );
+      const parsedMpfTags = filterTagsForParse("mpf", readMpfTags, tagFilter);
+      parsedGroups.mpf = parsedMpfTags;
+      if (tagFilter.shouldReturnGroup("mpf")) {
+        mergeSteps.push({
+          type: "mergeGroupAssign",
+          groupKey: "mpf",
+          parsedTags: parsedMpfTags
+        });
+      }
+    }
+    if (constants_default.USE_PNG && constants_default.USE_PNG_FILE && pngHeaderOffset !== void 0 && tagFilter.shouldParseGroup("png")) {
+      const readTags2 = png_file_tags_default.read(dataView, pngHeaderOffset);
+      const parsedPngFileTags = filterTagsForParse("png", readTags2, tagFilter);
+      parsedGroups.pngFile = parsedPngFileTags;
+      if (tagFilter.shouldReturnGroup("png")) {
+        mergeSteps.push({
+          type: "mergePngFile",
+          parsedTags: parsedPngFileTags
+        });
+      }
+    }
+    if (constants_default.USE_PNG && hasPngTextData(pngTextChunks) && (tagFilter.shouldParseGroup("png") || tagFilter.shouldParseGroup("exif") || tagFilter.shouldParseGroup("iptc"))) {
+      const { readTags: readTags2, embeddedExifTags, embeddedIptcTags, embeddedExifThumbnail, exifCarriedGroups, readTagsPromise } = png_text_tags_default.read(
+        dataView,
+        pngTextChunks,
+        async,
+        includeUnknown,
+        computed,
+        tagFilter,
+        decompressConfig,
+        valueBudget,
+        readEmbeddedExifThumbnail,
+        readEmbeddedExifCarriedGroups,
+        {
+          exif: constants_default.USE_EXIF ? readExifTags : void 0,
+          iptc: constants_default.USE_IPTC ? iptc_tags_default.read : void 0
+        }
+      );
+      pngTextIsAsync = !!readTagsPromise;
+      mergeSteps.push({
+        type: "processPngTextReadTags",
+        readTags: readTags2,
+        embeddedExifTags,
+        embeddedIptcTags,
+        embeddedExifThumbnail,
+        exifCarriedGroups
+      });
+      if (readTagsPromise) {
+        deferredPromises.push(readTagsPromise.then((tagList) => {
+          deferredResults.pngTextTagList = tagList;
+        }));
+        mergeSteps.push({
+          type: "processPngTextReadTagsDeferredList",
+          deferredKey: "pngTextTagList"
+        });
+      }
+    }
+    if (constants_default.USE_PNG && pngChunkOffsets !== void 0 && tagFilter.shouldParseGroup("png")) {
+      const readTags2 = png_tags_default.read(dataView, pngChunkOffsets);
+      const parsedPngChunkTags = filterTagsForParse("png", readTags2, tagFilter);
+      parsedGroups.pngChunk = parsedPngChunkTags;
+      if (tagFilter.shouldReturnGroup("png")) {
+        mergeSteps.push({
+          type: "mergePngChunk",
+          parsedTags: parsedPngChunkTags
+        });
+      }
+    }
+    if (constants_default.USE_WEBP && vp8xChunkOffset !== void 0 && tagFilter.shouldParseGroup("riff")) {
+      const readTags2 = vp8x_tags_default.read(dataView, vp8xChunkOffset);
+      const parsedRiffTags = filterTagsForParse("riff", readTags2, tagFilter);
+      parsedGroups.riff = parsedRiffTags;
+      if (tagFilter.shouldReturnGroup("riff")) {
+        mergeSteps.push({
+          type: "mergeGroupMerge",
+          groupKey: "riff",
+          parsedTags: parsedRiffTags
+        });
+      }
+    }
+    if (constants_default.USE_GIF && gifHeaderOffset !== void 0 && tagFilter.shouldParseGroup("gif")) {
+      const readTags2 = gif_file_tags_default.read(dataView, gifHeaderOffset);
+      const parsedGifTags = filterTagsForParse("gif", readTags2, tagFilter);
+      parsedGroups.gif = parsedGifTags;
+      if (tagFilter.shouldReturnGroup("gif")) {
+        mergeSteps.push({
+          type: "mergeGroupMerge",
+          groupKey: "gif",
+          parsedTags: parsedGifTags
+        });
+      }
+    }
+    if (constants_default.USE_JXL && jxlCodestreamOffset !== void 0 && tagFilter.shouldParseGroup("file")) {
+      const readTags2 = jxl_file_tags_default.read(dataView, jxlCodestreamOffset);
+      const parsedJxlFileTags = filterTagsForParse("file", readTags2, tagFilter);
+      parsedGroups.file = parsedJxlFileTags;
+      if (tagFilter.shouldReturnGroup("file")) {
+        mergeSteps.push({
+          type: "mergeGroupAssign",
+          groupKey: "file",
+          parsedTags: parsedJxlFileTags
+        });
+      }
+    }
+    if ((constants_default.USE_HEIC || constants_default.USE_AVIF) && (imageDimensionsOffset !== void 0 || pixelInformationOffset !== void 0) && tagFilter.shouldParseGroup("file")) {
+      const readTags2 = iso_bmff_file_tags_default.read(dataView, imageDimensionsOffset, pixelInformationOffset);
+      const parsedIsoBmffFileTags = filterTagsForParse("file", readTags2, tagFilter);
+      parsedGroups.file = parsedIsoBmffFileTags;
+      if (tagFilter.shouldReturnGroup("file")) {
+        mergeSteps.push({
+          type: "mergeGroupAssign",
+          groupKey: "file",
+          parsedTags: parsedIsoBmffFileTags
+        });
+      }
+    }
+    if (constants_default.USE_EXIF) {
+      mergeSteps.push({ type: "gps" });
+    }
+    if (constants_default.USE_EXIF || constants_default.USE_XMP) {
+      mergeSteps.push({ type: "composite" });
+    }
+    mergeSteps.push({ type: "thumbnail" });
+    mergeSteps.push({ type: "fileType" });
+    if (expanded && includeOffsets) {
+      mergeSteps.push({
+        type: "metadataRange",
+        metadataBlocks: getParsedMetadataBlocks(metadataBlocks, fileType2),
+        metadataTruncated: !!metadataTruncated
+      });
+    }
+    if (!fileHasMetaData) {
+      throw new errors_default.MetadataMissingError();
+    }
+    const pipelineDependencies = {
+      objectAssign,
+      hasPngTextData,
+      filterTagsForParse,
+      filterTagsForReturn,
+      // A plain property here would keep the function alive for the bundler,
+      // so a build without Exif would still carry getGpsGroupFromExifTags.
+      getGpsGroupFromExifTags: constants_default.USE_EXIF ? getGpsGroupFromExifTags : void 0,
+      // A plain property here would keep the import alive for the bundler, so
+      // a build with neither Exif nor XMP would still carry composite.js.
+      Composite: constants_default.USE_EXIF || constants_default.USE_XMP ? composite_default : void 0,
+      // A plain property here would keep the import alive for the bundler, so
+      // a build without Exif thumbnails would still carry thumbnail.js.
+      Thumbnail: constants_default.USE_EXIF && constants_default.USE_THUMBNAIL ? thumbnail_default : void 0
+    };
+    if (async) {
+      assertPromiseSupport();
+      return Promise.all(deferredPromises).then(() => {
+        const tags = buildTagsFromMergeSteps({
+          mergeSteps,
+          deferredResults,
+          parsedGroups,
+          expanded,
+          tagFilter,
+          dataView,
+          tiffHeaderOffset,
+          exifDataView,
+          fileType: fileType2,
+          pngTextChunks,
+          pngTextIsAsync,
+          thumbnailIfdTags,
+          deps: pipelineDependencies
+        });
+        return tags;
+      });
+    }
+    return buildTagsFromMergeSteps({
+      mergeSteps,
+      deferredResults,
+      parsedGroups,
+      expanded,
+      tagFilter,
+      dataView,
+      tiffHeaderOffset,
+      exifDataView,
+      fileType: fileType2,
+      pngTextChunks,
+      pngTextIsAsync,
+      thumbnailIfdTags,
+      deps: pipelineDependencies
+    });
+    function shouldReadFileTagsForFileTypeOnlyOptimization(includeTagsOptions) {
+      if (!includeTagsOptions) {
+        return true;
+      }
+      const { composite, file } = includeTagsOptions;
+      if (composite === true || Array.isArray(composite) && composite.length > 0) {
+        return true;
+      }
+      return !(Array.isArray(file) && file.length === 1 && file[0] === "FileType");
+    }
+    function readExifCarriedGroups(parsedExifTags, exifTiffDataView, exifTiffHeaderOffset, exifByteOrder, exifValueBudget, source) {
+      const groups = {};
+      try {
+        if (constants_default.USE_IPTC && parsedExifTags["IPTC-NAA"] && !source.hasIptcBlock && tagFilter.shouldParseGroup("iptc")) {
+          const readIptcTags = iptc_tags_default.read(
+            parsedExifTags["IPTC-NAA"].value,
+            0,
+            includeUnknown,
+            tagFilter,
+            exifValueBudget
+          );
+          groups.iptc = filterTagsForParse("iptc", readIptcTags, tagFilter);
+        }
+        if (constants_default.USE_XMP && parsedExifTags["ApplicationNotes"] && isNumberArray(parsedExifTags["ApplicationNotes"].value) && !hasXmpData(xmpChunks) && tagFilter.shouldParseGroup("xmp") && (!source.decompressed || takeDecompressedApplicationNotesAllowance(parsedExifTags["ApplicationNotes"].value.length))) {
+          const readXmpTags = xmp_tags_default.read(
+            getByteString(parsedExifTags["ApplicationNotes"].value),
+            void 0,
+            domParser
+          );
+          groups.xmp = filterTagsForParse("xmp", readXmpTags, tagFilter);
+        }
+        if (constants_default.USE_PHOTOSHOP && parsedExifTags["ImageSourceData"] && parsedExifTags["PhotoshopSettings"] && Array.isArray(parsedExifTags["PhotoshopSettings"].value) && tagFilter.shouldParseGroup("photoshop")) {
+          const readPhotoshopTags = photoshop_tags_default.read(
+            parsedExifTags["PhotoshopSettings"].value,
+            includeUnknown,
+            tagFilter
+          );
+          groups.photoshop = filterTagsForParse("photoshop", readPhotoshopTags, tagFilter);
+        }
+        if (constants_default.USE_ICC && parsedExifTags["ICC_Profile"] && !hasIccData(iccChunks) && tagFilter.shouldParseGroup("icc")) {
+          const readIccTags = icc_tags_default.read(
+            parsedExifTags["ICC_Profile"].value,
+            [{
+              offset: 0,
+              length: parsedExifTags["ICC_Profile"].value.length,
+              chunkNumber: 1,
+              chunksTotal: 1
+            }]
+          );
+          groups.icc = filterTagsForParse("icc", readIccTags, tagFilter);
+        }
+        if (constants_default.USE_MAKER_NOTES && parsedExifTags["MakerNote"] && tagFilter.shouldParseGroup("makerNotes")) {
+          if (hasCanonData(parsedExifTags)) {
+            groups.makerNotes = canon_tags_default.read(
+              exifTiffDataView,
+              exifTiffHeaderOffset,
+              parsedExifTags["MakerNote"].__offset,
+              exifByteOrder,
+              includeUnknown,
+              computed,
+              tagFilter,
+              exifValueBudget
+            );
+          } else if (hasPentaxType1Data(parsedExifTags)) {
+            groups.makerNotes = pentax_tags_default.read(
+              exifTiffDataView,
+              exifTiffHeaderOffset,
+              parsedExifTags["MakerNote"].__offset,
+              includeUnknown,
+              computed,
+              tagFilter,
+              exifValueBudget
+            );
           }
-          function uo(e2) {
-            return "" + -0.5 * e2;
-          }
-          var fo = { read: function(e2, t2) {
-            return { "Image Width": so(e2, t2), "Image Height": co(e2, t2), "Bit Depth": lo(e2, t2), "Color Type": po(e2, t2), Compression: go(e2, t2), Filter: mo(e2, t2), Interlace: ho(e2, t2) };
-          } };
-          function so(e2, t2) {
-            if (!(t2 + 0 + 4 > e2.byteLength)) {
-              var n2 = An.getLongAt(e2, t2);
-              return { value: n2, description: "".concat(n2, "px") };
-            }
-          }
-          function co(e2, t2) {
-            if (!(t2 + 4 + 4 > e2.byteLength)) {
-              var n2 = An.getLongAt(e2, t2 + 4);
-              return { value: n2, description: "".concat(n2, "px") };
-            }
-          }
-          function lo(e2, t2) {
-            if (!(t2 + 8 + 1 > e2.byteLength)) {
-              var n2 = An.getByteAt(e2, t2 + 8);
-              return { value: n2, description: "".concat(n2) };
-            }
-          }
-          function po(e2, t2) {
-            if (!(t2 + 9 + 1 > e2.byteLength)) {
-              var n2 = An.getByteAt(e2, t2 + 9);
-              return { value: n2, description: { 0: "Grayscale", 2: "RGB", 3: "Palette", 4: "Grayscale with Alpha", 6: "RGB with Alpha" }[n2] || "Unknown" };
-            }
-          }
-          function go(e2, t2) {
-            if (!(t2 + 10 + 1 > e2.byteLength)) {
-              var n2 = An.getByteAt(e2, t2 + 10);
-              return { value: n2, description: 0 === n2 ? "Deflate/Inflate" : "Unknown" };
-            }
-          }
-          function mo(e2, t2) {
-            if (!(t2 + 11 + 1 > e2.byteLength)) {
-              var n2 = An.getByteAt(e2, t2 + 11);
-              return { value: n2, description: 0 === n2 ? "Adaptive" : "Unknown" };
-            }
-          }
-          function ho(e2, t2) {
-            if (!(t2 + 12 + 1 > e2.byteLength)) {
-              var n2 = An.getByteAt(e2, t2 + 12);
-              return { value: n2, description: { 0: "Noninterlaced", 1: "Adam7 Interlace" }[n2] || "Unknown" };
-            }
-          }
-          function vo(e2) {
-            return vo = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e3) {
-              return typeof e3;
-            } : function(e3) {
-              return e3 && "function" == typeof Symbol && e3.constructor === Symbol && e3 !== Symbol.prototype ? "symbol" : typeof e3;
-            }, vo(e2);
-          }
-          var yo = { read: function(e2, t2, n2, r2) {
-            for (var i2 = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : 0, o2 = arguments.length > 5 && void 0 !== arguments[5] ? arguments[5] : Ln, a2 = arguments.length > 6 ? arguments[6] : void 0, u2 = {}, f2 = [], s2 = 0; s2 < t2.length; s2++) {
-              var c2 = t2[s2], l2 = Uo(e2, c2.offset, c2.length, c2.type, n2, a2);
-              if (l2 instanceof Promise) f2.push(l2.then((function(e3) {
-                var t3, n3, a3, u3 = e3.name, f3 = e3.value, s3 = e3.description;
-                try {
-                  if (K.USE_EXIF && Lo(u3, f3)) return o2.shouldParseGroup("exif") ? { __exif: Yn.read(No(f3), To, r2, i2, o2).tags } : {};
-                  if (K.USE_IPTC && Mo(u3, f3)) return o2.shouldParseGroup("iptc") ? { __iptc: Fr.read(No(f3), 0, r2, o2) } : {};
-                  if (u3 && !Lo(u3, f3) && !Mo(u3, f3)) return o2.shouldParseGroup("png") ? (t3 = {}, a3 = { value: f3, description: s3 }, (n3 = (function(e4) {
-                    var t4 = (function(e5) {
-                      if ("object" != vo(e5) || !e5) return e5;
-                      var t5 = e5[Symbol.toPrimitive];
-                      if (void 0 !== t5) {
-                        var n4 = t5.call(e5, "string");
-                        if ("object" != vo(n4)) return n4;
-                        throw new TypeError("@@toPrimitive must return a primitive value.");
-                      }
-                      return e5 + "";
-                    })(e4);
-                    return "symbol" == vo(t4) ? t4 : t4 + "";
-                  })(n3 = u3)) in t3 ? Object.defineProperty(t3, n3, { value: a3, enumerable: 1, configurable: 1, writable: 1 }) : t3[n3] = a3, t3) : {};
-                } catch (e4) {
-                }
-                return {};
-              })));
-              else {
-                var d2 = l2.name, p2 = l2.value, g2 = l2.description;
-                d2 && o2.shouldParseGroup("png") && (u2[d2] = { value: p2, description: g2 });
-              }
-            }
-            return { readTags: u2, readTagsPromise: f2.length > 0 ? Promise.all(f2) : void 0 };
-          } }, bo = "STATE_KEYWORD", So = "STATE_COMPRESSION", Io = "STATE_LANG", Ao = "STATE_TRANSLATED_KEYWORD", Po = "STATE_TEXT", xo = 1, Co = 1, To = 6;
-          function Uo(e2, t2, n2, r2, i2, o2) {
-            for (var a2, u2 = [], f2 = [], s2 = [], c2 = bo, l2 = h, d2 = 0; d2 < n2 && t2 + d2 < e2.byteLength; d2++) if (c2 !== So) {
-              if (c2 === Po) {
-                a2 = new DataView(e2.buffer.slice(t2 + d2, t2 + n2));
-                break;
-              }
-              var p2 = e2.getUint8(t2 + d2);
-              0 === p2 ? c2 = wo(r2, c2) : c2 === bo ? u2.push(p2) : c2 === Io ? f2.push(p2) : c2 === Ao && s2.push(p2);
-            } else l2 = Eo({ type: r2, dataView: e2, offset: t2 + d2 }), r2 === At && (d2 += xo), c2 = wo(r2, c2);
-            if (l2 !== h && !i2) return {};
-            var g2 = S(a2, l2, /* @__PURE__ */ (function(e3) {
-              return e3 === It || e3 === Pt ? "latin1" : "utf-8";
-            })(r2), "string", o2);
-            return g2 instanceof Promise ? g2.then((function(e3) {
-              return Oo(e3, r2, f2, u2);
-            })).catch((function() {
-              return Oo("<text using unknown compression>".split(""), r2, f2, u2);
-            })) : Oo(g2, r2, f2, u2);
-          }
-          function Eo(e2) {
-            var t2 = e2.type, n2 = e2.dataView, r2 = e2.offset;
-            if (t2 === At) {
-              if (n2.getUint8(r2) === Co) return n2.getUint8(r2 + 1);
-            } else if (t2 === Pt) return n2.getUint8(r2);
-            return h;
-          }
-          function wo(e2, t2) {
-            return t2 === bo && [At, Pt].includes(e2) ? So : t2 === So ? e2 === At ? Io : Po : t2 === Io ? Ao : Po;
-          }
-          function Oo(e2, t2, n2, r2) {
-            var i2 = (function(e3) {
-              return e3 instanceof DataView ? a(e3, 0, e3.byteLength) : e3;
-            })(e2);
-            return { name: Fo(t2, n2, r2), value: i2, description: t2 === At ? Ro(e2) : i2 };
-          }
-          function Fo(e2, t2, n2) {
-            var r2 = c(n2);
-            if (e2 === It || 0 === t2.length) return r2;
-            var i2 = c(t2);
-            return "".concat(r2, " (").concat(i2, ")");
-          }
-          function Ro(e2) {
-            return Or("UTF-8", e2);
-          }
-          function Lo(e2, t2) {
-            return "raw profile type exif" === e2.toLowerCase() && "exif" === t2.substring(1, 5);
-          }
-          function Mo(e2, t2) {
-            return "raw profile type iptc" === e2.toLowerCase() && "iptc" === t2.substring(1, 5);
-          }
-          function No(e2) {
-            return (function(e3) {
-              for (var t2 = new DataView(new ArrayBuffer(e3.length / 2)), n2 = 0; n2 < e3.length; n2 += 2) t2.setUint8(n2 / 2, parseInt(e3.substring(n2, n2 + 2), 16));
-              return t2;
-            })(e2.match(/\n(exif|iptc)\n\s*\d+\n([\s\S]*)$/)[2].replace(/\n/g, ""));
-          }
-          var ko = { read: function(e2, t2) {
-            for (var n2 = {}, r2 = 0; r2 < t2.length; r2++) {
-              var i2 = An.getLongAt(e2, t2[r2] + vt), o2 = a(e2, t2[r2] + yt, ht);
-              o2 === xt ? (n2["Pixels Per Unit X"] = Do(e2, t2[r2], i2), n2["Pixels Per Unit Y"] = Go(e2, t2[r2], i2), n2["Pixel Units"] = _o(e2, t2[r2], i2)) : o2 === Ct && (n2["Modify Date"] = Bo(e2, t2[r2], i2));
-            }
-            return n2;
-          } };
-          function Do(e2, t2, n2) {
-            if (jo(e2, t2, n2, 0, 4)) {
-              var r2 = An.getLongAt(e2, t2 + bt + 0);
-              return { value: r2, description: "" + r2 };
-            }
-          }
-          function Go(e2, t2, n2) {
-            if (jo(e2, t2, n2, 4, 4)) {
-              var r2 = An.getLongAt(e2, t2 + bt + 4);
-              return { value: r2, description: "" + r2 };
-            }
-          }
-          function _o(e2, t2, n2) {
-            if (jo(e2, t2, n2, 8, 1)) {
-              var r2 = An.getByteAt(e2, t2 + bt + 8);
-              return { value: r2, description: 1 === r2 ? "meters" : "Unknown" };
-            }
-          }
-          function Bo(e2, t2, n2) {
-            if (jo(e2, t2, n2, 0, 7)) {
-              var r2 = An.getShortAt(e2, t2 + bt), i2 = An.getByteAt(e2, t2 + bt + 2), o2 = An.getByteAt(e2, t2 + bt + 3), a2 = An.getByteAt(e2, t2 + bt + 4), u2 = An.getByteAt(e2, t2 + bt + 5), f2 = An.getByteAt(e2, t2 + bt + 6);
-              return { value: [r2, i2, o2, a2, u2, f2], description: "".concat(zo(r2, 4), "-").concat(zo(i2, 2), "-").concat(zo(o2, 2), " ").concat(zo(a2, 2), ":").concat(zo(u2, 2), ":").concat(zo(f2, 2)) };
-            }
-          }
-          function jo(e2, t2, n2, r2, i2) {
-            return r2 + i2 <= n2 && t2 + bt + r2 + i2 <= e2.byteLength;
-          }
-          function zo(e2, t2) {
-            return "".concat("0".repeat(t2 - ("" + e2).length)).concat(e2);
-          }
-          var Vo = { read: function(e2, t2) {
-            var n2 = {};
-            if (t2 + Wo > e2.byteLength) return n2;
-            var r2 = An.getByteAt(e2, t2);
-            return n2.Alpha = (function(e3) {
-              var t3 = 16 & e3;
-              return { value: t3 ? 1 : 0, description: t3 ? "Yes" : "No" };
-            })(r2), n2.Animation = (function(e3) {
-              var t3 = 2 & e3;
-              return { value: t3 ? 1 : 0, description: t3 ? "Yes" : "No" };
-            })(r2), n2.ImageWidth = Ko(e2, t2 + Xo), n2.ImageHeight = Ko(e2, t2 + Ho), n2;
-          } }, Xo = 4, Ho = 7, Wo = 10;
-          function Ko(e2, t2) {
-            var n2 = An.getByteAt(e2, t2) + 256 * An.getByteAt(e2, t2 + 1) + 65536 * An.getByteAt(e2, t2 + 2) + 1;
-            return { value: n2, description: n2 + "px" };
-          }
-          var Jo = { read: function(e2) {
-            return { "GIF Version": qo(e2), "Image Width": Yo(e2), "Image Height": $o(e2), "Global Color Map": Zo(e2), "Bits Per Pixel": ea(e2), "Color Resolution Depth": Qo(e2) };
-          } };
-          function qo(e2) {
-            if (!(6 > e2.byteLength)) {
-              var t2 = a(e2, 3, 3);
-              return { value: t2, description: t2 };
-            }
-          }
-          function Yo(e2) {
-            if (!(8 > e2.byteLength)) {
-              var t2 = e2.getUint16(6, 1);
-              return { value: t2, description: "".concat(t2, "px") };
-            }
-          }
-          function $o(e2) {
-            if (!(10 > e2.byteLength)) {
-              var t2 = e2.getUint16(8, 1);
-              return { value: t2, description: "".concat(t2, "px") };
-            }
-          }
-          function Zo(e2) {
-            if (!(11 > e2.byteLength)) {
-              var t2 = (128 & e2.getUint8(10)) >>> 7;
-              return { value: t2, description: 1 === t2 ? "Yes" : "No" };
-            }
-          }
-          function Qo(e2) {
-            if (!(11 > e2.byteLength)) {
-              var t2 = 1 + ((112 & e2.getUint8(10)) >>> 4);
-              return { value: t2, description: "".concat(t2, " ").concat(1 === t2 ? "bit" : "bits") };
-            }
-          }
-          function ea(e2) {
-            if (!(11 > e2.byteLength)) {
-              var t2 = 1 + (7 & e2.getUint8(10));
-              return { value: t2, description: "".concat(t2, " ").concat(1 === t2 ? "bit" : "bits") };
-            }
-          }
-          var ta = [6, 7, 99], na = { get: function(e2, t2, n2) {
-            if ((i2 = t2) && (void 0 === i2.Compression || ta.includes(i2.Compression.value)) && i2.JPEGInterchangeFormat && i2.JPEGInterchangeFormat.value && i2.JPEGInterchangeFormatLength && i2.JPEGInterchangeFormatLength.value) {
-              t2.type = "image/jpeg";
-              var r2 = n2 + t2.JPEGInterchangeFormat.value;
-              t2.image = e2.buffer.slice(r2, r2 + t2.JPEGInterchangeFormatLength.value), d(t2, "base64", (function() {
-                return p(this.image);
-              }));
-            }
-            var i2;
-            return t2;
-          } }, ra = { get: function(e2, t2) {
-            var n2 = {}, r2 = 0, i2 = ia(e2, "exif", "FocalLength", t2), o2 = ia(e2, "exif", "FocalPlaneXResolution", t2), a2 = ia(e2, "exif", "FocalPlaneYResolution", t2), u2 = ia(e2, "exif", "FocalPlaneResolutionUnit", t2), f2 = ia(e2, "file", "Image Width", t2), s2 = ia(e2, "file", "Image Height", t2), c2 = ia(e2, "exif", "FocalLengthIn35mmFilm", t2) || (function(e3, t3, n3, r3, i3, o3) {
-              if (e3 && t3 && n3 && r3 && i3 && o3) try {
-                var a3;
-                switch (n3) {
-                  case 2:
-                    a3 = 25.4;
-                    break;
-                  case 3:
-                    a3 = 10;
-                    break;
-                  case 4:
-                    a3 = 1;
-                    break;
-                  default:
-                    return;
-                }
-                var u3 = e3[0] / e3[1] * a3, f3 = i3 / (t3[0] / t3[1] * a3), s3 = Math.sqrt(Math.pow(r3 / u3, 2) + Math.pow(f3, 2));
-                return o3[0] / o3[1] * (43.27 / s3);
-              } catch (e4) {
-              }
-            })(o2, a2, u2, f2, s2, i2);
-            c2 && (n2.FocalLength35efl = { value: c2, description: nn.FocalLengthIn35mmFilm(c2) }, r2 = 1);
-            var l2 = (function(e3, t3) {
-              if (e3 && t3) try {
-                var n3 = t3 / (e3[0] / e3[1]);
-                return { value: n3, description: n3.toFixed(1) };
-              } catch (e4) {
-              }
-            })(i2, c2);
-            l2 && (n2.ScaleFactorTo35mmEquivalent = l2, r2 = 1);
-            var d2 = (function(e3) {
-              if (e3) try {
-                var t3 = 2 * Math.atan(36 / (2 * e3)) * (180 / Math.PI);
-                return { value: t3, description: t3.toFixed(1) + " deg" };
-              } catch (e4) {
-              }
-            })(c2);
-            if (d2 && (n2.FieldOfView = d2, r2 = 1), r2) return n2;
-          } };
-          function ia(e2, t2, n2, r2) {
-            return r2 && e2[t2] && e2[t2][n2] ? e2[t2][n2].value : !r2 && e2[n2] ? e2[n2].value : void 0;
-          }
-          function oa(e2) {
-            for (var t2 = e2.mergeSteps, n2 = e2.deferredResults, r2 = e2.parsedGroups, i2 = e2.expanded, o2 = e2.tagFilter, a2 = e2.dataView, u2 = e2.tiffHeaderOffset, f2 = e2.exifDataView, s2 = e2.fileType, c2 = e2.pngTextChunks, l2 = e2.pngTextIsAsync, d2 = e2.thumbnailIfdTags, p2 = e2.deps, g2 = {}, m2 = 0; m2 < t2.length; m2++) g2 = aa({ step: t2[m2], deferredResults: n2, parsedGroups: r2, expanded: i2, tagFilter: o2, dataView: a2, tiffHeaderOffset: u2, exifDataView: f2, fileType: s2, thumbnailIfdTags: d2, tags: g2, deps: p2 });
-            return i2 && l2 && o2.shouldReturnGroup("png") && g2.png && (g2.pngText = p2.objectAssign({}, g2.png)), i2 && o2.shouldReturnGroup("png") && p2.hasPngTextData(c2) && g2.png && !g2.pngText && (g2.pngText = p2.objectAssign({}, g2.png)), g2;
-          }
-          function aa(e2) {
-            var t2 = e2.step, n2 = e2.deferredResults, r2 = e2.parsedGroups, i2 = e2.expanded, o2 = e2.tagFilter, a2 = e2.dataView, u2 = e2.tiffHeaderOffset, f2 = e2.exifDataView, s2 = e2.fileType, c2 = e2.thumbnailIfdTags, l2 = e2.tags, d2 = e2.deps;
-            if ("mergeGroupAssign" === t2.type) {
-              var p2 = d2.filterTagsForReturn(t2.groupKey, t2.parsedTags, o2);
-              return ua(l2, t2.groupKey, p2, i2, d2);
-            }
-            if ("mergeGroupMerge" === t2.type) {
-              var g2 = d2.filterTagsForReturn(t2.groupKey, t2.parsedTags, o2);
-              return (function(e3, t3, n3, r3, i3) {
-                return r3 ? (e3[t3] ? e3[t3] = i3.objectAssign({}, e3[t3], n3) : e3[t3] = n3, e3) : i3.objectAssign({}, e3, n3);
-              })(l2, t2.groupKey, g2, i2, d2);
-            }
-            if ("mergeXmpGroupAssign" === t2.type) {
-              var m2 = d2.filterTagsForReturn("xmp", t2.parsedTags, o2);
-              if (i2) return l2.xmp = m2, l2;
-              var h2 = d2.objectAssign({}, m2);
-              return delete h2._raw, d2.objectAssign({}, l2, h2);
-            }
-            if ("mergeIccDeferred" === t2.type) {
-              var v2 = n2[t2.deferredKey], y2 = d2.filterTagsForParse("icc", v2, o2);
-              return r2.icc = y2, o2.shouldReturnGroup("icc") ? ua(l2, "icc", d2.filterTagsForReturn("icc", y2, o2), i2, d2) : l2;
-            }
-            if ("mergeBrobExifDeferred" === t2.type) {
-              var b2 = n2[t2.deferredKey];
-              if (!b2 || 0 === Object.keys(b2).length) return l2;
-              var S2 = d2.filterTagsForParse("exif", b2, o2);
-              return r2.exif = r2.exif ? d2.objectAssign({}, r2.exif, S2) : S2, o2.shouldReturnGroup("exif") ? ua(l2, "exif", d2.filterTagsForReturn("exif", S2, o2), i2, d2) : l2;
-            }
-            if ("mergeBrobXmpDeferred" === t2.type) {
-              var I2 = n2[t2.deferredKey];
-              if (!I2 || 0 === Object.keys(I2).length) return l2;
-              var A2 = d2.filterTagsForParse("xmp", I2, o2);
-              if (r2.xmp = A2, !o2.shouldReturnGroup("xmp")) return l2;
-              var P2 = d2.filterTagsForReturn("xmp", A2, o2);
-              if (i2) return l2.xmp = P2, l2;
-              var x2 = d2.objectAssign({}, P2);
-              return delete x2._raw, d2.objectAssign({}, l2, x2);
-            }
-            if ("mergePngFile" === t2.type) {
-              var C2 = d2.filterTagsForReturn("png", t2.parsedTags, o2);
-              return o2.shouldReturnGroup("png") ? i2 ? (l2.png = l2.png ? d2.objectAssign({}, l2.png, C2) : C2, l2.pngFile = C2, l2) : d2.objectAssign({}, l2, C2) : l2;
-            }
-            if ("mergePngChunk" === t2.type) {
-              var T2 = d2.filterTagsForReturn("png", t2.parsedTags, o2);
-              return o2.shouldReturnGroup("png") ? i2 ? (l2.png = l2.png ? d2.objectAssign({}, l2.png, T2) : T2, l2) : d2.objectAssign({}, l2, T2) : l2;
-            }
-            if ("processPngTextReadTags" === t2.type) return fa({ readTags: t2.readTags, parsedGroups: r2, expanded: i2, tagFilter: o2, tags: l2, deps: d2 });
-            if ("processPngTextReadTagsDeferredList" === t2.type) {
-              for (var U2 = n2[t2.deferredKey] || [], E2 = 0; E2 < U2.length; E2++) l2 = fa({ readTags: U2[E2], parsedGroups: r2, expanded: i2, tagFilter: o2, tags: l2, deps: d2 });
-              return l2;
-            }
-            if ("gps" === t2.type) {
-              if (i2 && o2.shouldReturnGroup("gps") && r2.exif) {
-                var w2 = d2.getGpsGroupFromExifTags(r2.exif);
-                if (w2) {
-                  var O2 = d2.filterTagsForReturn("gps", w2, o2);
-                  l2.gps = O2;
-                }
-              }
-              return l2;
-            }
-            if ("composite" === t2.type) {
-              if (!o2.shouldReturnGroup("composite")) return l2;
-              var F2 = l2, R2 = i2;
-              o2.isActive && (F2 = { exif: r2.exif, file: r2.file }, R2 = 1);
-              var L2 = d2.Composite.get(F2, R2);
-              return L2 ? ua(l2, "composite", d2.filterTagsForReturn("composite", L2, o2), i2, d2) : l2;
-            }
-            if ("thumbnail" === t2.type) {
-              if (!o2.shouldReturnGroup("thumbnail") || !o2.shouldReturnTag("thumbnail", "Thumbnail")) return delete l2.Thumbnail, l2;
-              if (!c2) return l2;
-              var M2 = c2 ? d2.filterTagsForParse("thumbnail", c2, o2) : void 0;
-              M2 && (r2.thumbnail = M2);
-              var N2 = (d2.Constants.USE_JPEG || d2.Constants.USE_WEBP) && d2.Constants.USE_EXIF && d2.Constants.USE_THUMBNAIL && d2.Thumbnail.get(f2 || a2, M2, u2);
-              return N2 ? l2.Thumbnail = N2 : delete l2.Thumbnail, l2;
-            }
-            if ("metadataRange" === t2.type) {
-              if (!i2) return l2;
-              var k2 = (function(e3, t3, n3, r3) {
-                var i3 = (e3 || []).slice(), o3 = !!t3;
-                if (r3 && r3.mpf && Array.isArray(r3.mpf.Images)) for (var a3 = 0; a3 < r3.mpf.Images.length; a3++) {
-                  var u3 = r3.mpf.Images[a3];
-                  if (u3 && u3.ImageOffset && u3.ImageSize) {
-                    var f3 = u3.ImageOffset.value, s3 = u3.ImageSize.value;
-                    "number" != typeof f3 || f3 <= 0 || "number" != typeof s3 || s3 <= 0 || i3.push({ type: "mpfImage", start: f3, end: f3 + s3 });
-                  }
-                }
-                if (0 !== i3.length) {
-                  i3.sort((function(e4, t4) {
-                    return e4.start - t4.start;
-                  }));
-                  for (var c3 = i3[0].start, l3 = i3[0].end, d3 = 1; d3 < i3.length; d3++) i3[d3].end > l3 && (l3 = i3[d3].end);
-                  var p3 = n3 && "number" == typeof n3.byteLength ? n3.byteLength : 0;
-                  return { start: c3, end: l3, complete: !o3 && l3 <= p3, blocks: i3 };
-                }
-              })(t2.metadataBlocks, t2.metadataTruncated, a2, r2);
-              return k2 && (l2.metadataRange = k2), l2;
-            }
-            return "fileType" === t2.type ? (s2 && o2.shouldReturnGroup("file") && o2.shouldReturnTag("file", "FileType") && (i2 ? (l2.file || (l2.file = {}), l2.file.FileType = s2) : l2.FileType = s2), l2) : l2;
-          }
-          function ua(e2, t2, n2, r2, i2) {
-            return r2 ? (e2[t2] = n2, e2) : i2.objectAssign({}, e2, n2);
-          }
-          function fa(e2) {
-            var t2 = e2.readTags, n2 = e2.parsedGroups, r2 = e2.expanded, i2 = e2.tagFilter, o2 = e2.tags, a2 = e2.deps, u2 = t2.__exif, f2 = t2.__iptc;
-            if (delete t2.__exif, delete t2.__iptc, u2) {
-              var s2 = a2.filterTagsForParse("exif", u2, i2);
-              if (n2.exif = n2.exif ? a2.objectAssign({}, n2.exif, s2) : s2, i2.shouldReturnGroup("exif")) {
-                var c2 = a2.filterTagsForReturn("exif", s2, i2);
-                r2 ? o2.exif = o2.exif ? a2.objectAssign({}, o2.exif, c2) : c2 : o2 = a2.objectAssign({}, o2, c2);
-              }
-            }
-            if (f2) {
-              var l2 = a2.filterTagsForParse("iptc", f2, i2);
-              if (n2.iptc = n2.iptc ? a2.objectAssign({}, n2.iptc, l2) : l2, i2.shouldReturnGroup("iptc")) {
-                var d2 = a2.filterTagsForReturn("iptc", l2, i2);
-                r2 ? o2.iptc = o2.iptc ? a2.objectAssign({}, o2.iptc, d2) : d2 : o2 = a2.objectAssign({}, o2, d2);
-              }
-            }
-            if (i2.shouldReturnGroup("png")) {
-              var p2 = a2.filterTagsForParse("png", t2, i2), g2 = a2.filterTagsForReturn("png", p2, i2);
-              n2.pngText = p2, r2 ? (o2.png = o2.png ? a2.objectAssign({}, o2.png, g2) : g2, g2 && Object.keys(g2).length > 0 && (o2.pngText = o2.pngText ? a2.objectAssign({}, o2.pngText, g2) : g2)) : o2 = a2.objectAssign({}, o2, g2);
-            }
-            return o2;
-          }
-          function sa(e2) {
-            this.name = "MetadataMissingError", this.message = e2 || "No Exif data", this.stack = Error().stack;
-          }
-          sa.prototype = Error();
-          var ca = { MetadataMissingError: sa }, la = { load: pa, loadView: ma, errors: ca }, da = ca;
-          function pa(e2) {
-            var t2 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
-            if ("auto" === t2.length) return (function(e3) {
-              if (1 != e3.expanded || 1 != e3.includeOffsets) throw Error('length: "auto" requires both expanded: true and includeOffsets: true.');
-            })(t2), V(ga)(e2, t2);
-            if (U(e2)) {
-              if ("undefined" == typeof Promise) throw Error("Promise is required when async mode is enabled.");
-              var n2 = l({}, t2, { async: 1 });
-              return (function(e3, t3) {
-                return /^\w+:\/\//.test(e3) ? "undefined" != typeof fetch ? F(e3, O(t3)).then((function(e4) {
-                  return e4.buffer;
-                })) : L(e3, O(t3)).then((function(e4) {
-                  return e4.buffer;
-                })) : w(e3) ? Promise.resolve(g(e3)) : N(e3, O(t3)).then((function(e4) {
-                  return e4.buffer;
-                }));
-              })(e2, n2).then((function(e3) {
-                return ga(e3, n2);
-              }));
-            }
-            if (E(e2)) {
-              if ("undefined" == typeof Promise) throw Error("Promise is required when async mode is enabled.");
-              var r2 = l({}, t2, { async: 1 });
-              return (function(e3, t3) {
-                return D(e3, O(t3)).then((function(e4) {
-                  return e4.buffer;
-                }));
-              })(e2, r2).then((function(e3) {
-                return ga(e3, r2);
-              }));
-            }
-            return ga(e2, t2);
-          }
-          function ga(e2, t2) {
-            return (function(e3) {
-              try {
-                return Buffer.isBuffer(e3);
-              } catch (e4) {
-                return 0;
-              }
-            })(e2) && (e2 = new Uint8Array(e2).buffer), ma((function(e3) {
-              try {
-                return new DataView(e3);
-              } catch (t3) {
-                return new i(e3);
-              }
-            })(e2), t2);
-          }
-          function ma(e2) {
-            var t2, n2, r2, i2 = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : { expanded: 0, async: 0, computed: 0, includeUnknown: 0, includeOffsets: 0, domParser: void 0, includeTags: void 0, excludeTags: void 0, decompress: void 0 }, o2 = i2.expanded, a2 = void 0 === o2 ? 0 : o2, u2 = i2.async, f2 = void 0 === u2 ? 0 : u2, s2 = i2.computed, d2 = void 0 === s2 ? 0 : s2, p2 = i2.includeUnknown, g2 = void 0 === p2 ? 0 : p2, m2 = i2.includeOffsets, h2 = void 0 === m2 ? 0 : m2, v2 = i2.domParser, b2 = void 0 === v2 ? void 0 : v2, I2 = i2.includeTags, A2 = void 0 === I2 ? void 0 : I2, P2 = i2.excludeTags, x2 = void 0 === P2 ? void 0 : P2, C2 = i2.decompress, T2 = void 0 === C2 ? void 0 : C2, U2 = (function() {
-              var e3 = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, t3 = e3.includeTags, n3 = e3.excludeTags, r3 = !!t3, i3 = !!n3, o3 = r3 || i3, a3 = /* @__PURE__ */ Object.create(null), u3 = /* @__PURE__ */ Object.create(null), f3 = /* @__PURE__ */ Object.create(null);
-              if (!o3) return Rn();
-              var s3 = r3 && (kn(t3, "iptc") || kn(t3, "xmp") || kn(t3, "icc") || kn(t3, "photoshop") || kn(t3, "makerNotes") || kn(t3, "thumbnail") || kn(t3, "gps") || kn(t3, "composite")), c2 = r3 && kn(t3, "composite"), l2 = /* @__PURE__ */ Object.create(null);
-              r3 && (l2 = (function(e4) {
-                var t4 = (function(e5) {
-                  var t5 = /* @__PURE__ */ Object.create(null);
-                  if (!e5) return t5;
-                  for (var n4 in Array.isArray(e5.exif) && e5.exif.length > 0 && (t5[En.exifIfdPointer] = 1, (function(e6, t6) {
-                    for (var n5 = 0; n5 < t6.length; n5++) {
-                      var r5 = t6[n5];
-                      if ("string" == typeof r5) {
-                        var i5 = r5.toLowerCase();
-                        0 === i5.indexOf("gps") && (e6[En.gpsInfoIfdPointer] = 1), 0 !== i5.indexOf("interoperability") && 0 !== i5.indexOf("relatedimage") || (e6[En.interoperabilityIfdPointer] = 1);
-                      }
-                    }
-                  })(t5, e5.exif)), wn) if (Fn(e5[n4])) {
-                    for (var r4 = wn[n4], i4 = 0; i4 < r4.length; i4++) t5[r4[i4]] = 1;
-                    t5[En.exifIfdPointer] = 1;
-                  }
-                  return Fn(e5.gps) && (t5[En.gpsInfoIfdPointer] = 1, t5[En.exifIfdPointer] = 1), t5;
-                })(e4);
-                return kn(e4, "composite") && (function(e5, t5) {
-                  for (var n4 = 0; n4 < t5.length; n4++) e5[t5[n4]] = 1;
-                })(t4, On.exif), t4;
-              })(t3));
-              var d3, p3 = /* @__PURE__ */ Object.create(null);
-              for (var g3 in r3 && c2 && (p3 = (function(e4) {
-                for (var t4 = /* @__PURE__ */ Object.create(null), n4 = 0; n4 < e4.length; n4++) t4[e4[n4].toLowerCase()] = 1;
-                return t4;
-              })(On.file)), Un) {
-                var m3 = r3 && Object.prototype.hasOwnProperty.call(t3, g3), h3 = void 0;
-                i3 && Object.prototype.hasOwnProperty.call(n3, g3) && !m3 && (h3 = n3[g3]);
-                var v3 = Dn({ groupKey: g3, includeValue: m3 ? t3[g3] : void 0, excludeValue: h3, extraIncludeNames: /* @__PURE__ */ Object.create(null) });
-                a3[g3] = r3 ? m3 : 1, m3 && (d3 = t3[g3], Array.isArray(d3) && 0 === d3.length) && (a3[g3] = 0), v3.excludeAll && (a3[g3] = 0), u3[g3] = v3;
-                var y2 = Dn({ groupKey: g3, includeValue: Mn({ groupKey: g3, hasIncludeTags: r3, hasIncludeEntry: m3, includeTags: t3, shouldParseExif: s3, shouldParseFile: c2 }), excludeValue: h3, extraIncludeNames: Nn({ groupKey: g3, hasIncludeTags: r3, hasIncludeEntry: m3, shouldParseExif: s3, shouldParseFile: c2, exifIncludeDependencies: l2, fileIncludeDependencies: p3 }) });
-                f3[g3] = y2;
-              }
-              return { isActive: o3, shouldReturnGroup: b3, shouldParseGroup: S2, shouldReturnTag: function(e4, t4, n4) {
-                return Un[e4] ? b3(e4) ? Gn(u3[e4], t4, n4) : 0 : 1;
-              }, shouldParseTag: function(e4, t4, n4) {
-                return Un[e4] ? S2(e4) ? Gn(f3[e4], t4, n4) : 0 : 1;
-              } };
-              function b3(e4) {
-                return Un[e4] ? !!a3[e4] : 1;
-              }
-              function S2(e4) {
-                return Un[e4] ? b3(e4) ? 1 : "exif" === e4 ? s3 : "file" === e4 ? c2 : 0 : 1;
-              }
-            })({ includeTags: A2, excludeTags: x2 }), E2 = /* @__PURE__ */ Object.create(null), w2 = [], O2 = /* @__PURE__ */ Object.create(null), F2 = [], R2 = 0, L2 = void 0, M2 = void 0, N2 = en.parseAppMarkers(e2, f2, a2 && h2), k2 = N2.fileType, D2 = N2.fileDataOffset, G2 = N2.jfifDataOffset, _2 = N2.tiffHeaderOffset, B2 = N2.iptcDataOffset, j2 = N2.xmpChunks, z2 = N2.iccChunks, V2 = N2.mpfDataOffset, X2 = N2.pngHeaderOffset, H2 = N2.pngTextChunks, W2 = N2.pngChunkOffsets, J2 = N2.vp8xChunkOffset, q2 = N2.gifHeaderOffset, Y2 = N2.brobExifChunk, $2 = N2.brobXmpChunk, Z2 = N2.jxlCodestreamOffset, ee2 = N2.metadataBlocks, te2 = N2.metadataTruncated, ne2 = N2.exifDataView, re2 = N2.xmpDataView, ie2 = (function(e3) {
-              var t3 = e3.fileDataOffset, n3 = e3.jfifDataOffset, r3 = e3.tiffHeaderOffset, i3 = e3.iptcDataOffset, o3 = e3.xmpChunks, a3 = e3.iccChunks, u3 = e3.mpfDataOffset, f3 = e3.pngHeaderOffset, s3 = e3.pngTextChunks, c2 = e3.pngChunkOffsets, l2 = e3.vp8xChunkOffset, d3 = e3.gifHeaderOffset, p3 = e3.jxlCodestreamOffset;
-              return !!e3.fileType || K.USE_JPEG && K.USE_FILE && Sa(t3) || K.USE_JPEG && K.USE_JFIF && Ia(n3) || K.USE_EXIF && Aa(r3) || K.USE_JPEG && K.USE_IPTC && Pa(i3) || K.USE_XMP && xa(o3) || (K.USE_JPEG || K.USE_WEBP) && K.USE_ICC && Ca(a3) || K.USE_MPF && Ta(u3) || K.USE_PNG && K.USE_PNG_FILE && Ua(f3) || K.USE_PNG && Ea(s3) || K.USE_PNG && wa(c2) || K.USE_WEBP && Oa(l2) || K.USE_GIF && Fa(d3) || K.USE_JXL && Ra(p3);
-            })({ fileType: k2, fileDataOffset: D2, jfifDataOffset: G2, tiffHeaderOffset: _2, iptcDataOffset: B2, xmpChunks: j2, iccChunks: z2, mpfDataOffset: V2, pngHeaderOffset: X2, pngTextChunks: H2, pngChunkOffsets: W2, vp8xChunkOffset: J2, gifHeaderOffset: q2, jxlCodestreamOffset: Z2 });
-            if (K.USE_JPEG && K.USE_FILE && Sa(D2) && U2.shouldParseGroup("file") && (!(r2 = A2) || 1 == r2.composite || Array.isArray(r2.composite) && r2.composite.length > 0 || !r2.file || 1 == r2.file || !Array.isArray(r2.file) || 1 !== r2.file.length || "FileType" !== r2.file[0])) {
-              var oe2 = ha("file", ur.read(e2, D2), U2);
-              E2.file = oe2, U2.shouldReturnGroup("file") && w2.push({ type: "mergeGroupAssign", groupKey: "file", parsedTags: oe2 });
-            }
-            if (K.USE_JPEG && K.USE_JFIF && Ia(G2) && U2.shouldParseGroup("jfif")) {
-              var ae2 = ha("jfif", br.read(e2, G2), U2);
-              E2.jfif = ae2, U2.shouldReturnGroup("jfif") && w2.push({ type: "mergeGroupAssign", groupKey: "jfif", parsedTags: ae2 });
-            }
-            if (K.USE_EXIF && Aa(_2) && U2.shouldParseGroup("exif")) {
-              var ue2 = (function(e3, t3, n3, r3, i3) {
-                try {
-                  return Yn.read(e3, t3, n3, r3, i3);
-                } catch (e4) {
-                  return { tags: {}, byteOrder: Q.BIG_ENDIAN };
-                }
-              })(ne2 || e2, _2, g2, d2, U2), fe2 = ue2.tags, se2 = ue2.byteOrder;
-              fe2.Thumbnail && (L2 = fe2.Thumbnail, delete fe2.Thumbnail);
-              var ce2 = ha("exif", fe2, U2);
-              if (E2.exif = ce2, K.USE_TIFF && K.USE_IPTC && ce2["IPTC-NAA"] && !Pa(B2) && U2.shouldParseGroup("iptc")) {
-                var le2 = ha("iptc", Fr.read(ce2["IPTC-NAA"].value, 0, g2, U2), U2);
-                E2.iptc = le2, U2.shouldReturnGroup("iptc") && w2.push({ type: "mergeGroupAssign", groupKey: "iptc", parsedTags: le2 });
-              }
-              if (K.USE_TIFF && K.USE_XMP && ce2.ApplicationNotes && !xa(j2) && U2.shouldParseGroup("xmp")) {
-                var de2 = ha("xmp", $r.read(c(ce2.ApplicationNotes.value), void 0, b2), U2);
-                if (E2.xmp = de2, U2.shouldReturnGroup("xmp")) {
-                  var pe2 = { type: "mergeXmpGroupAssign", parsedTags: de2 };
-                  a2 ? w2.push(pe2) : M2 = pe2;
-                }
-              }
-              if (K.USE_PHOTOSHOP && ce2.ImageSourceData && ce2.PhotoshopSettings && U2.shouldParseGroup("photoshop")) {
-                var ge2 = ha("photoshop", Li.read(ce2.PhotoshopSettings.value, g2, U2), U2);
-                E2.photoshop = ge2, U2.shouldReturnGroup("photoshop") && w2.push({ type: "mergeGroupAssign", groupKey: "photoshop", parsedTags: ge2 });
-              }
-              if (K.USE_TIFF && K.USE_ICC && ce2.ICC_Profile && !Ca(z2) && U2.shouldParseGroup("icc")) {
-                var me2 = ha("icc", Vi.read(ce2.ICC_Profile.value, [{ offset: 0, length: ce2.ICC_Profile.value.length, chunkNumber: 1, chunksTotal: 1 }]), U2);
-                E2.icc = me2, U2.shouldReturnGroup("icc") && w2.push({ type: "mergeGroupAssign", groupKey: "icc", parsedTags: me2 });
-              }
-              if (K.USE_MAKER_NOTES && ce2.MakerNote && U2.shouldParseGroup("makerNotes")) {
-                if ((t2 = ce2).Make && t2.Make.value && Array.isArray(t2.Make.value) && "Canon" === t2.Make.value[0] && t2.MakerNote && t2.MakerNote.__offset) {
-                  var ve2 = no.read(ne2 || e2, _2, ce2.MakerNote.__offset, se2, g2, d2, U2);
-                  E2.makerNotes = ve2, U2.shouldReturnGroup("makerNotes") && w2.push({ type: "mergeGroupAssign", groupKey: "makerNotes", parsedTags: ve2 });
-                } else if ((function(e3) {
-                  return e3.MakerNote.value.length > 7 && "PENTAX " === c(e3.MakerNote.value.slice(0, 7)) && e3.MakerNote.__offset;
-                })(ce2)) {
-                  var ye2 = oo.read(ne2 || e2, _2, ce2.MakerNote.__offset, g2, d2, U2);
-                  E2.makerNotes = ye2, U2.shouldReturnGroup("makerNotes") && w2.push({ type: "mergeGroupAssign", groupKey: "makerNotes", parsedTags: ye2 });
-                }
-              }
-              ce2.MakerNote && delete ce2.MakerNote.__offset, U2.shouldReturnGroup("exif") && w2.push({ type: "mergeGroupAssign", groupKey: "exif", parsedTags: ce2 }), !a2 && M2 && (w2.push(M2), M2 = void 0);
-            }
-            if (K.USE_JPEG && K.USE_IPTC && Pa(B2) && U2.shouldParseGroup("iptc")) {
-              var be2 = ha("iptc", Fr.read(e2, B2, g2, U2), U2);
-              E2.iptc = be2, U2.shouldReturnGroup("iptc") && w2.push({ type: "mergeGroupAssign", groupKey: "iptc", parsedTags: be2 });
-            }
-            if (K.USE_XMP && xa(j2) && U2.shouldParseGroup("xmp")) {
-              var Se2 = ha("xmp", $r.read(re2 || e2, j2, b2), U2);
-              E2.xmp = Se2, U2.shouldReturnGroup("xmp") && w2.push({ type: "mergeXmpGroupAssign", parsedTags: Se2 });
-            }
-            if (K.USE_JXL && K.USE_EXIF && Y2 && !Aa(_2) && U2.shouldParseGroup("exif") && f2) {
-              var Ie2 = new DataView(e2.buffer, e2.byteOffset + Y2.dataOffset, Y2.length);
-              F2.push(S(Ie2, y, void 0, "dataview", T2).then((function(e3) {
-                var t3 = he(e3, 0), n3 = Yn.read(e3, t3, g2, d2, U2).tags;
-                n3.Thumbnail && delete n3.Thumbnail, O2.brobExif = n3;
-              })).catch((function() {
-                O2.brobExif = {};
-              }))), w2.push({ type: "mergeBrobExifDeferred", deferredKey: "brobExif" });
-            }
-            if (K.USE_JXL && K.USE_XMP && $2 && !xa(j2) && U2.shouldParseGroup("xmp") && f2) {
-              var Ae2 = new DataView(e2.buffer, e2.byteOffset + $2.dataOffset, $2.length);
-              F2.push(S(Ae2, y, void 0, "dataview", T2).then((function(e3) {
-                O2.brobXmp = $r.read(e3, [{ dataOffset: 0, length: e3.byteLength }], b2);
-              })).catch((function() {
-                O2.brobXmp = {};
-              }))), w2.push({ type: "mergeBrobXmpDeferred", deferredKey: "brobXmp" });
-            }
-            if ((K.USE_JPEG || K.USE_WEBP) && K.USE_ICC && Ca(z2) && U2.shouldParseGroup("icc")) {
-              var Pe2 = Vi.read(e2, z2, f2, T2);
-              if ((n2 = Pe2) && "function" == typeof n2.then) {
-                if (!f2) throw Error("Promise is required when async mode is enabled.");
-                F2.push(Pe2.then((function(e3) {
-                  O2.iccApp = e3;
-                }))), w2.push({ type: "mergeIccDeferred", deferredKey: "iccApp" });
-              } else {
-                var xe2 = ha("icc", Pe2, U2);
-                E2.icc = xe2, U2.shouldReturnGroup("icc") && w2.push({ type: "mergeGroupAssign", groupKey: "icc", parsedTags: xe2 });
-              }
-            }
-            if (K.USE_MPF && Ta(V2) && U2.shouldParseGroup("mpf")) {
-              var Ce2 = ha("mpf", er.read(e2, V2, g2, d2, U2), U2);
-              E2.mpf = Ce2, U2.shouldReturnGroup("mpf") && w2.push({ type: "mergeGroupAssign", groupKey: "mpf", parsedTags: Ce2 });
-            }
-            if (K.USE_PNG && K.USE_PNG_FILE && Ua(X2) && U2.shouldParseGroup("png")) {
-              var Te2 = ha("png", fo.read(e2, X2), U2);
-              E2.pngFile = Te2, U2.shouldReturnGroup("png") && w2.push({ type: "mergePngFile", parsedTags: Te2 });
-            }
-            if (K.USE_PNG && Ea(H2) && (U2.shouldParseGroup("png") || U2.shouldParseGroup("exif") || U2.shouldParseGroup("iptc"))) {
-              var Ue2 = yo.read(e2, H2, f2, g2, d2, U2, T2), Ee2 = Ue2.readTags, we2 = Ue2.readTagsPromise;
-              R2 = !!we2, w2.push({ type: "processPngTextReadTags", readTags: Ee2 }), we2 && (F2.push(we2.then((function(e3) {
-                O2.pngTextTagList = e3;
-              }))), w2.push({ type: "processPngTextReadTagsDeferredList", deferredKey: "pngTextTagList" }));
-            }
-            if (K.USE_PNG && wa(W2) && U2.shouldParseGroup("png")) {
-              var Oe2 = ha("png", ko.read(e2, W2), U2);
-              E2.pngChunk = Oe2, U2.shouldReturnGroup("png") && w2.push({ type: "mergePngChunk", parsedTags: Oe2 });
-            }
-            if (K.USE_WEBP && Oa(J2) && U2.shouldParseGroup("riff")) {
-              var Fe2 = ha("riff", Vo.read(e2, J2), U2);
-              E2.riff = Fe2, U2.shouldReturnGroup("riff") && w2.push({ type: "mergeGroupMerge", groupKey: "riff", parsedTags: Fe2 });
-            }
-            if (K.USE_GIF && Fa(q2) && U2.shouldParseGroup("gif")) {
-              var Re2 = ha("gif", Jo.read(e2, q2), U2);
-              E2.gif = Re2, U2.shouldReturnGroup("gif") && w2.push({ type: "mergeGroupMerge", groupKey: "gif", parsedTags: Re2 });
-            }
-            if (K.USE_JXL && Ra(Z2) && U2.shouldParseGroup("file")) {
-              var Le2 = ha("file", gr.read(e2, Z2), U2);
-              E2.file = Le2, U2.shouldReturnGroup("file") && w2.push({ type: "mergeGroupAssign", groupKey: "file", parsedTags: Le2 });
-            }
-            if (w2.push({ type: "gps" }), w2.push({ type: "composite" }), w2.push({ type: "thumbnail" }), w2.push({ type: "fileType" }), a2 && h2 && w2.push({ type: "metadataRange", metadataBlocks: ee2, metadataTruncated: !!te2 }), !ie2) throw new ca.MetadataMissingError();
-            var Me2 = { objectAssign: l, hasPngTextData: Ea, filterTagsForParse: ha, filterTagsForReturn: va, getGpsGroupFromExifTags: ba, Constants: K, Composite: ra, Thumbnail: na };
-            if (f2) {
-              if ("undefined" == typeof Promise) throw Error("Promise is required when async mode is enabled.");
-              return Promise.all(F2).then((function() {
-                return oa({ mergeSteps: w2, deferredResults: O2, parsedGroups: E2, expanded: a2, tagFilter: U2, dataView: e2, tiffHeaderOffset: _2, exifDataView: ne2, fileType: k2, pngTextChunks: H2, pngTextIsAsync: R2, thumbnailIfdTags: L2, deps: Me2 });
-              }));
-            }
-            return oa({ mergeSteps: w2, deferredResults: O2, parsedGroups: E2, expanded: a2, tagFilter: U2, dataView: e2, tiffHeaderOffset: _2, exifDataView: ne2, fileType: k2, pngTextChunks: H2, pngTextIsAsync: R2, thumbnailIfdTags: L2, deps: Me2 });
-          }
-          function ha(e2, t2, n2) {
-            return n2.isActive ? ya(e2, t2, n2.shouldParseTag) : t2;
-          }
-          function va(e2, t2, n2) {
-            return n2.isActive ? ya(e2, t2, n2.shouldReturnTag) : t2;
-          }
-          function ya(e2, t2, n2) {
-            if (!t2) return t2;
-            var r2 = {};
-            for (var i2 in t2) {
-              var o2 = t2[i2];
-              n2(e2, i2, a2(o2)) && (r2[i2] = o2);
-            }
-            return r2;
-            function a2(e3) {
-              if (e3) {
-                if (Array.isArray(e3)) {
-                  if (0 === e3.length) return;
-                  return e3[0].id;
-                }
-                return e3.id;
-              }
-            }
-          }
-          function ba(e2) {
-            var t2 = void 0;
-            if (e2.GPSLatitude && e2.GPSLatitudeRef) {
-              t2 = t2 || {};
-              try {
-                t2.Latitude = Y(e2.GPSLatitude.value), "S" === e2.GPSLatitudeRef.value.join("") && (t2.Latitude = -t2.Latitude);
-              } catch (e3) {
-              }
-            }
-            if (e2.GPSLongitude && e2.GPSLongitudeRef) {
-              t2 = t2 || {};
-              try {
-                t2.Longitude = Y(e2.GPSLongitude.value), "W" === e2.GPSLongitudeRef.value.join("") && (t2.Longitude = -t2.Longitude);
-              } catch (e3) {
-              }
-            }
-            if (e2.GPSAltitude && e2.GPSAltitudeRef) {
-              t2 = t2 || {};
-              try {
-                t2.Altitude = e2.GPSAltitude.value[0] / e2.GPSAltitude.value[1], 1 === e2.GPSAltitudeRef.value && (t2.Altitude = -t2.Altitude);
-              } catch (e3) {
-              }
-            }
-            if (t2) return t2;
-          }
-          function Sa(e2) {
-            return void 0 !== e2;
-          }
-          function Ia(e2) {
-            return void 0 !== e2;
-          }
-          function Aa(e2) {
-            return void 0 !== e2;
-          }
-          function Pa(e2) {
-            return void 0 !== e2;
-          }
-          function xa(e2) {
-            return Array.isArray(e2) && e2.length > 0;
-          }
-          function Ca(e2) {
-            return Array.isArray(e2) && e2.length > 0;
-          }
-          function Ta(e2) {
-            return void 0 !== e2;
-          }
-          function Ua(e2) {
-            return void 0 !== e2;
-          }
-          function Ea(e2) {
-            return Array.isArray(e2) && e2.length > 0;
-          }
-          function wa(e2) {
-            return void 0 !== e2;
-          }
-          function Oa(e2) {
-            return void 0 !== e2;
-          }
-          function Fa(e2) {
-            return void 0 !== e2;
-          }
-          function Ra(e2) {
-            return void 0 !== e2;
-          }
-          return t;
-        })();
-      }));
+        }
+      } finally {
+        if (parsedExifTags["MakerNote"]) {
+          delete parsedExifTags["MakerNote"].__offset;
+        }
+      }
+      return groups;
+    }
+    function takeDecompressedApplicationNotesAllowance(byteLength) {
+      if (exceedsBrobXmpSizeBound(decompressedApplicationNotesSize + byteLength, dataView)) {
+        return false;
+      }
+      decompressedApplicationNotesSize += byteLength;
+      return true;
+    }
+    function readEmbeddedExifCarriedGroups(exifTiffDataView, readTags2, exifTiffHeaderOffset, exifByteOrder, exifValueBudget, source) {
+      try {
+        return readExifCarriedGroups(
+          filterTagsForParse("exif", readTags2, tagFilter),
+          exifTiffDataView,
+          exifTiffHeaderOffset,
+          exifByteOrder,
+          exifValueBudget,
+          source
+        );
+      } catch (error) {
+        return {};
+      }
+    }
+  }
+  function getSelfContainedDataView(dataView) {
+    if (isWindowIntoLargerBuffer(dataView)) {
+      return getDataView(dataView.buffer.slice(dataView.byteOffset, dataView.byteOffset + dataView.byteLength));
+    }
+    return dataView;
+  }
+  function isWindowIntoLargerBuffer(dataView) {
+    return isDataViewLike(dataView) && (dataView.byteOffset > 0 || dataView.byteLength < dataView.buffer.byteLength);
+  }
+  function isDataViewLike(dataView) {
+    return !!dataView && typeof dataView.getUint8 === "function" && typeof dataView.byteOffset === "number" && typeof dataView.byteLength === "number" && !!dataView.buffer && typeof dataView.buffer.slice === "function";
+  }
+  function getBrobDataView(dataView, brobChunk) {
+    const length = Math.max(0, Math.min(brobChunk.length, dataView.byteLength - brobChunk.dataOffset));
+    return new DataView(dataView.buffer, dataView.byteOffset + brobChunk.dataOffset, length);
+  }
+  function exceedsBrobXmpSizeBound(byteLength, inputDataView) {
+    return byteLength > BROB_XMP_SIZE_PER_INPUT_SIZE * inputDataView.byteLength + BROB_XMP_SIZE_ALLOWANCE;
+  }
+  function readExifTagsSafely(dataView, tiffHeaderOffset, includeUnknown, computed, tagFilter) {
+    const valueBudget = dataView === void 0 ? void 0 : getValueBudget(dataView);
+    try {
+      const { tags, byteOrder } = readExifTags(dataView, tiffHeaderOffset, includeUnknown, computed, tagFilter, valueBudget);
+      return { tags, byteOrder, valueBudget };
+    } catch (error) {
+      return { tags: {}, byteOrder: byte_order_default.BIG_ENDIAN, valueBudget };
+    }
+  }
+  function readExifTags(dataView, tiffHeaderOffset, includeUnknown, computed, tagFilter, valueBudget) {
+    return tags_default.read(
+      dataView,
+      tiffHeaderOffset,
+      includeUnknown,
+      computed,
+      tagFilter,
+      valueBudget,
+      getExifTagNames(),
+      shouldReadThumbnailIfd(tagFilter)
+    );
+  }
+  function getExifTagNames() {
+    const tagNames = {};
+    tagNames[IFD_TYPE_0TH] = TAG_NAMES_0TH_AND_EXIF_IFDS;
+    tagNames[IFD_TYPE_EXIF] = TAG_NAMES_0TH_AND_EXIF_IFDS;
+    tagNames[IFD_TYPE_GPS] = tag_names_gps_ifd_default;
+    tagNames[IFD_TYPE_INTEROPERABILITY] = tag_names_interoperability_ifd_default;
+    if (constants_default.USE_THUMBNAIL) {
+      tagNames[IFD_TYPE_1ST] = tag_names_0th_ifd_default;
+    }
+    return tagNames;
+  }
+  function shouldReadThumbnailIfd(tagFilter) {
+    return constants_default.USE_THUMBNAIL && tagFilter.shouldParseGroup("thumbnail");
+  }
+  function getParsedMetadataBlocks(metadataBlocks, fileType2) {
+    if (!metadataBlocks) {
+      return metadataBlocks;
+    }
+    const format = fileType2 && fileType2.value;
+    const isCapped = metadataBlocks.length >= MAX_METADATA_BLOCKS;
+    const lastIndex = metadataBlocks.length - 1;
+    return metadataBlocks.filter((block, index) => isParsedMetadataBlock(format, block.type) || isCapped && index === lastIndex);
+  }
+  function isParsedMetadataBlock(format, blockType) {
+    switch (blockType) {
+      case "file":
+        return format === "png" ? constants_default.USE_PNG_FILE : constants_default.USE_FILE;
+      case "exif":
+        return format === "png" || constants_default.USE_EXIF;
+      case "jfif":
+        return constants_default.USE_JFIF;
+      case "xmp":
+        return constants_default.USE_XMP;
+      case "iptc":
+        return constants_default.USE_IPTC;
+      case "icc":
+        return constants_default.USE_ICC;
+      case "mpf":
+        return constants_default.USE_MPF;
+      default:
+        return true;
+    }
+  }
+  function getEmbeddedExifThumbnailReader(tagFilter, inputDataView) {
+    if (!constants_default.USE_EXIF || !constants_default.USE_THUMBNAIL || !tagFilter.shouldReturnTag("thumbnail", "Thumbnail")) {
+      return void 0;
+    }
+    let copiedThumbnailSize = 0;
+    return (dataView, thumbnailIfdTags, tiffHeaderOffset) => {
+      const parsedThumbnailIfdTags = filterTagsForParse("thumbnail", thumbnailIfdTags, tagFilter);
+      const lengthTag = parsedThumbnailIfdTags.JPEGInterchangeFormatLength;
+      const sizeBound = EMBEDDED_THUMBNAIL_SIZE_PER_INPUT_SIZE * inputDataView.byteLength + EMBEDDED_THUMBNAIL_SIZE_ALLOWANCE;
+      if (!hasLengthWithin(lengthTag, sizeBound - copiedThumbnailSize)) {
+        return parsedThumbnailIfdTags;
+      }
+      const thumbnail = thumbnail_default.get(dataView, parsedThumbnailIfdTags, tiffHeaderOffset);
+      if (thumbnail.image) {
+        copiedThumbnailSize += lengthTag.value;
+      }
+      return thumbnail;
+    };
+  }
+  function hasLengthWithin(lengthTag, maxLength) {
+    return !!lengthTag && typeof lengthTag.value === "number" && lengthTag.value <= maxLength;
+  }
+  function filterTagsForParse(groupKey, readTags2, tagFilter) {
+    if (!tagFilter.isActive) {
+      return readTags2;
+    }
+    return filterTags(groupKey, readTags2, tagFilter.shouldParseTag);
+  }
+  function filterTagsForReturn(groupKey, readTags2, tagFilter) {
+    if (!tagFilter.isActive) {
+      return readTags2;
+    }
+    return filterTags(groupKey, readTags2, tagFilter.shouldReturnTag);
+  }
+  function filterTags(groupKey, readTags2, matchesTag) {
+    if (!readTags2) {
+      return readTags2;
+    }
+    const filteredTags = {};
+    for (const tagName in readTags2) {
+      const tagValue = readTags2[tagName];
+      const tagId = getTagId(tagValue);
+      if (matchesTag(groupKey, tagName, tagId)) {
+        setProperty(filteredTags, tagName, tagValue);
+      }
+    }
+    return filteredTags;
+    function getTagId(tagValue) {
+      if (!tagValue) {
+        return void 0;
+      }
+      if (Array.isArray(tagValue)) {
+        if (tagValue.length === 0) {
+          return void 0;
+        }
+        return tagValue[0].id;
+      }
+      return tagValue.id;
+    }
+  }
+  function hasPotentialMetaData({
+    fileType: fileType2,
+    fileDataOffset,
+    jfifDataOffset,
+    tiffHeaderOffset,
+    iptcDataOffset,
+    xmpChunks,
+    iccChunks,
+    mpfDataOffset,
+    pngHeaderOffset,
+    pngTextChunks,
+    pngChunkOffsets,
+    vp8xChunkOffset,
+    gifHeaderOffset,
+    jxlCodestreamOffset,
+    imageDimensionsOffset,
+    pixelInformationOffset
+  }) {
+    return !!fileType2 || constants_default.USE_JPEG && constants_default.USE_FILE && fileDataOffset !== void 0 || constants_default.USE_JPEG && constants_default.USE_JFIF && jfifDataOffset !== void 0 || constants_default.USE_EXIF && tiffHeaderOffset !== void 0 || constants_default.USE_JPEG && constants_default.USE_IPTC && iptcDataOffset !== void 0 || constants_default.USE_XMP && hasXmpData(xmpChunks) || constants_default.USE_ICC && hasIccData(iccChunks) || constants_default.USE_MPF && mpfDataOffset !== void 0 || constants_default.USE_PNG && constants_default.USE_PNG_FILE && pngHeaderOffset !== void 0 || constants_default.USE_PNG && hasPngTextData(pngTextChunks) || constants_default.USE_PNG && pngChunkOffsets !== void 0 || constants_default.USE_WEBP && vp8xChunkOffset !== void 0 || constants_default.USE_GIF && gifHeaderOffset !== void 0 || constants_default.USE_JXL && jxlCodestreamOffset !== void 0 || (constants_default.USE_HEIC || constants_default.USE_AVIF) && (imageDimensionsOffset !== void 0 || pixelInformationOffset !== void 0);
+  }
+  function getGpsGroupFromExifTags(exifTags) {
+    let gps = void 0;
+    if (exifTags.GPSLatitude && exifTags.GPSLatitudeRef) {
+      gps = gps || {};
+      try {
+        gps.Latitude = getCalculatedGpsValue(exifTags.GPSLatitude.value);
+        if (exifTags.GPSLatitudeRef.value.join("") === "S") {
+          gps.Latitude = -gps.Latitude;
+        }
+      } catch (error) {
+      }
+    }
+    if (exifTags.GPSLongitude && exifTags.GPSLongitudeRef) {
+      gps = gps || {};
+      try {
+        gps.Longitude = getCalculatedGpsValue(exifTags.GPSLongitude.value);
+        if (exifTags.GPSLongitudeRef.value.join("") === "W") {
+          gps.Longitude = -gps.Longitude;
+        }
+      } catch (error) {
+      }
+    }
+    if (exifTags.GPSAltitude && exifTags.GPSAltitudeRef) {
+      gps = gps || {};
+      try {
+        gps.Altitude = exifTags.GPSAltitude.value[0] / exifTags.GPSAltitude.value[1];
+        if (exifTags.GPSAltitudeRef.value === 1) {
+          gps.Altitude = -gps.Altitude;
+        }
+      } catch (error) {
+      }
+    }
+    if (!gps) {
+      return void 0;
+    }
+    return gps;
+  }
+  function isNumberArray(value) {
+    return Array.isArray(value) && typeof value[0] === "number";
+  }
+  function hasXmpData(xmpChunks) {
+    return Array.isArray(xmpChunks) && xmpChunks.length > 0;
+  }
+  function hasIccData(iccDataOffsets) {
+    return Array.isArray(iccDataOffsets) && iccDataOffsets.length > 0;
+  }
+  function hasCanonData(tags) {
+    return tags["Make"] && tags["Make"].value && Array.isArray(tags["Make"].value) && tags["Make"].value[0] === "Canon" && tags["MakerNote"] && tags["MakerNote"].__offset;
+  }
+  function hasPentaxType1Data(tags) {
+    const PENTAX_ID_STRING = "PENTAX ";
+    return Array.isArray(tags["MakerNote"].value) && tags["MakerNote"].value.length > PENTAX_ID_STRING.length && getStringValueFromArray(tags["MakerNote"].value.slice(0, PENTAX_ID_STRING.length)) === PENTAX_ID_STRING && tags["MakerNote"].__offset;
+  }
+  function hasPngTextData(pngTextChunks) {
+    return Array.isArray(pngTextChunks) && pngTextChunks.length > 0;
+  }
+  var BROB_XMP_SIZE_PER_INPUT_SIZE, BROB_XMP_SIZE_ALLOWANCE, EMBEDDED_THUMBNAIL_SIZE_PER_INPUT_SIZE, EMBEDDED_THUMBNAIL_SIZE_ALLOWANCE, TAG_NAMES_0TH_AND_EXIF_IFDS, exif_reader_default, errors;
+  var init_exif_reader = __esm({
+    "node_modules/exifreader/src/exif-reader.js"() {
+      init_esbuild_shims();
+      init_utils();
+      init_file_loaders();
+      init_load_auto();
+      init_constants();
+      init_tag_names_utils();
+      init_byte_order();
+      init_image_header_iso_bmff();
+      init_image_header();
+      init_tags();
+      init_tag_names_0th_ifd();
+      init_tag_names_exif_ifd();
+      init_tag_names_gps_ifd();
+      init_tag_names_interoperability_ifd();
+      init_ifd_types();
+      init_tags_helpers();
+      init_mpf_tags();
+      init_file_tags();
+      init_jxl_file_tags();
+      init_iso_bmff_file_tags();
+      init_jfif_tags();
+      init_iptc_tags();
+      init_xmp_tags();
+      init_photoshop_tags();
+      init_icc_tags();
+      init_canon_tags();
+      init_pentax_tags();
+      init_png_file_tags();
+      init_png_text_tags();
+      init_png_tags();
+      init_vp8x_tags();
+      init_gif_file_tags();
+      init_thumbnail();
+      init_composite();
+      init_tag_filter();
+      init_loadview_pipeline();
+      init_errors();
+      BROB_XMP_SIZE_PER_INPUT_SIZE = 4;
+      BROB_XMP_SIZE_ALLOWANCE = 64 * 1024;
+      EMBEDDED_THUMBNAIL_SIZE_PER_INPUT_SIZE = 2;
+      EMBEDDED_THUMBNAIL_SIZE_ALLOWANCE = 64 * 1024;
+      TAG_NAMES_0TH_AND_EXIF_IFDS = constants_default.USE_EXIF ? objectAssign({}, tag_names_0th_ifd_default, tag_names_exif_ifd_default) : {};
+      exif_reader_default = {
+        load,
+        loadView,
+        errors: errors_default
+      };
+      errors = errors_default;
     }
   });
 
@@ -15685,11 +16735,11 @@
     "lib/browser/load.js"(exports2, module2) {
       init_esbuild_shims();
       var Class2 = require_class();
-      var ExifReader = require_exif_reader();
+      var ExifReader = (init_exif_reader(), __toCommonJS(exif_reader_exports));
       var fileType2 = require_file_type();
       module2.exports = Class2.create({
         load: function(thingy, callback) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           if (typeof thingy == "string") {
             var url = thingy;
@@ -15698,10 +16748,10 @@
             var http = new XMLHttpRequest();
             http.onload = function() {
               if (this.status == 200 || this.status === 0) {
-                self2.perf.end("download");
-                self2.load(http.response, callback);
+                self.perf.end("download");
+                self.load(http.response, callback);
               } else {
-                self2.doError("load", "URL Fetch Failure: " + url + ": HTTP " + this.status + " " + this.statusText, callback);
+                self.doError("load", "URL Fetch Failure: " + url + ": HTTP " + this.status + " " + this.statusText, callback);
               }
               http = null;
             };
@@ -15712,7 +16762,7 @@
           } else if (thingy instanceof Blob || thingy instanceof File) {
             var fileReader = new FileReader();
             fileReader.onload = function(e) {
-              self2.load(e.target.result, callback);
+              self.load(e.target.result, callback);
             };
             fileReader.readAsArrayBuffer(thingy);
             return;
@@ -15759,37 +16809,37 @@
           var url_creator = window.URL || window.webkitURL || window.mozURL || window.msURL;
           var object_url = null;
           this.image.onerror = function() {
-            self2.perf.end("read");
-            self2.doError("load", "Image load failed", callback);
+            self.perf.end("read");
+            self.doError("load", "Image load failed", callback);
             if (object_url) url_creator.revokeObjectURL(object_url);
           };
           this.image.onload = function() {
-            self2.perf.end("read");
-            self2.perf.count("bytes_read", arr_buf.byteLength);
-            self2.set("mode", "image");
+            self.perf.end("read");
+            self.perf.count("bytes_read", arr_buf.byteLength);
+            self.set("mode", "image");
             if (this.width < 1 || this.height < 1) {
-              return self2.doError("load", "Image dimensions are invalid: " + this.width + "x" + this.height, callback);
+              return self.doError("load", "Image dimensions are invalid: " + this.width + "x" + this.height, callback);
             }
-            if (self2.get("maxArea")) {
+            if (self.get("maxArea")) {
               var area = this.width * this.height;
-              if (area > self2.get("maxArea")) {
-                self2.doError("load", "Image dimensions are too large: " + this.width + "x" + this.height, callback);
+              if (area > self.get("maxArea")) {
+                self.doError("load", "Image dimensions are too large: " + this.width + "x" + this.height, callback);
               }
             }
-            self2.set("width", this.width);
-            self2.set("height", this.height);
-            self2.set("origWidth", self2.get("width"));
-            self2.set("origHeight", self2.get("height"));
-            self2.set("origFormat", self2.get("format"));
-            self2.canvas = null;
-            self2.context = null;
-            self2.pixels = null;
-            self2.palette = null;
-            if (self2.get("format") == "gif") {
-              self2.logDebug(6, "Premultiplying alpha for GIF");
-              self2.render();
-              var ctx = self2.getContext();
-              var imgData = ctx.getImageData(0, 0, self2.width(), self2.height());
+            self.set("width", this.width);
+            self.set("height", this.height);
+            self.set("origWidth", self.get("width"));
+            self.set("origHeight", self.get("height"));
+            self.set("origFormat", self.get("format"));
+            self.canvas = null;
+            self.context = null;
+            self.pixels = null;
+            self.palette = null;
+            if (self.get("format") == "gif") {
+              self.logDebug(6, "Premultiplying alpha for GIF");
+              self.render();
+              var ctx = self.getContext();
+              var imgData = ctx.getImageData(0, 0, self.width(), self.height());
               for (var idx = 0, len2 = imgData.data.length; idx < len2; idx += 4) {
                 if (imgData.data[idx + 3] == 0) {
                   imgData.data[idx] = imgData.data[idx + 1] = imgData.data[idx + 2] = 0;
@@ -15797,7 +16847,7 @@
               }
               ctx.putImageData(imgData, 0, 0);
             }
-            self2.logDebug(5, "Image load complete");
+            self.logDebug(5, "Image load complete");
             if (callback) callback(false);
             if (object_url) url_creator.revokeObjectURL(object_url);
           };
@@ -15812,7 +16862,7 @@
           }
         },
         loadRemote: function(url, callback) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           this.perf.begin("download");
           var fmt = "";
@@ -15822,32 +16872,32 @@
           this.image.crossOrigin = "anonymous";
           this.image.setAttribute("crossorigin", "anonymous");
           this.image.onerror = function() {
-            self2.doError("load", "Image load failed: " + url, callback);
+            self.doError("load", "Image load failed: " + url, callback);
           };
           this.image.onload = function() {
-            self2.perf.end("download");
+            self.perf.end("download");
             if (this.width < 1 || this.height < 1) {
-              return self2.doError("load", "Image dimensions are invalid: " + this.width + "x" + this.height, callback);
+              return self.doError("load", "Image dimensions are invalid: " + this.width + "x" + this.height, callback);
             }
-            if (self2.get("maxArea")) {
+            if (self.get("maxArea")) {
               var area = this.width * this.height;
-              if (area > self2.get("maxArea")) {
-                self2.doError("load", "Image dimensions are too large: " + this.width + "x" + this.height, callback);
+              if (area > self.get("maxArea")) {
+                self.doError("load", "Image dimensions are too large: " + this.width + "x" + this.height, callback);
               }
             }
-            self2.set("width", this.width);
-            self2.set("height", this.height);
-            self2.set("format", fmt);
-            self2.set("origWidth", self2.get("width"));
-            self2.set("origHeight", self2.get("height"));
-            self2.set("origFormat", self2.get("format"));
-            self2.canvas = null;
-            self2.context = null;
-            self2.pixels = null;
-            self2.palette = null;
-            self2.exif = null;
-            self2.set("mode", "image");
-            self2.logDebug(5, "Image load complete");
+            self.set("width", this.width);
+            self.set("height", this.height);
+            self.set("format", fmt);
+            self.set("origWidth", self.get("width"));
+            self.set("origHeight", self.get("height"));
+            self.set("origFormat", self.get("format"));
+            self.canvas = null;
+            self.context = null;
+            self.pixels = null;
+            self.palette = null;
+            self.exif = null;
+            self.set("mode", "image");
+            self.logDebug(5, "Image load complete");
             if (callback) callback(false);
           };
           this.image.src = url;
@@ -15863,7 +16913,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         write: function(opts, callback) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           if (!opts) opts = {};
           if (typeof opts == "string") {
@@ -15890,9 +16940,9 @@
               if (callback) callback(err);
               return;
             }
-            self2.logDebug(5, "Image compression complete", { size: buf.length });
-            self2.perf.end("write");
-            self2.perf.count("bytes_written", buf.length);
+            self.logDebug(5, "Image compression complete", { size: buf.length });
+            self.perf.end("write");
+            self.perf.count("bytes_written", buf.length);
             if (callback) callback(false, buf);
           });
         }
@@ -15907,7 +16957,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         draw: function(opts) {
-          var self2 = this;
+          var self = this;
           var result2;
           this.clearLastError();
           result2 = this.requireRGBA();
@@ -15961,7 +17011,7 @@
           }
           opts.commands.forEach(function(args) {
             var name = args.shift();
-            self2.logDebug(9, "Executing Command: " + name, args);
+            self.logDebug(9, "Executing Command: " + name, args);
             ctx[name].apply(ctx, args);
           });
           ctx.restore();
@@ -15980,7 +17030,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         adjust: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           if (!opts || !Object.keys(opts).length) {
             return this.doError("adjust", "No adjust options were provided");
@@ -16061,7 +17111,7 @@
           return this.adjust({ saturation: amount });
         },
         desaturate: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           opts = this.copyHash(opts || {});
           var result2 = this.requireRGBA();
@@ -16143,7 +17193,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         border: function(opts) {
-          var self2 = this;
+          var self = this;
           var result2;
           this.clearLastError();
           result2 = this.requireRGBA();
@@ -16196,7 +17246,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         composite: function(opts) {
-          var self2 = this;
+          var self = this;
           var result2;
           this.clearLastError();
           result2 = this.requireRGBA();
@@ -16289,7 +17339,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         convolve: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           if (!opts || !opts.matrix) {
             return this.doError("convolve", "No convolve options were provided");
@@ -16473,7 +17523,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         crop: function(opts) {
-          var self2 = this;
+          var self = this;
           var result2;
           this.clearLastError();
           if (this.get("mode") == "indexed") {
@@ -16520,7 +17570,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         curves: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           if (!opts || !Object.keys(opts).length) {
             return this.doError("curves", "No curves options were provided");
@@ -16908,7 +17958,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         expand: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           if (!opts || !opts.width && !opts.height) {
             return this.doError("expand", "Both width and height were not specified");
@@ -16938,7 +17988,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         flatten: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           opts = this.copyHash(opts || {});
           if (opts && opts.background) {
@@ -16984,7 +18034,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         hash: function() {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           var result2 = this.requireRGBA();
           if (result2.isError) return result2;
@@ -17157,7 +18207,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         histogram: function() {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           var result2 = this.requireRGBA();
           if (result2.isError) return result2;
@@ -17205,7 +18255,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         opacity: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           if (typeof opts == "number") {
             opts = { opacity: opts };
@@ -19710,7 +20760,7 @@
       var iq = require_iq();
       module2.exports = Class2.create({
         quantize: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           opts = this.copyHash(opts || {});
           var result2 = this.requireRGBA();
@@ -19760,7 +20810,7 @@
           return this;
         },
         quantizeFast: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           opts = this.copyHash(opts || {});
           var result2 = this.requireRGBA();
@@ -19877,7 +20927,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         resize: function(opts) {
-          var self2 = this;
+          var self = this;
           var result2;
           this.clearLastError();
           if (this.get("mode") == "indexed") {
@@ -20020,7 +21070,7 @@
       };
       module2.exports = Class2.create({
         text: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           width_cache = {};
           var result2 = this.requireRGBA();
@@ -20178,7 +21228,7 @@
               ctx2.fillRect(x, y, text_width, text_height);
             }
             ctx2.fillStyle = opts.color;
-            if (self2.browser && self2.userAgent.match(/Safari/) && !self2.userAgent.match(/Chrome/)) {
+            if (self.browser && self.userAgent.match(/Safari/) && !self.userAgent.match(/Chrome/)) {
               y -= line_height * 1.15 - line_height;
             }
             for (var idx2 = 0, len3 = lines.length; idx2 < len3; idx2++) {
@@ -20192,7 +21242,7 @@
                 if (x + line_width2 > width2) x = width2 - line_width2;
                 if (x < 0) x = 0;
               }
-              self2.logDebug(9, "Rendering line", { idx: idx2, line: line2, x, y });
+              self.logDebug(9, "Rendering line", { idx: idx2, line: line2, x, y });
               if (kerning != 0) {
                 for (var idy2 = 0, ley2 = chars.length; idy2 < ley2; idy2++) {
                   var ch = chars[idy2];
@@ -20336,7 +21386,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         transform: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           var result2 = this.requireRGBA();
           if (result2.isError) return result2;
@@ -20446,7 +21496,7 @@
       var Class2 = require_class();
       module2.exports = Class2.create({
         trim: function(opts) {
-          var self2 = this;
+          var self = this;
           this.clearLastError();
           var result2 = this.requireRGBA();
           if (result2.isError) return result2;
@@ -21088,7 +22138,7 @@
       var toBuffer = require_blob_to_buffer();
       module2.exports = Class2.create({
         output_gif: function(callback) {
-          var self2 = this;
+          var self = this;
           var mode = this.get("mode");
           var width = this.get("width");
           var height = this.get("height");
@@ -21156,7 +22206,7 @@
       var toBuffer = require_blob_to_buffer();
       module2.exports = Class2.create({
         output_jpeg: function(callback) {
-          var self2 = this;
+          var self = this;
           if (this.requireRGBA().isError) return callback(this.getLastError());
           if (this.get("useDataURLs")) {
             this.logDebug(6, "Compressing into JPEG format (using browser)", { quality: this.get("quality") });
@@ -21168,8 +22218,8 @@
             this.canvas.toBlob(
               function(blob) {
                 toBuffer(blob, function(err, buf2) {
-                  if (err) return self2.doError("jpeg", "JPEG Encode Error: " + err, callback);
-                  self2.logDebug(6, "JPEG compression complete");
+                  if (err) return self.doError("jpeg", "JPEG Encode Error: " + err, callback);
+                  self.logDebug(6, "JPEG compression complete");
                   callback(null, buf2);
                 });
               },
@@ -24984,7 +26034,7 @@
       };
       module2.exports = Class2.create({
         output_png: function(callback) {
-          var self2 = this;
+          var self = this;
           var mode = this.get("mode");
           var width = this.get("width");
           var height = this.get("height");
@@ -25007,8 +26057,8 @@
               this.canvas.toBlob(
                 function(blob) {
                   toBuffer(blob, function(err, buf2) {
-                    if (err) return self2.doError("png", "PNG Encode Error: " + err, callback);
-                    self2.logDebug(6, "PNG compression complete");
+                    if (err) return self.doError("png", "PNG Encode Error: " + err, callback);
+                    self.logDebug(6, "PNG compression complete");
                     callback(null, buf2);
                   });
                 },
@@ -25088,7 +26138,7 @@
       var toBuffer = require_blob_to_buffer();
       module2.exports = Class2.create({
         output_webp: function(callback) {
-          var self2 = this;
+          var self = this;
           if (this.requireRGBA().isError) return callback(this.getLastError());
           if (this.get("useDataURLs")) {
             this.logDebug(6, "Compressing into WebP format (using browser)", { quality: this.get("quality") });
@@ -25100,8 +26150,8 @@
             this.canvas.toBlob(
               function(blob) {
                 toBuffer(blob, function(err, buf2) {
-                  if (err) return self2.doError("webp", "WebP Encode Error: " + err, callback);
-                  self2.logDebug(6, "WebP compression complete");
+                  if (err) return self.doError("webp", "WebP Encode Error: " + err, callback);
+                  self.logDebug(6, "WebP compression complete");
                   callback(null, buf2);
                 });
               },
@@ -25113,8 +26163,8 @@
             var opts = Object.assign({}, this.get("webp") || {}, { quality: this.get("quality") });
             this.logDebug(6, "Compressing into WebP format", opts);
             this.webp.encode(imgData, opts, function(err, data) {
-              if (err) return self2.doError("webp", "WebP Encode Error: " + err, callback);
-              self2.logDebug(6, "WebP compression complete");
+              if (err) return self.doError("webp", "WebP Encode Error: " + err, callback);
+              self.logDebug(6, "WebP compression complete");
               callback(null, data);
             });
           }
